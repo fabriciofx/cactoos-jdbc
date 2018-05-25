@@ -21,39 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import org.cactoos.list.ListOf;
+import com.github.fabriciofx.cactoos.jdbc.result.IntResult;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import org.junit.Test;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Transaction implements Statement {
-    private final List<Statement> stmts;
-
-    public Transaction(final Statement... stmts) {
-        this.stmts = new ListOf<>(stmts);
-    }
-
-    @Override
-    public void exec(final DataStreams streams, final Connection connection)
-        throws SQLException {
-        try {
-            connection.setAutoCommit(false);
-            for (final Statement stmt : this.stmts) {
-                stmt.exec(streams, connection);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-        } catch(final SQLException ex) {
-            connection.rollback();
-        }
+public final class UpdateTest {
+    @Test
+    public void update() throws Exception {
+        System.out.println(
+            new IntResult(
+                new NoAuthSession(
+                    new H2Source("testdb")
+                ),
+                new Update(
+                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                )
+            ).result()
+        );
     }
 }

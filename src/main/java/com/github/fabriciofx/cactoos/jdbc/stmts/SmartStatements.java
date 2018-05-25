@@ -21,15 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.stmts;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.Statements;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
+import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public interface Statements extends Iterable<Statement> {
-    void exec() throws SQLException;
+public final class SmartStatements implements Statements {
+    private final Session session;
+    private final List<Statement> statements;
+
+    public SmartStatements(
+        final Session sssn,
+        final Statement<?>... stmts
+    ) {
+        this.session = sssn;
+        this.statements = new ListOf<>(stmts);
+    }
+
+    @Override
+    public void exec() throws SQLException {
+        try (final Connection connection = this.session.connection()) {
+            for (final Statement<?> stmt : this.statements) {
+                stmt.result(connection);
+            }
+        }
+    }
+
+    @Override
+    public Iterator<Statement> iterator() {
+        return this.statements.iterator();
+    }
 }

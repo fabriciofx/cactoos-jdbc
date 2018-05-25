@@ -23,50 +23,30 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
 import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class KeysResult implements Result {
-    private final DataStream stream;
+public final class IntResult implements Result<Integer> {
+    private final Session session;
+    private final Statement<Integer> statement;
 
-    public KeysResult() {
-        this(new XmlDataStream("keys"));
-    }
-
-    public KeysResult(final DataStream strm) {
-        this.stream = strm;
+    public IntResult(final Session sssn, final Statement<Integer> stmt) {
+        this.session = sssn;
+        this.statement = stmt;
     }
 
     @Override
-    public void process(
-        final DataStreams streams,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.execute();
-        try (final ResultSet rset = stmt.getGeneratedKeys()) {
-            while (rset.next()) {
-                final ResultSetMetaData rsmd = rset.getMetaData();
-                final int cols = rsmd.getColumnCount();
-                for (int i = 1; i <= cols; i++) {
-                    final String name = rsmd.getColumnName(i).toLowerCase();
-                    final Object value = rset.getObject(i);
-                    this.stream.with(name, () -> value.toString());
-                }
-            }
-            streams.with(this.stream);
-        } catch (final Exception ex) {
-            throw new SQLException(ex);
+    public Integer result() throws SQLException {
+        try (final Connection connection = this.session.connection()) {
+            return this.statement.result(connection);
         }
     }
 }

@@ -24,11 +24,10 @@
 package com.github.fabriciofx.cactoos.jdbc.result;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
 import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
-import java.sql.PreparedStatement;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -38,28 +37,22 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class PlainResult implements Result {
+public final class RsetAsDataStream implements Result<DataStream> {
+    private final Statement<ResultSet> statement;
     private final DataStream stream;
 
-    public PlainResult() {
-        this("rset");
+    public RsetAsDataStream(final Statement<ResultSet> stmt) {
+        this(stmt, new XmlDataStream("select"));
     }
 
-    public PlainResult(final String name) {
-        this(new FormattedXmlDataStream(new XmlDataStream(name)));
-    }
-
-    public PlainResult(final DataStream strm) {
+    public RsetAsDataStream(final Statement<ResultSet> stmt, final DataStream strm) {
+        this.statement = stmt;
         this.stream = strm;
     }
 
     @Override
-    public void process(
-        final DataStreams streams,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.execute();
-        try (final ResultSet rset = stmt.getResultSet()) {
+    public DataStream result() throws SQLException {
+        try (final ResultSet rset = this.statement.result(null)) {
             while (rset.next()) {
                 final ResultSetMetaData rsmd = rset.getMetaData();
                 final int cols = rsmd.getColumnCount();
@@ -69,9 +62,9 @@ public final class PlainResult implements Result {
                     this.stream.with(name, () -> value.toString());
                 }
             }
-            streams.with(this.stream);
         } catch (final Exception ex) {
             throw new SQLException(ex);
         }
+        return this.stream;
     }
 }

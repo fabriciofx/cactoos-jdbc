@@ -31,6 +31,6 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public interface Statement {
-    void exec(DataStreams streams, Connection connection) throws SQLException;
+public interface Statement<T> {
+    T result(Connection connection) throws SQLException;
 }

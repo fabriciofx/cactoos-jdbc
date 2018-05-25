@@ -24,11 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.DataParam;
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
-import com.github.fabriciofx.cactoos.jdbc.result.NoResult;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -38,8 +35,7 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class Update implements Statement {
-    private final Result result;
+public final class Update implements Statement<Integer> {
     private final String query;
     private final DataParams params;
 
@@ -47,21 +43,12 @@ public final class Update implements Statement {
         final String sql,
         final DataParam... prms
     ) {
-        this(new NoResult(), sql, prms);
-    }
-
-    public Update(
-        final Result rslt,
-        final String sql,
-        final DataParam... prms
-    ) {
-        this.result = rslt;
         this.query = sql;
         this.params = new DataParams(prms);
     }
 
     @Override
-    public void exec(final DataStreams streams, final Connection connection)
+    public Integer result(final Connection connection)
         throws SQLException {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
@@ -69,7 +56,7 @@ public final class Update implements Statement {
             )
         ) {
             this.params.prepare(1, stmt);
-            this.result.process(streams, stmt);
+            return stmt.executeUpdate();
         }
     }
 }

@@ -21,8 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -30,6 +36,30 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public interface Statements extends Iterable<Statement> {
-    void exec() throws SQLException;
+public final class InsertWithKeys implements Statement<ResultSet> {
+    private final String query;
+    private final DataParams params;
+
+    public InsertWithKeys(
+        final String sql,
+        final DataParam... prms
+    ) {
+        this.query = sql;
+        this.params = new DataParams(prms);
+    }
+
+    @Override
+    public ResultSet result(final Connection connection)
+        throws SQLException {
+        try (
+            final PreparedStatement stmt = connection.prepareStatement(
+                this.query,
+                java.sql.Statement.RETURN_GENERATED_KEYS
+            )
+        ) {
+            this.params.prepare(1, stmt);
+            stmt.execute();
+            return stmt.getGeneratedKeys();
+        }
+    }
 }

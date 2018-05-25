@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -31,6 +30,6 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public interface Result {
-    void process(DataStreams streams, PreparedStatement stmt) throws SQLException;
+public interface Result<T> {
+    T result() throws SQLException;
 }

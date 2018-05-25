@@ -24,11 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.DataParam;
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
-import com.github.fabriciofx.cactoos.jdbc.result.KeysResult;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -38,8 +35,7 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class Insert implements Statement {
-    private final Result result;
+public final class Insert implements Statement<Boolean> {
     private final String query;
     private final DataParams params;
 
@@ -47,30 +43,20 @@ public final class Insert implements Statement {
         final String sql,
         final DataParam... prms
     ) {
-        this(new KeysResult(), sql, prms);
-    }
-
-    public Insert(
-        final Result rslt,
-        final String sql,
-        final DataParam... prms
-    ) {
-        this.result = rslt;
         this.query = sql;
         this.params = new DataParams(prms);
     }
 
     @Override
-    public void exec(final DataStreams streams, final Connection connection)
+    public Boolean result(final Connection connection)
         throws SQLException {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
-                this.query,
-                java.sql.Statement.RETURN_GENERATED_KEYS
+                this.query
             )
         ) {
             this.params.prepare(1, stmt);
-            this.result.process(streams, stmt);
+            return stmt.execute();
         }
     }
 }
