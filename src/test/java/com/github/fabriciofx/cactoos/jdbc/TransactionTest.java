@@ -23,13 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.RsetDataStreamAdapter;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,7 +35,6 @@ import org.junit.Test;
  * @since 0.1
  */
 public final class TransactionTest {
-    @Ignore
     @Test
     public void transaction() throws Exception {
         System.out.println(
@@ -48,10 +44,10 @@ public final class TransactionTest {
                 ),
                 new Transaction(
                     new Update(
-                        "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                        "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
                     ),
                     new Insert(
-                        "INSERT INTO foo3 (name) VALUES (?)",
+                        "INSERT INTO foo5 (name) VALUES (?)",
                         new TextParam("name", "Jeff Lebowski")
                     ),
                     new Insert(
@@ -59,9 +55,9 @@ public final class TransactionTest {
                         new TextParam("name", "Yegor Bugayenko")
                     )
                 ),
-                new Select<>(
-                    new RsetDataStreamAdapter(),
-                    "SELECT * FROM foo3"
+                new Insert(
+                    "INSERT INTO foo5 (name) VALUES (?)",
+                    new TextParam("name", "Bart Simpson")
                 )
             ).value()
         );

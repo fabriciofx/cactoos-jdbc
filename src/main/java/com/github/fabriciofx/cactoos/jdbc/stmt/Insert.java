@@ -28,6 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -55,6 +56,9 @@ public final class Insert implements Statement<Boolean> {
         ) {
             this.params.prepare(1, stmt);
             return stmt.execute();
+        } catch (final Exception ex) {
+            System.out.println("DEU RUIM");
+            throw ex;
         }
     }
 }

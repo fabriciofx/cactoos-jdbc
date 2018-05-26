@@ -55,6 +55,9 @@ public final class Result<T> implements Scalar<T> {
         try (final Connection connection = this.session.connection()) {
             this.statements.exec(connection);
             return this.statement.result(connection);
+        } catch(final Exception ex) {
+            System.out.println("RESULT FALHOU");
+            throw ex;
         }
     }
 }

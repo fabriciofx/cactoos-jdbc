@@ -24,12 +24,12 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
+import org.cactoos.Proc;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public interface Statements {
-    void exec(Connection connection) throws Exception;
+public interface Statements extends Proc<Connection> {
 }

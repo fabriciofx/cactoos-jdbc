@@ -32,6 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
 import org.junit.Test;
 
 /**
@@ -43,6 +44,7 @@ public final class SelectTest {
     @Test
     public void select() throws Exception {
         System.out.println(
+            new FormattedXmlDataStream(
             new Result<>(
                 new NoAuthSession(
                     new H2Source("testdb")
@@ -80,10 +82,10 @@ public final class SelectTest {
                     )
                 ),
                 new Select<>(
-                    new RsetDataStreamAdapter(),
+                    new RsetDataStreamAdapter("employees", "employee"),
                     "SELECT * FROM employee"
                 )
-            ).value().asString()
+            ).value()).asString()
         );
     }
 }

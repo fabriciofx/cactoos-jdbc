@@ -37,12 +37,12 @@ import org.cactoos.Func;
 public final class RsetDataStreamAdapter implements Func<ResultSet, DataStream> {
     private final DataStream stream;
 
-    public RsetDataStreamAdapter() {
-        this("select");
+    public RsetDataStreamAdapter(final String chld) {
+        this("select", chld);
     }
 
-    public RsetDataStreamAdapter(final String name) {
-        this(new XmlDataStream(name));
+    public RsetDataStreamAdapter(final String root, final String chld) {
+        this(new XmlDataStream(root, chld));
     }
 
     public RsetDataStreamAdapter(final DataStream strm) {

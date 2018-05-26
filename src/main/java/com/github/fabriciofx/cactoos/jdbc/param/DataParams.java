@@ -46,7 +46,7 @@ public final class DataParams implements DataParam, Iterable<DataParam> {
     }
 
     public DataParams(final String name, final DataParam... prms) {
-        this(new XmlDataStream(name), prms);
+        this(new XmlDataStream("", name), prms);
     }
 
     public DataParams(final DataStream strm, final DataParam... prms) {

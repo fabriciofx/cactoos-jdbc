@@ -1,7 +1,6 @@
 package com.github.fabriciofx.cactoos.jdbc.stream;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;
@@ -17,14 +16,14 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 public final class FormattedXmlDataStream implements DataStream {
-    private final XmlDataStream origin;
+    private final DataStream origin;
     private final int indent;
 
-    public FormattedXmlDataStream(final XmlDataStream strm) {
+    public FormattedXmlDataStream(final DataStream strm) {
         this(strm, 2);
     }
 
-    public FormattedXmlDataStream(final XmlDataStream strm, final int indent) {
+    public FormattedXmlDataStream(final DataStream strm, final int indent) {
         this.origin = strm;
         this.indent = indent;
     }

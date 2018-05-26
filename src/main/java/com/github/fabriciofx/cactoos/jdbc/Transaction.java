@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -44,10 +43,10 @@ public final class Transaction implements Statements {
             connection.setAutoCommit(false);
             this.statements.exec(connection);
             connection.commit();
-        } catch(final SQLException ex) {
+        } catch(final Exception ex) {
+            System.out.println("TRANSACO FALHOU");
             connection.rollback();
-        } finally {
-            connection.close();
         }
+        connection.setAutoCommit(true);
     }
 }

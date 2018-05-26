@@ -38,14 +38,6 @@ public final class SmartDataStreams implements DataStreams {
     private final DataStream stream;
     private final List<DataStream> streams;
 
-    public SmartDataStreams() {
-        this("streams");
-    }
-
-    public SmartDataStreams(final String name) {
-        this(new XmlDataStream(name));
-    }
-
     public SmartDataStreams(final DataStream strm) {
         this.stream = strm;
         this.streams = new ArrayList<>();

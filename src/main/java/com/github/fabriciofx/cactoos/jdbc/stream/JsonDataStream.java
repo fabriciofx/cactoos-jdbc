@@ -37,11 +37,11 @@ public final class JsonDataStream implements DataStream {
     private final DataStream xml;
 
     public JsonDataStream() {
-        this("json");
+        this("datum", "data");
     }
 
-    public JsonDataStream(final String name) {
-        this.xml = new XmlDataStream(name);
+    public JsonDataStream(final String rtt, final String chld) {
+        this.xml = new XmlDataStream(rtt, chld);
     }
 
     public JsonDataStream(final DataStream strm) {
