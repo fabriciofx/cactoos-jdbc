@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.RsetDataStreamAdapter;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsDataStream;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -33,6 +33,7 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
 import org.junit.Test;
 
 /**
@@ -82,7 +83,9 @@ public final class SelectTest {
                     )
                 ),
                 new Select<>(
-                    new RsetDataStreamAdapter("employees", "employee"),
+                    new ResultSetAsDataStream(
+                        new XmlDataStream("employees", "employee")
+                    ),
                     "SELECT * FROM employee"
                 )
             ).value()).asString()

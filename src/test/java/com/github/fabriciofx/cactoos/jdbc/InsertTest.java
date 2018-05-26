@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.RsetIntAdapter;
-import com.github.fabriciofx.cactoos.jdbc.adapter.RsetUuidAdapter;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsInt;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsUuid;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
@@ -71,7 +71,7 @@ public final class InsertTest {
                     )
                 ),
                 new InsertWithKeys<>(
-                    new RsetIntAdapter(),
+                    new ResultSetAsInt(),
                     "INSERT INTO foo3 (name) VALUES (?)",
                     new TextParam("name", "Yegor Bugayenko")
                 )
@@ -92,7 +92,7 @@ public final class InsertTest {
                     )
                 ),
                 new InsertWithKeys<>(
-                    new RsetUuidAdapter(),
+                    new ResultSetAsUuid(),
                     "INSERT INTO foo4 (name) VALUES (?)",
                     new TextParam("name", "Yegor Bugayenko")
                 )

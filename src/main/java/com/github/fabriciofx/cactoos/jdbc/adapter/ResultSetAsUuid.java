@@ -32,7 +32,7 @@ import org.cactoos.Func;
  * @version $Id$
  * @since 0.1
  */
-public final class RsetUuidAdapter implements Func<ResultSet, UUID> {
+public final class ResultSetAsUuid implements Func<ResultSet, UUID> {
     @Override
     public UUID apply(final ResultSet rset) throws Exception {
         rset.next();

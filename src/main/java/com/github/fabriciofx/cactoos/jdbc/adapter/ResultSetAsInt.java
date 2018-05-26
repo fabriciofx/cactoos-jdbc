@@ -23,10 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import org.cactoos.Func;
 
 /**
@@ -34,33 +31,12 @@ import org.cactoos.Func;
  * @version $Id$
  * @since 0.1
  */
-public final class RsetDataStreamAdapter implements Func<ResultSet, DataStream> {
-    private final DataStream stream;
-
-    public RsetDataStreamAdapter(final String chld) {
-        this("select", chld);
-    }
-
-    public RsetDataStreamAdapter(final String root, final String chld) {
-        this(new XmlDataStream(root, chld));
-    }
-
-    public RsetDataStreamAdapter(final DataStream strm) {
-        this.stream = strm;
-    }
-
+public final class ResultSetAsInt implements Func<ResultSet, Integer> {
     @Override
-    public DataStream apply(final ResultSet rset) throws Exception {
-        while (rset.next()) {
-            final ResultSetMetaData rsmd = rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            for (int i = 1; i <= cols; i++) {
-                final String name = rsmd.getColumnName(i).toLowerCase();
-                final Object value = rset.getObject(i);
-                this.stream.with(name, () -> value.toString());
-            }
-        }
+    public Integer apply(final ResultSet rset) throws Exception {
+        rset.next();
+        final Integer value = rset.getInt(1);
         rset.close();
-        return this.stream;
+        return value;
     }
 }
