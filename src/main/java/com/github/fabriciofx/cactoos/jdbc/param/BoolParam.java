@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.DataParam;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -41,11 +40,6 @@ public final class BoolParam implements DataParam {
     public BoolParam(final String name, final Boolean value) {
         this.name = name;
         this.value = value;
-    }
-
-    @Override
-    public int count() {
-        return 1;
     }
 
     @Override

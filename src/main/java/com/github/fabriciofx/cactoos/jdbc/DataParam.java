@@ -36,6 +36,4 @@ public interface DataParam extends Text {
     void prepare(int pos, PreparedStatement stmt) throws SQLException;
 
     DataStream stream(DataStream stream) throws Exception;
-
-    int count();
 }

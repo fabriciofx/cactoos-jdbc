@@ -67,11 +67,6 @@ public final class DataParams implements DataParam, Iterable<DataParam> {
     }
 
     @Override
-    public int count() {
-        return this.params.size();
-    }
-
-    @Override
     public void prepare(
         final int pos,
         final PreparedStatement stmt

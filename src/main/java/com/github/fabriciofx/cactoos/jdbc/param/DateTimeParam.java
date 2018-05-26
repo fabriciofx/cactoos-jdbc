@@ -45,11 +45,6 @@ public final class DateTimeParam implements DataParam {
     }
 
     @Override
-    public int count() {
-        return 1;
-    }
-
-    @Override
     public void prepare(
         final int pos,
         final PreparedStatement stmt
