@@ -29,28 +29,30 @@ import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.cactoos.Func;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class InsertWithKeys implements Statement<ResultSet> {
+public final class InsertWithKeys<T> implements Statement<T> {
+    private final Func<ResultSet, T> func;
     private final String query;
     private final DataParams params;
 
     public InsertWithKeys(
+        final Func<ResultSet, T> fnc,
         final String sql,
         final DataParam... prms
     ) {
+        this.func = fnc;
         this.query = sql;
         this.params = new DataParams(prms);
     }
 
     @Override
-    public ResultSet result(final Connection connection)
-        throws SQLException {
+    public T result(final Connection connection) throws Exception {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
                 this.query,
@@ -59,7 +61,7 @@ public final class InsertWithKeys implements Statement<ResultSet> {
         ) {
             this.params.prepare(1, stmt);
             stmt.execute();
-            return stmt.getGeneratedKeys();
+            return this.func.apply(stmt.getGeneratedKeys());
         }
     }
 }

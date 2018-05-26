@@ -23,13 +23,38 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.SQLException;
+import java.sql.Connection;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public interface Result<T> {
-    T result() throws SQLException;
+public final class Result<T> implements Scalar<T> {
+    private final Session session;
+    private final Statements statements;
+    private final Statement<T> statement;
+
+    public Result(final Session sssn, final Statement<T> stmt) {
+        this(sssn, connection -> {}, stmt);
+    }
+
+    public Result(
+        final Session sssn,
+        final Statements stmts,
+        final Statement<T> stmt
+    ) {
+        this.session = sssn;
+        this.statements = stmts;
+        this.statement = stmt;
+    }
+
+    @Override
+    public T value() throws Exception {
+        try (final Connection connection = this.session.connection()) {
+            this.statements.exec(connection);
+            return this.statement.result(connection);
+        }
+    }
 }

@@ -23,8 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.adapter.RsetDataStreamAdapter;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -32,16 +37,31 @@ import org.junit.Test;
  * @version $Id$
  * @since 0.1
  */
-public final class UpdateTest {
+public final class TransactionTest {
+    @Ignore
     @Test
-    public void update() throws Exception {
+    public void transaction() throws Exception {
         System.out.println(
             new Result<>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
-                new Update(
-                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                new Transaction(
+                    new Update(
+                        "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    ),
+                    new Insert(
+                        "INSERT INTO foo3 (name) VALUES (?)",
+                        new TextParam("name", "Jeff Lebowski")
+                    ),
+                    new Insert(
+                        "INSERT INTO bar (name) VALUES (?)",
+                        new TextParam("name", "Yegor Bugayenko")
+                    )
+                ),
+                new Select<>(
+                    new RsetDataStreamAdapter(),
+                    "SELECT * FROM foo3"
                 )
             ).value()
         );

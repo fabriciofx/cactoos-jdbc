@@ -21,15 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.UUID;
+import org.cactoos.Func;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public interface Statements {
-    void exec(Connection connection) throws Exception;
+public final class RsetUuidAdapter implements Func<ResultSet, UUID> {
+    @Override
+    public UUID apply(final ResultSet rset) throws Exception {
+        rset.next();
+        final UUID value = (UUID) rset.getObject(1);
+        rset.close();
+        return value;
+    }
 }

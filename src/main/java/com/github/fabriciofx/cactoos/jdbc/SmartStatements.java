@@ -21,14 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmts;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.Statements;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 import org.cactoos.list.ListOf;
 
@@ -37,36 +32,19 @@ import org.cactoos.list.ListOf;
  * @version $Id$
  * @since 0.1
  */
-public final class Transaction implements Statements {
-    private final Session session;
-    private final List<Statement> statements;
+public final class SmartStatements implements Statements {
+    private final List<Statement<?>> statements;
 
-    public Transaction(
-        final Session sssn,
+    public SmartStatements(
         final Statement<?>... stmts
     ) {
-        this.session = sssn;
         this.statements = new ListOf<>(stmts);
     }
 
     @Override
-    public void exec() throws SQLException {
-        final Connection connection = this.session.connection();
-        try {
-            connection.setAutoCommit(false);
-            for (final Statement<?> stmt : this.statements) {
-                stmt.result(connection);
-            }
-            connection.commit();
-        } catch(final SQLException ex) {
-            connection.rollback();
-        } finally {
-            connection.close();
+    public void exec(final Connection connection) throws Exception {
+        for (final Statement<?> stmt : this.statements) {
+            stmt.result(connection);
         }
-    }
-
-    @Override
-    public Iterator<Statement> iterator() {
-        return this.statements.iterator();
     }
 }

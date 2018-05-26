@@ -21,41 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class LastResult<T> implements Result<T> {
-    private final Session session;
-    private final List<Statement> statements;
+public final class Transaction implements Statements {
+    private final Statements statements;
 
-    public LastResult(
-        final Session sssn,
-        final Statement<?>... stmts
-    ) {
-        this.session = sssn;
-        this.statements = new ListOf<>(stmts);
+    public Transaction(final Statement<?>... stmts) {
+        this.statements = new SmartStatements(stmts);
     }
 
     @Override
-    public T result() throws SQLException {
-        T value = null;
-        try (final Connection connection = this.session.connection()) {
-            for (final Statement<?> stmt : this.statements) {
-                value = (T) stmt.result(connection);
-            }
+    public void exec(final Connection connection) throws Exception {
+        try {
+            connection.setAutoCommit(false);
+            this.statements.exec(connection);
+            connection.commit();
+        } catch(final SQLException ex) {
+            connection.rollback();
+        } finally {
+            connection.close();
         }
-        return (T) value;
     }
 }

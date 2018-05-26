@@ -23,8 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.adapter.RsetIntAdapter;
+import com.github.fabriciofx.cactoos.jdbc.adapter.RsetUuidAdapter;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.result.LastResult;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -40,36 +41,62 @@ public final class InsertTest {
     @Test
     public void insert() throws Exception {
         System.out.println(
-            new LastResult<Boolean>(
+            new Result<>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
-                new Update(
-                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                new SmartStatements(
+                    new Update(
+                        "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    )
                 ),
                 new Insert(
-                    "INSERT INTO foo1 (name) VALUES (?)",
+                    "INSERT INTO foo2 (name) VALUES (?)",
                     new TextParam("name", "Yegor Bugayenko")
                 )
-            ).result()
+            ).value()
         );
     }
 
     @Test
     public void insertWithKeys() throws Exception {
         System.out.println(
-            new LastResult<Integer>(
+            new Result<>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
-                new Update(
-                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                new SmartStatements(
+                    new Update(
+                        "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    )
                 ),
-                new InsertWithKeys(
-                    "INSERT INTO foo1 (name) VALUES (?)",
+                new InsertWithKeys<>(
+                    new RsetIntAdapter(),
+                    "INSERT INTO foo3 (name) VALUES (?)",
                     new TextParam("name", "Yegor Bugayenko")
                 )
-            ).result()
+            ).value()
+        );
+    }
+
+    @Test
+    public void insertWithKeysUuid() throws Exception {
+        System.out.println(
+            new Result<>(
+                new NoAuthSession(
+                    new H2Source("testdb")
+                ),
+                new SmartStatements(
+                    new Update(
+                        "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+                    )
+                ),
+                new InsertWithKeys<>(
+                    new RsetUuidAdapter(),
+                    "INSERT INTO foo4 (name) VALUES (?)",
+                    new TextParam("name", "Yegor Bugayenko")
+                )
+            ).value()
         );
     }
 }

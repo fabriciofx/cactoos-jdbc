@@ -21,32 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import org.cactoos.Func;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class IntResult implements Result<Integer> {
-    private final Session session;
-    private final Statement<Integer> statement;
+public final class RsetDataStreamAdapter implements Func<ResultSet, DataStream> {
+    private final DataStream stream;
 
-    public IntResult(final Session sssn, final Statement<Integer> stmt) {
-        this.session = sssn;
-        this.statement = stmt;
+    public RsetDataStreamAdapter() {
+        this("select");
+    }
+
+    public RsetDataStreamAdapter(final String name) {
+        this(new XmlDataStream(name));
+    }
+
+    public RsetDataStreamAdapter(final DataStream strm) {
+        this.stream = strm;
     }
 
     @Override
-    public Integer result() throws SQLException {
-        try (final Connection connection = this.session.connection()) {
-            return this.statement.result(connection);
+    public DataStream apply(final ResultSet rset) throws Exception {
+        while (rset.next()) {
+            final ResultSetMetaData rsmd = rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            for (int i = 1; i <= cols; i++) {
+                final String name = rsmd.getColumnName(i).toLowerCase();
+                final Object value = rset.getObject(i);
+                this.stream.with(name, () -> value.toString());
+            }
         }
+        rset.close();
+        return this.stream;
     }
 }

@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * H2 result source, for unit testing.
+ * H2 adapter source, for unit testing.
  *
  * @since 0.13
  */

@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -32,5 +31,5 @@ import java.sql.SQLException;
  * @since 0.1
  */
 public interface Statement<T> {
-    T result(Connection connection) throws SQLException;
+    T result(Connection connection) throws Exception;
 }

@@ -28,7 +28,6 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -48,8 +47,7 @@ public final class Update implements Statement<Integer> {
     }
 
     @Override
-    public Integer result(final Connection connection)
-        throws SQLException {
+    public Integer result(final Connection connection) throws Exception {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
                 this.query
