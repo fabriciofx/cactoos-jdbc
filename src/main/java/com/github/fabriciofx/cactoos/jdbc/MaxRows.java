@@ -21,47 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
+import java.sql.Connection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class DecimalParam implements DataParam {
-    private final String name;
-    private final BigDecimal value;
+public final class MaxRows implements Statement<List<Map<String, Object>>> {
+    private final Select select;
+    private final int max;
 
-    public DecimalParam(final String name, final String value) {
-        this(name, new BigDecimal(value));
-    }
-
-    public DecimalParam(final String name, final BigDecimal value) {
-        this.name = name;
-        this.value = value;
+    public MaxRows(final Select select, final int max) {
+        this.select = select;
+        this.max = max;
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setBigDecimal(pos, this.value);
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+    public List<Map<String, Object>> result(final Connection connection) throws Exception {
+        return this.select.result(connection);
     }
 }

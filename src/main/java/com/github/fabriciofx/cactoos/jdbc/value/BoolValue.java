@@ -21,46 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stream;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.DataStreams;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class SmartDataStreams implements DataStreams {
-    private final DataStream stream;
-    private final List<DataStream> streams;
+public final class BoolValue implements DataValue {
+    private final String name;
+    private final Boolean value;
 
-    public SmartDataStreams(final DataStream strm) {
-        this.stream = strm;
-        this.streams = new ArrayList<>();
+    public BoolValue(final String name, final Boolean value) {
+        this.name = name;
+        this.value = value;
     }
 
     @Override
-    public DataStreams with(final DataStream stream) {
-        this.streams.add(stream);
-        return this;
+    public void prepare(
+        final int pos,
+        final PreparedStatement stmt
+    ) throws SQLException {
+        stmt.setBoolean(pos, this.value);
     }
 
     @Override
-    public DataStream get(final int index) {
-        return this.streams.get(index);
+    public DataStream stream(final DataStream stream) throws Exception {
+        return stream.with(this.name, this);
     }
 
     @Override
-    public Iterator<DataStream> iterator() {
-        return this.streams.iterator();
-    }
 
-    @Override
     public String asString() throws Exception {
-        return "";
+        return this.value.toString();
     }
 }

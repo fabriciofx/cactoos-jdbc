@@ -21,41 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
-import com.github.fabriciofx.cactoos.jdbc.param.DoubleParam;
-import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
-import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import org.junit.Test;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DataParamsTest {
-    @Test
-    public void xml() throws Exception {
-        System.out.println(
-            new DataParams(
-                "person",
-                new TextParam("name", "Yegor Bugayenko"),
-                new IntParam("age", 40),
-                new DoubleParam("weight", 85.5),
-                new DataParams(
-                    "address",
-                    new TextParam("street", "Boulervard Street"),
-                    new DataParams(
-                        "talk",
-                        new TextParam("bla", "black"),
-                        new IntParam("size", 23),
-                        new TextParam("blu", "blue")
-                    ),
-                    new TextParam("city", "California"),
-                    new TextParam("country", "USA")
-                )
-            ).asString()
-        );
+public final class DateTimeValue implements DataValue {
+    private final String name;
+    private final LocalDateTime value;
+
+    public DateTimeValue(final String name, final LocalDateTime value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    @Override
+    public void prepare(
+        final int pos,
+        final PreparedStatement stmt
+    ) throws SQLException {
+        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
+    }
+
+    @Override
+    public DataStream stream(final DataStream stream) throws Exception {
+        return stream.with(this.name, this);
+    }
+
+    @Override
+    public String asString() throws Exception {
+        return this.value.toString();
     }
 }

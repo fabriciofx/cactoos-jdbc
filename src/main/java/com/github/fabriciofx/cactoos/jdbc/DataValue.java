@@ -21,43 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import org.cactoos.Text;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class BoolParam implements DataParam {
-    private final String name;
-    private final Boolean value;
+public interface DataValue extends Text {
+    void prepare(int pos, PreparedStatement stmt) throws SQLException;
 
-    public BoolParam(final String name, final Boolean value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setBoolean(pos, this.value);
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
-    }
-
-    @Override
-
-    public String asString() throws Exception {
-        return this.value.toString();
-    }
+    DataStream stream(DataStream stream) throws Exception;
 }

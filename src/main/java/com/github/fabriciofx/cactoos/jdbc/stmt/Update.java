@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
+import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -36,14 +36,14 @@ import java.sql.PreparedStatement;
  */
 public final class Update implements Statement<Integer> {
     private final String query;
-    private final DataParams params;
+    private final DataValues params;
 
     public Update(
         final String sql,
-        final DataParam... prms
+        final DataValue... prms
     ) {
         this.query = sql;
-        this.params = new DataParams(prms);
+        this.params = new DataValues(prms);
     }
 
     @Override

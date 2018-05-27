@@ -21,43 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import java.sql.Connection;
-import org.cactoos.Scalar;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Result<T> implements Scalar<T> {
-    private final Session session;
-    private final Statements statements;
-    private final Statement<T> statement;
+public final class DoubleValue implements DataValue {
+    private final String name;
+    private final Double value;
 
-    public Result(final Session sssn, final Statement<T> stmt) {
-        this(sssn, connection -> {}, stmt);
-    }
-
-    public Result(
-        final Session sssn,
-        final Statements stmts,
-        final Statement<T> stmt
-    ) {
-        this.session = sssn;
-        this.statements = stmts;
-        this.statement = stmt;
+    public DoubleValue(final String name, final Double value) {
+        this.name = name;
+        this.value = value;
     }
 
     @Override
-    public T value() throws Exception {
-        try (final Connection connection = this.session.connection()) {
-            this.statements.exec(connection);
-            return this.statement.result(connection);
-        } catch(final Exception ex) {
-            System.out.println("RESULT FALHOU");
-            throw ex;
-        }
+    public void prepare(
+        final int pos,
+        final PreparedStatement stmt
+    ) throws SQLException {
+        stmt.setDouble(pos, this.value);
+    }
+
+    @Override
+    public DataStream stream(final DataStream stream) throws Exception {
+        return stream.with(this.name, this);
+    }
+
+    @Override
+    public String asString() throws Exception {
+        return this.value.toString();
     }
 }

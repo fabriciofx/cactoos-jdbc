@@ -21,42 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class AnyParam implements DataParam {
-    private final String name;
-    private final Object value;
+public final class ResultSetAsMap implements Scalar<List<Map<String, Object>>> {
+    private final ResultSet rset;
 
-    public AnyParam(final String name, final Object value) {
-        this.name = name;
-        this.value = value;
+    public ResultSetAsMap(final ResultSet rst) {
+        this.rset = rst;
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setObject(pos, this.value);
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(name, this);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+    public List<Map<String, Object>> value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new HashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
+            }
+            rows.add(fields);
+        }
+        rset.close();
+        return rows;
     }
 }

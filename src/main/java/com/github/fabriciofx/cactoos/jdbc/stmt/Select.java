@@ -23,44 +23,42 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsMap;
+import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import org.cactoos.Func;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Select<T> implements Statement<T> {
-    private final Func<ResultSet, T> func;
+public final class Select implements Statement<List<Map<String, Object>>> {
     private final String query;
-    private final DataParams params;
+    private final DataValues values;
 
     public Select(
-        final Func<ResultSet, T> fnc,
         final String sql,
-        final DataParam... prms
+        final DataValue... prms
     ) {
-        this.func = fnc;
         this.query = sql;
-        this.params = new DataParams(prms);
+        this.values = new DataValues(prms);
     }
 
     @Override
-    public T result(final Connection connection) throws Exception {
+    public List<Map<String, Object>> result(final Connection connection) throws Exception {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
                 this.query
             )
         ) {
-            this.params.prepare(1, stmt);
+            this.values.prepare(1, stmt);
             stmt.execute();
-            return this.func.apply(stmt.getResultSet());
+            return new ResultSetAsMap(stmt.getResultSet()).value();
         }
     }
 }

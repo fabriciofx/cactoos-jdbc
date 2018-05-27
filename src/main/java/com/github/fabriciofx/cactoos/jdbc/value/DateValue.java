@@ -21,32 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import java.sql.Connection;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Transaction implements Statements {
-    private final Statements statements;
+public final class DateValue implements DataValue {
+    private final String name;
+    private final LocalDate value;
 
-    public Transaction(final Statement<?>... stmts) {
-        this.statements = new SmartStatements(stmts);
+    public DateValue(final String name, final String value) {
+        this(name, LocalDate.parse(value));
+    }
+
+    public DateValue(final String name, final LocalDate value) {
+        this.name = name;
+        this.value = value;
     }
 
     @Override
-    public void exec(final Connection connection) throws Exception {
-        try {
-            connection.setAutoCommit(false);
-            this.statements.exec(connection);
-            connection.commit();
-        } catch(final Exception ex) {
-            System.out.println("TRANSACO FALHOU");
-            connection.rollback();
-        }
-        connection.setAutoCommit(true);
+    public void prepare(
+        final int pos,
+        final PreparedStatement stmt
+    ) throws SQLException {
+        stmt.setDate(pos, java.sql.Date.valueOf(this.value));
+    }
+
+    @Override
+    public DataStream stream(final DataStream stream) throws Exception {
+        return stream.with(this.name, this);
+    }
+
+    @Override
+    public String asString() throws IOException {
+        return this.value.toString();
     }
 }

@@ -23,17 +23,16 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsDataStream;
-import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
-import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
-import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultAsDataStream;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
 import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
+import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.junit.Test;
 
 /**
@@ -44,51 +43,47 @@ import org.junit.Test;
 public final class SelectTest {
     @Test
     public void select() throws Exception {
-        System.out.println(
-            new FormattedXmlDataStream(
-            new Result<>(
+        final DataStream xml = new ResultAsDataStream(
+            new Statements<>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
-                new SmartStatements(
-                    new Update(
-                        "CREATE TABLE employee (" +
-                            "id UUID DEFAULT RANDOM_UUID()," +
-                            "name VARCHAR(50)," +
-                            "birthday DATE," +
-                            "address VARCHAR(100)," +
-                            "married BOOLEAN," +
-                            "salary DECIMAL(20,2)" +
-                        ")"
-                    ),
-                    new Insert(
-                        "INSERT INTO employee " +
-                            "(name, birthday, address, married, salary) " +
-                            "VALUES (?, ?, ?, ?, ?)",
-                        new TextParam("name", "John Wick"),
-                        new DateParam("birthday", "1980-08-16"),
-                        new TextParam("address", "Boulevard Street, 34"),
-                        new BoolParam("married", false),
-                        new DecimalParam("salary", "13456.00")
-                    ),
-                    new Insert(
-                        "INSERT INTO employee " +
-                            "(name, birthday, address, married, salary) " +
-                            "VALUES (?, ?, ?, ?, ?)",
-                        new TextParam("name", "Adam Park"),
-                        new DateParam("birthday", "1985-07-10"),
-                        new TextParam("address", "Sunset Place, 14"),
-                        new BoolParam("married", true),
-                        new DecimalParam("salary", "12345.00")
-                    )
+                new Update(
+                    "CREATE TABLE employee (" +
+                        "id UUID DEFAULT RANDOM_UUID()," +
+                        "name VARCHAR(50)," +
+                        "birthday DATE," +
+                        "address VARCHAR(100)," +
+                        "married BOOLEAN," +
+                        "salary DECIMAL(20,2)" +
+                    ")"
                 ),
-                new Select<>(
-                    new ResultSetAsDataStream(
-                        new XmlDataStream("employees", "employee")
-                    ),
+                new Insert(
+                    "INSERT INTO employee " +
+                        "(name, birthday, address, married, salary) " +
+                        "VALUES (?, ?, ?, ?, ?)",
+                    new TextValue("name", "John Wick"),
+                    new DateValue("birthday", "1980-08-16"),
+                    new TextValue("address", "Boulevard Street, 34"),
+                    new BoolValue("married", false),
+                    new DecimalValue("salary", "13456.00")
+                ),
+                new Insert(
+                    "INSERT INTO employee " +
+                        "(name, birthday, address, married, salary) " +
+                        "VALUES (?, ?, ?, ?, ?)",
+                    new TextValue("name", "Adam Park"),
+                    new DateValue("birthday", "1985-07-10"),
+                    new TextValue("address", "Sunset Place, 14"),
+                    new BoolValue("married", true),
+                    new DecimalValue("salary", "12345.00")
+                ),
+                new Select(
                     "SELECT * FROM employee"
                 )
-            ).value()).asString()
-        );
+            ),
+            new XmlDataStream("employees", "employee")
+        ).value();
+        System.out.println(xml.asString());
     }
 }

@@ -21,48 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import com.github.fabriciofx.cactoos.jdbc.Statements;
+import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Func;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DateParam implements DataParam {
-    private final String name;
-    private final LocalDate value;
+public final class ResultAsDataStream implements Scalar<DataStream> {
+    private final Statements<List<Map<String, Object>>> statements;
+    private final DataStream stream;
 
-    public DateParam(final String name, final String value) {
-        this(name, LocalDate.parse(value));
-    }
-
-    public DateParam(final String name, final LocalDate value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setDate(pos, java.sql.Date.valueOf(this.value));
+    public ResultAsDataStream(
+        final Statements<List<Map<String, Object>>> stmts,
+        final DataStream strm
+    ) {
+        this.statements = stmts;
+        this.stream = strm;
     }
 
     @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
-    }
-
-    @Override
-    public String asString() throws IOException {
-        return this.value.toString();
+    public DataStream value() throws Exception {
+        for (final Map<String, Object> fields : this.statements.value()) {
+            for (final String name : fields.keySet()) {
+                this.stream.with(name, () -> fields.get(name).toString());
+            }
+        }
+        return this.stream;
     }
 }

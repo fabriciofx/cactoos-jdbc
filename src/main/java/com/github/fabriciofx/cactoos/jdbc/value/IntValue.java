@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,11 +33,11 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class IntParam implements DataParam {
+public final class IntValue implements DataValue {
     private final String name;
     private final Integer value;
 
-    public IntParam(final String name, final Integer value) {
+    public IntValue(final String name, final Integer value) {
         this.name = name;
         this.value = value;
     }

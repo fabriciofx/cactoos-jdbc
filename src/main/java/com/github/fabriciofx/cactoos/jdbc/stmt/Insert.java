@@ -23,12 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.param.DataParams;
+import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -37,14 +36,14 @@ import java.sql.SQLException;
  */
 public final class Insert implements Statement<Boolean> {
     private final String query;
-    private final DataParams params;
+    private final DataValues values;
 
     public Insert(
         final String sql,
-        final DataParam... prms
+        final DataValue... prms
     ) {
         this.query = sql;
-        this.params = new DataParams(prms);
+        this.values = new DataValues(prms);
     }
 
     @Override
@@ -54,11 +53,8 @@ public final class Insert implements Statement<Boolean> {
                 this.query
             )
         ) {
-            this.params.prepare(1, stmt);
+            this.values.prepare(1, stmt);
             return stmt.execute();
-        } catch (final Exception ex) {
-            System.out.println("DEU RUIM");
-            throw ex;
         }
     }
 }

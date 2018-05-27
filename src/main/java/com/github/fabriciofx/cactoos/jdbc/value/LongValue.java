@@ -21,25 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DateTimeParam implements DataParam {
+public final class LongValue implements DataValue {
     private final String name;
-    private final LocalDateTime value;
+    private final Long value;
 
-    public DateTimeParam(final String name, final LocalDateTime value) {
+    public LongValue(final String name, final Long value) {
         this.name = name;
         this.value = value;
     }
@@ -49,7 +47,7 @@ public final class DateTimeParam implements DataParam {
         final int pos,
         final PreparedStatement stmt
     ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
+        stmt.setLong(pos, this.value);
     }
 
     @Override

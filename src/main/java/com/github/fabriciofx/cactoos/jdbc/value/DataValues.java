@@ -21,25 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.param;
+package com.github.fabriciofx.cactoos.jdbc.value;
 
-import com.github.fabriciofx.cactoos.jdbc.DataParam;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DoubleParam implements DataParam {
-    private final String name;
-    private final Double value;
+public final class DataValues implements DataValue, Iterable<DataValue> {
+    private final List<DataValue> params;
+    private final DataStream stream;
 
-    public DoubleParam(final String name, final Double value) {
-        this.name = name;
-        this.value = value;
+    public DataValues(final DataValue... prms) {
+        this("params", prms);
+    }
+
+    public DataValues(final String name, final DataValue... prms) {
+        this(new XmlDataStream("", name), prms);
+    }
+
+    public DataValues(final DataStream strm, final DataValue... prms) {
+        this.stream = strm;
+        this.params = new ArrayList<>();
+        for (final DataValue p : prms) {
+            this.params.add(p);
+        }
+    }
+
+    public DataValue get(final int index) {
+        return this.params.get(index);
+    }
+
+    public DataValues with(final DataValue param) {
+        this.params.add(param);
+        return this;
     }
 
     @Override
@@ -47,16 +71,28 @@ public final class DoubleParam implements DataParam {
         final int pos,
         final PreparedStatement stmt
     ) throws SQLException {
-        stmt.setDouble(pos, this.value);
+        int idx = pos;
+        for (final DataValue param : this.params) {
+            param.prepare(idx, stmt);
+            ++idx;
+        }
     }
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
+        for (final DataValue param : this.params) {
+            param.stream(stream);
+        }
+        return stream;
+    }
+
+    @Override
+    public Iterator<DataValue> iterator() {
+        return this.params.iterator();
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.stream(this.stream).asString();
     }
 }

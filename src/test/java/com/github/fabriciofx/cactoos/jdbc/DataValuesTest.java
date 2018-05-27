@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
+import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.junit.Test;
 
 /**
@@ -34,32 +34,28 @@ import org.junit.Test;
  * @version $Id$
  * @since 0.1
  */
-public final class TransactionTest {
+public final class DataValuesTest {
     @Test
-    public void transaction() throws Exception {
+    public void xml() throws Exception {
         System.out.println(
-            new Result<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Transaction(
-                    new Update(
-                        "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+            new DataValues(
+                "person",
+                new TextValue("name", "Yegor Bugayenko"),
+                new IntValue("age", 40),
+                new DoubleValue("weight", 85.5),
+                new DataValues(
+                    "address",
+                    new TextValue("street", "Boulervard Street"),
+                    new DataValues(
+                        "talk",
+                        new TextValue("bla", "black"),
+                        new IntValue("size", 23),
+                        new TextValue("blu", "blue")
                     ),
-                    new Insert(
-                        "INSERT INTO foo5 (name) VALUES (?)",
-                        new TextParam("name", "Jeff Lebowski")
-                    ),
-                    new Insert(
-                        "INSERT INTO bar (name) VALUES (?)",
-                        new TextParam("name", "Yegor Bugayenko")
-                    )
-                ),
-                new Insert(
-                    "INSERT INTO foo5 (name) VALUES (?)",
-                    new TextParam("name", "Bart Simpson")
+                    new TextValue("city", "California"),
+                    new TextValue("country", "USA")
                 )
-            ).value()
+            ).asString()
         );
     }
 }

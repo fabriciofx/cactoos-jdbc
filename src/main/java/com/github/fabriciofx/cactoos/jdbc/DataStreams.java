@@ -32,6 +32,4 @@ import org.cactoos.Text;
  */
 public interface DataStreams extends Iterable<DataStream>, Text {
     DataStreams with(DataStream stream);
-
-    DataStream get(int index);
 }
