@@ -21,46 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import org.cactoos.Func;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class ResultSetAsDataStream implements Func<ResultSet, DataStream> {
+public final class ResultAsXml implements Scalar<DataStream> {
+    private final Result<List<Map<String, Object>>> statements;
     private final DataStream stream;
+    private final String child;
 
-    public ResultSetAsDataStream(final String chld) {
-        this("select", chld);
-    }
-
-    public ResultSetAsDataStream(final String root, final String chld) {
-        this(new XmlDataStream(root, chld));
-    }
-
-    public ResultSetAsDataStream(final DataStream strm) {
-        this.stream = strm;
+    public ResultAsXml(
+        final Result<List<Map<String, Object>>> stmts,
+        final String root,
+        final String chld
+    ) {
+        this.statements = stmts;
+        this.stream = new XmlDataStream(root);
+        this.child = chld;
     }
 
     @Override
-    public DataStream apply(final ResultSet rset) throws Exception {
-        while (rset.next()) {
-            final ResultSetMetaData rsmd = rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            for (int i = 1; i <= cols; i++) {
-                final String name = rsmd.getColumnName(i).toLowerCase();
-                final Object value = rset.getObject(i);
-                this.stream.with(name, () -> value.toString());
+    public DataStream value() throws Exception {
+        for (final Map<String, Object> fields : this.statements.value()) {
+            final DataStream substream = this.stream.substream(this.child);
+            for (final String name : fields.keySet()) {
+                substream.with(name, () -> fields.get(name).toString());
             }
+            this.stream.add(substream);
         }
-        rset.close();
         return this.stream;
     }
 }

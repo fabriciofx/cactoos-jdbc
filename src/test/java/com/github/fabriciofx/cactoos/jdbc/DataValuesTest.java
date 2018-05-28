@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
@@ -35,27 +34,27 @@ import org.junit.Test;
  * @since 0.1
  */
 public final class DataValuesTest {
-    @Test
-    public void xml() throws Exception {
-        System.out.println(
-            new DataValues(
-                "person",
-                new TextValue("name", "Yegor Bugayenko"),
-                new IntValue("age", 40),
-                new DoubleValue("weight", 85.5),
-                new DataValues(
-                    "address",
-                    new TextValue("street", "Boulervard Street"),
-                    new DataValues(
-                        "talk",
-                        new TextValue("bla", "black"),
-                        new IntValue("size", 23),
-                        new TextValue("blu", "blue")
-                    ),
-                    new TextValue("city", "California"),
-                    new TextValue("country", "USA")
-                )
-            ).asString()
-        );
-    }
+//    @Test
+//    public void xml() throws Exception {
+//        System.out.println(
+//            new SmartDataValues(
+//                "person",
+//                new TextValue("name", "Yegor Bugayenko"),
+//                new IntValue("age", 40),
+//                new DoubleValue("weight", 85.5),
+//                new SmartDataValues(
+//                    "address",
+//                    new TextValue("street", "Boulervard Street"),
+//                    new SmartDataValues(
+//                        "talk",
+//                        new TextValue("bla", "black"),
+//                        new IntValue("size", 23),
+//                        new TextValue("blu", "blue")
+//                    ),
+//                    new TextValue("city", "California"),
+//                    new TextValue("country", "USA")
+//                )
+//            ).asString()
+//        );
+//    }
 }

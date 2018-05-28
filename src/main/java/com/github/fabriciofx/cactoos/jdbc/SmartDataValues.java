@@ -21,14 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,50 +34,33 @@ import java.util.List;
  * @version $Id$
  * @since 0.1
  */
-public final class DataValues implements DataValue, Iterable<DataValue> {
-    private final List<DataValue> params;
-    private final DataStream stream;
+public final class SmartDataValues implements DataValues {
+    private final List<DataValue> values;
 
-    public DataValues(final DataValue... prms) {
-        this("params", prms);
+    public SmartDataValues(final DataValue... prms) {
+        this.values = Arrays.asList(prms);
     }
 
-    public DataValues(final String name, final DataValue... prms) {
-        this(new XmlDataStream("", name), prms);
-    }
-
-    public DataValues(final DataStream strm, final DataValue... prms) {
-        this.stream = strm;
-        this.params = new ArrayList<>();
-        for (final DataValue p : prms) {
-            this.params.add(p);
-        }
-    }
-
-    public DataValue get(final int index) {
-        return this.params.get(index);
-    }
-
-    public DataValues with(final DataValue param) {
-        this.params.add(param);
+    @Override
+    public DataValues with(final DataValue value) {
+        this.values.add(value);
         return this;
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        int idx = pos;
-        for (final DataValue param : this.params) {
-            param.prepare(idx, stmt);
+    public PreparedStatement prepare(final PreparedStatement stmt)
+        throws SQLException {
+        int idx = 1;
+        for (final DataValue value : this.values) {
+            value.prepare(idx, stmt);
             ++idx;
         }
+        return stmt;
     }
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-        for (final DataValue param : this.params) {
+        for (final DataValue param : this.values) {
             param.stream(stream);
         }
         return stream;
@@ -88,11 +68,6 @@ public final class DataValues implements DataValue, Iterable<DataValue> {
 
     @Override
     public Iterator<DataValue> iterator() {
-        return this.params.iterator();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.stream(this.stream).asString();
+        return this.values.iterator();
     }
 }

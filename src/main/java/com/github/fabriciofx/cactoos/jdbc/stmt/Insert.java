@@ -24,8 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -43,7 +44,7 @@ public final class Insert implements Statement<Boolean> {
         final DataValue... prms
     ) {
         this.query = sql;
-        this.values = new DataValues(prms);
+        this.values = new SmartDataValues(prms);
     }
 
     @Override
@@ -53,8 +54,7 @@ public final class Insert implements Statement<Boolean> {
                 this.query
             )
         ) {
-            this.values.prepare(1, stmt);
-            return stmt.execute();
+            return this.values.prepare(stmt).execute();
         }
     }
 }

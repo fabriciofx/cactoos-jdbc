@@ -29,6 +29,14 @@ public final class FormattedXmlDataStream implements DataStream {
     }
 
     @Override
+    public DataStream substream(final String name) {
+        return null;
+    }
+    @Override
+    public DataStream add(final DataStream stream) throws Exception {
+        return null;
+    }
+    @Override
     public DataStream with(
         final String name,
         final Text value

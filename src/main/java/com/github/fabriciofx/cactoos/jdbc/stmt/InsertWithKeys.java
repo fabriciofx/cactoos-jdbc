@@ -24,9 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsMap;
-import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsMap;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -39,14 +39,14 @@ import java.util.Map;
  */
 public final class InsertWithKeys implements Statement<List<Map<String, Object>>> {
     private final String query;
-    private final DataValues values;
+    private final SmartDataValues values;
 
     public InsertWithKeys(
         final String sql,
         final DataValue... prms
     ) {
         this.query = sql;
-        this.values = new DataValues(prms);
+        this.values = new SmartDataValues(prms);
     }
 
     @Override
@@ -57,8 +57,7 @@ public final class InsertWithKeys implements Statement<List<Map<String, Object>>
                 java.sql.Statement.RETURN_GENERATED_KEYS
             )
         ) {
-            this.values.prepare(1, stmt);
-            stmt.execute();
+            this.values.prepare(stmt).execute();
             return new ResultSetAsMap(stmt.getGeneratedKeys()).value();
         }
     }

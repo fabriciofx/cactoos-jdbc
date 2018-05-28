@@ -56,7 +56,6 @@ public final class BoolValue implements DataValue {
     }
 
     @Override
-
     public String asString() throws Exception {
         return this.value.toString();
     }

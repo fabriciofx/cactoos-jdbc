@@ -21,29 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class MaxRows implements Statement<List<Map<String, Object>>> {
-    private final Select select;
-    private final int max;
+public final class ResultSetAsMap implements Scalar<List<Map<String, Object>>> {
+    private final ResultSet rset;
 
-    public MaxRows(final Select select, final int max) {
-        this.select = select;
-        this.max = max;
+    public ResultSetAsMap(final ResultSet rst) {
+        this.rset = rst;
     }
 
     @Override
-    public List<Map<String, Object>> result(final Connection connection) throws Exception {
-        return this.select.result(connection);
+    public List<Map<String, Object>> value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new HashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
+            }
+            rows.add(fields);
+        }
+        rset.close();
+        return rows;
     }
 }

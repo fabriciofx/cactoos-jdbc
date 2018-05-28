@@ -23,36 +23,31 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.Connection;
-import java.util.List;
-import org.cactoos.Scalar;
-import org.cactoos.list.ListOf;
+import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
+import org.junit.Test;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class Statements<T> implements Scalar<T> {
-    private final Session session;
-    private final List<Statement<?>> statements;
-
-    public Statements(
-        final Session sssn,
-        final Statement<?>... stmts
-    ) {
-        this.session = sssn;
-        this.statements = new ListOf<>(stmts);
-    }
-
-    @Override
-    public T value() throws Exception {
-        try (final Connection connection = this.session.connection()) {
-            final int size = this.statements.size() - 1;
-            for (int idx = 0; idx < size; ++idx) {
-                this.statements.get(idx).result(connection);
-            }
-            return (T) this.statements.get(size).result(connection);
-        }
+public final class XmlDataStreamTest {
+    @Test
+    public void xml() throws Exception {
+        final DataStream stream = new XmlDataStream("employees");
+        final DataStream person1 = stream.substream("employee")
+            .with("name", () -> "Joseph Klimber")
+            .with("age", () -> "25");
+        final DataStream address1 = person1.substream("address")
+            .with("street", () -> "Sunset Boulevard")
+            .with("city", () -> "California")
+            .with("state", () -> "California");
+        person1.add(address1);
+        final DataStream person2 = stream.substream("employee")
+            .with("name", () -> "Jeff Bridges")
+            .with("age", () -> "34");
+        stream.add(person1).add(person2);
+        System.out.println(new FormattedXmlDataStream(stream).asString());
     }
 }

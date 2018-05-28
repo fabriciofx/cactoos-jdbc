@@ -24,9 +24,10 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsMap;
-import com.github.fabriciofx.cactoos.jdbc.value.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsMap;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -46,7 +47,7 @@ public final class Select implements Statement<List<Map<String, Object>>> {
         final DataValue... prms
     ) {
         this.query = sql;
-        this.values = new DataValues(prms);
+        this.values = new SmartDataValues(prms);
     }
 
     @Override
@@ -56,8 +57,7 @@ public final class Select implements Statement<List<Map<String, Object>>> {
                 this.query
             )
         ) {
-            this.values.prepare(1, stmt);
-            stmt.execute();
+            this.values.prepare(stmt).execute();
             return new ResultSetAsMap(stmt.getResultSet()).value();
         }
     }

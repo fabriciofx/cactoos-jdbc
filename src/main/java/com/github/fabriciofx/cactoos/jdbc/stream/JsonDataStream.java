@@ -37,17 +37,25 @@ public final class JsonDataStream implements DataStream {
     private final DataStream xml;
 
     public JsonDataStream() {
-        this("datum", "data");
+        this("datum");
     }
 
-    public JsonDataStream(final String rtt, final String chld) {
-        this.xml = new XmlDataStream(rtt, chld);
+    public JsonDataStream(final String rtt) {
+        this.xml = new XmlDataStream(rtt);
     }
 
     public JsonDataStream(final DataStream strm) {
         this.xml = strm;
     }
 
+    @Override
+    public DataStream substream(final String name) {
+        return null;
+    }
+    @Override
+    public DataStream add(final DataStream stream) throws Exception {
+        return null;
+    }
     @Override
     public DataStream with(
         final String name,

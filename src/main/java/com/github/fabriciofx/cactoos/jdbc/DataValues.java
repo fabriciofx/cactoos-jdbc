@@ -21,22 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.ResultSet;
-import org.cactoos.Func;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
- * @since 0.1
+ * @since
  */
-public final class ResultSetAsInt implements Func<ResultSet, Integer> {
-    @Override
-    public Integer apply(final ResultSet rset) throws Exception {
-        rset.next();
-        final Integer value = rset.getInt(1);
-        rset.close();
-        return value;
-    }
+public interface DataValues extends Iterable<DataValue> {
+    DataValues with(final DataValue value);
+
+    PreparedStatement prepare(PreparedStatement stmt) throws SQLException;
+
+    DataStream stream(DataStream stream) throws Exception;
 }

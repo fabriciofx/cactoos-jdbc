@@ -34,15 +34,24 @@ import org.cactoos.Text;
  */
 public final class XmlDataStream implements DataStream {
     private final String root;
-    private final String child;
     private final StringBuilder strb;
 
-    public XmlDataStream(final String rrt, final String chld) {
+    public XmlDataStream(final String rrt) {
         this.root = rrt;
-        this.child = chld;
         this.strb = new StringBuilder(
-            String.format("<%s>", this.child)
+            String.format("<%s>", this.root)
         );
+    }
+
+    @Override
+    public DataStream substream(final String name) {
+        return new XmlDataStream(name);
+    }
+
+    @Override
+    public DataStream add(final DataStream stream) throws Exception {
+        this.strb.append(stream.asString());
+        return this;
     }
 
     @Override
@@ -68,12 +77,7 @@ public final class XmlDataStream implements DataStream {
 
     @Override
     public String asString() throws Exception {
-        this.strb.append(String.format("</%s>", this.child));
-        return String.format(
-            "<%s>%s</%s>",
-            this.root,
-            this.strb.toString(),
-            this.root
-        );
+        this.strb.append(String.format("</%s>", this.root));
+        return this.strb.toString();
     }
 }
