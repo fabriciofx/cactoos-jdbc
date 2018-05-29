@@ -27,10 +27,8 @@ import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Transaction;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.junit.Test;
 
@@ -39,48 +37,36 @@ import org.junit.Test;
  * @version $Id$
  * @since 0.1
  */
-public final class SelectTest {
+public final class TransactionTest {
     @Test
-    public void select() throws Exception {
-        final DataStream xml = new Result<DataStream>(
+    public void transaction() throws Exception {
+        System.out.println(
+            new Result<DataStream>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
                 new Update(
-                    "CREATE TABLE employee (" +
-                        "id UUID DEFAULT RANDOM_UUID()," +
-                        "name VARCHAR(50)," +
-                        "birthday DATE," +
-                        "address VARCHAR(100)," +
-                        "married BOOLEAN," +
-                        "salary DECIMAL(20,2)" +
-                    ")"
+                    "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                ),
+                new Transaction(
+                    new Insert(
+                        "INSERT INTO foo5 (name) VALUES (?)",
+                        new TextValue("name", "Jeff Lebowski")
+                    ),
+                    new Insert(
+                        "INSERT INTO bar (name) VALUES (?)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
                 ),
                 new Insert(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
-                    new TextValue("name", "John Wick"),
-                    new DateValue("birthday", "1980-08-16"),
-                    new TextValue("address", "Boulevard Street, 34"),
-                    new BoolValue("married", false),
-                    new DecimalValue("salary", "13456.00")
-                ),
-                new Insert(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
-                    new TextValue("name", "Adam Park"),
-                    new DateValue("birthday", "1985-07-10"),
-                    new TextValue("address", "Sunset Place, 14"),
-                    new BoolValue("married", true),
-                    new DecimalValue("salary", "12345.00")
+                    "INSERT INTO foo5 (name) VALUES (?)",
+                    new TextValue("name", "Bart Simpson")
                 ),
                 new Select(
                     new ResultSetAsXml("employees", "employee"),
-                    "SELECT * FROM employee"
+                    "SELECT * from foo5"
                 )
-            ).value();
-        System.out.println(xml.asString());
+            ).value().asString()
+        );
     }
 }

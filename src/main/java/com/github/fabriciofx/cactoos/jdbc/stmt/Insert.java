@@ -41,20 +41,25 @@ public final class Insert implements Statement<Boolean> {
 
     public Insert(
         final String sql,
-        final DataValue... prms
+        final DataValue... vals
     ) {
         this.query = sql;
-        this.values = new SmartDataValues(prms);
+        this.values = new SmartDataValues(vals);
+    }
+
+    @Override
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = connection.prepareStatement(this.query);
+        this.values.prepare(stmt);
+        return stmt;
     }
 
     @Override
     public Boolean result(final Connection connection) throws Exception {
-        try (
-            final PreparedStatement stmt = connection.prepareStatement(
-                this.query
-            )
-        ) {
-            return this.values.prepare(stmt).execute();
+        try (final PreparedStatement stmt = this.prepare(connection)) {
+            return stmt.execute();
         }
     }
 }

@@ -25,6 +25,9 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -52,8 +55,18 @@ public final class BoolValue implements DataValue {
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            stream.save(() -> baos);
+            baos.write(
+                String.format(
+                    "<%s>%s</%s>",
+                    this.name,
+                    this.value.toString(),
+                    this.name
+                ).getBytes()
+            );
+            return new BytesDataStream(baos.toByteArray());
+        }
     }
 
     @Override

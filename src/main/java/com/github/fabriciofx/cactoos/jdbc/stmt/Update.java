@@ -37,24 +37,29 @@ import java.sql.PreparedStatement;
  */
 public final class Update implements Statement<Integer> {
     private final String query;
-    private final DataValues params;
+    private final DataValues values;
 
     public Update(
         final String sql,
-        final DataValue... prms
+        final DataValue... vals
     ) {
         this.query = sql;
-        this.params = new SmartDataValues(prms);
+        this.values = new SmartDataValues(vals);
+    }
+
+    @Override
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = connection.prepareStatement(this.query);
+        this.values.prepare(stmt);
+        return stmt;
     }
 
     @Override
     public Integer result(final Connection connection) throws Exception {
-        try (
-            final PreparedStatement stmt = connection.prepareStatement(
-                this.query
-            )
-        ) {
-            return this.params.prepare(stmt).executeUpdate();
+        try (final PreparedStatement stmt = this.prepare(connection)) {
+            return stmt.executeUpdate();
         }
     }
 }

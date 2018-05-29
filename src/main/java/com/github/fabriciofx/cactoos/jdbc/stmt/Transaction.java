@@ -21,44 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Adapter;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import org.xembly.Directives;
-import org.xembly.Xembler;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.List;
+import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class ResultSetAsXml implements Adapter {
-    private final String root;
-    private final String child;
+public final class Transaction implements Statement<Boolean> {
+    private final List<Statement<?>> statements;
 
-    public ResultSetAsXml(final String root, final String child) {
-        this.root = root;
-        this.child = child;
+    public Transaction(final Statement<?>... stmts) {
+        this.statements = new ListOf<>(stmts);
     }
 
     @Override
-    public DataStream adapt(final ResultSet rset) throws Exception {
-        final Directives tree = new Directives().add(this.root);
-        while (rset.next()) {
-            final ResultSetMetaData rsmd = rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            tree.add(this.child);
-            for (int i = 1; i <= cols; i++) {
-                tree.add(rsmd.getColumnName(i).toLowerCase())
-                    .set(rset.getObject(i))
-                    .up();
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Boolean result(final Connection connection) throws Exception {
+        try {
+            connection.setAutoCommit(false);
+            for (final Statement<?> stmt : this.statements) {
+                stmt.result(connection);
             }
-            tree.up();
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch(final Exception ex) {
+            connection.rollback();
+            return false;
         }
-        return new BytesDataStream(new Xembler(tree).xml().getBytes());
+        return true;
     }
 }

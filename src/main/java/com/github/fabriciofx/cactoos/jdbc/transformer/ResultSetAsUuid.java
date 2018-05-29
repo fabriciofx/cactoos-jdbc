@@ -21,21 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.transformer;
 
-import org.cactoos.Text;
+import com.github.fabriciofx.cactoos.jdbc.Transformer;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.sql.ResultSet;
+import java.util.UUID;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public interface DataPack extends Text {
-    DataPack subpack(String name);
-
-    DataPack add(DataPack pack) throws Exception;
-
-    DataPack with(String name, Text value) throws Exception;
-
-    DataStream stream() throws Exception;
+public final class ResultSetAsUuid implements Transformer {
+    @Override
+    public DataStream transform(final ResultSet rset) throws Exception {
+        rset.next();
+        final UUID uuid = (UUID) rset.getObject(1);
+        return new BytesDataStream(uuid.toString().getBytes());
+    }
 }

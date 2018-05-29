@@ -21,66 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.pack;
+package com.github.fabriciofx.cactoos.jdbc.transformer;
 
-import com.github.fabriciofx.cactoos.jdbc.DataPack;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import org.cactoos.Text;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class XmlPack implements DataPack {
-    private final String root;
-    private final String child;
-    private final StringBuilder strb;
+public final class ResultSetAsMap implements Scalar<DataStream> {
+    private final ResultSet rset;
 
-    public XmlPack(final String root, final String child) {
-        this.root = root;
-        this.child = child;
-        this.strb = new StringBuilder(
-            String.format("<%s>", this.root)
-        );
+    public ResultSetAsMap(final ResultSet rst) {
+        this.rset = rst;
     }
 
     @Override
-    public DataPack subpack(final String name) {
-        return new XmlPack(this.child, name);
-    }
-
-    @Override
-    public DataPack add(final DataPack pack) throws Exception {
-        this.strb.append(pack.asString());
-        return this;
-    }
-
-    @Override
-    public DataPack with(
-        final String name,
-        final Text value
-    ) throws Exception {
-        this.strb.append(
-            String.format(
-                "<%s>%s</%s>",
-                name,
-                value.asString(),
-                name
-            )
-        );
-        return this;
-    }
-
-    @Override
-    public DataStream stream() throws Exception {
-        return new BytesDataStream(this.asString().getBytes());
-    }
-
-    @Override
-    public String asString() throws Exception {
-        this.strb.append(String.format("</%s>", this.root));
-        return this.strb.toString();
+    public DataStream value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new HashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
+            }
+            rows.add(fields);
+        }
+        return new BytesDataStream(() -> null);
     }
 }

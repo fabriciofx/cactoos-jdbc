@@ -21,45 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc.transformer;
 
+import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.cactoos.Scalar;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class ResultSetAsMap implements Scalar<DataStream> {
-    private final ResultSet rset;
+public final class ResultSetAsXml implements Transformer {
+    private final String root;
+    private final String child;
 
-    public ResultSetAsMap(final ResultSet rst) {
-        this.rset = rst;
+    public ResultSetAsXml(final String root, final String child) {
+        this.root = root;
+        this.child = child;
     }
 
     @Override
-    public DataStream value() throws Exception {
-        final List<Map<String, Object>> rows = new LinkedList<>();
-        while (this.rset.next()) {
-            final ResultSetMetaData rsmd = this.rset.getMetaData();
+    public DataStream transform(final ResultSet rset) throws Exception {
+        final Directives tree = new Directives().add(this.root);
+        while (rset.next()) {
+            final ResultSetMetaData rsmd = rset.getMetaData();
             final int cols = rsmd.getColumnCount();
-            final Map<String, Object> fields = new HashMap<>();
+            tree.add(this.child);
             for (int i = 1; i <= cols; i++) {
-                fields.put(
-                    rsmd.getColumnName(i).toLowerCase(),
-                    this.rset.getObject(i)
-                );
+                tree.add(rsmd.getColumnName(i).toLowerCase())
+                    .set(rset.getObject(i))
+                    .up();
             }
-            rows.add(fields);
+            tree.up();
         }
-        return new BytesDataStream(() -> null);
+        return new BytesDataStream(new Xembler(tree).xml().getBytes());
     }
 }

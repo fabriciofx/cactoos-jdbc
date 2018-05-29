@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
@@ -39,30 +39,35 @@ import java.sql.ResultSet;
  * @since 0.1
  */
 public final class Select implements Statement<DataStream> {
-    private final Adapter adapter;
+    private final Transformer adapter;
     private final String query;
     private final DataValues values;
 
     public Select(
-        final Adapter dptr,
+        final Transformer dptr,
         final String sql,
-        final DataValue... prms
+        final DataValue... vals
     ) {
         this.adapter = dptr;
         this.query = sql;
-        this.values = new SmartDataValues(prms);
+        this.values = new SmartDataValues(vals);
+    }
+
+    @Override
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = connection.prepareStatement(this.query);
+        this.values.prepare(stmt);
+        return stmt;
     }
 
     @Override
     public DataStream result(final Connection connection) throws Exception {
-        try (
-            final PreparedStatement stmt = connection.prepareStatement(
-                this.query
-            )
-        ) {
-            this.values.prepare(stmt).execute();
+        try (final PreparedStatement stmt = this.prepare(connection)) {
+            stmt.execute();
             try (final ResultSet rset = stmt.getResultSet()) {
-                return this.adapter.adapt(rset);
+                return this.adapter.transform(rset);
             }
         }
     }

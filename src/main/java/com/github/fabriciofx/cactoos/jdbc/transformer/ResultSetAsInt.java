@@ -21,15 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.transformer;
 
+import com.github.fabriciofx.cactoos.jdbc.Transformer;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
+ * @version Id
  * @since
  */
-public interface Adapter {
-    DataStream adapt(ResultSet rset) throws Exception;
+public final class ResultSetAsInt implements Transformer {
+    @Override
+    public DataStream transform(final ResultSet rset) throws Exception {
+        rset.next();
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            try (final DataOutputStream dos = new DataOutputStream(baos)) {
+                dos.write(rset.getInt(1));
+                dos.flush();
+                return new BytesDataStream(baos.toByteArray());
+            }
+        }
+    }
 }

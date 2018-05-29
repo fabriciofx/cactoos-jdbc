@@ -21,24 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.sql.ResultSet;
-import java.util.UUID;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class ResultSetAsUuid implements Adapter {
+public final class Timeout implements Statement<DataStream> {
+    private final Statement<DataStream> origin;
+    private final int time;
+
+    public Timeout(final Statement<DataStream> stmt, final int seconds) {
+        this.origin = stmt;
+        this.time = seconds;
+    }
+
     @Override
-    public DataStream adapt(final ResultSet rset) throws Exception {
-        rset.next();
-        final UUID uuid = (UUID) rset.getObject(1);
-        return new BytesDataStream(uuid.toString().getBytes());
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = this.origin.prepare(connection);
+        stmt.setQueryTimeout(this.time);
+        return stmt;
+    }
+
+    @Override
+    public DataStream result(final Connection connection) throws Exception {
+        return this.origin.result(connection);
     }
 }

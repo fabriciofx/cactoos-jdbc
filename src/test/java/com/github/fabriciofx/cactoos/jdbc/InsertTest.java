@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsInt;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsUuid;
+import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsInt;
+import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsUuid;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;

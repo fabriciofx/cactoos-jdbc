@@ -21,28 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
+ * @version $Id$
  * @since
  */
-public final class MaxRows implements Statement<DataStream> {
-    private final Select select;
-    private final int max;
-
-    public MaxRows(final Select select, final int max) {
-        this.select = select;
-        this.max = max;
-    }
-
-    @Override
-    public DataStream result(final Connection connection) throws Exception {
-        return this.select.result(connection);
-    }
+public interface Transformer {
+    DataStream transform(ResultSet rset) throws Exception;
 }
