@@ -45,14 +45,15 @@ public final class Result<T> implements Scalar<T> {
         this.statements = new ListOf<>(stmts);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T value() throws Exception {
         try (final Connection connection = this.session.connection()) {
-            T value = null;
+            Object value = null;
             for (final Statement<?> stmt : this.statements) {
-                value = (T) stmt.result(connection);
+                value = stmt.result(connection);
             }
-            return value;
+            return (T) value;
         }
     }
 }
