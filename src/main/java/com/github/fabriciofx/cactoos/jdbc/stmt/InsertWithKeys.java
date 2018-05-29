@@ -39,16 +39,16 @@ import java.sql.ResultSet;
  * @since 0.1
  */
 public final class InsertWithKeys implements Statement<DataStream> {
-    private final Transformer adapter;
+    private final Transformer transformer;
     private final String query;
     private final DataValues values;
 
     public InsertWithKeys(
-        final Transformer dptr,
+        final Transformer transfmr,
         final String sql,
         final DataValue... vals
     ) {
-        this.adapter = dptr;
+        this.transformer = transfmr;
         this.query = sql;
         this.values = new SmartDataValues(vals);
     }
@@ -70,7 +70,7 @@ public final class InsertWithKeys implements Statement<DataStream> {
         try (final PreparedStatement stmt = this.prepare(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getGeneratedKeys()) {
-                return this.adapter.transform(rset);
+                return this.transformer.transform(rset);
             }
         }
     }
