@@ -38,7 +38,7 @@ public final class ResultSetAsUuid implements Adapter {
     @Override
     public DataStream adapt(final ResultSet rset) throws Exception {
         rset.next();
-        final UUID value = (UUID) rset.getObject(1);
-        return new BytesDataStream(value.toString().getBytes());
+        final UUID uuid = (UUID) rset.getObject(1);
+        return new BytesDataStream(uuid.toString().getBytes());
     }
 }
