@@ -23,13 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.transformer;
 
-import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import org.xembly.Directives;
-import org.xembly.Xembler;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -47,18 +45,25 @@ public final class ResultSetAsXml implements Transformer {
 
     @Override
     public DataStream transform(final ResultSet rset) throws Exception {
-        final Directives tree = new Directives().add(this.root);
+        final StringBuilder strb = new StringBuilder();
+        strb.append(String.format("<%s>", this.root));
         while (rset.next()) {
             final ResultSetMetaData rsmd = rset.getMetaData();
             final int cols = rsmd.getColumnCount();
-            tree.add(this.child);
+            strb.append(String.format("<%s>", this.child));
             for (int i = 1; i <= cols; i++) {
-                tree.add(rsmd.getColumnName(i).toLowerCase())
-                    .set(rset.getObject(i))
-                    .up();
+                strb.append(
+                    String.format(
+                        "<%s>%s</%s>",
+                        rsmd.getColumnName(i).toLowerCase(),
+                        rset.getObject(i).toString(),
+                        rsmd.getColumnName(i).toLowerCase()
+                    )
+                );
             }
-            tree.up();
+            strb.append(String.format("</%s>", this.child));
         }
-        return new BytesDataStream(new Xembler(tree).xml().getBytes());
+        strb.append(String.format("</%s>", this.root));
+        return new BytesDataStream(strb.toString().getBytes());
     }
 }
