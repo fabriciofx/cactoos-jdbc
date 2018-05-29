@@ -26,7 +26,8 @@ package com.github.fabriciofx.cactoos.jdbc.adapter;
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.math.BigInteger;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.sql.ResultSet;
 
 /**
@@ -38,7 +39,12 @@ public final class ResultSetAsInt implements Adapter {
     @Override
     public DataStream adapt(final ResultSet rset) throws Exception {
         rset.next();
-        final BigInteger value = BigInteger.valueOf(rset.getInt(1));
-        return new BytesDataStream(value.toByteArray());
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            try (final DataOutputStream dos = new DataOutputStream(baos)) {
+                dos.write(rset.getInt(1));
+                dos.flush();
+                return new BytesDataStream(baos.toByteArray());
+            }
+        }
     }
 }
