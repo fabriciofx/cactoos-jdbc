@@ -23,17 +23,16 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class MaxRows implements Statement<List<Map<String, Object>>> {
+public final class MaxRows implements Statement<DataStream> {
     private final Select select;
     private final int max;
 
@@ -43,7 +42,7 @@ public final class MaxRows implements Statement<List<Map<String, Object>>> {
     }
 
     @Override
-    public List<Map<String, Object>> result(final Connection connection) throws Exception {
+    public DataStream result(final Connection connection) throws Exception {
         return this.select.result(connection);
     }
 }

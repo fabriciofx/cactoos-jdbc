@@ -23,34 +23,37 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsMap;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.Map;
+import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class InsertWithKeys implements Statement<List<Map<String, Object>>> {
+public final class InsertWithKeys implements Statement<DataStream> {
+    private final Adapter adapter;
     private final String query;
     private final SmartDataValues values;
 
     public InsertWithKeys(
+        final Adapter dptr,
         final String sql,
         final DataValue... prms
     ) {
+        this.adapter = dptr;
         this.query = sql;
         this.values = new SmartDataValues(prms);
     }
 
     @Override
-    public List<Map<String, Object>> result(final Connection connection) throws Exception {
+    public DataStream result(final Connection connection) throws Exception {
         try (
             final PreparedStatement stmt = connection.prepareStatement(
                 this.query,
@@ -58,7 +61,9 @@ public final class InsertWithKeys implements Statement<List<Map<String, Object>>
             )
         ) {
             this.values.prepare(stmt).execute();
-            return new ResultSetAsMap(stmt.getGeneratedKeys()).value();
+            try (final ResultSet rset = stmt.getGeneratedKeys()) {
+                return this.adapter.adapt(rset);
+            }
         }
     }
 }

@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.value;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -52,7 +52,8 @@ public final class LongValue implements DataValue {
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
+//        return stream.with(this.name, this);
+        return null;
     }
 
     @Override

@@ -57,7 +57,8 @@ public final class DecimalValue implements DataValue {
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-        return stream.with(this.name, this);
+//        return stream.with(this.name, this);
+        return null;
     }
 
     @Override

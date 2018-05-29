@@ -21,33 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
-import org.junit.Test;
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.sql.ResultSet;
+import java.util.UUID;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class XmlDataStreamTest {
-    @Test
-    public void xml() throws Exception {
-        final DataStream stream = new XmlDataStream("employees");
-        final DataStream person1 = stream.substream("employee")
-            .with("name", () -> "Joseph Klimber")
-            .with("age", () -> "25");
-        final DataStream address1 = person1.substream("address")
-            .with("street", () -> "Sunset Boulevard")
-            .with("city", () -> "California")
-            .with("state", () -> "California");
-        person1.add(address1);
-        final DataStream person2 = stream.substream("employee")
-            .with("name", () -> "Jeff Bridges")
-            .with("age", () -> "34");
-        stream.add(person1).add(person2);
-        System.out.println(new FormattedXmlDataStream(stream).asString());
+public final class ResultSetAsUuid implements Adapter {
+    @Override
+    public DataStream adapt(final ResultSet rset) throws Exception {
+        rset.next();
+        final UUID value = (UUID) rset.getObject(1);
+        return new BytesDataStream(value.toString().getBytes());
     }
 }

@@ -21,45 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.math.BigInteger;
+import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class DateTimeValue implements DataValue {
-    private final String name;
-    private final LocalDateTime value;
-
-    public DateTimeValue(final String name, final LocalDateTime value) {
-        this.name = name;
-        this.value = value;
-    }
-
+public final class ResultSetAsInt implements Adapter {
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+    public DataStream adapt(final ResultSet rset) throws Exception {
+        rset.next();
+        final BigInteger value = BigInteger.valueOf(rset.getInt(1));
+        return new BytesDataStream(value.toByteArray());
     }
 }

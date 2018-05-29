@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stream;
+package com.github.fabriciofx.cactoos.jdbc.pack;
 
+import com.github.fabriciofx.cactoos.jdbc.DataPack;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import org.cactoos.Output;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import org.cactoos.Text;
 
 /**
@@ -32,30 +33,32 @@ import org.cactoos.Text;
  * @version $Id$
  * @since 0.1
  */
-public final class XmlDataStream implements DataStream {
+public final class XmlPack implements DataPack {
     private final String root;
+    private final String child;
     private final StringBuilder strb;
 
-    public XmlDataStream(final String rrt) {
-        this.root = rrt;
+    public XmlPack(final String root, final String child) {
+        this.root = root;
+        this.child = child;
         this.strb = new StringBuilder(
             String.format("<%s>", this.root)
         );
     }
 
     @Override
-    public DataStream substream(final String name) {
-        return new XmlDataStream(name);
+    public DataPack subpack(final String name) {
+        return new XmlPack(this.child, name);
     }
 
     @Override
-    public DataStream add(final DataStream stream) throws Exception {
-        this.strb.append(stream.asString());
+    public DataPack add(final DataPack pack) throws Exception {
+        this.strb.append(pack.asString());
         return this;
     }
 
     @Override
-    public DataStream with(
+    public DataPack with(
         final String name,
         final Text value
     ) throws Exception {
@@ -71,8 +74,8 @@ public final class XmlDataStream implements DataStream {
     }
 
     @Override
-    public void save(final Output output) throws Exception {
-        output.stream().write(this.asString().getBytes());
+    public DataStream stream() throws Exception {
+        return new BytesDataStream(this.asString().getBytes());
     }
 
     @Override

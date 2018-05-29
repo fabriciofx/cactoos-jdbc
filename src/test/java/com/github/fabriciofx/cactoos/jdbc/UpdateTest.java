@@ -21,45 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import org.junit.Test;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DateTimeValue implements DataValue {
-    private final String name;
-    private final LocalDateTime value;
-
-    public DateTimeValue(final String name, final LocalDateTime value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+public final class UpdateTest {
+    @Test
+    public void update() throws Exception {
+        System.out.println(
+            new Result<>(
+                new NoAuthSession(
+                    new H2Source("testdb")
+                ),
+                new Update(
+                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                )
+            ).value()
+        );
     }
 }

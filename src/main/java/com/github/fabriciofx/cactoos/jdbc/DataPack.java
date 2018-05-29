@@ -21,44 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.cactoos.Scalar;
+import org.cactoos.Text;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class ResultSetAsMap implements Scalar<List<Map<String, Object>>> {
-    private final ResultSet rset;
+public interface DataPack extends Text {
+    DataPack subpack(String name);
 
-    public ResultSetAsMap(final ResultSet rst) {
-        this.rset = rst;
-    }
+    DataPack add(DataPack pack) throws Exception;
 
-    @Override
-    public List<Map<String, Object>> value() throws Exception {
-        final List<Map<String, Object>> rows = new LinkedList<>();
-        while (this.rset.next()) {
-            final ResultSetMetaData rsmd = this.rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            final Map<String, Object> fields = new HashMap<>();
-            for (int i = 1; i <= cols; i++) {
-                fields.put(
-                    rsmd.getColumnName(i).toLowerCase(),
-                    this.rset.getObject(i)
-                );
-            }
-            rows.add(fields);
-        }
-        rset.close();
-        return rows;
-    }
+    DataPack with(String name, Text value) throws Exception;
+
+    DataStream stream() throws Exception;
 }

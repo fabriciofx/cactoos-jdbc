@@ -32,11 +32,5 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public interface DataStream extends Text {
-    DataStream substream(String name);
-
-    DataStream add(DataStream stream) throws Exception;
-
-    DataStream with(String name, Text value) throws Exception;
-
     void save(Output output) throws Exception;
 }

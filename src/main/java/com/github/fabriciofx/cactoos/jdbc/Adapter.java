@@ -21,45 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
- * @since 0.1
+ * @since
  */
-public final class DateTimeValue implements DataValue {
-    private final String name;
-    private final LocalDateTime value;
-
-    public DateTimeValue(final String name, final LocalDateTime value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
-    }
+public interface Adapter {
+    DataStream adapt(ResultSet rset) throws Exception;
 }

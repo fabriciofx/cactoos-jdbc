@@ -21,45 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class DateTimeValue implements DataValue {
-    private final String name;
-    private final LocalDateTime value;
+public final class ResultSetAsMap implements Scalar<DataStream> {
+    private final ResultSet rset;
 
-    public DateTimeValue(final String name, final LocalDateTime value) {
-        this.name = name;
-        this.value = value;
+    public ResultSetAsMap(final ResultSet rst) {
+        this.rset = rst;
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
-    }
-
-    @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+    public DataStream value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new HashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
+            }
+            rows.add(fields);
+        }
+        return new BytesDataStream(() -> null);
     }
 }

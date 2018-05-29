@@ -23,12 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.stream.FormattedXmlDataStream;
 import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
@@ -43,8 +42,7 @@ import org.junit.Test;
 public final class SelectTest {
     @Test
     public void select() throws Exception {
-        final DataStream xml = new ResultAsXml(
-            new Result<>(
+        final DataStream xml = new Result<DataStream>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
@@ -79,12 +77,10 @@ public final class SelectTest {
                     new DecimalValue("salary", "12345.00")
                 ),
                 new Select(
+                    new ResultSetAsXml("employees", "employee"),
                     "SELECT * FROM employee"
                 )
-            ),
-            "employees",
-            "employee"
-        ).value();
-        System.out.println(new FormattedXmlDataStream(xml).asString());
+            ).value();
+        System.out.println(xml.asString());
     }
 }

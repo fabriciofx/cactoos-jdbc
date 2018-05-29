@@ -21,44 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.stream.XmlDataStream;
-import java.util.List;
-import java.util.Map;
-import org.cactoos.Scalar;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class ResultAsXml implements Scalar<DataStream> {
-    private final Result<List<Map<String, Object>>> statements;
-    private final DataStream stream;
+public final class ResultSetAsXml implements Adapter {
+    private final String root;
     private final String child;
 
-    public ResultAsXml(
-        final Result<List<Map<String, Object>>> stmts,
-        final String root,
-        final String chld
-    ) {
-        this.statements = stmts;
-        this.stream = new XmlDataStream(root);
-        this.child = chld;
+    public ResultSetAsXml(final String root, final String child) {
+        this.root = root;
+        this.child = child;
     }
 
     @Override
-    public DataStream value() throws Exception {
-        for (final Map<String, Object> fields : this.statements.value()) {
-            final DataStream substream = this.stream.substream(this.child);
-            for (final String name : fields.keySet()) {
-                substream.with(name, () -> fields.get(name).toString());
+    public DataStream adapt(final ResultSet rset) throws Exception {
+        final Directives tree = new Directives().add(this.root);
+        while (rset.next()) {
+            final ResultSetMetaData rsmd = rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            tree.add(this.child);
+            for (int i = 1; i <= cols; i++) {
+                tree.add(rsmd.getColumnName(i).toLowerCase())
+                    .set(rset.getObject(i))
+                    .up();
             }
-            this.stream.add(substream);
+            tree.up();
         }
-        return this.stream;
+        return new BytesDataStream(new Xembler(tree).xml().getBytes());
     }
 }

@@ -24,54 +24,33 @@
 package com.github.fabriciofx.cactoos.jdbc.stream;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import java.nio.charset.StandardCharsets;
+import org.cactoos.Bytes;
 import org.cactoos.Output;
-import org.cactoos.Text;
-import org.json.XML;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class JsonDataStream implements DataStream {
-    private final DataStream xml;
+public final class BytesDataStream implements DataStream {
+    private final Bytes bytes;
 
-    public JsonDataStream() {
-        this("datum");
-    }
-
-    public JsonDataStream(final String rtt) {
-        this.xml = new XmlDataStream(rtt);
+    public BytesDataStream(final byte[] bts) {
+        this(() -> bts);
     }
 
-    public JsonDataStream(final DataStream strm) {
-        this.xml = strm;
-    }
-
-    @Override
-    public DataStream substream(final String name) {
-        return null;
-    }
-    @Override
-    public DataStream add(final DataStream stream) throws Exception {
-        return null;
-    }
-    @Override
-    public DataStream with(
-        final String name,
-        final Text value
-    ) throws Exception {
-        this.xml.with(name, value);
-        return this;
+    public BytesDataStream(final Bytes bts) {
+        this.bytes = bts;
     }
 
     @Override
     public void save(final Output output) throws Exception {
-        this.xml.save(output);
+        output.stream().write(this.bytes.asBytes());
     }
 
     @Override
     public String asString() throws Exception {
-        return XML.toJSONObject(this.xml.asString()).toString();
+        return new String(this.bytes.asBytes(), StandardCharsets.UTF_8);
     }
 }

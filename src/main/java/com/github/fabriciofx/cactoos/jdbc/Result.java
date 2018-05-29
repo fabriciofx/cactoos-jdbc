@@ -48,11 +48,11 @@ public final class Result<T> implements Scalar<T> {
     @Override
     public T value() throws Exception {
         try (final Connection connection = this.session.connection()) {
-            final int size = this.statements.size() - 1;
-            for (int idx = 0; idx < size; ++idx) {
-                this.statements.get(idx).result(connection);
+            T value = null;
+            for (final Statement<?> stmt : this.statements) {
+                value = (T) stmt.result(connection);
             }
-            return (T) this.statements.get(size).result(connection);
+            return value;
         }
     }
 }

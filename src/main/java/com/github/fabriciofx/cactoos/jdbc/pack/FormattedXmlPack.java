@@ -1,5 +1,6 @@
-package com.github.fabriciofx.cactoos.jdbc.stream;
+package com.github.fabriciofx.cactoos.jdbc.pack;
 
+import com.github.fabriciofx.cactoos.jdbc.DataPack;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -10,44 +11,41 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.cactoos.Output;
 import org.cactoos.Text;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-public final class FormattedXmlDataStream implements DataStream {
-    private final DataStream origin;
+public final class FormattedXmlPack implements DataPack {
+    private final XmlPack origin;
     private final int indent;
 
-    public FormattedXmlDataStream(final DataStream strm) {
-        this(strm, 2);
+    public FormattedXmlPack(final XmlPack pack) {
+        this(pack, 2);
     }
 
-    public FormattedXmlDataStream(final DataStream strm, final int indent) {
-        this.origin = strm;
+    public FormattedXmlPack(final XmlPack pack, final int indent) {
+        this.origin = pack;
         this.indent = indent;
     }
 
     @Override
-    public DataStream substream(final String name) {
-        return null;
-    }
-    @Override
-    public DataStream add(final DataStream stream) throws Exception {
-        return null;
-    }
-    @Override
-    public DataStream with(
-        final String name,
-        final Text value
-    ) throws Exception {
-        this.origin.with(name, value);
-        return this;
+    public DataPack subpack(final String name) {
+        return this.origin.subpack(name);
     }
 
     @Override
-    public void save(final Output output) throws Exception {
-        this.origin.save(output);
+    public DataPack add(final DataPack pack) throws Exception {
+        return this.origin.add(pack);
+    }
+
+    @Override
+    public DataPack with(final String name, final Text value) throws Exception {
+        return this.origin.with(name, value);
+    }
+
+    @Override
+    public DataStream stream() throws Exception {
+        return this.origin.stream();
     }
 
     @Override
