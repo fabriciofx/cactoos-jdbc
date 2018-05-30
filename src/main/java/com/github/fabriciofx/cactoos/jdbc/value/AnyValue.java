@@ -24,8 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -33,7 +33,7 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class AnyValue implements DataValue {
+public final class AnyValue implements DataValue<Object> {
     private final String name;
     private final Object value;
 
@@ -43,17 +43,18 @@ public final class AnyValue implements DataValue {
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setObject(pos, this.value);
+    public boolean match(final Class<?> type) {
+        return false;
     }
 
     @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(name, this);
-        return null;
+    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
+        stmt.setObject(index, this.value);
+    }
+
+    @Override
+    public Object value(final ResultSet rset) throws SQLException {
+        return rset.getObject(this.name);
     }
 
     @Override

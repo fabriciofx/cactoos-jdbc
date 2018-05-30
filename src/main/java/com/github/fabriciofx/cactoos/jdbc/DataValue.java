@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.cactoos.Text;
 
@@ -32,8 +33,10 @@ import org.cactoos.Text;
  * @version $Id$
  * @since 0.1
  */
-public interface DataValue extends Text {
-    void prepare(int pos, PreparedStatement stmt) throws SQLException;
+public interface DataValue<T> extends Text {
+    boolean match(Class<?> type);
 
-    DataStream stream(DataStream stream) throws Exception;
+    void prepare(PreparedStatement stmt, int index) throws SQLException;
+
+    T value(ResultSet rset) throws SQLException;
 }

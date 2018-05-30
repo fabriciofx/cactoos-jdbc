@@ -49,11 +49,11 @@ public final class Result<T> implements Scalar<T> {
     @Override
     public T value() throws Exception {
         try (final Connection connection = this.session.connection()) {
-            Object value = null;
+            Object val = new Object();
             for (final Statement<?> stmt : this.statements) {
-                value = stmt.result(connection);
+                val = stmt.result(connection);
             }
-            return (T) value;
+            return (T) val;
         }
     }
 }

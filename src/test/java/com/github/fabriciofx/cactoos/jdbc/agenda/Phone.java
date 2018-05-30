@@ -21,44 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class TextValue implements DataValue<String> {
-    private final String name;
-    private final String value;
+public interface Phone {
+    String number() throws IOException;
 
-    public TextValue(final String name, final String value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public boolean match(final Class<?> type) {
-        return type.equals(String.class);
-    }
-
-    @Override
-    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
-        stmt.setString(index, this.value);
-    }
-
-    @Override
-    public String value(final ResultSet rset) throws SQLException {
-        return rset.getString(this.name);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value;
-    }
+    String operator() throws IOException;
 }

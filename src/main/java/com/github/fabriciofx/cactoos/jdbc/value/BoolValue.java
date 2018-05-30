@@ -24,11 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -36,7 +33,7 @@ import java.sql.SQLException;
  * @version $Id$
  * @since 0.1
  */
-public final class BoolValue implements DataValue {
+public final class BoolValue implements DataValue<Boolean> {
     private final String name;
     private final Boolean value;
 
@@ -46,27 +43,21 @@ public final class BoolValue implements DataValue {
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setBoolean(pos, this.value);
+    public boolean match(final Class<?> type) {
+        return type.equals(Boolean.TYPE) || type.equals(Boolean.class);
     }
 
     @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            stream.save(() -> baos);
-            baos.write(
-                String.format(
-                    "<%s>%s</%s>",
-                    this.name,
-                    this.value.toString(),
-                    this.name
-                ).getBytes()
-            );
-            return new BytesDataStream(baos.toByteArray());
-        }
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws SQLException {
+        stmt.setBoolean(index, this.value);
+    }
+
+    @Override
+    public Boolean value(final ResultSet rset) throws SQLException {
+        return rset.getBoolean(this.name);
     }
 
     @Override

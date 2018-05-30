@@ -30,6 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import java.util.UUID;
 import org.junit.Test;
 
 /**
@@ -90,7 +91,7 @@ public final class InsertTest {
                     "INSERT INTO foo4 (name) VALUES (?)",
                     new TextValue("name", "Yegor Bugayenko")
                 )
-            ).value().asString()
+            ).value().toString()
         );
     }
 }

@@ -24,8 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
  * @version $Id$
  * @since 0.1
  */
-public final class DateTimeValue implements DataValue {
+public final class DateTimeValue implements DataValue<LocalDateTime> {
     private final String name;
     private final LocalDateTime value;
 
@@ -45,17 +45,18 @@ public final class DateTimeValue implements DataValue {
     }
 
     @Override
-    public void prepare(
-        final int pos,
-        final PreparedStatement stmt
-    ) throws SQLException {
-        stmt.setTimestamp(pos, Timestamp.valueOf(this.value));
+    public boolean match(final Class<?> type) {
+        return false;
     }
 
     @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-//        return stream.with(this.name, this);
-        return null;
+    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
+        stmt.setTimestamp(index, Timestamp.valueOf(this.value));
+    }
+
+    @Override
+    public LocalDateTime value(final ResultSet rset) throws SQLException {
+        return rset.getTimestamp(this.name).toLocalDateTime();
     }
 
     @Override
