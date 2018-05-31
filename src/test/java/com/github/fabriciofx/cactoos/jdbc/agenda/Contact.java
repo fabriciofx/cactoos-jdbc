@@ -23,13 +23,19 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import org.cactoos.Text;
+
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public interface Contact {
+public interface Contact extends Text {
     String name() throws Exception;
 
     Phones phones() throws Exception;
+
+    void delete() throws Exception;
+
+    void rename(String name) throws Exception;
 }

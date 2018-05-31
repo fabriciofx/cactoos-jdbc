@@ -23,7 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsXml;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToStream;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -42,45 +43,103 @@ import org.junit.Test;
 public final class SelectTest {
     @Test
     public void select() throws Exception {
-        final DataStream xml = new Result<DataStream>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    "CREATE TABLE employee (" +
-                        "id UUID DEFAULT RANDOM_UUID()," +
-                        "name VARCHAR(50)," +
-                        "birthday DATE," +
-                        "address VARCHAR(100)," +
-                        "married BOOLEAN," +
-                        "salary DECIMAL(20,2)" +
-                    ")"
-                ),
-                new Insert(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
-                    new TextValue("name", "John Wick"),
-                    new DateValue("birthday", "1980-08-16"),
-                    new TextValue("address", "Boulevard Street, 34"),
-                    new BoolValue("married", false),
-                    new DecimalValue("salary", "13456.00")
-                ),
-                new Insert(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
-                    new TextValue("name", "Adam Park"),
-                    new DateValue("birthday", "1985-07-10"),
-                    new TextValue("address", "Sunset Place, 14"),
-                    new BoolValue("married", true),
-                    new DecimalValue("salary", "12345.00")
-                ),
+        final Session session = new NoAuthSession(
+            new H2Source("testdb")
+        );
+        new Results<>(
+            session,
+            new Update(
+                "CREATE TABLE employee (" +
+                    "id UUID DEFAULT RANDOM_UUID()," +
+                    "name VARCHAR(50)," +
+                    "birthday DATE," +
+                    "address VARCHAR(100)," +
+                    "married BOOLEAN," +
+                    "salary DECIMAL(20,2)" +
+                ")"
+            ),
+            new Insert(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (?, ?, ?, ?, ?)",
+                new TextValue("name", "John Wick"),
+                new DateValue("birthday", "1980-08-16"),
+                new TextValue("address", "Boulevard Street, 34"),
+                new BoolValue("married", false),
+                new DecimalValue("salary", "13456.00")
+            ),
+            new Insert(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (?, ?, ?, ?, ?)",
+                new TextValue("name", "Adam Park"),
+                new DateValue("birthday", "1985-07-10"),
+                new TextValue("address", "Sunset Place, 14"),
+                new BoolValue("married", true),
+                new DecimalValue("salary", "12345.00")
+            )
+        ).value();
+        final DataStream xml = new ResultSetToStream(
+            new Result<>(
+                session,
                 new Select(
-                    new ResultSetAsXml("employees", "employee"),
                     "SELECT * FROM employee"
                 )
-            ).value();
+            ),
+            "employees",
+            "employee"
+        ).value();
         System.out.println(xml.asString());
     }
+
+    @Test
+    public void any() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("testdb")
+        );
+        new Results<>(
+            session,
+            new Update(
+                "CREATE TABLE employee (" +
+                    "id UUID DEFAULT RANDOM_UUID()," +
+                    "name VARCHAR(50)," +
+                    "birthday DATE," +
+                    "address VARCHAR(100)," +
+                    "married BOOLEAN," +
+                    "salary DECIMAL(20,2)" +
+                    ")"
+            ),
+            new Insert(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (?, ?, ?, ?, ?)",
+                new TextValue("name", "John Wick"),
+                new DateValue("birthday", "1980-08-16"),
+                new TextValue("address", "Boulevard Street, 34"),
+                new BoolValue("married", false),
+                new DecimalValue("salary", "13456.00")
+            ),
+            new Insert(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (?, ?, ?, ?, ?)",
+                new TextValue("name", "Adam Park"),
+                new DateValue("birthday", "1985-07-10"),
+                new TextValue("address", "Sunset Place, 14"),
+                new BoolValue("married", true),
+                new DecimalValue("salary", "12345.00")
+            )
+        ).value();
+        final String name = new ResultSetToType<>(
+            new Result<>(
+                session,
+                new Select(
+                    "SELECT name FROM employee"
+                )
+            ),
+            String.class
+        ).value();
+        System.out.println(name);
+    }
+
 }

@@ -23,12 +23,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsXml;
-import java.io.IOException;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
+import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
 
 /**
@@ -38,30 +40,70 @@ import java.util.UUID;
  */
 public final class SqlPhone implements Phone {
     private final Session session;
-    private final UUID id;
+    private final UUID contact;
+    private final int seq;
 
-    public SqlPhone(final Session sssn, final UUID id) {
+    public SqlPhone(final Session sssn, final UUID contact, final int seq) {
         this.session = sssn;
-        this.id = id;
+        this.contact = contact;
+        this.seq = seq;
     }
 
     @Override
-    public String number() throws IOException {
+    public String number() throws Exception {
+        return new ResultSetToType<>(
+            new Result<>(
+                this.session,
+                new Select(
+                    "SELECT number FROM phone WHERE (contact = ?) AND (seq = ?)",
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
+                )
+            ),
+            String.class
+        ).value();
+    }
+
+    @Override
+    public String operator() throws Exception {
+        return new ResultSetToType<>(
+            new Result<>(
+                this.session,
+                new Select(
+                    "SELECT operator FROM phone WHERE (contact = ?) AND (seq = ?)",
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
+                )
+            ),
+            String.class
+        ).value();
+    }
+
+    @Override
+    public void delete() throws Exception {
         new Result<>(
             this.session,
-            new Select(
-                "SELECT * FROM employee"
+            new Update(
+                "DELETE FROM phone WHERE (contact = ?) AND (seq = ?)",
+                new AnyValue("contact", this.contact),
+                new IntValue("seq", this.seq)
             )
         ).value();
     }
 
     @Override
-    public String operator() throws IOException {
+    public void change(
+        final String number,
+        final String operator
+    ) throws Exception {
         new Result<>(
             this.session,
-            new Select(
-                new ResultSetAsXml("employees", "employee"),
-                "SELECT * FROM employee"
+            new Update(
+                "UPDATE phone SET number = '?', operator = '?' WHERE (contact = ?) AND (seq = ?)",
+                new TextValue("number", number),
+                new TextValue("operator", operator),
+                new AnyValue("contact", this.contact),
+                new IntValue("seq", this.seq)
             )
         ).value();
     }

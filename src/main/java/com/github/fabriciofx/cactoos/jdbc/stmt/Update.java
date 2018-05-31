@@ -41,7 +41,7 @@ public final class Update implements Statement<Integer> {
 
     public Update(
         final String sql,
-        final DataValue... vals
+        final DataValue<?>... vals
     ) {
         this.query = sql;
         this.values = new SmartDataValues(vals);

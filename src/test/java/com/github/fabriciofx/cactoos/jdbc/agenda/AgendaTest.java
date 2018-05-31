@@ -21,45 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.transformer;
+package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.cactoos.Scalar;
+import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToStream;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
+import org.cactoos.io.ResourceOf;
+import org.junit.Test;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class ResultSetAsMap implements Scalar<DataStream> {
-    private final ResultSet rset;
+public final class AgendaTest {
+    @Test
+    public void agenda() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("agendadb")
+        );
+        new ScriptSql(
+            session,
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+            )
+        ).exec();
+        final Contacts contacts = new SqlContacts(session);
+        final Contact joseph = contacts.contact("Joseph Klimber");
+        joseph.phones().phone("99991234", "TIM");
+        joseph.phones().phone("98812564", "Oi");
+        System.out.println(joseph.asString());
 
-    public ResultSetAsMap(final ResultSet rst) {
-        this.rset = rst;
-    }
-
-    @Override
-    public DataStream value() throws Exception {
-        final List<Map<String, Object>> rows = new LinkedList<>();
-        while (this.rset.next()) {
-            final ResultSetMetaData rsmd = this.rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            final Map<String, Object> fields = new HashMap<>();
-            for (int i = 1; i <= cols; i++) {
-                fields.put(
-                    rsmd.getColumnName(i).toLowerCase(),
-                    this.rset.getObject(i)
-                );
-            }
-            rows.add(fields);
-        }
-        return new BytesDataStream(() -> null);
+        final Contact maria = contacts.find("maria");
+        System.out.println(maria.asString());
     }
 }

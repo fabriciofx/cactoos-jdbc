@@ -21,20 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.script;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Script;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import org.cactoos.Input;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
+ * @version Id
  * @since
  */
-public interface DataValues extends Iterable<DataValue<?>> {
-    DataValues with(final DataValue<?> value);
+public final class ScriptSql implements Script {
+    private final Session session;
+    private final Input input;
 
-    PreparedStatement prepare(PreparedStatement stmt) throws SQLException;
+    public ScriptSql(final Session sssn, final Input npt) {
+        this.session = sssn;
+        this.input = npt;
+    }
 
-    DataStream stream(DataStream stream) throws Exception;
+    @Override
+    public void exec() throws Exception {
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            final InputStream inpt = this.input.stream();
+            final byte[] buf = new byte[1024];
+            int length;
+            while ((length = inpt.read(buf)) != -1) {
+                baos.write(buf, 0, length);
+            }
+            final String sql = baos.toString("UTF-8");
+            new Result<>(
+                this.session,
+                new Update(sql)
+            ).value();
+        }
+    }
 }

@@ -21,30 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.transformer;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class ResultSetAsInt implements Transformer {
+public final class ResultSetToMap implements Scalar<DataStream> {
+    private final ResultSet rset;
+
+    public ResultSetToMap(final ResultSet rst) {
+        this.rset = rst;
+    }
+
     @Override
-    public DataStream transform(final ResultSet rset) throws Exception {
-        rset.next();
-        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            try (final DataOutputStream dos = new DataOutputStream(baos)) {
-                dos.write(rset.getInt(1));
-                dos.flush();
-                return new BytesDataStream(baos.toByteArray());
+    public DataStream value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new HashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
             }
+            rows.add(fields);
         }
+        return new BytesDataStream(() -> null);
     }
 }

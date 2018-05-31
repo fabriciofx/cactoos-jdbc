@@ -23,13 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.ResultSet;
-
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since
  */
-public interface Transformer {
-    DataStream transform(ResultSet rset) throws Exception;
+public interface Script {
+    void exec() throws Exception;
 }

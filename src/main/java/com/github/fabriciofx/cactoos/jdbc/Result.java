@@ -24,9 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
-import java.util.List;
 import org.cactoos.Scalar;
-import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -35,25 +33,21 @@ import org.cactoos.list.ListOf;
  */
 public final class Result<T> implements Scalar<T> {
     private final Session session;
-    private final List<Statement<?>> statements;
+    private final Statement<T> statement;
 
     public Result(
         final Session sssn,
-        final Statement<?>... stmts
+        final Statement<T> stmt
     ) {
         this.session = sssn;
-        this.statements = new ListOf<>(stmts);
+        this.statement = stmt;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T value() throws Exception {
         try (final Connection connection = this.session.connection()) {
-            Object val = new Object();
-            for (final Statement<?> stmt : this.statements) {
-                val = stmt.result(connection);
-            }
-            return (T) val;
+            return this.statement.result(connection);
         }
     }
 }

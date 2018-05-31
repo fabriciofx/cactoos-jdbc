@@ -42,7 +42,7 @@ import javax.sql.DataSource;
  *
  * @since 0.13
  */
-final class H2Source implements DataSource {
+public final class H2Source implements DataSource {
     /**
      * H2 driver.
      */
@@ -57,7 +57,7 @@ final class H2Source implements DataSource {
      * Public ctor.
      * @param dbname DB name
      */
-    H2Source(final String dbname) {
+    public H2Source(final String dbname) {
         this(new org.h2.Driver(), dbname);
     }
 
@@ -66,7 +66,7 @@ final class H2Source implements DataSource {
      * @param drvr H2 Driver
      * @param dbname DB name
      */
-    H2Source(final Driver drvr, final String dbname) {
+    public H2Source(final Driver drvr, final String dbname) {
         this.driver = drvr;
         this.name = dbname;
     }

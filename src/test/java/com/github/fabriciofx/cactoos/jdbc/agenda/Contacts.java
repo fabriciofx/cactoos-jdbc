@@ -28,6 +28,8 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  * @version $Id$
  * @since
  */
-public interface Contacts {
-    Contact contact(final String name) throws Exception;
+public interface Contacts extends Iterable<Contact> {
+    Contact contact(String name) throws Exception;
+
+    Contact find(String name) throws Exception;
 }

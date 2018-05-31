@@ -29,5 +29,5 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  * @since
  */
 public interface Phones extends Iterable<Phone> {
-    Phone phone(String number, String operator);
+    Phone phone(String number, String operator) throws Exception;
 }

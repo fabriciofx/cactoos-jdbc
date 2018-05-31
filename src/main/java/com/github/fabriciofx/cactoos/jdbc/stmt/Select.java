@@ -23,32 +23,30 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Transformer;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Select implements Statement<DataStream> {
-    private final Transformer transformer;
+public final class Select implements Statement<ResultSet> {
     private final String query;
     private final DataValues values;
 
     public Select(
-        final Transformer transfmr,
         final String sql,
-        final DataValue... vals
+        final DataValue<?>... vals
     ) {
-        this.transformer = transfmr;
         this.query = sql;
         this.values = new SmartDataValues(vals);
     }
@@ -63,11 +61,14 @@ public final class Select implements Statement<DataStream> {
     }
 
     @Override
-    public DataStream result(final Connection connection) throws Exception {
+    public ResultSet result(final Connection connection) throws Exception {
         try (final PreparedStatement stmt = this.prepare(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getResultSet()) {
-                return this.transformer.transform(rset);
+                final CachedRowSet crs = RowSetProvider.newFactory()
+                    .createCachedRowSet();
+                crs.populate(rset);
+                return crs;
             }
         }
     }

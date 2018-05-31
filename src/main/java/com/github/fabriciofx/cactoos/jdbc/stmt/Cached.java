@@ -21,20 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
- * @since
+ * @since 0.1
  */
-public interface DataValues extends Iterable<DataValue<?>> {
-    DataValues with(final DataValue<?> value);
+public final class Cached implements Statement<ResultSet> {
+    private final Statement<ResultSet> origin;
+    private final List<ResultSet> cache;
 
-    PreparedStatement prepare(PreparedStatement stmt) throws SQLException;
+    public Cached(final Statement<ResultSet> stmt) {
+        this.origin = stmt;
+        this.cache = new ArrayList<>();
+    }
 
-    DataStream stream(DataStream stream) throws Exception;
+    @Override
+    public PreparedStatement prepare(
+        final Connection connection
+    ) throws Exception {
+        return this.origin.prepare(connection);
+    }
+
+    @Override
+    public ResultSet result(final Connection connection) throws Exception {
+        if (this.cache.isEmpty()) {
+            this.cache.add(this.origin.result(connection));
+        }
+        return this.cache.get(0);
+    }
 }

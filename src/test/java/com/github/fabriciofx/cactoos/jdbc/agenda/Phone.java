@@ -23,15 +23,17 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import java.io.IOException;
-
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
 public interface Phone {
-    String number() throws IOException;
+    String number() throws Exception;
 
-    String operator() throws IOException;
+    String operator() throws Exception;
+
+    void delete () throws Exception;
+
+    void change(String number, String operator) throws Exception;
 }

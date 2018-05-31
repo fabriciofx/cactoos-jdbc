@@ -41,7 +41,7 @@ public final class Insert implements Statement<Boolean> {
 
     public Insert(
         final String sql,
-        final DataValue... vals
+        final DataValue<?>... vals
     ) {
         this.query = sql;
         this.values = new SmartDataValues(vals);

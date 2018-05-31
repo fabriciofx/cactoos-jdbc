@@ -25,11 +25,10 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -41,52 +40,62 @@ import java.util.UUID;
  * @version Id
  * @since
  */
-public final class SqlPhones implements Phones {
+public final class SqlContacts implements Contacts {
     private final Session session;
-    private final UUID contact;
 
-    public SqlPhones(final Session sssn, final UUID contact) {
+    public SqlContacts(final Session sssn) {
         this.session = sssn;
-        this.contact = contact;
     }
 
     @Override
-    public Phone phone(final String number, final String operator) throws Exception{
-        final Integer seq = new ResultSetToType<>(
+    public Contact contact(final String name) throws Exception {
+        final UUID id = new ResultSetToType<>(
             new Result<>(
                 this.session,
                 new InsertWithKeys(
-                    "INSERT INTO phone (contact, number, operator) VALUES (?, ?, ?)",
-                    new AnyValue("contact", this.contact),
-                    new TextValue("number", number),
-                    new TextValue("operator", operator)
+                    "INSERT INTO contact (name) VALUES (?)",
+                    new TextValue("name", name)
                 )
             ),
-            Integer.class
+            UUID.class
         ).value();
-        return new SqlPhone(this.session, this.contact, seq);
+        return new SqlContact(this.session, id);
     }
 
     @Override
-    public Iterator<Phone> iterator() {
+    public Contact find(final String name) throws Exception {
+        final UUID id = new ResultSetToType<>(
+            new Result<>(
+                this.session,
+                new Select(
+                    "SELECT id FROM contact WHERE name ILIKE '%' || ? || '%'",
+                    new TextValue("name", name)
+                )
+            ),
+            UUID.class
+        ).value();
+        return new SqlContact(this.session, id);
+    }
+
+    @Override
+    public Iterator<Contact> iterator() {
         try {
-            final List<Integer> seqs = new ResultSetToTypes<>(
+            final List<UUID> ids = new ResultSetToTypes<>(
                 new Result<>(
                     this.session,
                     new Select(
-                        "SELECT seq FROM phone WHERE contact = ?",
-                        new AnyValue("contact", this.contact)
+                        "SELECT id FROM contact"
                     )
                 ),
-                Integer.class
+                UUID.class
             ).value();
-            final List<Phone> list = new LinkedList<>();
-            for (final int seq : seqs) {
-                list.add(new SqlPhone(this.session, this.contact, seq));
+            final List<Contact> list = new LinkedList<>();
+            for (final UUID id : ids) {
+                list.add(new SqlContact(this.session, id));
             }
             return list.iterator();
         } catch (final Exception ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Error in interator of contacts");
         }
     }
 }

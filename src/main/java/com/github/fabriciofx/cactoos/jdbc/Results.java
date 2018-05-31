@@ -21,24 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.transformer;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.Transformer;
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
-import java.sql.ResultSet;
-import java.util.UUID;
+import java.sql.Connection;
+import java.util.List;
+import org.cactoos.Scalar;
+import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class ResultSetAsUuid implements Transformer {
+public final class Results<T> implements Scalar<T> {
+    private final Session session;
+    private final List<Statement<?>> statements;
+
+    public Results(
+        final Session sssn,
+        final Statement<?>... stmts
+    ) {
+        this.session = sssn;
+        this.statements = new ListOf<>(stmts);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public DataStream transform(final ResultSet rset) throws Exception {
-        rset.next();
-        final UUID uuid = (UUID) rset.getObject(1);
-        return new BytesDataStream(uuid.toString().getBytes());
+    public T value() throws Exception {
+        try (final Connection connection = this.session.connection()) {
+            Object val = new Object();
+            for (final Statement<?> stmt : this.statements) {
+                val = stmt.result(connection);
+            }
+            return (T) val;
+        }
     }
 }

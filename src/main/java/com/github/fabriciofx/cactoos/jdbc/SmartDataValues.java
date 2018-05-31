@@ -35,14 +35,14 @@ import java.util.List;
  * @since 0.1
  */
 public final class SmartDataValues implements DataValues {
-    private final List<DataValue> values;
+    private final List<DataValue<?>> values;
 
-    public SmartDataValues(final DataValue... prms) {
+    public SmartDataValues(final DataValue<?>... prms) {
         this.values = Arrays.asList(prms);
     }
 
     @Override
-    public DataValues with(final DataValue value) {
+    public DataValues with(final DataValue<?> value) {
         this.values.add(value);
         return this;
     }
@@ -50,24 +50,21 @@ public final class SmartDataValues implements DataValues {
     @Override
     public PreparedStatement prepare(final PreparedStatement stmt)
         throws SQLException {
-        int idx = 1;
-        for (final DataValue value : this.values) {
-            value.prepare(idx, stmt);
-            ++idx;
+        int index = 1;
+        for (final DataValue<?> value : this.values) {
+            value.prepare(stmt, index);
+            ++index;
         }
         return stmt;
     }
 
     @Override
     public DataStream stream(final DataStream stream) throws Exception {
-        for (final DataValue param : this.values) {
-            param.stream(stream);
-        }
-        return stream;
+        return null;
     }
 
     @Override
-    public Iterator<DataValue> iterator() {
+    public Iterator<DataValue<?>> iterator() {
         return this.values.iterator();
     }
 }

@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -41,7 +40,7 @@ public final class TransactionTest {
     @Test
     public void transaction() throws Exception {
         System.out.println(
-            new Result<DataStream>(
+            new Results<DataStream>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
@@ -63,7 +62,6 @@ public final class TransactionTest {
                     new TextValue("name", "Bart Simpson")
                 ),
                 new Select(
-                    new ResultSetAsXml("employees", "employee"),
                     "SELECT * from foo5"
                 )
             ).value().asString()

@@ -23,11 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.transformer.ResultSetAsXml;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
 
 /**
@@ -46,17 +47,53 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        return new Result<DataStream>(
-            this.session,
-            new Select(
-                new ResultSetAsXml("contact", "name"),
-                "SELECT name FROM contact"
-            )
-        ).value().asString();
+        return new ResultSetToType<>(
+            new Result<>(
+                this.session,
+                new Select(
+                    "SELECT name FROM contact WHERE id = ?",
+                    new TextValue("id", this.id.toString())
+                )
+            ),
+            String.class
+        ).value();
     }
 
     @Override
     public Phones phones() throws Exception {
         return new SqlPhones(this.session, this.id);
+    }
+
+    @Override
+    public void delete() throws Exception {
+        new Result<>(
+            this.session,
+            new Update(
+                "DELETE FROM contact WHERE id = ?",
+                new TextValue("id", this.id.toString())
+            )
+        ).value();
+    }
+
+    @Override
+    public void rename(final String name) throws Exception {
+        new Result<>(
+            this.session,
+            new Update(
+                "UPDATE contact SET name = '?' WHERE id = ?",
+                new TextValue("name", name),
+                new TextValue("id", this.id.toString())
+            )
+        ).value();
+    }
+
+    @Override
+    public String asString() throws Exception {
+        final StringBuilder strb = new StringBuilder();
+        strb.append(String.format("Name: %s\n", this.name()));
+        for (final Phone phone : this.phones()) {
+            strb.append(String.format("Phone: %s\n", phone.number()));
+        }
+        return strb.toString();
     }
 }

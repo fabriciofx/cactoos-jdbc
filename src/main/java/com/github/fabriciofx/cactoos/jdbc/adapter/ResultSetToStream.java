@@ -21,47 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.transformer;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.Transformer;
 import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class ResultSetAsXml implements Transformer {
+public final class ResultSetToStream implements Scalar<DataStream> {
+    private final Scalar<ResultSet> scalar;
     private final String root;
     private final String child;
 
-    public ResultSetAsXml(final String root, final String child) {
+    public ResultSetToStream(
+        final ResultSet rst,
+        final String root,
+        final String child
+    ) {
+        this(() -> rst, root, child);
+    }
+
+    public ResultSetToStream(
+        final Scalar<ResultSet> sclr,
+        final String root,
+        final String child
+    ) {
+        this.scalar = sclr;
         this.root = root;
         this.child = child;
     }
 
     @Override
-    public DataStream transform(final ResultSet rset) throws Exception {
+    public DataStream value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("<%s>", this.root));
-        while (rset.next()) {
-            final ResultSetMetaData rsmd = rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            strb.append(String.format("<%s>", this.child));
-            for (int i = 1; i <= cols; i++) {
-                strb.append(
-                    String.format(
-                        "<%s>%s</%s>",
-                        rsmd.getColumnName(i).toLowerCase(),
-                        rset.getObject(i).toString(),
-                        rsmd.getColumnName(i).toLowerCase()
-                    )
-                );
+        try (final ResultSet rset = this.scalar.value()) {
+            while (rset.next()) {
+                final ResultSetMetaData rsmd = rset.getMetaData();
+                final int cols = rsmd.getColumnCount();
+                strb.append(String.format("<%s>", this.child));
+                for (int i = 1; i <= cols; i++) {
+                    strb.append(
+                        String.format(
+                            "<%s>%s</%s>",
+                            rsmd.getColumnName(i).toLowerCase(),
+                            rset.getObject(i).toString(),
+                            rsmd.getColumnName(i).toLowerCase()
+                        )
+                    );
+                }
+                strb.append(String.format("</%s>", this.child));
             }
-            strb.append(String.format("</%s>", this.child));
         }
         strb.append(String.format("</%s>", this.root));
         return new BytesDataStream(strb.toString().getBytes());
