@@ -31,6 +31,29 @@ import org.cactoos.Text;
  * @since
  */
 public interface Contact extends Text {
+    Contact NOBODY = new Contact() {
+        @Override
+        public String name() throws Exception {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public Phones phones() throws Exception {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public void delete() throws Exception {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public void rename(final String name) throws Exception {
+            throw new UnsupportedOperationException();
+        }
+        @Override
+        public String asString() throws Exception {
+            throw new UnsupportedOperationException();
+        }
+    };
+
     String name() throws Exception;
 
     Phones phones() throws Exception;

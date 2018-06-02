@@ -39,32 +39,30 @@ import org.junit.Test;
 public final class TransactionTest {
     @Test
     public void transaction() throws Exception {
-        System.out.println(
-            new Results<DataStream>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                ),
-                new Transaction(
-                    new Insert(
-                        "INSERT INTO foo5 (name) VALUES (?)",
-                        new TextValue("name", "Jeff Lebowski")
-                    ),
-                    new Insert(
-                        "INSERT INTO bar (name) VALUES (?)",
-                        new TextValue("name", "Yegor Bugayenko")
-                    )
-                ),
+        new Results<>(
+            new NoAuthSession(
+                new H2Source("testdb")
+            ),
+            new Update(
+                "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+            ),
+            new Transaction(
                 new Insert(
                     "INSERT INTO foo5 (name) VALUES (?)",
-                    new TextValue("name", "Bart Simpson")
+                    new TextValue("name", "Jeff Lebowski")
                 ),
-                new Select(
-                    "SELECT * from foo5"
+                new Insert(
+                    "INSERT INTO bar (name) VALUES (?)",
+                    new TextValue("name", "Yegor Bugayenko")
                 )
-            ).value().asString()
-        );
+            ),
+            new Insert(
+                "INSERT INTO foo5 (name) VALUES (?)",
+                new TextValue("name", "Bart Simpson")
+            ),
+            new Select(
+                "SELECT * from foo5"
+            )
+        ).value();
     }
 }

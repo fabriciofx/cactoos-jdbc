@@ -100,7 +100,7 @@ public final class SelectTest {
         new Results<>(
             session,
             new Update(
-                "CREATE TABLE employee (" +
+                "CREATE TABLE employee2 (" +
                     "id UUID DEFAULT RANDOM_UUID()," +
                     "name VARCHAR(50)," +
                     "birthday DATE," +
@@ -110,7 +110,7 @@ public final class SelectTest {
                     ")"
             ),
             new Insert(
-                "INSERT INTO employee " +
+                "INSERT INTO employee2 " +
                     "(name, birthday, address, married, salary) " +
                     "VALUES (?, ?, ?, ?, ?)",
                 new TextValue("name", "John Wick"),
@@ -120,7 +120,7 @@ public final class SelectTest {
                 new DecimalValue("salary", "13456.00")
             ),
             new Insert(
-                "INSERT INTO employee " +
+                "INSERT INTO employee2 " +
                     "(name, birthday, address, married, salary) " +
                     "VALUES (?, ?, ?, ?, ?)",
                 new TextValue("name", "Adam Park"),
@@ -134,12 +134,11 @@ public final class SelectTest {
             new Result<>(
                 session,
                 new Select(
-                    "SELECT name FROM employee"
+                    "SELECT name FROM employee2"
                 )
             ),
             String.class
         ).value();
         System.out.println(name);
     }
-
 }

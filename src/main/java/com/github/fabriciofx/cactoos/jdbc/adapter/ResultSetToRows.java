@@ -21,51 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.LooseResultSet;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class Select implements Statement<ResultSet> {
-    private final String query;
-    private final DataValues values;
+public final class ResultSetToRows implements Scalar<List<Map<String, Object>>> {
+    private final ResultSet rset;
 
-    public Select(
-        final String sql,
-        final DataValue<?>... vals
-    ) {
-        this.query = sql;
-        this.values = new SmartDataValues(vals);
+    public ResultSetToRows(final ResultSet rst) {
+        this.rset = rst;
     }
 
     @Override
-    public PreparedStatement prepare(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(this.query);
-        this.values.prepare(stmt);
-        return stmt;
-    }
-
-    @Override
-    public ResultSet result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepare(connection)) {
-            stmt.execute();
-            try (final ResultSet rset = stmt.getResultSet()) {
-                return new LooseResultSet(new ResultSetToRows(rset).value());
+    public List<Map<String, Object>> value() throws Exception {
+        final List<Map<String, Object>> rows = new LinkedList<>();
+        while (this.rset.next()) {
+            final ResultSetMetaData rsmd = this.rset.getMetaData();
+            final int cols = rsmd.getColumnCount();
+            final Map<String, Object> fields = new LinkedHashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    this.rset.getObject(i)
+                );
             }
+            rows.add(fields);
         }
+        return rows;
     }
 }

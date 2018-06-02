@@ -80,7 +80,7 @@ public final class SqlContact implements Contact {
         new Result<>(
             this.session,
             new Update(
-                "UPDATE contact SET name = '?' WHERE id = ?",
+                "UPDATE contact SET name = ? WHERE id = ?",
                 new TextValue("name", name),
                 new TextValue("id", this.id.toString())
             )
@@ -92,7 +92,13 @@ public final class SqlContact implements Contact {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("Name: %s\n", this.name()));
         for (final Phone phone : this.phones()) {
-            strb.append(String.format("Phone: %s\n", phone.number()));
+            strb.append(
+                String.format(
+                    "Phone: %s (%s)\n",
+                    phone.number(),
+                    phone.operator()
+                )
+            );
         }
         return strb.toString();
     }

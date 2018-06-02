@@ -27,11 +27,11 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.adapter.LooseResultSet;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetProvider;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -67,10 +67,7 @@ public final class InsertWithKeys implements Statement<ResultSet> {
         try (final PreparedStatement stmt = this.prepare(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getGeneratedKeys()) {
-                final CachedRowSet crs = RowSetProvider.newFactory()
-                    .createCachedRowSet();
-                crs.populate(rset);
-                return crs;
+                return new LooseResultSet(new ResultSetToRows(rset).value());
             }
         }
     }

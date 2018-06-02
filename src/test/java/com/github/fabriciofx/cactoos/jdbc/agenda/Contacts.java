@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import java.util.List;
+
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
@@ -31,5 +33,5 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 public interface Contacts extends Iterable<Contact> {
     Contact contact(String name) throws Exception;
 
-    Contact find(String name) throws Exception;
+    List<Contact> find(String name) throws Exception;
 }

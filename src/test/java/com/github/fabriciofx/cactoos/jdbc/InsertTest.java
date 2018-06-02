@@ -23,11 +23,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Timeout;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import java.util.UUID;
 import org.junit.Test;
 
 /**
@@ -57,35 +60,41 @@ public final class InsertTest {
     @Test
     public void insertWithKeys() throws Exception {
         System.out.println(
-            new Results<DataStream>(
-                new NoAuthSession(
-                    new H2Source("testdb")
+            new ResultSetToType<>(
+                new Results<>(
+                    new NoAuthSession(
+                        new H2Source("testdb")
+                    ),
+                    new Update(
+                        "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    ),
+                    new InsertWithKeys(
+                        "INSERT INTO foo3 (name) VALUES (?)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
                 ),
-                new Update(
-                    "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                ),
-                new InsertWithKeys(
-                    "INSERT INTO foo3 (name) VALUES (?)",
-                    new TextValue("name", "Yegor Bugayenko")
-                )
-            ).value().asString()
+                Integer.class
+            ).value()
         );
     }
 
     @Test
     public void insertWithKeysUuid() throws Exception {
         System.out.println(
-            new Results<DataStream>(
-                new NoAuthSession(
-                    new H2Source("testdb")
+            new ResultSetToType<>(
+                new Results<>(
+                    new NoAuthSession(
+                        new H2Source("testdb")
+                    ),
+                    new Update(
+                        "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+                    ),
+                    new InsertWithKeys(
+                        "INSERT INTO foo4 (name) VALUES (?)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
                 ),
-                new Update(
-                    "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
-                ),
-                new InsertWithKeys(
-                    "INSERT INTO foo4 (name) VALUES (?)",
-                    new TextValue("name", "Yegor Bugayenko")
-                )
+                UUID.class
             ).value().toString()
         );
     }

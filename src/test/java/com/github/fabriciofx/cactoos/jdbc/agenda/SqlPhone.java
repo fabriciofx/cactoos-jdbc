@@ -99,7 +99,8 @@ public final class SqlPhone implements Phone {
         new Result<>(
             this.session,
             new Update(
-                "UPDATE phone SET number = '?', operator = '?' WHERE (contact = ?) AND (seq = ?)",
+                "UPDATE phone SET number = ?, operator = ? " +
+                    "WHERE (contact = ?) AND (seq = ?)",
                 new TextValue("number", number),
                 new TextValue("operator", operator),
                 new AnyValue("contact", this.contact),

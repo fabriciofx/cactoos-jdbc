@@ -52,11 +52,22 @@ public final class AgendaTest {
         ).exec();
         final Contacts contacts = new SqlContacts(session);
         final Contact joseph = contacts.contact("Joseph Klimber");
-        joseph.phones().phone("99991234", "TIM");
+        final Phone tim = joseph.phones().phone("99991234", "TIM");
         joseph.phones().phone("98812564", "Oi");
         System.out.println(joseph.asString());
 
-        final Contact maria = contacts.find("maria");
+        final Contact maria = contacts.find("maria").get(0);
         System.out.println(maria.asString());
+
+        tim.change("99994321", "TIM");
+        System.out.println(joseph.asString());
+
+//        tim.delete();
+//        System.out.println(joseph.asString());
+
+
+//        maria.delete();
+//        final Contact deleted = contacts.find("maria");
+//        System.out.println(deleted.asString());
     }
 }

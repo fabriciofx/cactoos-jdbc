@@ -63,8 +63,8 @@ public final class SqlContacts implements Contacts {
     }
 
     @Override
-    public Contact find(final String name) throws Exception {
-        final UUID id = new ResultSetToType<>(
+    public List<Contact> find(final String name) throws Exception {
+        final List<UUID> ids = new ResultSetToTypes<>(
             new Result<>(
                 this.session,
                 new Select(
@@ -74,7 +74,11 @@ public final class SqlContacts implements Contacts {
             ),
             UUID.class
         ).value();
-        return new SqlContact(this.session, id);
+        final List<Contact> founds = new LinkedList<>();
+        for (final UUID id : ids) {
+            founds.add(new SqlContact(this.session, id));
+        }
+        return founds;
     }
 
     @Override

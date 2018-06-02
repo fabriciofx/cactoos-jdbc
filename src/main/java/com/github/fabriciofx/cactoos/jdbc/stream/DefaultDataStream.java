@@ -21,39 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.stream;
 
 import com.github.fabriciofx.cactoos.jdbc.DataStream;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.nio.charset.StandardCharsets;
+import org.cactoos.Bytes;
+import org.cactoos.Output;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class Timeout<T> implements Statement<T> {
-    private final Statement<?> origin;
-    private final int time;
+public final class DefaultDataStream implements DataStream {
+    private final Bytes bytes;
 
-    public Timeout(final Statement<?> stmt, final int seconds) {
-        this.origin = stmt;
-        this.time = seconds;
+    public DefaultDataStream(final byte[] bts) {
+        this(() -> bts);
+    }
+
+    public DefaultDataStream(final Bytes bts) {
+        this.bytes = bts;
     }
 
     @Override
-    public PreparedStatement prepare(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepare(connection);
-        stmt.setQueryTimeout(this.time);
-        return stmt;
+    public void save(final Output output) throws Exception {
+        output.stream().write(this.bytes.asBytes());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T result(final Connection connection) throws Exception {
-        return (T) this.origin.result(connection);
+    public String asString() throws Exception {
+        return new String(this.bytes.asBytes(), StandardCharsets.UTF_8);
     }
 }
