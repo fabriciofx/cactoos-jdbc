@@ -21,8 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -31,6 +35,27 @@ import java.sql.PreparedStatement;
  * @version $Id$
  * @since 0.1
  */
-public interface Query {
-    PreparedStatement prepared(Connection connection) throws Exception;
+public final class KeydQuery implements Query {
+    private final String sql;
+    private final DataValues values;
+
+    public KeydQuery(
+        final String sql,
+        final DataValue<?>... vals
+    ) {
+        this.sql = sql;
+        this.values = new SmartDataValues(vals);
+    }
+
+    @Override
+    public PreparedStatement prepared(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = connection.prepareStatement(
+            this.sql,
+            java.sql.Statement.RETURN_GENERATED_KEYS
+        );
+        this.values.prepare(stmt);
+        return stmt;
+    }
 }

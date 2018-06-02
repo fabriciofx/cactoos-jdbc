@@ -27,6 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
+import com.github.fabriciofx.cactoos.jdbc.query.KeydQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -57,7 +58,7 @@ public final class SqlPhones implements Phones {
             new Result<>(
                 this.session,
                 new InsertWithKeys(
-                    new NamedQuery(
+                    new KeydQuery(
                         "INSERT INTO phone (contact, number, operator) VALUES (?, ?, ?)",
                         new AnyValue("contact", this.contact),
                         new TextValue("number", number),

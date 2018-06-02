@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.query.KeydQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
@@ -75,7 +76,7 @@ public final class InsertTest {
                         )
                     ),
                     new InsertWithKeys(
-                        new NamedQuery(
+                        new KeydQuery(
                             "INSERT INTO foo3 (name) VALUES (?)",
                             new TextValue("name", "Yegor Bugayenko")
                         )
@@ -100,7 +101,7 @@ public final class InsertTest {
                         )
                     ),
                     new InsertWithKeys(
-                        new NamedQuery(
+                        new KeydQuery(
                             "INSERT INTO foo4 (name) VALUES (?)",
                             new TextValue("name", "Yegor Bugayenko")
                         )
