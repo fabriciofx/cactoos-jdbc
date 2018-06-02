@@ -51,7 +51,7 @@ public final class Select implements Statement<ResultSet> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(this.query);
@@ -61,7 +61,7 @@ public final class Select implements Statement<ResultSet> {
 
     @Override
     public ResultSet result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepare(connection)) {
+        try (final PreparedStatement stmt = this.prepared(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getResultSet()) {
                 return new LooseResultSet(new ResultSetToRows(rset).value());

@@ -48,7 +48,7 @@ public final class Update implements Statement<Integer> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(this.query);
@@ -58,7 +58,7 @@ public final class Update implements Statement<Integer> {
 
     @Override
     public Integer result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepare(connection)) {
+        try (final PreparedStatement stmt = this.prepared(connection)) {
             return stmt.executeUpdate();
         }
     }

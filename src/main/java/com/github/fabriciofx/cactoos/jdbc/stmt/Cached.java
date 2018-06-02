@@ -45,10 +45,10 @@ public final class Cached implements Statement<ResultSet> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
-        return this.origin.prepare(connection);
+        return this.origin.prepared(connection);
     }
 
     @Override

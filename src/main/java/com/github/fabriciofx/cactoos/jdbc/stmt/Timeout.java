@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,10 +42,10 @@ public final class Timeout<T> implements Statement<T> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepare(connection);
+        final PreparedStatement stmt = this.origin.prepared(connection);
         stmt.setQueryTimeout(this.time);
         return stmt;
     }

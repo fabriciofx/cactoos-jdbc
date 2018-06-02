@@ -42,7 +42,7 @@ public final class Transaction implements Statement<Boolean> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
         throw new UnsupportedOperationException();

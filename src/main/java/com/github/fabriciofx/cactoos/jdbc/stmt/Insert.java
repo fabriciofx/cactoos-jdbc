@@ -48,7 +48,7 @@ public final class Insert implements Statement<Boolean> {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(this.query);
@@ -58,7 +58,7 @@ public final class Insert implements Statement<Boolean> {
 
     @Override
     public Boolean result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepare(connection)) {
+        try (final PreparedStatement stmt = this.prepared(connection)) {
             return stmt.execute();
         }
     }

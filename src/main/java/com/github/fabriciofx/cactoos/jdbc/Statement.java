@@ -32,7 +32,7 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public interface Statement<T> {
-    PreparedStatement prepare(Connection connection) throws Exception;
+    PreparedStatement prepared(Connection connection) throws Exception;
 
     T result(Connection connection) throws Exception;
 }
