@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.LooseResultSet;
+import com.github.fabriciofx.cactoos.jdbc.LooseResultSet;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
