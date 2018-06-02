@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.junit.Test;
@@ -41,7 +42,9 @@ public final class UpdateTest {
                     new H2Source("testdb")
                 ),
                 new Update(
-                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    new NamedQuery(
+                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    )
                 )
             ).value()
         );

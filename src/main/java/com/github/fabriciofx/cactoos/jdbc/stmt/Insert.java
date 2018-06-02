@@ -23,9 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,29 +34,15 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public final class Insert implements Statement<Boolean> {
-    private final String query;
-    private final DataValues values;
+    private final Query query;
 
-    public Insert(
-        final String sql,
-        final DataValue<?>... vals
-    ) {
-        this.query = sql;
-        this.values = new SmartDataValues(vals);
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(this.query);
-        this.values.prepare(stmt);
-        return stmt;
+    public Insert(final Query qry) {
+        this.query = qry;
     }
 
     @Override
     public Boolean result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepared(connection)) {
+        try (final PreparedStatement stmt = this.query.prepared(connection)) {
             return stmt.execute();
         }
     }

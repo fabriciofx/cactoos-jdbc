@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -32,7 +31,5 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public interface Statement<T> {
-    PreparedStatement prepared(Connection connection) throws Exception;
-
     T result(Connection connection) throws Exception;
 }

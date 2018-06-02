@@ -21,10 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
+import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -33,17 +35,24 @@ import java.sql.PreparedStatement;
  * @version $Id$
  * @since 0.1
  */
-public final class Update implements Statement<Integer> {
-    private final Query query;
+public final class NamedQuery implements Query {
+    private final String sql;
+    private final DataValues values;
 
-    public Update(final Query qry) {
-        this.query = qry;
+    public NamedQuery(
+        final String sql,
+        final DataValue<?>... vals
+    ) {
+        this.sql = sql;
+        this.values = new SmartDataValues(vals);
     }
 
     @Override
-    public Integer result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.query.prepared(connection)) {
-            return stmt.executeUpdate();
-        }
+    public PreparedStatement prepared(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = connection.prepareStatement(this.sql);
+        this.values.prepare(stmt);
+        return stmt;
     }
 }

@@ -23,11 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.LooseResultSet;
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,29 +37,15 @@ import java.sql.ResultSet;
  * @since 0.1
  */
 public final class Select implements Statement<ResultSet> {
-    private final String query;
-    private final DataValues values;
+    private final Query query;
 
-    public Select(
-        final String sql,
-        final DataValue<?>... vals
-    ) {
-        this.query = sql;
-        this.values = new SmartDataValues(vals);
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(this.query);
-        this.values.prepare(stmt);
-        return stmt;
+    public Select(final Query qry) {
+        this.query = qry;
     }
 
     @Override
     public ResultSet result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.prepared(connection)) {
+        try (final PreparedStatement stmt = this.query.prepared(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getResultSet()) {
                 return new LooseResultSet(new ResultSetToRows(rset).value());

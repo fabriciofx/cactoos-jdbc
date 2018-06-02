@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
@@ -51,8 +52,10 @@ public final class SqlContact implements Contact {
             new Result<>(
                 this.session,
                 new Select(
-                    "SELECT name FROM contact WHERE id = ?",
-                    new TextValue("id", this.id.toString())
+                    new NamedQuery(
+                        "SELECT name FROM contact WHERE id = ?",
+                        new TextValue("id", this.id.toString())
+                    )
                 )
             ),
             String.class
@@ -69,8 +72,10 @@ public final class SqlContact implements Contact {
         new Result<>(
             this.session,
             new Update(
-                "DELETE FROM contact WHERE id = ?",
-                new TextValue("id", this.id.toString())
+                new NamedQuery(
+                    "DELETE FROM contact WHERE id = ?",
+                    new TextValue("id", this.id.toString())
+                )
             )
         ).value();
     }
@@ -80,9 +85,11 @@ public final class SqlContact implements Contact {
         new Result<>(
             this.session,
             new Update(
-                "UPDATE contact SET name = ? WHERE id = ?",
-                new TextValue("name", name),
-                new TextValue("id", this.id.toString())
+                new NamedQuery(
+                    "UPDATE contact SET name = ? WHERE id = ?",
+                    new TextValue("name", name),
+                    new TextValue("id", this.id.toString())
+                )
             )
         ).value();
     }

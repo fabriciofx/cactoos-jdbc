@@ -24,10 +24,10 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Timeout;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
@@ -47,11 +47,15 @@ public final class InsertTest {
                     new H2Source("testdb")
                 ),
                 new Update(
-                    "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    new NamedQuery(
+                        "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    )
                 ),
                 new Insert(
-                    "INSERT INTO foo2 (name) VALUES (?)",
-                    new TextValue("name", "Yegor Bugayenko")
+                    new NamedQuery(
+                        "INSERT INTO foo2 (name) VALUES (?)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
                 )
             ).value()
         );
@@ -66,11 +70,15 @@ public final class InsertTest {
                         new H2Source("testdb")
                     ),
                     new Update(
-                        "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                        new NamedQuery(
+                            "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                        )
                     ),
                     new InsertWithKeys(
-                        "INSERT INTO foo3 (name) VALUES (?)",
-                        new TextValue("name", "Yegor Bugayenko")
+                        new NamedQuery(
+                            "INSERT INTO foo3 (name) VALUES (?)",
+                            new TextValue("name", "Yegor Bugayenko")
+                        )
                     )
                 ),
                 Integer.class
@@ -87,11 +95,15 @@ public final class InsertTest {
                         new H2Source("testdb")
                     ),
                     new Update(
-                        "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+                        new NamedQuery(
+                            "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+                        )
                     ),
                     new InsertWithKeys(
-                        "INSERT INTO foo4 (name) VALUES (?)",
-                        new TextValue("name", "Yegor Bugayenko")
+                        new NamedQuery(
+                            "INSERT INTO foo4 (name) VALUES (?)",
+                            new TextValue("name", "Yegor Bugayenko")
+                        )
                     )
                 ),
                 UUID.class

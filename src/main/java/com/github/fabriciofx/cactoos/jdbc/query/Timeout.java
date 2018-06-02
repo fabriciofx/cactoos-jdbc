@@ -21,29 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class Update implements Statement<Integer> {
-    private final Query query;
+public final class Timeout implements Query {
+    private final Query origin;
+    private final int time;
 
-    public Update(final Query qry) {
-        this.query = qry;
+    public Timeout(final Query query, final int seconds) {
+        this.origin = query;
+        this.time = seconds;
     }
 
     @Override
-    public Integer result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.query.prepared(connection)) {
-            return stmt.executeUpdate();
-        }
+    public PreparedStatement prepared(
+        final Connection connection
+    ) throws Exception {
+        final PreparedStatement stmt = this.origin.prepared(connection);
+        stmt.setQueryTimeout(this.time);
+        return stmt;
     }
 }

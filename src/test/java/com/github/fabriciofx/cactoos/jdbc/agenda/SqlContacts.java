@@ -27,6 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
@@ -53,8 +54,10 @@ public final class SqlContacts implements Contacts {
             new Result<>(
                 this.session,
                 new InsertWithKeys(
-                    "INSERT INTO contact (name) VALUES (?)",
-                    new TextValue("name", name)
+                    new NamedQuery(
+                        "INSERT INTO contact (name) VALUES (?)",
+                        new TextValue("name", name)
+                    )
                 )
             ),
             UUID.class
@@ -68,8 +71,10 @@ public final class SqlContacts implements Contacts {
             new Result<>(
                 this.session,
                 new Select(
-                    "SELECT id FROM contact WHERE name ILIKE '%' || ? || '%'",
-                    new TextValue("name", name)
+                    new NamedQuery(
+                        "SELECT id FROM contact WHERE name ILIKE '%' || ? || '%'",
+                        new TextValue("name", name)
+                    )
                 )
             ),
             UUID.class
@@ -88,7 +93,9 @@ public final class SqlContacts implements Contacts {
                 new Result<>(
                     this.session,
                     new Select(
-                        "SELECT id FROM contact"
+                        new NamedQuery(
+                            "SELECT id FROM contact"
+                        )
                     )
                 ),
                 UUID.class

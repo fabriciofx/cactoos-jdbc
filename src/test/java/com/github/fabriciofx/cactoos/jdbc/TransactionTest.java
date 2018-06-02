@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -44,24 +45,34 @@ public final class TransactionTest {
                 new H2Source("testdb")
             ),
             new Update(
-                "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                new NamedQuery(
+                    "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                )
             ),
             new Transaction(
                 new Insert(
-                    "INSERT INTO foo5 (name) VALUES (?)",
-                    new TextValue("name", "Jeff Lebowski")
+                    new NamedQuery(
+                        "INSERT INTO foo5 (name) VALUES (?)",
+                        new TextValue("name", "Jeff Lebowski")
+                    )
                 ),
                 new Insert(
-                    "INSERT INTO bar (name) VALUES (?)",
-                    new TextValue("name", "Yegor Bugayenko")
+                    new NamedQuery(
+                        "INSERT INTO bar (name) VALUES (?)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
                 )
             ),
             new Insert(
-                "INSERT INTO foo5 (name) VALUES (?)",
-                new TextValue("name", "Bart Simpson")
+                new NamedQuery(
+                    "INSERT INTO foo5 (name) VALUES (?)",
+                    new TextValue("name", "Bart Simpson")
+                )
             ),
             new Select(
-                "SELECT * from foo5"
+                new NamedQuery(
+                    "SELECT * from foo5"
+                )
             )
         ).value();
     }

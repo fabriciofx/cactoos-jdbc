@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,6 @@ public final class Cached implements Statement<ResultSet> {
     public Cached(final Statement<ResultSet> stmt) {
         this.origin = stmt;
         this.cache = new ArrayList<>();
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        return this.origin.prepared(connection);
     }
 
     @Override

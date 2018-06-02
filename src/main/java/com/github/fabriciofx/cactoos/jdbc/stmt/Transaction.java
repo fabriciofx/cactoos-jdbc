@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 import org.cactoos.list.ListOf;
 
@@ -39,13 +38,6 @@ public final class Transaction implements Statement<Boolean> {
 
     public Transaction(final Statement<?>... stmts) {
         this.statements = new ListOf<>(stmts);
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        throw new UnsupportedOperationException();
     }
 
     @Override

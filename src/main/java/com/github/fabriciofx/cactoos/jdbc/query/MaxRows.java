@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -32,12 +32,12 @@ import java.sql.PreparedStatement;
  * @version Id
  * @since
  */
-public final class MaxRows<T> implements Statement<T> {
-    private final Statement<?> origin;
+public final class MaxRows implements Query {
+    private final Query origin;
     private final int rows;
 
-    public MaxRows(final Statement<?> stmt, final int max) {
-        this.origin = stmt;
+    public MaxRows(final Query query, final int max) {
+        this.origin = query;
         this.rows = max;
     }
 
@@ -48,11 +48,5 @@ public final class MaxRows<T> implements Statement<T> {
         final PreparedStatement stmt = this.origin.prepared(connection);
         stmt.setMaxRows(this.rows);
         return stmt;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T result(final Connection connection) throws Exception {
-        return (T) this.origin.result(connection);
     }
 }

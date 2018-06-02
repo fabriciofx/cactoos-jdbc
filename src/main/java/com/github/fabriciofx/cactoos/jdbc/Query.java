@@ -21,38 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @version $Id$
+ * @since 0.1
  */
-public final class Timeout<T> implements Statement<T> {
-    private final Statement<?> origin;
-    private final int time;
-
-    public Timeout(final Statement<?> stmt, final int seconds) {
-        this.origin = stmt;
-        this.time = seconds;
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(connection);
-        stmt.setQueryTimeout(this.time);
-        return stmt;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T result(final Connection connection) throws Exception {
-        return (T) this.origin.result(connection);
-    }
+public interface Query {
+    PreparedStatement prepared(final Connection connection) throws Exception;
 }

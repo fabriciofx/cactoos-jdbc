@@ -25,8 +25,9 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
@@ -56,10 +57,12 @@ public final class SqlPhones implements Phones {
             new Result<>(
                 this.session,
                 new InsertWithKeys(
-                    "INSERT INTO phone (contact, number, operator) VALUES (?, ?, ?)",
-                    new AnyValue("contact", this.contact),
-                    new TextValue("number", number),
-                    new TextValue("operator", operator)
+                    new NamedQuery(
+                        "INSERT INTO phone (contact, number, operator) VALUES (?, ?, ?)",
+                        new AnyValue("contact", this.contact),
+                        new TextValue("number", number),
+                        new TextValue("operator", operator)
+                    )
                 )
             ),
             Integer.class
@@ -74,8 +77,10 @@ public final class SqlPhones implements Phones {
                 new Result<>(
                     this.session,
                     new Select(
-                        "SELECT seq FROM phone WHERE contact = ?",
-                        new AnyValue("contact", this.contact)
+                        new NamedQuery(
+                            "SELECT seq FROM phone WHERE contact = ?",
+                            new AnyValue("contact", this.contact)
+                        )
                     )
                 ),
                 Integer.class

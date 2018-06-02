@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
@@ -55,9 +56,11 @@ public final class SqlPhone implements Phone {
             new Result<>(
                 this.session,
                 new Select(
-                    "SELECT number FROM phone WHERE (contact = ?) AND (seq = ?)",
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
+                    new NamedQuery(
+                        "SELECT number FROM phone WHERE (contact = ?) AND (seq = ?)",
+                        new AnyValue("contact", this.contact),
+                        new IntValue("seq", this.seq)
+                    )
                 )
             ),
             String.class
@@ -70,9 +73,11 @@ public final class SqlPhone implements Phone {
             new Result<>(
                 this.session,
                 new Select(
-                    "SELECT operator FROM phone WHERE (contact = ?) AND (seq = ?)",
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
+                    new NamedQuery(
+                        "SELECT operator FROM phone WHERE (contact = ?) AND (seq = ?)",
+                        new AnyValue("contact", this.contact),
+                        new IntValue("seq", this.seq)
+                    )
                 )
             ),
             String.class
@@ -84,9 +89,11 @@ public final class SqlPhone implements Phone {
         new Result<>(
             this.session,
             new Update(
-                "DELETE FROM phone WHERE (contact = ?) AND (seq = ?)",
-                new AnyValue("contact", this.contact),
-                new IntValue("seq", this.seq)
+                new NamedQuery(
+                    "DELETE FROM phone WHERE (contact = ?) AND (seq = ?)",
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
+                )
             )
         ).value();
     }
@@ -99,12 +106,14 @@ public final class SqlPhone implements Phone {
         new Result<>(
             this.session,
             new Update(
-                "UPDATE phone SET number = ?, operator = ? " +
-                    "WHERE (contact = ?) AND (seq = ?)",
-                new TextValue("number", number),
-                new TextValue("operator", operator),
-                new AnyValue("contact", this.contact),
-                new IntValue("seq", this.seq)
+                new NamedQuery(
+                    "UPDATE phone SET number = ?, operator = ? " +
+                        "WHERE (contact = ?) AND (seq = ?)",
+                    new TextValue("number", number),
+                    new TextValue("operator", operator),
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
+                )
             )
         ).value();
     }
