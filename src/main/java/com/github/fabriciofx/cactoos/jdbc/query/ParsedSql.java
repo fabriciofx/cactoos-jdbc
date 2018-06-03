@@ -25,44 +25,52 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.StickyScalar;
+import org.cactoos.list.ListOf;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class KeydQuery implements Query {
-    private final Scalar<String> sql;
-    private final DataValues values;
+public final class ParsedSql implements Scalar<String>  {
+    private final String sql;
+    private final List<DataValue<?>> values;
 
-    public KeydQuery(
+    public ParsedSql(
         final String sql,
         final DataValue<?>... vals
     ) {
-        this.sql = new StickyScalar<>(new ParsedSql(sql, vals));
-        this.values = new SmartDataValues(vals);
+        this.sql = sql;
+        this.values = new ListOf<>(vals);
     }
 
     @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.value(),
-            java.sql.Statement.RETURN_GENERATED_KEYS
-        );
-        this.values.prepare(stmt);
-        return stmt;
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.sql.value();
+    public String value() throws Exception {
+        final List<String> fields = new ArrayList<>();
+        final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+        final Matcher matcher = find.matcher(this.sql);
+        while (matcher.find()) {
+            fields.add(matcher.group().substring(1));
+        }
+        final String parsed = this.sql.replaceAll(find.pattern(), "?");
+        int idx = 0;
+        for (final DataValue<?> val : this.values) {
+            if (!val.name().equals(fields.get(idx))) {
+                throw new Exception(
+                    String.format(
+                        "NamedQuery parameter #%d (%s) is out of order",
+                        idx + 1,
+                        val.name()
+                    )
+                );
+            }
+            ++idx;
+        }
+        return parsed;
     }
 }
