@@ -41,7 +41,7 @@ public final class NoAuthSession implements Session {
     }
 
     @Override
-    public Connection connection() throws SQLException {
+    public Connection connection() throws Exception {
         return this.source.getConnection();
     }
 }
