@@ -26,28 +26,64 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.UncheckedText;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class Timeout implements Query {
+public final class LoggedQuery implements Query {
     private final Query origin;
-    private final int time;
+    private final String source;
+    private final Logger logger;
+    private final UncheckedScalar<Level> level;
 
-    public Timeout(final Query query, final int seconds) {
+    public LoggedQuery(final Query query, final String source) {
+        this(query, source, Logger.getLogger(source));
+    }
+
+    public LoggedQuery(final Query query, final String src, final Logger lgr) {
         this.origin = query;
-        this.time = seconds;
+        this.source = src;
+        this.logger = lgr;
+        this.level = new UncheckedScalar<>(
+            new StickyScalar<>(
+                () -> {
+                    Level lvl = lgr.getLevel();
+                    if (lvl == null) {
+                        Logger parent = lgr;
+                        while (lvl == null) {
+                            parent = parent.getParent();
+                            lvl = parent.getLevel();
+                        }
+                    }
+                    return lvl;
+                }
+            )
+        );
     }
 
     @Override
     public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(connection);
-        stmt.setQueryTimeout(this.time);
-        return stmt;
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] SQL Query: %s ",
+                    this.source,
+                    this.origin
+                )
+            ).asString()
+        );
+        return this.origin.prepared(connection);
     }
 
     @Override

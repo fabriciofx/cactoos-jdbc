@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +48,7 @@ public final class SmartDataValues implements DataValues {
 
     @Override
     public PreparedStatement prepare(final PreparedStatement stmt)
-        throws SQLException {
+        throws Exception {
         int index = 1;
         for (final DataValue<?> value : this.values) {
             value.prepare(stmt, index);

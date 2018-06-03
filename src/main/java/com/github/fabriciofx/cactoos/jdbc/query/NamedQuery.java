@@ -55,4 +55,9 @@ public final class NamedQuery implements Query {
         this.values.prepare(stmt);
         return stmt;
     }
+
+    @Override
+    public String asString() throws Exception {
+        return this.sql;
+    }
 }

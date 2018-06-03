@@ -49,4 +49,9 @@ public final class MaxRows implements Query {
         stmt.setMaxRows(this.rows);
         return stmt;
     }
+
+    @Override
+    public String asString() throws Exception {
+        return this.origin.asString();
+    }
 }

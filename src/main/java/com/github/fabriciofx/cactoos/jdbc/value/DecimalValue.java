@@ -27,7 +27,6 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -53,12 +52,15 @@ public final class DecimalValue implements DataValue<BigDecimal> {
     }
 
     @Override
-    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
         stmt.setBigDecimal(index, this.value);
     }
 
     @Override
-    public BigDecimal value(final ResultSet rset) throws SQLException {
+    public BigDecimal value(final ResultSet rset) throws Exception {
         return rset.getBigDecimal(this.name);
     }
 

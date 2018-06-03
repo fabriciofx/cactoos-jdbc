@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.cactoos.Text;
 
 /**
@@ -36,7 +35,7 @@ import org.cactoos.Text;
 public interface DataValue<T> extends Text {
     boolean match(Class<?> type);
 
-    void prepare(PreparedStatement stmt, int index) throws SQLException;
+    void prepare(PreparedStatement stmt, int index) throws Exception;
 
-    T value(ResultSet rset) throws SQLException;
+    T value(ResultSet rset) throws Exception;
 }

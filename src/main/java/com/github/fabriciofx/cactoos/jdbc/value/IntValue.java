@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -48,12 +47,15 @@ public final class IntValue implements DataValue<Integer> {
     }
 
     @Override
-    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
         stmt.setInt(index, this.value);
     }
 
     @Override
-    public Integer value(final ResultSet rset) throws SQLException {
+    public Integer value(final ResultSet rset) throws Exception {
         return rset.getInt(this.name);
     }
 

@@ -54,7 +54,10 @@ public final class DateValue implements DataValue<LocalDate> {
     }
 
     @Override
-    public void prepare(final PreparedStatement stmt, final int index) throws SQLException {
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
         stmt.setDate(index, java.sql.Date.valueOf(this.value));
     }
 

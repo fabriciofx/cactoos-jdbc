@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -34,7 +33,7 @@ import java.sql.SQLException;
 public interface DataValues extends Iterable<DataValue<?>> {
     DataValues with(final DataValue<?> value);
 
-    PreparedStatement prepare(PreparedStatement stmt) throws SQLException;
+    PreparedStatement prepare(PreparedStatement stmt) throws Exception;
 
     DataStream stream(DataStream stream) throws Exception;
 }

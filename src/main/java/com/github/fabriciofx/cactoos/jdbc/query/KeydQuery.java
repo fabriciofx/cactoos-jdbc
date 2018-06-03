@@ -58,4 +58,9 @@ public final class KeydQuery implements Query {
         this.values.prepare(stmt);
         return stmt;
     }
+
+    @Override
+    public String asString() throws Exception {
+        return this.sql;
+    }
 }

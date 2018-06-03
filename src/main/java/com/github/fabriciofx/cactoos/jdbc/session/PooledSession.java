@@ -21,46 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import java.sql.Connection;
+import java.util.Properties;
+import javax.sql.DataSource;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.StickyScalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class BoolValue implements DataValue<Boolean> {
-    private final String name;
-    private final Boolean value;
+public final class PooledSession implements Session {
+    private final Scalar<DataSource> source;
 
-    public BoolValue(final String name, final Boolean value) {
-        this.name = name;
-        this.value = value;
+    public PooledSession(final Session session) {
+        this.source = new StickyScalar<>(
+            () -> {
+                try (final Connection connection = session.connection()) {
+                    final Properties props = connection.getClientInfo();
+                    return new HikariDataSource(new HikariConfig(props));
+                }
+            }
+        );
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return type.equals(Boolean.TYPE) || type.equals(Boolean.class);
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setBoolean(index, this.value);
-    }
-
-    @Override
-    public Boolean value(final ResultSet rset) throws Exception {
-        return rset.getBoolean(this.name);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+    public Connection connection() throws Exception {
+        return this.source.value().getConnection();
     }
 }

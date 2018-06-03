@@ -87,7 +87,16 @@ public final class H2Source implements DataSource {
         final String username,
         final String password
     ) throws SQLException {
-        return this.getConnection();
+        final Properties props = new Properties();
+        props.put("user", username);
+        props.put("password", password);
+        return this.driver.connect(
+            String.format(
+                "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1",
+                this.name
+            ),
+            props
+        );
     }
 
     @Override

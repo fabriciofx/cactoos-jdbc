@@ -25,12 +25,13 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import org.cactoos.Text;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public interface Query {
+public interface Query extends Text {
     PreparedStatement prepared(Connection connection) throws Exception;
 }
