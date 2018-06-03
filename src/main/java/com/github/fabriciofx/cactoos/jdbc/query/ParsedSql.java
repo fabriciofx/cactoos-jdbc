@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -61,9 +60,9 @@ public final class ParsedSql implements Scalar<String>  {
         int idx = 0;
         for (final DataValue<?> val : this.values) {
             if (!val.name().equals(fields.get(idx))) {
-                throw new Exception(
+                throw new IllegalArgumentException(
                     String.format(
-                        "NamedQuery parameter #%d (%s) is out of order",
+                        "NamedQuery parameter #%d (%s) is wrong or out of order",
                         idx + 1,
                         val.name()
                     )

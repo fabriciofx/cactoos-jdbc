@@ -55,7 +55,7 @@ public final class NamedQueryTest {
         );
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = IllegalArgumentException.class)
     public void invalid() throws Exception {
         System.out.println(
             new NamedQuery(
@@ -81,7 +81,7 @@ public final class NamedQueryTest {
         );
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = IllegalArgumentException.class)
     public void outOfOrder() throws Exception {
         System.out.println(
             new NamedQuery(
