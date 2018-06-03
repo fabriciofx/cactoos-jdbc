@@ -29,6 +29,12 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.StickyScalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -36,14 +42,38 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public final class NamedQuery implements Query {
-    private final String sql;
+    private final Scalar<String> sql;
     private final DataValues values;
 
     public NamedQuery(
         final String sql,
         final DataValue<?>... vals
     ) {
-        this.sql = sql;
+        this.sql = new StickyScalar<>(
+            () -> {
+                final List<String> fields = new ArrayList<>();
+                final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+                final Matcher matcher = find.matcher(sql);
+                while (matcher.find()) {
+                    fields.add(matcher.group().substring(1));
+                }
+                final String parsed = sql.replaceAll(find.pattern(), "?");
+                int idx = 0;
+                for (final DataValue<?> val : vals) {
+                    if (!val.name().equals(fields.get(idx))) {
+                        throw new Exception(
+                            String.format(
+                                "NamedQuery parameter #%d (%s) out of order",
+                                idx + 1,
+                                val.name()
+                            )
+                        );
+                    }
+                    ++idx;
+                }
+                return parsed;
+            }
+        );
         this.values = new SmartDataValues(vals);
     }
 
@@ -51,13 +81,15 @@ public final class NamedQuery implements Query {
     public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(this.sql);
+        final PreparedStatement stmt = connection.prepareStatement(
+            this.asString()
+        );
         this.values.prepare(stmt);
         return stmt;
     }
 
     @Override
     public String asString() throws Exception {
-        return this.sql;
+        return this.sql.value();
     }
 }

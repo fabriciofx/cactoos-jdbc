@@ -36,14 +36,14 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public final class KeydQuery implements Query {
-    private final String sql;
+    private final Query named;
     private final DataValues values;
 
     public KeydQuery(
         final String sql,
         final DataValue<?>... vals
     ) {
-        this.sql = sql;
+        this.named = new NamedQuery(sql, vals);
         this.values = new SmartDataValues(vals);
     }
 
@@ -52,7 +52,7 @@ public final class KeydQuery implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql,
+            this.named.asString(),
             java.sql.Statement.RETURN_GENERATED_KEYS
         );
         this.values.prepare(stmt);
@@ -61,6 +61,6 @@ public final class KeydQuery implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql;
+        return this.named.asString();
     }
 }

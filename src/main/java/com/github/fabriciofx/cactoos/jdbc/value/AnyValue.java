@@ -42,6 +42,11 @@ public final class AnyValue implements DataValue<Object> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return false;
     }

@@ -59,7 +59,7 @@ public final class SqlPhones implements Phones {
                 this.session,
                 new InsertWithKeys(
                     new KeydQuery(
-                        "INSERT INTO phone (contact, number, operator) VALUES (?, ?, ?)",
+                        "INSERT INTO phone (contact, number, operator) VALUES (:contact, :number, :operator)",
                         new AnyValue("contact", this.contact),
                         new TextValue("number", number),
                         new TextValue("operator", operator)
@@ -79,7 +79,7 @@ public final class SqlPhones implements Phones {
                     this.session,
                     new Select(
                         new NamedQuery(
-                            "SELECT seq FROM phone WHERE contact = ?",
+                            "SELECT seq FROM phone WHERE contact = :contact",
                             new AnyValue("contact", this.contact)
                         )
                     )

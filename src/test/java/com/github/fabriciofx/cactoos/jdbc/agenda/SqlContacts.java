@@ -56,7 +56,7 @@ public final class SqlContacts implements Contacts {
                 this.session,
                 new InsertWithKeys(
                     new KeydQuery(
-                        "INSERT INTO contact (name) VALUES (?)",
+                        "INSERT INTO contact (name) VALUES (:name)",
                         new TextValue("name", name)
                     )
                 )
@@ -73,7 +73,7 @@ public final class SqlContacts implements Contacts {
                 this.session,
                 new Select(
                     new NamedQuery(
-                        "SELECT id FROM contact WHERE name ILIKE '%' || ? || '%'",
+                        "SELECT id FROM contact WHERE name ILIKE '%' || :name || '%'",
                         new TextValue("name", name)
                     )
                 )

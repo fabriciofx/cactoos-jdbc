@@ -42,6 +42,11 @@ public final class TextValue implements DataValue<String> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return type.equals(String.class);
     }

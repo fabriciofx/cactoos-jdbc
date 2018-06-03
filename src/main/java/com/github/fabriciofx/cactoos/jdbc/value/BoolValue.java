@@ -42,6 +42,11 @@ public final class BoolValue implements DataValue<Boolean> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return type.equals(Boolean.TYPE) || type.equals(Boolean.class);
     }

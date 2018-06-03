@@ -54,7 +54,7 @@ public final class InsertTest {
                 ),
                 new Insert(
                     new NamedQuery(
-                        "INSERT INTO foo2 (name) VALUES (?)",
+                        "INSERT INTO foo2 (name) VALUES (:name)",
                         new TextValue("name", "Yegor Bugayenko")
                     )
                 )
@@ -77,7 +77,7 @@ public final class InsertTest {
                     ),
                     new InsertWithKeys(
                         new KeydQuery(
-                            "INSERT INTO foo3 (name) VALUES (?)",
+                            "INSERT INTO foo3 (name) VALUES (:name)",
                             new TextValue("name", "Yegor Bugayenko")
                         )
                     )
@@ -102,7 +102,7 @@ public final class InsertTest {
                     ),
                     new InsertWithKeys(
                         new KeydQuery(
-                            "INSERT INTO foo4 (name) VALUES (?)",
+                            "INSERT INTO foo4 (name) VALUES (:name)",
                             new TextValue("name", "Yegor Bugayenko")
                         )
                     )

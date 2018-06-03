@@ -47,6 +47,11 @@ public final class DecimalValue implements DataValue<BigDecimal> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return false;
     }

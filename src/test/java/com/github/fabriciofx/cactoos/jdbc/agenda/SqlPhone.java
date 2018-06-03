@@ -57,7 +57,7 @@ public final class SqlPhone implements Phone {
                 this.session,
                 new Select(
                     new NamedQuery(
-                        "SELECT number FROM phone WHERE (contact = ?) AND (seq = ?)",
+                        "SELECT number FROM phone WHERE (contact = :contact) AND (seq = :seq)",
                         new AnyValue("contact", this.contact),
                         new IntValue("seq", this.seq)
                     )
@@ -74,7 +74,7 @@ public final class SqlPhone implements Phone {
                 this.session,
                 new Select(
                     new NamedQuery(
-                        "SELECT operator FROM phone WHERE (contact = ?) AND (seq = ?)",
+                        "SELECT operator FROM phone WHERE (contact = :contact) AND (seq = :seq)",
                         new AnyValue("contact", this.contact),
                         new IntValue("seq", this.seq)
                     )
@@ -90,7 +90,7 @@ public final class SqlPhone implements Phone {
             this.session,
             new Update(
                 new NamedQuery(
-                    "DELETE FROM phone WHERE (contact = ?) AND (seq = ?)",
+                    "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
                     new AnyValue("contact", this.contact),
                     new IntValue("seq", this.seq)
                 )
@@ -107,8 +107,8 @@ public final class SqlPhone implements Phone {
             this.session,
             new Update(
                 new NamedQuery(
-                    "UPDATE phone SET number = ?, operator = ? " +
-                        "WHERE (contact = ?) AND (seq = ?)",
+                    "UPDATE phone SET number = :number, operator = :operator " +
+                        "WHERE (contact = :contact) AND (seq = :seq)",
                     new TextValue("number", number),
                     new TextValue("operator", operator),
                     new AnyValue("contact", this.contact),

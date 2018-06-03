@@ -33,6 +33,8 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public interface DataValue<T> extends Text {
+    String name();
+
     boolean match(Class<?> type);
 
     void prepare(PreparedStatement stmt, int index) throws Exception;

@@ -52,20 +52,20 @@ public final class TransactionTest {
             new Transaction(
                 new Insert(
                     new NamedQuery(
-                        "INSERT INTO foo5 (name) VALUES (?)",
+                        "INSERT INTO foo5 (name) VALUES (:name)",
                         new TextValue("name", "Jeff Lebowski")
                     )
                 ),
                 new Insert(
                     new NamedQuery(
-                        "INSERT INTO bar (name) VALUES (?)",
+                        "INSERT INTO bar (name) VALUES (:name)",
                         new TextValue("name", "Yegor Bugayenko")
                     )
                 )
             ),
             new Insert(
                 new NamedQuery(
-                    "INSERT INTO foo5 (name) VALUES (?)",
+                    "INSERT INTO foo5 (name) VALUES (:name)",
                     new TextValue("name", "Bart Simpson")
                 )
             ),

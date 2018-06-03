@@ -65,7 +65,7 @@ public final class SelectTest {
                 new NamedQuery(
                     "INSERT INTO employee " +
                         "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)",
                     new TextValue("name", "John Wick"),
                     new DateValue("birthday", "1980-08-16"),
                     new TextValue("address", "Boulevard Street, 34"),
@@ -77,7 +77,7 @@ public final class SelectTest {
                 new NamedQuery(
                     "INSERT INTO employee " +
                         "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)",
                     new TextValue("name", "Adam Park"),
                     new DateValue("birthday", "1985-07-10"),
                     new TextValue("address", "Sunset Place, 14"),
@@ -124,7 +124,7 @@ public final class SelectTest {
                 new NamedQuery(
                     "INSERT INTO employee2 " +
                         "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)",
                     new TextValue("name", "John Wick"),
                     new DateValue("birthday", "1980-08-16"),
                     new TextValue("address", "Boulevard Street, 34"),
@@ -136,7 +136,7 @@ public final class SelectTest {
                 new NamedQuery(
                     "INSERT INTO employee2 " +
                         "(name, birthday, address, married, salary) " +
-                        "VALUES (?, ?, ?, ?, ?)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)",
                     new TextValue("name", "Adam Park"),
                     new DateValue("birthday", "1985-07-10"),
                     new TextValue("address", "Sunset Place, 14"),

@@ -49,6 +49,11 @@ public final class DateValue implements DataValue<LocalDate> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return false;
     }

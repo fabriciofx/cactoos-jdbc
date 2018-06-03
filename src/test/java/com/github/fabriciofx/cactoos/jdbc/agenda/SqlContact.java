@@ -53,7 +53,7 @@ public final class SqlContact implements Contact {
                 this.session,
                 new Select(
                     new NamedQuery(
-                        "SELECT name FROM contact WHERE id = ?",
+                        "SELECT name FROM contact WHERE id = :id",
                         new TextValue("id", this.id.toString())
                     )
                 )
@@ -73,7 +73,7 @@ public final class SqlContact implements Contact {
             this.session,
             new Update(
                 new NamedQuery(
-                    "DELETE FROM contact WHERE id = ?",
+                    "DELETE FROM contact WHERE id = :id",
                     new TextValue("id", this.id.toString())
                 )
             )
@@ -86,7 +86,7 @@ public final class SqlContact implements Contact {
             this.session,
             new Update(
                 new NamedQuery(
-                    "UPDATE contact SET name = ? WHERE id = ?",
+                    "UPDATE contact SET name = :name WHERE id = :id",
                     new TextValue("name", name),
                     new TextValue("id", this.id.toString())
                 )

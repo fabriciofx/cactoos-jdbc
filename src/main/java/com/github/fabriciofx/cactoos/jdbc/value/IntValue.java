@@ -42,6 +42,11 @@ public final class IntValue implements DataValue<Integer> {
     }
 
     @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
     public boolean match(final Class<?> type) {
         return false;
     }
