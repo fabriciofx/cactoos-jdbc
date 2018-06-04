@@ -39,7 +39,11 @@ public final class TransactedSession implements Session {
 
     public TransactedSession(final Session session) {
         this.scalar = new StickyScalar<>(
-            () -> new TransactedConnection(session.connection())
+            () -> {
+                final Connection connection = session.connection();
+                connection.setAutoCommit(false);
+                return new TransactedConnection(connection);
+            }
         );
     }
 

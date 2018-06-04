@@ -42,7 +42,6 @@ public final class Transaction {
     public <T> T call(final Callable<T> callable) throws Exception {
         final Connection connection = this.session.connection();
         try {
-            connection.setAutoCommit(false);
             final T result = callable.call();
             connection.commit();
             return result;
