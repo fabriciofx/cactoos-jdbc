@@ -37,11 +37,11 @@ import org.cactoos.scalar.StickyScalar;
  * @version $Id$
  * @since 0.1
  */
-public final class KeydQuery implements Query {
+public final class KeyedQuery implements Query {
     private final Scalar<String> sql;
     private final DataValues values;
 
-    public KeydQuery(
+    public KeyedQuery(
         final String sql,
         final DataValue<?>... vals
     ) {
