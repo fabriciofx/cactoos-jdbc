@@ -21,35 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.jdk.LooseResultSet;
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
+import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.concurrent.Callable;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class Select implements Statement<ResultSet> {
-    private final Query query;
+public final class Transaction {
+    private final Session session;
 
-    public Select(final Query qry) {
-        this.query = qry;
+    public Transaction(final TransactedSession sssn) {
+        this.session = sssn;
     }
 
-    @Override
-    public ResultSet result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.query.prepared(connection)) {
-            stmt.execute();
-            try (final ResultSet rset = stmt.getResultSet()) {
-                return new LooseResultSet(new ResultSetToRows(rset).value());
-            }
+    public <T> T call(final Callable<T> callable) throws Exception {
+        final Connection connection = this.session.connection();
+        try {
+            connection.setAutoCommit(false);
+            final T result = callable.call();
+            connection.commit();
+            return result;
+        } catch (final Exception ex) {
+            connection.rollback();
+            throw ex;
         }
     }
 }

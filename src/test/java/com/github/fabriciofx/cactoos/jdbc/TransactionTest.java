@@ -23,57 +23,40 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
+import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Transaction;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
+import org.cactoos.io.ResourceOf;
 import org.junit.Test;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
 public final class TransactionTest {
     @Test
-    public void transaction() throws Exception {
-        new Results<>(
+    public void agenda() throws Exception {
+        final TransactedSession session = new TransactedSession(
             new NoAuthSession(
                 new H2Source("testdb")
-            ),
-            new Update(
-                new NamedQuery(
-                    "CREATE TABLE foo5 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                )
-            ),
-            new Transaction(
-                new Insert(
-                    new NamedQuery(
-                        "INSERT INTO foo5 (name) VALUES (:name)",
-                        new TextValue("name", "Jeff Lebowski")
-                    )
-                ),
-                new Insert(
-                    new NamedQuery(
-                        "INSERT INTO bar (name) VALUES (:name)",
-                        new TextValue("name", "Yegor Bugayenko")
-                    )
-                )
-            ),
-            new Insert(
-                new NamedQuery(
-                    "INSERT INTO foo5 (name) VALUES (:name)",
-                    new TextValue("name", "Bart Simpson")
-                )
-            ),
-            new Select(
-                new NamedQuery(
-                    "SELECT * from foo5"
-                )
             )
-        ).value();
+        );
+        new ScriptSql(
+            session,
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+            )
+        ).exec();
+        new Transaction(session).call(() -> {
+            final Contact einstein = new SqlContacts(session)
+                .contact("Albert Einstein");
+            einstein.phones().phone("912232325", "TIM");
+            einstein.phones().phone("982231234", "Oi");
+            System.out.println(einstein.asString());
+            return einstein;
+        });
     }
 }

@@ -33,10 +33,10 @@ import org.cactoos.list.ListOf;
  * @version $Id$
  * @since 0.1
  */
-public final class Transaction implements Statement<Boolean> {
+public final class TransactionStmt implements Statement<Boolean> {
     private final List<Statement<?>> statements;
 
-    public Transaction(final Statement<?>... stmts) {
+    public TransactionStmt(final Statement<?>... stmts) {
         this.statements = new ListOf<>(stmts);
     }
 

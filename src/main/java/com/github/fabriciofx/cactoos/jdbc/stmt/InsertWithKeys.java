@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.rset.LooseResultSet;
+import com.github.fabriciofx.cactoos.jdbc.jdk.LooseResultSet;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;

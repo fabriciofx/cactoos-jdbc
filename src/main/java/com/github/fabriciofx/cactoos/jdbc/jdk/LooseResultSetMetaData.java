@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.rset;
+package com.github.fabriciofx.cactoos.jdbc.jdk;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
