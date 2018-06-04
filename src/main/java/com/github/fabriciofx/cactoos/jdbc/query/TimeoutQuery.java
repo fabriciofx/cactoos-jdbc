@@ -32,11 +32,11 @@ import java.sql.PreparedStatement;
  * @version Id
  * @since
  */
-public final class Timeout implements Query {
+public final class TimeoutQuery implements Query {
     private final Query origin;
     private final int time;
 
-    public Timeout(final Query query, final int seconds) {
+    public TimeoutQuery(final Query query, final int seconds) {
         this.origin = query;
         this.time = seconds;
     }

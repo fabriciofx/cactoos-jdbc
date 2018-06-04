@@ -32,11 +32,11 @@ import java.sql.PreparedStatement;
  * @version Id
  * @since
  */
-public final class MaxRows implements Query {
+public final class MaxRowsQuery implements Query {
     private final Query origin;
     private final int rows;
 
-    public MaxRows(final Query query, final int max) {
+    public MaxRowsQuery(final Query query, final int max) {
         this.origin = query;
         this.rows = max;
     }
