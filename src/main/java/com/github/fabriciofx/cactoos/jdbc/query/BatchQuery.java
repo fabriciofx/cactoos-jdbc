@@ -23,10 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
