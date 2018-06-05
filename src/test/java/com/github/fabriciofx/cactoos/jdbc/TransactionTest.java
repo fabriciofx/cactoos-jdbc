@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import org.cactoos.io.ResourceOf;
@@ -44,7 +44,7 @@ public final class TransactionTest {
                 new H2Source("testdb")
             )
         );
-        new ScriptSql(
+        new SqlScript(
             session,
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"

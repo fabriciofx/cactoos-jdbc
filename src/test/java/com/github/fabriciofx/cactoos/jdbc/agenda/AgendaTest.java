@@ -24,12 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToStream;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import org.cactoos.io.ResourceOf;
 import org.junit.Test;
 
@@ -44,7 +41,7 @@ public final class AgendaTest {
         final Session session = new NoAuthSession(
             new H2Source("agendadb")
         );
-        new ScriptSql(
+        new SqlScript(
             session,
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"

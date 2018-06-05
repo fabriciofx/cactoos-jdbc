@@ -37,11 +37,11 @@ import org.cactoos.Input;
  * @version Id
  * @since
  */
-public final class ScriptSql implements Script {
+public final class SqlScript implements Script {
     private final Session session;
     private final Input input;
 
-    public ScriptSql(final Session sssn, final Input npt) {
+    public SqlScript(final Session sssn, final Input npt) {
         this.session = sssn;
         this.input = npt;
     }
