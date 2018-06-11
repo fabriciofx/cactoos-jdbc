@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -48,8 +48,8 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        return new ResultSetToType<>(
-            new Result<>(
+        return new ResultToValue<>(
+            new Crop<>(
                 this.session,
                 new Select(
                     new NamedQuery(
@@ -69,7 +69,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public void delete() throws Exception {
-        new Result<>(
+        new Crop<>(
             this.session,
             new Update(
                 new NamedQuery(
@@ -82,7 +82,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public void rename(final String name) throws Exception {
-        new Result<>(
+        new Crop<>(
             this.session,
             new Update(
                 new NamedQuery(

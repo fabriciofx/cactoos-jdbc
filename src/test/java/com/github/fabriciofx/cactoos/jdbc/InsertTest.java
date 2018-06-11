@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -43,7 +43,7 @@ public final class InsertTest {
     @Test
     public void insert() throws Exception {
         System.out.println(
-            new Results<>(
+            new Crops<>(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
@@ -65,8 +65,8 @@ public final class InsertTest {
     @Test
     public void insertWithKeys() throws Exception {
         System.out.println(
-            new ResultSetToType<>(
-                new Results<>(
+            new ResultToValue<>(
+                new Crops<>(
                     new NoAuthSession(
                         new H2Source("testdb")
                     ),
@@ -90,8 +90,8 @@ public final class InsertTest {
     @Test
     public void insertWithKeysUuid() throws Exception {
         System.out.println(
-            new ResultSetToType<>(
-                new Results<>(
+            new ResultToValue<>(
+                new Crops<>(
                     new NoAuthSession(
                         new H2Source("testdb")
                     ),

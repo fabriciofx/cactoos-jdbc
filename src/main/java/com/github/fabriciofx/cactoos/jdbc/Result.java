@@ -23,31 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.Connection;
-import org.cactoos.Scalar;
+import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class Result<T> implements Scalar<T> {
-    private final Session session;
-    private final Statement<T> statement;
-
-    public Result(
-        final Session sssn,
-        final Statement<T> stmt
-    ) {
-        this.session = sssn;
-        this.statement = stmt;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T value() throws Exception {
-        try (final Connection connection = this.session.connection()) {
-            return this.statement.result(connection);
-        }
-    }
+public interface Result extends Iterable<Map<String, Object>> {
+    int count();
 }

@@ -23,30 +23,45 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import org.junit.Test;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class UpdateTest {
-    @Test
-    public void update() throws Exception {
-        System.out.println(
-            new Crop<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
-                )
-            ).value()
-        );
+public final class ResultFromResultSet implements Result {
+    private final List<Map<String, Object>> rows;
+
+    public ResultFromResultSet(final ResultSet rset) throws Exception {
+        this.rows = new LinkedList<>();
+        final ResultSetMetaData rsmd = rset.getMetaData();
+        final int cols = rsmd.getColumnCount();
+        while (rset.next()) {
+            final Map<String, Object> fields = new LinkedHashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    rset.getObject(i)
+                );
+            }
+            this.rows.add(fields);
+        }
+    }
+
+    @Override
+    public Iterator<Map<String, Object>> iterator() {
+        return this.rows.iterator();
+    }
+
+    @Override
+    public int count() {
+        return this.rows.size();
     }
 }

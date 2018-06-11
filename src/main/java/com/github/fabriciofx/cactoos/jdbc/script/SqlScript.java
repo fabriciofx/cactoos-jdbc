@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
@@ -56,7 +56,7 @@ public final class SqlScript implements Script {
                 baos.write(buf, 0, length);
             }
             final String sql = baos.toString("UTF-8");
-            new Result<>(
+            new Crop<>(
                 this.session,
                 new Update(
                     new NamedQuery(sql)

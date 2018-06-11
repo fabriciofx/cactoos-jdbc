@@ -21,32 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import org.junit.Test;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class UpdateTest {
-    @Test
-    public void update() throws Exception {
-        System.out.println(
-            new Crop<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
-                )
-            ).value()
-        );
+public final class ResultToValues<T> implements Scalar<List<T>> {
+    private final Scalar<Result> scalar;
+    private final Class<T> type;
+
+    public ResultToValues(final Scalar<Result> sclr, final Class<T> tpe) {
+        this.scalar = sclr;
+        this.type = tpe;
+    }
+
+    @Override
+    public List<T> value() throws Exception {
+        final List<T> values = new LinkedList<>();
+        for (final Map<String, Object> row : this.scalar.value()) {
+            for (final Object obj : row.values()) {
+                values.add(this.type.cast(obj));
+            }
+        }
+        return values;
     }
 }

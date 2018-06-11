@@ -33,11 +33,11 @@ import org.cactoos.list.ListOf;
  * @version $Id$
  * @since 0.1
  */
-public final class Results<T> implements Scalar<T> {
+public final class Crops<T> implements Scalar<T> {
     private final Session session;
     private final List<Statement<?>> statements;
 
-    public Results(
+    public Crops(
         final Session sssn,
         final Statement<?>... stmts
     ) {

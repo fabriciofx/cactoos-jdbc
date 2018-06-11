@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValues;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -51,8 +51,8 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact contact(final String name) throws Exception {
-        final UUID id = new ResultSetToType<>(
-            new Result<>(
+        final UUID id = new ResultToValue<>(
+            new Crop<>(
                 this.session,
                 new InsertWithKeys(
                     new KeyedQuery(
@@ -68,8 +68,8 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public List<Contact> find(final String name) throws Exception {
-        final List<UUID> ids = new ResultSetToTypes<>(
-            new Result<>(
+        final List<UUID> ids = new ResultToValues<>(
+            new Crop<>(
                 this.session,
                 new Select(
                     new NamedQuery(
@@ -90,8 +90,8 @@ public final class SqlContacts implements Contacts {
     @Override
     public Iterator<Contact> iterator() {
         try {
-            final List<UUID> ids = new ResultSetToTypes<>(
-                new Result<>(
+            final List<UUID> ids = new ResultToValues<>(
+                new Crop<>(
                     this.session,
                     new Select(
                         new NamedQuery(

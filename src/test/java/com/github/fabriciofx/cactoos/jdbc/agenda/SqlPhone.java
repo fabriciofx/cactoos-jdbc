@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -52,8 +52,8 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String number() throws Exception {
-        return new ResultSetToType<>(
-            new Result<>(
+        return new ResultToValue<>(
+            new Crop<>(
                 this.session,
                 new Select(
                     new NamedQuery(
@@ -69,8 +69,8 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String operator() throws Exception {
-        return new ResultSetToType<>(
-            new Result<>(
+        return new ResultToValue<>(
+            new Crop<>(
                 this.session,
                 new Select(
                     new NamedQuery(
@@ -86,7 +86,7 @@ public final class SqlPhone implements Phone {
 
     @Override
     public void delete() throws Exception {
-        new Result<>(
+        new Crop<>(
             this.session,
             new Update(
                 new NamedQuery(
@@ -103,7 +103,7 @@ public final class SqlPhone implements Phone {
         final String number,
         final String operator
     ) throws Exception {
-        new Result<>(
+        new Crop<>(
             this.session,
             new Update(
                 new NamedQuery(

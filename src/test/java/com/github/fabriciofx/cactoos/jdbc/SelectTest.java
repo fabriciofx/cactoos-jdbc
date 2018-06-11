@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToStream;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToStream;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
@@ -47,7 +47,7 @@ public final class SelectTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Results<>(
+        new Crops<>(
             session,
             new Update(
                 new NamedQuery(
@@ -86,8 +86,8 @@ public final class SelectTest {
                 )
             )
         ).value();
-        final DataStream xml = new ResultSetToStream(
-            new Result<>(
+        final DataStream xml = new ResultToStream(
+            new Crop<>(
                 session,
                 new Select(
                     new NamedQuery(
@@ -106,7 +106,7 @@ public final class SelectTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Results<>(
+        new Crops<>(
             session,
             new Update(
                 new NamedQuery(
@@ -145,8 +145,8 @@ public final class SelectTest {
                 )
             )
         ).value();
-        final String name = new ResultSetToType<>(
-            new Result<>(
+        final String name = new ResultToValue<>(
+            new Crop<>(
                 session,
                 new Select(
                     new NamedQuery(

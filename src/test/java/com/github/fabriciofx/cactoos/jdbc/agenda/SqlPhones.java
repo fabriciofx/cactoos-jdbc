@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToType;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToTypes;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValues;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -54,8 +54,8 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Phone phone(final String number, final String operator) throws Exception{
-        final Integer seq = new ResultSetToType<>(
-            new Result<>(
+        final Integer seq = new ResultToValue<>(
+            new Crop<>(
                 this.session,
                 new InsertWithKeys(
                     new KeyedQuery(
@@ -74,8 +74,8 @@ public final class SqlPhones implements Phones {
     @Override
     public Iterator<Phone> iterator() {
         try {
-            final List<Integer> seqs = new ResultSetToTypes<>(
-                new Result<>(
+            final List<Integer> seqs = new ResultToValues<>(
+                new Crop<>(
                     this.session,
                     new Select(
                         new NamedQuery(

@@ -23,30 +23,31 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import org.junit.Test;
+import java.sql.Connection;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class UpdateTest {
-    @Test
-    public void update() throws Exception {
-        System.out.println(
-            new Crop<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
-                )
-            ).value()
-        );
+public final class Crop<T> implements Scalar<T> {
+    private final Session session;
+    private final Statement<T> statement;
+
+    public Crop(
+        final Session sssn,
+        final Statement<T> stmt
+    ) {
+        this.session = sssn;
+        this.statement = stmt;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T value() throws Exception {
+        try (final Connection connection = this.session.connection()) {
+            return this.statement.result(connection);
+        }
     }
 }

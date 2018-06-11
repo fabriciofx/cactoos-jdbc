@@ -40,7 +40,7 @@ import org.junit.Test;
 public final class TransactionStmtTest {
     @Test
     public void transaction() throws Exception {
-        new Results<>(
+        new Crops<>(
             new NoAuthSession(
                 new H2Source("testdb")
             ),

@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.jdk.LooseResultSet;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.ResultFromResultSet;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetToRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +36,7 @@ import java.sql.ResultSet;
  * @version $Id$
  * @since 0.1
  */
-public final class InsertWithKeys implements Statement<ResultSet> {
+public final class InsertWithKeys implements Statement<Result> {
     private final Query query;
 
     public InsertWithKeys(final Query qry) {
@@ -44,11 +44,11 @@ public final class InsertWithKeys implements Statement<ResultSet> {
     }
 
     @Override
-    public ResultSet result(final Connection connection) throws Exception {
+    public Result result(final Connection connection) throws Exception {
         try (final PreparedStatement stmt = this.query.prepared(connection)) {
             stmt.execute();
             try (final ResultSet rset = stmt.getGeneratedKeys()) {
-                return new LooseResultSet(new ResultSetToRows(rset).value());
+                return new ResultFromResultSet(rset);
             }
         }
     }

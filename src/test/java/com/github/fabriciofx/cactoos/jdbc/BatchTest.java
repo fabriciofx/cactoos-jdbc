@@ -43,7 +43,7 @@ public final class BatchTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Result<>(
+        new Crop<>(
             session,
             new Update(
                 new NamedQuery(
@@ -55,7 +55,7 @@ public final class BatchTest {
                 )
             )
         ).value();
-        new Result<>(
+        new Crop<>(
             session,
             new Batch(
                 new BatchQuery(

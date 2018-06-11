@@ -23,41 +23,51 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import com.github.fabriciofx.cactoos.jdbc.DataStream;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import java.util.Map;
 import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @version Id
+ * @since
  */
-public final class ResultSetToRows implements Scalar<List<Map<String, Object>>> {
-    private final ResultSet rset;
+public final class ResultToStream implements Scalar<DataStream> {
+    private final Scalar<Result> scalar;
+    private final String root;
+    private final String child;
 
-    public ResultSetToRows(final ResultSet rst) {
-        this.rset = rst;
+    public ResultToStream(
+        final Scalar<Result> sclr,
+        final String root,
+        final String child
+    ) {
+        this.scalar = sclr;
+        this.root = root;
+        this.child = child;
     }
 
     @Override
-    public List<Map<String, Object>> value() throws Exception {
-        final List<Map<String, Object>> rows = new LinkedList<>();
-        final ResultSetMetaData rsmd = this.rset.getMetaData();
-        final int cols = rsmd.getColumnCount();
-        while (this.rset.next()) {
-            final Map<String, Object> fields = new LinkedHashMap<>();
-            for (int i = 1; i <= cols; i++) {
-                fields.put(
-                    rsmd.getColumnName(i).toLowerCase(),
-                    this.rset.getObject(i)
+    public DataStream value() throws Exception {
+        final StringBuilder strb = new StringBuilder();
+        strb.append(String.format("<%s>", this.root));
+        for (final Map<String, Object> row : this.scalar.value()) {
+            strb.append(String.format("<%s>", this.child));
+            for (final String key : row.keySet()) {
+                strb.append(
+                    String.format(
+                        "<%s>%s</%s>",
+                        key,
+                        row.get(key),
+                        key
+                    )
                 );
             }
-            rows.add(fields);
+            strb.append(String.format("</%s>", this.child));
         }
-        return rows;
+        strb.append(String.format("</%s>", this.root));
+        return new BytesDataStream(strb.toString().getBytes());
     }
 }

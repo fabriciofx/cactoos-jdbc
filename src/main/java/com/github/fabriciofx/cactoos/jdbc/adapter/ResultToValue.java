@@ -21,32 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.adapter;
 
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import org.junit.Test;
+import com.github.fabriciofx.cactoos.jdbc.Result;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class UpdateTest {
-    @Test
-    public void update() throws Exception {
-        System.out.println(
-            new Crop<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
-                )
-            ).value()
-        );
+public final class ResultToValue<T> implements Scalar<T> {
+    private final Scalar<Result> crop;
+    private final Class<T> type;
+
+    public ResultToValue(final Scalar<Result> crp, final Class<T> tpe) {
+        this.crop = crp;
+        this.type = tpe;
+    }
+
+    @Override
+    public T value() throws Exception {
+        final Object obj = this.crop.value()
+            .iterator()
+            .next()
+            .values()
+            .iterator()
+            .next();
+        return this.type.cast(obj);
     }
 }
