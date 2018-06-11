@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -47,8 +46,8 @@ public final class TextValue implements DataValue<String> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return type.equals(String.class);
+    public String value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -57,11 +56,6 @@ public final class TextValue implements DataValue<String> {
         final int index
     ) throws Exception {
         stmt.setString(index, this.value);
-    }
-
-    @Override
-    public String value(final ResultSet rset) throws Exception {
-        return rset.getString(this.name);
     }
 
     @Override

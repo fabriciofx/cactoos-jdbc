@@ -26,8 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.io.IOException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
@@ -54,8 +52,8 @@ public final class DateValue implements DataValue<LocalDate> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return false;
+    public LocalDate value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -64,11 +62,6 @@ public final class DateValue implements DataValue<LocalDate> {
         final int index
     ) throws Exception {
         stmt.setDate(index, java.sql.Date.valueOf(this.value));
-    }
-
-    @Override
-    public LocalDate value(final ResultSet rset) throws SQLException {
-        return rset.getDate(this.name).toLocalDate();
     }
 
     @Override

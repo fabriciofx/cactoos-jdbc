@@ -47,8 +47,8 @@ public final class AnyValue implements DataValue<Object> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return false;
+    public Object value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -57,11 +57,6 @@ public final class AnyValue implements DataValue<Object> {
         final int index
     ) throws Exception {
         stmt.setObject(index, this.value);
-    }
-
-    @Override
-    public Object value(final ResultSet rset) throws Exception {
-        return rset.getObject(this.name);
     }
 
     @Override

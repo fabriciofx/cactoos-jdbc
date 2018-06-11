@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -47,8 +46,8 @@ public final class DoubleValue implements DataValue<Double> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return false;
+    public Double value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -57,11 +56,6 @@ public final class DoubleValue implements DataValue<Double> {
         final int index
     ) throws Exception {
         stmt.setDouble(index, this.value);
-    }
-
-    @Override
-    public Double value(final ResultSet rset) throws Exception {
-        return rset.getDouble(this.name);
     }
 
     @Override

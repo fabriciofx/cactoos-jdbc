@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.cactoos.Scalar;
 import org.cactoos.Text;
 
 /**
@@ -32,12 +32,8 @@ import org.cactoos.Text;
  * @version $Id$
  * @since 0.1
  */
-public interface DataValue<T> extends Text {
+public interface DataValue<T> extends Scalar<T>, Text {
     String name();
 
-    boolean match(Class<?> type);
-
     void prepare(PreparedStatement stmt, int index) throws Exception;
-
-    T value(ResultSet rset) throws Exception;
 }

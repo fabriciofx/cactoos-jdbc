@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -52,8 +51,8 @@ public final class DecimalValue implements DataValue<BigDecimal> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return false;
+    public BigDecimal value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -62,11 +61,6 @@ public final class DecimalValue implements DataValue<BigDecimal> {
         final int index
     ) throws Exception {
         stmt.setBigDecimal(index, this.value);
-    }
-
-    @Override
-    public BigDecimal value(final ResultSet rset) throws Exception {
-        return rset.getBigDecimal(this.name);
     }
 
     @Override

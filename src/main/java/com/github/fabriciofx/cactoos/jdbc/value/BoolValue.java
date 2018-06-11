@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
@@ -47,8 +46,8 @@ public final class BoolValue implements DataValue<Boolean> {
     }
 
     @Override
-    public boolean match(final Class<?> type) {
-        return type.equals(Boolean.TYPE) || type.equals(Boolean.class);
+    public Boolean value() throws Exception {
+        return this.value;
     }
 
     @Override
@@ -57,11 +56,6 @@ public final class BoolValue implements DataValue<Boolean> {
         final int index
     ) throws Exception {
         stmt.setBoolean(index, this.value);
-    }
-
-    @Override
-    public Boolean value(final ResultSet rset) throws Exception {
-        return rset.getBoolean(this.name);
     }
 
     @Override
