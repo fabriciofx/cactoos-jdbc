@@ -46,9 +46,9 @@ public final class ResultSetToRows implements Scalar<List<Map<String, Object>>> 
     @Override
     public List<Map<String, Object>> value() throws Exception {
         final List<Map<String, Object>> rows = new LinkedList<>();
+        final ResultSetMetaData rsmd = this.rset.getMetaData();
+        final int cols = rsmd.getColumnCount();
         while (this.rset.next()) {
-            final ResultSetMetaData rsmd = this.rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
             final Map<String, Object> fields = new LinkedHashMap<>();
             for (int i = 1; i <= cols; i++) {
                 fields.put(
