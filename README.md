@@ -1,32 +1,66 @@
-# Cactoos JDBC
+[![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
+[![We recommend IntelliJ IDEA](http://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
-**Cactoos JDBC** is a is a [*true object-oriented*](http://www.yegor256.com/2014/11/20/seven-virtues-of-good-object.html)
-wrapper of [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity)
-API.
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/fabriciofx/cactoos-jdbc/blob/master/LICENSE.txt)
 
-## What does *true object-oriented* means?
 
-This application follows these four fundamental principles:
+## Introduction
 
-  * No `null` ([why?](http://www.yegor256.com/2014/05/13/why-null-is-bad.html))
-  * No code in constructors ([why?](http://www.yegor256.com/2015/05/07/ctors-must-be-code-free.html))
-  * No getters and setters ([why?](http://www.yegor256.com/2014/09/16/getters-and-setters-are-evil.html))
-  * No mutable objects ([why?](http://www.yegor256.com/2014/06/09/objects-should-be-immutable.html))
-  * No `static` methods, not even `private` ones ([why?](http://www.yegor256.com/2017/02/07/private-method-is-new-class.html))
-  * No `instanceof`, type casting, or reflection ([why?](http://www.yegor256.com/2015/04/02/class-casting-is-anti-pattern.html))
-  * No implementation inheritance ([why?](http://www.yegor256.com/2016/09/13/inheritance-is-procedural.html))
-  * No public methods without `@Override`
-  * No statements in test methods except `assertThat` ([why?](http://www.yegor256.com/2017/05/17/single-statement-unit-tests.html))
+**ATTENTION**: We're still in a very early alpha version, the API may and
+*will* change frequently. Please, use it at your own risk, until we release
+version 1.0 (Sep 2018).
 
-If you want to know more about true object-oriented programming, I recommend
-these books:
+**Cactoos JDBC** is a collection of object-oriented Java wrapper classes to
+[JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity).
 
-- [Elegant Objects (Volume 1)](https://www.amazon.com/Elegant-Objects-1-Yegor-Bugayenko/dp/1519166915) by
-[Yegor Bugayenko](http://www.yegor256.com)
-- [Elegant Objects (Volume 2)](https://www.amazon.com/Elegant-Objects-2-Yegor-Bugayenko/dp/1534908307) by
-[Yegor Bugayenko](http://www.yegor256.com)
-- [Object Thinking](https://www.amazon.com/Object-Thinking-Developer-Reference-David/dp/0735619654)
-by [David West](http://davewest.us)
+**Motivation**.
+We are not happy with
+[JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity)
+because it is procedural and not object-oriented. It does its job, but mostly
+through strongly coupled classes and static methods. Cactoos JDBC is suggesting
+to do almost exactly the same, but through (more OO) objects.
+
+**Principles**.
+These are the [design principles](http://www.elegantobjects.org#principles)
+behind Cactoos JDBC.
+
+
+## How to use
+
+```xml
+<dependency>
+  <groupId>com.github.fabriciofx.cactoos-jdbc</groupId>
+  <artifactId>cactoos-jdbc</artifactId>
+</dependency>
+```
+
+Java version required: 1.8+.
+
+## Transactions
+
+`TransactedSession` is a class decorates a `Session` to support transactions.
+`TransactedSession` generates an unique `TransactedConnection`.
+`TransactedConnection` is a not auto commited `Connection` that only closes
+when a `commmit()` or `rollback()` is done. Hence, you can pass an instance of
+`TransactedSession` to all SQL objects that can close a connection, but the
+connection won't be closed (until a `commit()` or `rollback()`) which will be
+done into a `Transaction` class. Let's make an example:
+
+```java
+final TransactedSession session = new TransactedSession(
+    new NoAuthSession(
+        new H2Source("testdb")
+    )
+);
+new Transaction(session).call(() -> {
+    final Contact einstein = new SqlContacts(session)
+        .contact("Albert Einstein");
+    einstein.phones().phone("912232325", "TIM");
+    einstein.phones().phone("982231234", "Oi");
+    System.out.println(einstein.asString());
+    return einstein;
+});
+```
 
 
 ## How compile it?
