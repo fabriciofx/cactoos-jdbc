@@ -52,14 +52,16 @@ final TransactedSession session = new TransactedSession(
         new H2Source("testdb")
     )
 );
-new Transaction(session).call(() -> {
+new Transaction(
+  session,
+  () -> {
     final Contact einstein = new SqlContacts(session)
         .contact("Albert Einstein");
     einstein.phones().phone("912232325", "TIM");
     einstein.phones().phone("982231234", "Oi");
-    System.out.println(einstein.asString());
-    return einstein;
-});
+    return einstein;    
+  }
+).result();
 ```
 
 
