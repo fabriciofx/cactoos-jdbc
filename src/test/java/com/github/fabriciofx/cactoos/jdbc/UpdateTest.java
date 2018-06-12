@@ -37,16 +37,14 @@ public final class UpdateTest {
     @Test
     public void update() throws Exception {
         System.out.println(
-            new Crop<>(
+            new Update(
                 new NoAuthSession(
                     new H2Source("testdb")
                 ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
+                new NamedQuery(
+                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
                 )
-            ).value()
+            ).result()
         );
     }
 }

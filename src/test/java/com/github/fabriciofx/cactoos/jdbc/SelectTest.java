@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToStream;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToStream;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
@@ -47,52 +47,50 @@ public final class SelectTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Crops<>(
+        new Update(
             session,
-            new Update(
-                new NamedQuery(
-                    "CREATE TABLE employee (" +
-                        "id UUID DEFAULT RANDOM_UUID()," +
-                        "name VARCHAR(50)," +
-                        "birthday DATE," +
-                        "address VARCHAR(100)," +
-                        "married BOOLEAN," +
-                        "salary DECIMAL(20,2)" +
-                    ")"
-                )
-            ),
-            new Insert(
-                new NamedQuery(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (:name, :birthday, :address, :married, :salary)",
-                    new TextValue("name", "John Wick"),
-                    new DateValue("birthday", "1980-08-16"),
-                    new TextValue("address", "Boulevard Street, 34"),
-                    new BoolValue("married", false),
-                    new DecimalValue("salary", "13456.00")
-                )
-            ),
-            new Insert(
-                new NamedQuery(
-                    "INSERT INTO employee " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (:name, :birthday, :address, :married, :salary)",
-                    new TextValue("name", "Adam Park"),
-                    new DateValue("birthday", "1985-07-10"),
-                    new TextValue("address", "Sunset Place, 14"),
-                    new BoolValue("married", true),
-                    new DecimalValue("salary", "12345.00")
-                )
+            new NamedQuery(
+                "CREATE TABLE employee (" +
+                    "id UUID DEFAULT RANDOM_UUID()," +
+                    "name VARCHAR(50)," +
+                    "birthday DATE," +
+                    "address VARCHAR(100)," +
+                    "married BOOLEAN," +
+                    "salary DECIMAL(20,2)" +
+                ")"
             )
-        ).value();
+        ).result();
+        new Insert(
+            session,
+            new NamedQuery(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (:name, :birthday, :address, :married, :salary)",
+                new TextValue("name", "John Wick"),
+                new DateValue("birthday", "1980-08-16"),
+                new TextValue("address", "Boulevard Street, 34"),
+                new BoolValue("married", false),
+                new DecimalValue("salary", "13456.00")
+            )
+        ).result();
+        new Insert(
+            session,
+            new NamedQuery(
+                "INSERT INTO employee " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (:name, :birthday, :address, :married, :salary)",
+                new TextValue("name", "Adam Park"),
+                new DateValue("birthday", "1985-07-10"),
+                new TextValue("address", "Sunset Place, 14"),
+                new BoolValue("married", true),
+                new DecimalValue("salary", "12345.00")
+            )
+        ).result();
         final DataStream xml = new ResultToStream(
-            new Crop<>(
+            new Select(
                 session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT * FROM employee"
-                    )
+                new NamedQuery(
+                    "SELECT * FROM employee"
                 )
             ),
             "employees",
@@ -106,52 +104,50 @@ public final class SelectTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Crops<>(
+        new Update(
             session,
-            new Update(
-                new NamedQuery(
-                    "CREATE TABLE employee2 (" +
-                        "id UUID DEFAULT RANDOM_UUID()," +
-                        "name VARCHAR(50)," +
-                        "birthday DATE," +
-                        "address VARCHAR(100)," +
-                        "married BOOLEAN," +
-                        "salary DECIMAL(20,2)" +
-                    ")"
-                )
-            ),
-            new Insert(
-                new NamedQuery(
-                    "INSERT INTO employee2 " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (:name, :birthday, :address, :married, :salary)",
-                    new TextValue("name", "John Wick"),
-                    new DateValue("birthday", "1980-08-16"),
-                    new TextValue("address", "Boulevard Street, 34"),
-                    new BoolValue("married", false),
-                    new DecimalValue("salary", "13456.00")
-                )
-            ),
-            new Insert(
-                new NamedQuery(
-                    "INSERT INTO employee2 " +
-                        "(name, birthday, address, married, salary) " +
-                        "VALUES (:name, :birthday, :address, :married, :salary)",
-                    new TextValue("name", "Adam Park"),
-                    new DateValue("birthday", "1985-07-10"),
-                    new TextValue("address", "Sunset Place, 14"),
-                    new BoolValue("married", true),
-                    new DecimalValue("salary", "12345.00")
-                )
+            new NamedQuery(
+                "CREATE TABLE employee2 (" +
+                    "id UUID DEFAULT RANDOM_UUID()," +
+                    "name VARCHAR(50)," +
+                    "birthday DATE," +
+                    "address VARCHAR(100)," +
+                    "married BOOLEAN," +
+                    "salary DECIMAL(20,2)" +
+                ")"
             )
-        ).value();
+        ).result();
+        new Insert(
+            session,
+            new NamedQuery(
+                "INSERT INTO employee2 " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (:name, :birthday, :address, :married, :salary)",
+                new TextValue("name", "John Wick"),
+                new DateValue("birthday", "1980-08-16"),
+                new TextValue("address", "Boulevard Street, 34"),
+                new BoolValue("married", false),
+                new DecimalValue("salary", "13456.00")
+            )
+        ).result();
+        new Insert(
+            session,
+            new NamedQuery(
+                "INSERT INTO employee2 " +
+                    "(name, birthday, address, married, salary) " +
+                    "VALUES (:name, :birthday, :address, :married, :salary)",
+                new TextValue("name", "Adam Park"),
+                new DateValue("birthday", "1985-07-10"),
+                new TextValue("address", "Sunset Place, 14"),
+                new BoolValue("married", true),
+                new DecimalValue("salary", "12345.00")
+            )
+        ).result();
         final String name = new ResultToValue<>(
-            new Crop<>(
+            new Select(
                 session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT name FROM employee2"
-                    )
+                new NamedQuery(
+                    "SELECT name FROM employee2"
                 )
             ),
             String.class

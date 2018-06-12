@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -42,44 +42,46 @@ import org.junit.Test;
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("testdb")
+        );
         System.out.println(
-            new Crops<>(
-                new NoAuthSession(
-                    new H2Source("testdb")
-                ),
-                new Update(
-                    new NamedQuery(
-                        "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                    )
-                ),
-                new Insert(
-                    new NamedQuery(
-                        "INSERT INTO foo2 (name) VALUES (:name)",
-                        new TextValue("name", "Yegor Bugayenko")
-                    )
+            new Update(
+                session,
+                new NamedQuery(
+                    "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
                 )
-            ).value()
+            ).result()
+        );
+        System.out.println(
+            new Insert(
+                session,
+                new NamedQuery(
+                    "INSERT INTO foo2 (name) VALUES (:name)",
+                    new TextValue("name", "Yegor Bugayenko")
+                )
+            ).result()
         );
     }
 
     @Test
     public void insertWithKeys() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("testdb")
+        );
+        new Update(
+            session,
+            new NamedQuery(
+                "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+            )
+        ).result();
         System.out.println(
             new ResultToValue<>(
-                new Crops<>(
-                    new NoAuthSession(
-                        new H2Source("testdb")
-                    ),
-                    new Update(
-                        new NamedQuery(
-                            "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                        )
-                    ),
-                    new InsertWithKeys(
-                        new KeyedQuery(
-                            "INSERT INTO foo3 (name) VALUES (:name)",
-                            new TextValue("name", "Yegor Bugayenko")
-                        )
+                new InsertWithKeys(
+                    session,
+                    new KeyedQuery(
+                        "INSERT INTO foo3 (name) VALUES (:name)",
+                        new TextValue("name", "Yegor Bugayenko")
                     )
                 ),
                 Integer.class
@@ -89,22 +91,22 @@ public final class InsertTest {
 
     @Test
     public void insertWithKeysUuid() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("testdb")
+        );
+        new Update(
+            session,
+            new NamedQuery(
+                "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+            )
+        ).result();
         System.out.println(
             new ResultToValue<>(
-                new Crops<>(
-                    new NoAuthSession(
-                        new H2Source("testdb")
-                    ),
-                    new Update(
-                        new NamedQuery(
-                            "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
-                        )
-                    ),
-                    new InsertWithKeys(
-                        new KeyedQuery(
-                            "INSERT INTO foo4 (name) VALUES (:name)",
-                            new TextValue("name", "Yegor Bugayenko")
-                        )
+                new InsertWithKeys(
+                    session,
+                    new KeyedQuery(
+                        "INSERT INTO foo4 (name) VALUES (:name)",
+                        new TextValue("name", "Yegor Bugayenko")
                     )
                 ),
                 UUID.class

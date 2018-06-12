@@ -23,10 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValues;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -55,15 +54,13 @@ public final class SqlPhones implements Phones {
     @Override
     public Phone phone(final String number, final String operator) throws Exception{
         final Integer seq = new ResultToValue<>(
-            new Crop<>(
+            new InsertWithKeys(
                 this.session,
-                new InsertWithKeys(
-                    new KeyedQuery(
-                        "INSERT INTO phone (contact, number, operator) VALUES (:contact, :number, :operator)",
-                        new AnyValue("contact", this.contact),
-                        new TextValue("number", number),
-                        new TextValue("operator", operator)
-                    )
+                new KeyedQuery(
+                    "INSERT INTO phone (contact, number, operator) VALUES (:contact, :number, :operator)",
+                    new AnyValue("contact", this.contact),
+                    new TextValue("number", number),
+                    new TextValue("operator", operator)
                 )
             ),
             Integer.class
@@ -75,13 +72,11 @@ public final class SqlPhones implements Phones {
     public Iterator<Phone> iterator() {
         try {
             final List<Integer> seqs = new ResultToValues<>(
-                new Crop<>(
+                new Select(
                     this.session,
-                    new Select(
-                        new NamedQuery(
-                            "SELECT seq FROM phone WHERE contact = :contact",
-                            new AnyValue("contact", this.contact)
-                        )
+                    new NamedQuery(
+                        "SELECT seq FROM phone WHERE contact = :contact",
+                        new AnyValue("contact", this.contact)
                     )
                 ),
                 Integer.class

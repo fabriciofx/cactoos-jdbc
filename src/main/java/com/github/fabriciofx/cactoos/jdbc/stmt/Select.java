@@ -25,7 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.ResultFromResultSet;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultFromResultSet;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,18 +38,22 @@ import java.sql.ResultSet;
  * @since 0.1
  */
 public final class Select implements Statement<Result> {
+    private final Session session;
     private final Query query;
 
-    public Select(final Query qry) {
+    public Select(final Session sssn, final Query qry) {
+        this.session = sssn;
         this.query = qry;
     }
 
     @Override
-    public Result result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.query.prepared(connection)) {
-            stmt.execute();
-            try (final ResultSet rset = stmt.getResultSet()) {
-                return new ResultFromResultSet(rset);
+    public Result result() throws Exception {
+        try (final Connection conn = this.session.connection()) {
+            try (final PreparedStatement stmt = this.query.prepared(conn)) {
+                stmt.execute();
+                try (final ResultSet rset = stmt.getResultSet()) {
+                    return new ResultFromResultSet(rset);
+                }
             }
         }
     }

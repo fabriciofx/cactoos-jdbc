@@ -21,38 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
+import java.util.LinkedList;
 import java.util.List;
-import org.cactoos.list.ListOf;
+import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
  * @since 0.1
  */
-public final class TransactionStmt implements Statement<Boolean> {
-    private final List<Statement<?>> statements;
+public final class ResultToValues<T> implements Scalar<List<T>> {
+    private final Statement<Result> statement;
+    private final Class<T> type;
 
-    public TransactionStmt(final Statement<?>... stmts) {
-        this.statements = new ListOf<>(stmts);
+    public ResultToValues(final Statement<Result> stmt, final Class<T> tpe) {
+        this.statement = stmt;
+        this.type = tpe;
     }
 
     @Override
-    public Boolean result(final Connection connection) throws Exception {
-        try {
-            connection.setAutoCommit(false);
-            for (final Statement<?> stmt : this.statements) {
-                stmt.result(connection);
+    public List<T> value() throws Exception {
+        final List<T> values = new LinkedList<>();
+        for (final Map<String, Object> row : this.statement.result()) {
+            for (final Object obj : row.values()) {
+                values.add(this.type.cast(obj));
             }
-            connection.commit();
-            connection.setAutoCommit(true);
-        } catch(final Exception ex) {
-            connection.rollback();
-            return false;
         }
-        return true;
+        return values;
     }
 }

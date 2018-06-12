@@ -43,37 +43,33 @@ public final class BatchTest {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        new Crop<>(
+        new Update(
             session,
-            new Update(
-                new NamedQuery(
-                    "CREATE TABLE person (" +
-                        "id INT AUTO_INCREMENT, " +
-                        "name VARCHAR(50), " +
-                        "age INT" +
-                    ")"
+            new NamedQuery(
+                "CREATE TABLE person (" +
+                    "id INT AUTO_INCREMENT, " +
+                    "name VARCHAR(50), " +
+                    "age INT" +
+                ")"
+            )
+        ).result();
+        new Batch(
+            session,
+            new BatchQuery(
+                "INSERT INTO person (name, age) VALUES (:name, :age)",
+                new SmartDataValues(
+                    new TextValue("name", "Jeff Bridges"),
+                    new IntValue("age", 34)
+                ),
+                new SmartDataValues(
+                    new TextValue("name", "Anna Miller"),
+                    new IntValue("age", 26)
+                ),
+                new SmartDataValues(
+                    new TextValue("name", "Michal Douglas"),
+                    new IntValue("age", 32)
                 )
             )
-        ).value();
-        new Crop<>(
-            session,
-            new Batch(
-                new BatchQuery(
-                    "INSERT INTO person (name, age) VALUES (:name, :age)",
-                    new SmartDataValues(
-                        new TextValue("name", "Jeff Bridges"),
-                        new IntValue("age", 34)
-                    ),
-                    new SmartDataValues(
-                        new TextValue("name", "Anna Miller"),
-                        new IntValue("age", 26)
-                    ),
-                    new SmartDataValues(
-                        new TextValue("name", "Michal Douglas"),
-                        new IntValue("age", 32)
-                    )
-                )
-            )
-        ).value();
+        ).result();
     }
 }

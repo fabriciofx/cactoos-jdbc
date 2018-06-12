@@ -23,9 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -53,14 +52,12 @@ public final class SqlPhone implements Phone {
     @Override
     public String number() throws Exception {
         return new ResultToValue<>(
-            new Crop<>(
+            new Select(
                 this.session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT number FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                        new AnyValue("contact", this.contact),
-                        new IntValue("seq", this.seq)
-                    )
+                new NamedQuery(
+                    "SELECT number FROM phone WHERE (contact = :contact) AND (seq = :seq)",
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
                 )
             ),
             String.class
@@ -70,14 +67,12 @@ public final class SqlPhone implements Phone {
     @Override
     public String operator() throws Exception {
         return new ResultToValue<>(
-            new Crop<>(
+            new Select(
                 this.session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT operator FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                        new AnyValue("contact", this.contact),
-                        new IntValue("seq", this.seq)
-                    )
+                new NamedQuery(
+                    "SELECT operator FROM phone WHERE (contact = :contact) AND (seq = :seq)",
+                    new AnyValue("contact", this.contact),
+                    new IntValue("seq", this.seq)
                 )
             ),
             String.class
@@ -86,16 +81,14 @@ public final class SqlPhone implements Phone {
 
     @Override
     public void delete() throws Exception {
-        new Crop<>(
+        new Update(
             this.session,
-            new Update(
-                new NamedQuery(
-                    "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
-                )
+            new NamedQuery(
+                "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
+                new AnyValue("contact", this.contact),
+                new IntValue("seq", this.seq)
             )
-        ).value();
+        ).result();
     }
 
     @Override
@@ -103,18 +96,16 @@ public final class SqlPhone implements Phone {
         final String number,
         final String operator
     ) throws Exception {
-        new Crop<>(
+        new Update(
             this.session,
-            new Update(
-                new NamedQuery(
-                    "UPDATE phone SET number = :number, operator = :operator " +
-                        "WHERE (contact = :contact) AND (seq = :seq)",
-                    new TextValue("number", number),
-                    new TextValue("operator", operator),
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
-                )
+            new NamedQuery(
+                "UPDATE phone SET number = :number, operator = :operator " +
+                    "WHERE (contact = :contact) AND (seq = :seq)",
+                new TextValue("number", number),
+                new TextValue("operator", operator),
+                new AnyValue("contact", this.contact),
+                new IntValue("seq", this.seq)
             )
-        ).value();
+        ).result();
     }
 }

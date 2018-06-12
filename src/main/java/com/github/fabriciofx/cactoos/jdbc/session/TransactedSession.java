@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.jdk.TransactedConnection;
 import java.sql.Connection;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;

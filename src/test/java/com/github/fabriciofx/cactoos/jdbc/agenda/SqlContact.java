@@ -23,9 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -49,13 +48,11 @@ public final class SqlContact implements Contact {
     @Override
     public String name() throws Exception {
         return new ResultToValue<>(
-            new Crop<>(
+            new Select(
                 this.session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT name FROM contact WHERE id = :id",
-                        new TextValue("id", this.id.toString())
-                    )
+                new NamedQuery(
+                    "SELECT name FROM contact WHERE id = :id",
+                    new TextValue("id", this.id.toString())
                 )
             ),
             String.class
@@ -69,29 +66,25 @@ public final class SqlContact implements Contact {
 
     @Override
     public void delete() throws Exception {
-        new Crop<>(
+        new Update(
             this.session,
-            new Update(
-                new NamedQuery(
-                    "DELETE FROM contact WHERE id = :id",
-                    new TextValue("id", this.id.toString())
-                )
+            new NamedQuery(
+                "DELETE FROM contact WHERE id = :id",
+                new TextValue("id", this.id.toString())
             )
-        ).value();
+        ).result();
     }
 
     @Override
     public void rename(final String name) throws Exception {
-        new Crop<>(
+        new Update(
             this.session,
-            new Update(
-                new NamedQuery(
-                    "UPDATE contact SET name = :name WHERE id = :id",
-                    new TextValue("name", name),
-                    new TextValue("id", this.id.toString())
-                )
+            new NamedQuery(
+                "UPDATE contact SET name = :name WHERE id = :id",
+                new TextValue("name", name),
+                new TextValue("id", this.id.toString())
             )
-        ).value();
+        ).result();
     }
 
     @Override

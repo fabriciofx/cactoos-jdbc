@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,21 +38,25 @@ import javax.sql.rowset.RowSetProvider;
  * @since 0.1
  */
 public final class CachedSelect implements Statement<ResultSet> {
+    private final Session session;
     private final Query query;
 
-    public CachedSelect(final Query qry) {
+    public CachedSelect(final Session sssn, final Query qry) {
+        this.session = sssn;
         this.query = qry;
     }
 
     @Override
-    public ResultSet result(final Connection connection) throws Exception {
-        try (final PreparedStatement stmt = this.query.prepared(connection)) {
-            stmt.execute();
-            try (final ResultSet rset = stmt.getResultSet()) {
-                final CachedRowSet crs = RowSetProvider.newFactory()
-                    .createCachedRowSet();
-                crs.populate(rset);
-                return crs;
+    public ResultSet result() throws Exception {
+        try (final Connection conn = this.session.connection()) {
+            try (final PreparedStatement stmt = this.query.prepared(conn)) {
+                stmt.execute();
+                try (final ResultSet rset = stmt.getResultSet()) {
+                    final CachedRowSet crs = RowSetProvider.newFactory()
+                        .createCachedRowSet();
+                    crs.populate(rset);
+                    return crs;
+                }
             }
         }
     }

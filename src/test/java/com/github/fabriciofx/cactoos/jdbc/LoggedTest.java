@@ -43,20 +43,18 @@ public final class LoggedTest {
             ),
             "cactoos-jdbc"
         );
-        new Crop<>(
+        new Update(
             session,
-            new Update(
-                new NamedQuery(
-                    "CREATE TABLE guy (" +
-                        "id UUID DEFAULT RANDOM_UUID()," +
-                        "name VARCHAR(50)," +
-                        "birthday DATE," +
-                        "address VARCHAR(100)," +
-                        "married BOOLEAN," +
-                        "salary DECIMAL(20,2)" +
-                    ")"
-                )
+            new NamedQuery(
+                "CREATE TABLE guy (" +
+                    "id UUID DEFAULT RANDOM_UUID()," +
+                    "name VARCHAR(50)," +
+                    "birthday DATE," +
+                    "address VARCHAR(100)," +
+                    "married BOOLEAN," +
+                    "salary DECIMAL(20,2)" +
+                ")"
             )
-        ).value();
+        ).result();
     }
 }

@@ -23,10 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Crop;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValue;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultToValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValues;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -52,13 +51,11 @@ public final class SqlContacts implements Contacts {
     @Override
     public Contact contact(final String name) throws Exception {
         final UUID id = new ResultToValue<>(
-            new Crop<>(
+            new InsertWithKeys(
                 this.session,
-                new InsertWithKeys(
-                    new KeyedQuery(
-                        "INSERT INTO contact (name) VALUES (:name)",
-                        new TextValue("name", name)
-                    )
+                new KeyedQuery(
+                    "INSERT INTO contact (name) VALUES (:name)",
+                    new TextValue("name", name)
                 )
             ),
             UUID.class
@@ -69,13 +66,11 @@ public final class SqlContacts implements Contacts {
     @Override
     public List<Contact> find(final String name) throws Exception {
         final List<UUID> ids = new ResultToValues<>(
-            new Crop<>(
+            new Select(
                 this.session,
-                new Select(
-                    new NamedQuery(
-                        "SELECT id FROM contact WHERE name ILIKE '%' || :name || '%'",
-                        new TextValue("name", name)
-                    )
+                new NamedQuery(
+                    "SELECT id FROM contact WHERE name ILIKE '%' || :name || '%'",
+                    new TextValue("name", name)
                 )
             ),
             UUID.class
@@ -91,12 +86,10 @@ public final class SqlContacts implements Contacts {
     public Iterator<Contact> iterator() {
         try {
             final List<UUID> ids = new ResultToValues<>(
-                new Crop<>(
+                new Select(
                     this.session,
-                    new Select(
-                        new NamedQuery(
-                            "SELECT id FROM contact"
-                        )
+                    new NamedQuery(
+                        "SELECT id FROM contact"
                     )
                 ),
                 UUID.class

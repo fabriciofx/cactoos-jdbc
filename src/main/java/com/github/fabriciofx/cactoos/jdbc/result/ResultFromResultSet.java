@@ -21,53 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.adapter;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import org.cactoos.Scalar;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version Id
  * @since
  */
-public final class ResultToStream implements Scalar<DataStream> {
-    private final Scalar<Result> scalar;
-    private final String root;
-    private final String child;
+public final class ResultFromResultSet implements Result {
+    private final List<Map<String, Object>> rows;
 
-    public ResultToStream(
-        final Scalar<Result> sclr,
-        final String root,
-        final String child
-    ) {
-        this.scalar = sclr;
-        this.root = root;
-        this.child = child;
+    public ResultFromResultSet(final ResultSet rset) throws Exception {
+        this.rows = new LinkedList<>();
+        final ResultSetMetaData rsmd = rset.getMetaData();
+        final int cols = rsmd.getColumnCount();
+        while (rset.next()) {
+            final Map<String, Object> fields = new LinkedHashMap<>();
+            for (int i = 1; i <= cols; i++) {
+                fields.put(
+                    rsmd.getColumnName(i).toLowerCase(),
+                    rset.getObject(i)
+                );
+            }
+            this.rows.add(fields);
+        }
     }
 
     @Override
-    public DataStream value() throws Exception {
-        final StringBuilder strb = new StringBuilder();
-        strb.append(String.format("<%s>", this.root));
-        for (final Map<String, Object> row : this.scalar.value()) {
-            strb.append(String.format("<%s>", this.child));
-            for (final String key : row.keySet()) {
-                strb.append(
-                    String.format(
-                        "<%s>%s</%s>",
-                        key,
-                        row.get(key),
-                        key
-                    )
-                );
-            }
-            strb.append(String.format("</%s>", this.child));
-        }
-        strb.append(String.format("</%s>", this.root));
-        return new BytesDataStream(strb.toString().getBytes());
+    public Iterator<Map<String, Object>> iterator() {
+        return this.rows.iterator();
+    }
+
+    @Override
+    public int count() {
+        return this.rows.size();
     }
 }
