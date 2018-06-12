@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
@@ -32,17 +34,20 @@ import java.util.concurrent.Callable;
  * @version Id
  * @since
  */
-public final class Transaction {
+public final class Transaction<T> implements Statement<T> {
     private final Session session;
+    private final Callable<T> callable;
 
-    public Transaction(final TransactedSession sssn) {
+    public Transaction(final TransactedSession sssn, final Callable<T> call) {
         this.session = sssn;
+        this.callable = call;
     }
 
-    public <T> T call(final Callable<T> callable) throws Exception {
+    @Override
+    public T result() throws Exception {
         final Connection connection = this.session.connection();
         try {
-            final T result = callable.call();
+            final T result = this.callable.call();
             connection.commit();
             return result;
         } catch (final Exception ex) {

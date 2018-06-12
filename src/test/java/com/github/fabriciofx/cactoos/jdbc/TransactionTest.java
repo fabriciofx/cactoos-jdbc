@@ -28,6 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Transaction;
 import org.cactoos.io.ResourceOf;
 import org.junit.Test;
 
@@ -50,13 +51,16 @@ public final class TransactionTest {
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
             )
         ).exec();
-        new Transaction(session).call(() -> {
-            final Contact einstein = new SqlContacts(session)
-                .contact("Albert Einstein");
-            einstein.phones().phone("912232325", "TIM");
-            einstein.phones().phone("982231234", "Oi");
-            System.out.println(einstein.asString());
-            return einstein;
-        });
+        new Transaction<>(
+            session,
+            () -> {
+                final Contact einstein = new SqlContacts(session)
+                    .contact("Albert Einstein");
+                einstein.phones().phone("912232325", "TIM");
+                einstein.phones().phone("982231234", "Oi");
+                System.out.println(einstein.asString());
+                return einstein;
+            }
+        ).result();
     }
 }
