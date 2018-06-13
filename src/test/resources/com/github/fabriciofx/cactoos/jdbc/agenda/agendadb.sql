@@ -16,5 +16,3 @@ CREATE TABLE phone (
 INSERT INTO contact(name) VALUES ('Joseph Klimber');
 INSERT INTO contact(name) VALUES ('Maria Souza');
 INSERT INTO contact(name) VALUES ('Jeff Duham');
-
-

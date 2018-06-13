@@ -24,8 +24,10 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.log.LoggedConnection;
 import java.sql.Connection;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.StickyScalar;
@@ -43,6 +45,8 @@ public final class LoggedSession implements Session {
     private final String source;
     private final Logger logger;
     private final UncheckedScalar<Level> level;
+    private final AtomicInteger connectionsId;
+    private final AtomicInteger statementsId;
 
     public LoggedSession(final Session session, final String source) {
         this(session, source, Logger.getLogger(source));
@@ -71,6 +75,8 @@ public final class LoggedSession implements Session {
                 }
             )
         );
+        this.connectionsId = new AtomicInteger();
+        this.statementsId = new AtomicInteger();
     }
 
     @Override
@@ -91,12 +97,20 @@ public final class LoggedSession implements Session {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection properties: %s",
+                    "[%s] Connection[#%d] has been opened with properties %s",
                     this.source,
+                    this.connectionsId.get(),
                     strb.toString().substring(0, strb.length() - 2)
                 )
             ).asString()
         );
-        return connection;
+        return new LoggedConnection(
+            connection,
+            this.source,
+            this.logger,
+            this.level.value(),
+            this.connectionsId.getAndIncrement(),
+            this.statementsId
+        );
     }
 }

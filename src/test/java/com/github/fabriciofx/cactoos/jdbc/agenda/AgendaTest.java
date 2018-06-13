@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
+import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import org.cactoos.io.ResourceOf;
 import org.junit.Test;
@@ -38,8 +39,11 @@ import org.junit.Test;
 public final class AgendaTest {
     @Test
     public void agenda() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("agendadb")
+        final Session session = new LoggedSession(
+            new NoAuthSession(
+                new H2Source("agendadb")
+            ),
+            "agenda"
         );
         new SqlScript(
             session,
@@ -52,12 +56,14 @@ public final class AgendaTest {
         final Phone tim = joseph.phones().phone("99991234", "TIM");
         joseph.phones().phone("98812564", "Oi");
         System.out.println(joseph.asString());
+        joseph.asString();
 
         final Contact maria = contacts.find("maria").get(0);
         System.out.println(maria.asString());
+        maria.asString();
 
         tim.change("99994321", "TIM");
-        System.out.println(joseph.asString());
+        //System.out.println(joseph.asString());
 
 //        tim.delete();
 //        System.out.println(joseph.asString());
