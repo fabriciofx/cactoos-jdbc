@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)

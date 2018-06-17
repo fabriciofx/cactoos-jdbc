@@ -24,8 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;

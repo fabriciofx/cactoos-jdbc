@@ -25,8 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.log;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)

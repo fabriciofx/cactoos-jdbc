@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.sql.Connection;
-import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**

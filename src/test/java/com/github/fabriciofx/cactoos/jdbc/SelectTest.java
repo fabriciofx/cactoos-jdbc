@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToXml;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;

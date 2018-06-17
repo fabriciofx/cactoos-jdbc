@@ -25,9 +25,9 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultFromResultSet;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultFromResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

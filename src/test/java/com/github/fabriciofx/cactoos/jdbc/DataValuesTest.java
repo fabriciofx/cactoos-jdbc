@@ -23,11 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
-import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
-import org.junit.Test;
-
 /**
  * @author Fabricio Cabral (fabriciofx@gmail.com)
  * @version $Id$
