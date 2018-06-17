@@ -16,7 +16,7 @@
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -37,6 +37,54 @@
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
   <description>A true OO implementation of the JDBC API</description>
+  <url>https://github.com/fabriciofx/cactoos-jdbc</url>
+  <inceptionYear>2018</inceptionYear>
+  <organization>
+    <name>Cactoos JDBC</name>
+    <url>https://github.com/fabriciofx/cactoos-jdbc</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>https://github.com/fabriciofx/cactoos-jdbc/LICENSE.txt</url>
+      <distribution>site</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>1</id>
+      <name>Fabrício Barros Cabral</name>
+      <email>fabriciofx@gmail.com</email>
+      <organization>fabriciofx</organization>
+      <organizationUrl>https://github.com/fabriciofx</organizationUrl>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/fabriciofx/cactoos-jdbc/issues</url>
+  </issueManagement>
+  <scm>
+    <connection>scm:git:git@github.com:fabriciofx/cactoos-jdbc.git</connection>
+    <developerConnection>
+      scm:git:git@github.com:fabriciofx/cactoos-jdbc.git
+    </developerConnection>
+    <url>https://github.com/fabriciofx/cactoos-jdbc</url>
+  </scm>
+  <ciManagement>
+    <system>rultor</system>
+    <url>http://www.rultor.com/s/cactoos-jdbc</url>
+  </ciManagement>
+  <distributionManagement>
+    <site>
+      <id>github-pages</id>
+      <url>https://github.com/fabriciofx/cactoos-jdbc</url>
+    </site>
+  </distributionManagement>
   <build>
     <pluginManagement>
       <plugins>
@@ -109,13 +157,9 @@
             <artifactId>qulice-maven-plugin</artifactId>
             <version>0.17.3</version>
             <configuration>
-              <license>file:${basedir}/LICENSE.txt</license>
               <excludes combine.children="append">
-                <exclude>checkstyle:/src/main/resources/images/.*</exclude>
-                <exclude>checkstyle:/src/test/resources/.*</exclude>
-                <exclude>pmd:/src/test/resources/.*</exclude>
+                <exclude>checkstyle:/src/site/resources/.*</exclude>
                 <exclude>findbugs:.*</exclude>
-                <exclude>duplicatefinder:.*</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -147,7 +191,7 @@
                         <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.40</minimum>
+                          <minimum>0.34</minimum>
                         </limit>
                         <limit>
                           <counter>LINE</counter>
@@ -162,12 +206,12 @@
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.30</minimum>
+                          <minimum>0.28</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.31</minimum>
+                          <minimum>0.25</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
