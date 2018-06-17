@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -26,9 +26,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import java.util.List;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since
+ * Contacts.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
 public interface Contacts extends Iterable<Contact> {
     Contact contact(String name) throws Exception;

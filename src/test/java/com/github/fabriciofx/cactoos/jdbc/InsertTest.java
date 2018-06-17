@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -35,8 +35,10 @@ import java.util.UUID;
 import org.junit.Test;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
+ * Insert tests.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
  * @since 0.1
  */
 public final class InsertTest {

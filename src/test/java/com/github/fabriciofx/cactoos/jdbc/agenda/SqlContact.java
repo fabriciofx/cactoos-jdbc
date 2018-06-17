@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -32,9 +32,11 @@ import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * Contact for SQL.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
 public final class SqlContact implements Contact {
     private final Session session;

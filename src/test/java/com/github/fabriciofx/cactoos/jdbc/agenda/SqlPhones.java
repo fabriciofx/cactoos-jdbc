@@ -38,9 +38,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * Phones for SQL.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
 public final class SqlPhones implements Phones {
     private final Session session;

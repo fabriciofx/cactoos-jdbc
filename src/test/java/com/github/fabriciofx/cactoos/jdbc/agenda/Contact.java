@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -26,9 +26,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import org.cactoos.Text;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * Contact.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
 public interface Contact extends Text {
     Contact NOBODY = new Contact() {

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -37,9 +37,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * Contacts for SQL.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
 public final class SqlContacts implements Contacts {
     private final Session session;
