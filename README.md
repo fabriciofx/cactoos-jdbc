@@ -149,7 +149,7 @@ new Transaction(
 ```
 
 ### Logging
-To enable loggin just decorate a `Session` object:
+To enable logging just decorate a `Session` object:
 ```java
 final Session logging = new LoggingSession(session);
 ```
@@ -161,7 +161,7 @@ final Session logging = new LoggingSession(session);
 $ mvn clean install -Pqulice
 ```
 
-# Contributions
+## Contributions
 
 Contributions are welcome! Please, open an issue before submit any kind (ideas,
 documentation, code, money, ...) of contribution.
