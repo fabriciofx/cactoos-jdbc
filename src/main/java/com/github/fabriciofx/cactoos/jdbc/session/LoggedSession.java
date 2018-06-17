@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -36,9 +36,7 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class LoggedSession implements Session {
     private final Session origin;

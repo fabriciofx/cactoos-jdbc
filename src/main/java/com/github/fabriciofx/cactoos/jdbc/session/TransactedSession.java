@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -30,9 +30,7 @@ import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class TransactedSession implements Session {
     private final Scalar<Connection> scalar;

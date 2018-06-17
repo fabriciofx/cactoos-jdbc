@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -32,9 +32,7 @@ import java.io.InputStream;
 import org.cactoos.Input;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class SqlScript implements Script {
     private final Session session;

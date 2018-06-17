@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -26,9 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 import java.sql.PreparedStatement;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
- * @since
+ * @since 0.1
  */
 public interface DataValues extends Iterable<DataValue<?>> {
     DataValues with(final DataValue<?> value);

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -28,8 +28,6 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import org.cactoos.Scalar;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 public final class ResultToValue<T> implements Scalar<T> {

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -28,8 +28,6 @@ import org.cactoos.Scalar;
 import org.cactoos.Text;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 public interface DataValue<T> extends Scalar<T>, Text {

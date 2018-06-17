@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -33,9 +33,7 @@ import java.util.regex.Pattern;
 import org.cactoos.Scalar;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class ParsedSql implements Scalar<String>  {
     private final String sql;

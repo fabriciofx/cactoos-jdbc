@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -29,9 +29,7 @@ import java.util.Map;
 import org.cactoos.Scalar;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class ResultToXml implements Scalar<String> {
     private final Statement<Result> statement;

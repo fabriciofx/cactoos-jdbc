@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -28,8 +28,6 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 public final class DecimalValue implements DataValue<BigDecimal> {

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -30,9 +30,7 @@ import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class Transaction<T> implements Statement<T> {
     private final Session session;

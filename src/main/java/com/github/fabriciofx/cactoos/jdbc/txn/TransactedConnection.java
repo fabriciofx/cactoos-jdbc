@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -43,9 +43,7 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
- * @since
+ * @since 0.1
  */
 public final class TransactedConnection implements Connection {
     private final Connection origin;

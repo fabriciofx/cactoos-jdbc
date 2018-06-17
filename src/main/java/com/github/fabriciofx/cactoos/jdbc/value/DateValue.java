@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -29,8 +29,6 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 public final class DateValue implements DataValue<LocalDate> {

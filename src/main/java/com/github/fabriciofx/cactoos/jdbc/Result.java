@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -26,8 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc;
 import java.util.Map;
 
 /**
- * @author Fabricio Cabral (fabriciofx@gmail.com)
- * @version Id
  * @since
  */
 public interface Result extends Iterable<Map<String, Object>> {
