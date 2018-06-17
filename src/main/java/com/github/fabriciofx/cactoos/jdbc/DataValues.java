@@ -34,6 +34,4 @@ public interface DataValues extends Iterable<DataValue<?>> {
     DataValues with(final DataValue<?> value);
 
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;
-
-    DataStream stream(DataStream stream) throws Exception;
 }

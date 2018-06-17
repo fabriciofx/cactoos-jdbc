@@ -58,11 +58,6 @@ public final class SmartDataValues implements DataValues {
     }
 
     @Override
-    public DataStream stream(final DataStream stream) throws Exception {
-        return null;
-    }
-
-    @Override
     public Iterator<DataValue<?>> iterator() {
         return this.values.iterator();
     }

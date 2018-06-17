@@ -23,10 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.DataStream;
 import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.stream.BytesDataStream;
 import java.util.Map;
 import org.cactoos.Scalar;
 
@@ -35,12 +33,12 @@ import org.cactoos.Scalar;
  * @version Id
  * @since
  */
-public final class ResultToStream implements Scalar<DataStream> {
+public final class ResultToXml implements Scalar<String> {
     private final Statement<Result> statement;
     private final String root;
     private final String child;
 
-    public ResultToStream(
+    public ResultToXml(
         final Statement<Result> stmt,
         final String root,
         final String child
@@ -51,7 +49,7 @@ public final class ResultToStream implements Scalar<DataStream> {
     }
 
     @Override
-    public DataStream value() throws Exception {
+    public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("<%s>", this.root));
         for (final Map<String, Object> row : this.statement.result()) {
@@ -69,6 +67,6 @@ public final class ResultToStream implements Scalar<DataStream> {
             strb.append(String.format("</%s>", this.child));
         }
         strb.append(String.format("</%s>", this.root));
-        return new BytesDataStream(strb.toString().getBytes());
+        return strb.toString();
     }
 }

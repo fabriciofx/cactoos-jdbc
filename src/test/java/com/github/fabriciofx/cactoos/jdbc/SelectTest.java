@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToStream;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultToXml;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -86,7 +86,7 @@ public final class SelectTest {
                 new DecimalValue("salary", "12345.00")
             )
         ).result();
-        final DataStream xml = new ResultToStream(
+        final String xml = new ResultToXml(
             new Select(
                 session,
                 new NamedQuery(
@@ -96,7 +96,7 @@ public final class SelectTest {
             "employees",
             "employee"
         ).value();
-        System.out.println(xml.asString());
+        System.out.println(xml);
     }
 
     @Test
