@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
@@ -42,12 +43,12 @@ public final class Transaction<T> implements Statement<T> {
     }
 
     @Override
-    public T result() throws Exception {
+    public Result<T> result() throws Exception {
         final Connection connection = this.session.connection();
         try {
-            final T result = this.callable.call();
+            final T ret = this.callable.call();
             connection.commit();
-            return result;
+            return () -> ret;
         } catch (final Exception ex) {
             connection.rollback();
             throw ex;

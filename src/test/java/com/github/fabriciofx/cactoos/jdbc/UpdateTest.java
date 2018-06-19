@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.junit.Test;
@@ -39,14 +40,17 @@ public final class UpdateTest {
     @Test
     public void update() throws Exception {
         System.out.println(
-            new Update(
-                new NoAuthSession(
-                    new H2Source("testdb")
+            new ResultAsValue<>(
+                new Update(
+                    new NoAuthSession(
+                        new H2Source("testdb")
+                    ),
+                    new NamedQuery(
+                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                    )
                 ),
-                new NamedQuery(
-                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                )
-            ).result()
+                Integer.class
+            ).value()
         );
     }
 }

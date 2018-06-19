@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
@@ -42,10 +43,11 @@ public final class Insert implements Statement<Boolean> {
     }
 
     @Override
-    public Boolean result() throws Exception {
+    public Result<Boolean> result() throws Exception {
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
-                return stmt.execute();
+                final boolean ret = stmt.execute();
+                return () -> ret;
             }
         }
     }

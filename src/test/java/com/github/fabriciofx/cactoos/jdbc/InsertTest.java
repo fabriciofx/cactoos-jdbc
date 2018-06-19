@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
@@ -78,7 +78,7 @@ public final class InsertTest {
             )
         ).result();
         System.out.println(
-            new ResultToValue<>(
+            new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
                     new KeyedQuery(
@@ -103,7 +103,7 @@ public final class InsertTest {
             )
         ).result();
         System.out.println(
-            new ResultToValue<>(
+            new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
                     new KeyedQuery(
@@ -112,7 +112,7 @@ public final class InsertTest {
                     )
                 ),
                 UUID.class
-            ).value().toString()
+            ).value().get(0).toString()
         );
     }
 }

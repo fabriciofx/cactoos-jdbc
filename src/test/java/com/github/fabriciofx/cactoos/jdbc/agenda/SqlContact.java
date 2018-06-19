@@ -25,7 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
@@ -49,7 +50,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        return new ResultToValue<>(
+        return new ResultAsValues<>(
             new Select(
                 this.session,
                 new NamedQuery(
@@ -58,7 +59,7 @@ public final class SqlContact implements Contact {
                 )
             ),
             String.class
-        ).value();
+        ).value().get(0);
     }
 
     @Override

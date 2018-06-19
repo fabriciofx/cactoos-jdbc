@@ -26,8 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
@@ -55,7 +54,7 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Phone phone(final String number, final String operator) throws Exception{
-        final Integer seq = new ResultToValue<>(
+        final Integer seq = new ResultAsValues<>(
             new InsertWithKeys(
                 this.session,
                 new KeyedQuery(
@@ -66,14 +65,14 @@ public final class SqlPhones implements Phones {
                 )
             ),
             Integer.class
-        ).value();
+        ).value().get(0);
         return new SqlPhone(this.session, this.contact, seq);
     }
 
     @Override
     public Iterator<Phone> iterator() {
         try {
-            final List<Integer> seqs = new ResultToValues<>(
+            final List<Integer> seqs = new ResultAsValues<>(
                 new Select(
                     this.session,
                     new NamedQuery(

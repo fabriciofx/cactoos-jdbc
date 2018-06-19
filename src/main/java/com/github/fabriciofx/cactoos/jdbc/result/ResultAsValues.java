@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,11 +33,11 @@ import org.cactoos.Scalar;
 /**
  * @since 0.1
  */
-public final class ResultToValues<T> implements Scalar<List<T>> {
-    private final Statement<Result> statement;
+public final class ResultAsValues<T> implements Scalar<List<T>> {
+    private final Statement<Rows> statement;
     private final Class<T> type;
 
-    public ResultToValues(final Statement<Result> stmt, final Class<T> tpe) {
+    public ResultAsValues(final Statement<Rows> stmt, final Class<T> tpe) {
         this.statement = stmt;
         this.type = tpe;
     }
@@ -45,7 +45,7 @@ public final class ResultToValues<T> implements Scalar<List<T>> {
     @Override
     public List<T> value() throws Exception {
         final List<T> values = new LinkedList<>();
-        for (final Map<String, Object> row : this.statement.result()) {
+        for (final Map<String, Object> row : this.statement.result().value()) {
             for (final Object obj : row.values()) {
                 values.add(this.type.cast(obj));
             }

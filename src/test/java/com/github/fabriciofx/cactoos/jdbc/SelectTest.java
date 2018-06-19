@@ -24,8 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToXml;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -88,7 +89,7 @@ public final class SelectTest {
                 new DecimalValue("salary", "12345.00")
             )
         ).result();
-        final String xml = new ResultToXml(
+        final String xml = new ResultAsXml(
             new Select(
                 session,
                 new NamedQuery(
@@ -145,7 +146,7 @@ public final class SelectTest {
                 new DecimalValue("salary", "12345.00")
             )
         ).result();
-        final String name = new ResultToValue<>(
+        final String name = new ResultAsValues<>(
             new Select(
                 session,
                 new NamedQuery(
@@ -153,7 +154,7 @@ public final class SelectTest {
                 )
             ),
             String.class
-        ).value();
+        ).value().get(0);
         System.out.println(name);
     }
 }

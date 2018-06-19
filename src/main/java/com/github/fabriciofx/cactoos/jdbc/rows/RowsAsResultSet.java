@@ -15,15 +15,15 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.rows;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Rows;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Iterator;
@@ -35,10 +35,10 @@ import java.util.Map;
 /**
  * @since 0.1
  */
-public final class ResultFromResultSet implements Result {
+public final class RowsAsResultSet implements Rows {
     private final List<Map<String, Object>> rows;
 
-    public ResultFromResultSet(final ResultSet rset) throws Exception {
+    public RowsAsResultSet(final ResultSet rset) throws Exception {
         this.rows = new LinkedList<>();
         final ResultSetMetaData rsmd = rset.getMetaData();
         final int cols = rsmd.getColumnCount();
@@ -57,10 +57,5 @@ public final class ResultFromResultSet implements Result {
     @Override
     public Iterator<Map<String, Object>> iterator() {
         return this.rows.iterator();
-    }
-
-    @Override
-    public int count() {
-        return this.rows.size();
     }
 }

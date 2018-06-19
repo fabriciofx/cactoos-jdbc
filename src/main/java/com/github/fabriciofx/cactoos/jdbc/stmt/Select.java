@@ -25,9 +25,10 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultFromResultSet;
+import com.github.fabriciofx.cactoos.jdbc.rows.RowsAsResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +36,7 @@ import java.sql.ResultSet;
 /**
  * @since 0.1
  */
-public final class Select implements Statement<Result> {
+public final class Select implements Statement<Rows> {
     private final Session session;
     private final Query query;
 
@@ -45,12 +46,13 @@ public final class Select implements Statement<Result> {
     }
 
     @Override
-    public Result result() throws Exception {
+    public Result<Rows> result() throws Exception {
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
                 stmt.execute();
                 try (final ResultSet rset = stmt.getResultSet()) {
-                    return new ResultFromResultSet(rset);
+                    final Rows rows = new RowsAsResultSet(rset);
+                    return () -> rows;
                 }
             }
         }

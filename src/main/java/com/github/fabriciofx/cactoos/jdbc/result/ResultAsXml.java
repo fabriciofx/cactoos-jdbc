@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
+import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.util.Map;
 import org.cactoos.Scalar;
@@ -31,13 +31,13 @@ import org.cactoos.Scalar;
 /**
  * @since 0.1
  */
-public final class ResultToXml implements Scalar<String> {
-    private final Statement<Result> statement;
+public final class ResultAsXml implements Scalar<String> {
+    private final Statement<Rows> statement;
     private final String root;
     private final String child;
 
-    public ResultToXml(
-        final Statement<Result> stmt,
+    public ResultAsXml(
+        final Statement<Rows> stmt,
         final String root,
         final String child
     ) {
@@ -50,7 +50,7 @@ public final class ResultToXml implements Scalar<String> {
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("<%s>", this.root));
-        for (final Map<String, Object> row : this.statement.result()) {
+        for (final Map<String, Object> row : this.statement.result().value()) {
             strb.append(String.format("<%s>", this.child));
             for (final String key : row.keySet()) {
                 strb.append(

@@ -32,5 +32,5 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.1
  */
 public interface Statement<T> {
-    T result() throws Exception;
+    Result<T> result() throws Exception;
 }

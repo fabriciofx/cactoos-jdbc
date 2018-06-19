@@ -21,41 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetProvider;
+import org.cactoos.Scalar;
 
 /**
  * @since 0.1
  */
-public final class CachedSelect implements Statement<ResultSet> {
-    private final Session session;
-    private final Query query;
+public final class ResultAsValue<T> implements Scalar<T> {
+    private final Statement<T> statement;
+    private final Class<T> type;
 
-    public CachedSelect(final Session sssn, final Query qry) {
-        this.session = sssn;
-        this.query = qry;
+    public ResultAsValue(final Statement<T> stmt, final Class<T> tpe) {
+        this.statement = stmt;
+        this.type = tpe;
     }
 
     @Override
-    public ResultSet result() throws Exception {
-        try (final Connection conn = this.session.connection()) {
-            try (final PreparedStatement stmt = this.query.prepared(conn)) {
-                stmt.execute();
-                try (final ResultSet rset = stmt.getResultSet()) {
-                    final CachedRowSet crs = RowSetProvider.newFactory()
-                        .createCachedRowSet();
-                    crs.populate(rset);
-                    return crs;
-                }
-            }
-        }
+    public T value() throws Exception {
+        return this.type.cast(this.statement.result().value());
     }
 }

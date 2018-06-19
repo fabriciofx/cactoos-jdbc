@@ -26,8 +26,8 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultToValues;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
@@ -52,7 +52,7 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact contact(final String name) throws Exception {
-        final UUID id = new ResultToValue<>(
+        final UUID id = new ResultAsValues<>(
             new InsertWithKeys(
                 this.session,
                 new KeyedQuery(
@@ -61,13 +61,13 @@ public final class SqlContacts implements Contacts {
                 )
             ),
             UUID.class
-        ).value();
+        ).value().get(0);
         return new SqlContact(this.session, id);
     }
 
     @Override
     public List<Contact> find(final String name) throws Exception {
-        final List<UUID> ids = new ResultToValues<>(
+        final List<UUID> ids = new ResultAsValues<>(
             new Select(
                 this.session,
                 new NamedQuery(
@@ -87,7 +87,7 @@ public final class SqlContacts implements Contacts {
     @Override
     public Iterator<Contact> iterator() {
         try {
-            final List<UUID> ids = new ResultToValues<>(
+            final List<UUID> ids = new ResultAsValues<>(
                 new Select(
                     this.session,
                     new NamedQuery(

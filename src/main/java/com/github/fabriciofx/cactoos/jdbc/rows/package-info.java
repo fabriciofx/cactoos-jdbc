@@ -15,39 +15,16 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
-
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import org.cactoos.Scalar;
+package com.github.fabriciofx.cactoos.jdbc.rows;
 
 /**
+ * Rows.
+ *
  * @since 0.1
  */
-public final class ResultToValue<T> implements Scalar<T> {
-    private final Statement<Result> statement;
-    private final Class<T> type;
-
-    public ResultToValue(final Statement<Result> stmt, final Class<T> tpe) {
-        this.statement = stmt;
-        this.type = tpe;
-    }
-
-    @Override
-    public T value() throws Exception {
-        final Object obj = this.statement
-            .result()
-            .iterator()
-            .next()
-            .values()
-            .iterator()
-            .next();
-        return this.type.cast(obj);
-    }
-}
