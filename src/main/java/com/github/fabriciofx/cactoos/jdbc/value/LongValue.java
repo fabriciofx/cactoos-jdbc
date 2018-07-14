@@ -27,25 +27,39 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 
 /**
+ * Long val.
+ *
  * @since 0.1
  */
 public final class LongValue implements DataValue<Long> {
-    private final String name;
-    private final Long value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final Long val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public LongValue(final String name, final Long value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public Long value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -53,11 +67,11 @@ public final class LongValue implements DataValue<Long> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setLong(index, this.value);
+        stmt.setLong(index, this.val);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 }

@@ -31,12 +31,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
+ * Insert.
+ *
  * @since 0.1
  */
 public final class Insert implements Statement<Boolean> {
+    /**
+     * The session.
+     */
     private final Session session;
+
+    /**
+     * The SQL query.
+     */
     private final Query query;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param qry A SQL query
+     */
     public Insert(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;

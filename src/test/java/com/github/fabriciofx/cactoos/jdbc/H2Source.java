@@ -1,4 +1,27 @@
 /*
+ * The MIT License (MIT)
+ *
+ * Copyright (C) 2018 Fabrício Barros Cabral
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+/*
  * Copyright (c) 2012-2018, jcabi.com
  * All rights reserved.
  *
@@ -20,11 +43,6 @@
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
  * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
  * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.github.fabriciofx.cactoos.jdbc;
@@ -40,9 +58,14 @@ import javax.sql.DataSource;
 /**
  * H2 result source, for unit testing.
  *
- * @since 0.13
+ * @since 0.1
  */
 public final class H2Source implements DataSource {
+    /**
+     * Default JDBC URL.
+     */
+    private static final String URL = "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1";
+
     /**
      * H2 driver.
      */
@@ -74,10 +97,7 @@ public final class H2Source implements DataSource {
     @Override
     public Connection getConnection() throws SQLException {
         return this.driver.connect(
-            String.format(
-                "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1",
-                this.name
-            ),
+            String.format(H2Source.URL, this.name),
             new Properties()
         );
     }
@@ -91,10 +111,7 @@ public final class H2Source implements DataSource {
         props.put("user", username);
         props.put("password", password);
         return this.driver.connect(
-            String.format(
-                "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1",
-                this.name
-            ),
+            String.format(H2Source.URL, this.name),
             props
         );
     }

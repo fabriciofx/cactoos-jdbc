@@ -32,5 +32,10 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.1
  */
 public interface Statement<T> {
+    /**
+     * Execute it and returns a single or set of value(s).
+     * @return A Result of a type
+     * @throws Exception If fails
+     */
     Result<T> result() throws Exception;
 }

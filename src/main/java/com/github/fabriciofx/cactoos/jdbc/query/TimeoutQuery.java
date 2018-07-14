@@ -28,12 +28,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
+ * Timeout query.
+ *
  * @since 0.1
  */
 public final class TimeoutQuery implements Query {
+    /**
+     * The query to be decorated.
+     */
     private final Query origin;
+
+    /**
+     * Query timeout time in seconds.
+     */
     private final int time;
 
+    /**
+     * Ctor.
+     * @param query The SQL query
+     * @param seconds The timeout time
+     */
     public TimeoutQuery(final Query query, final int seconds) {
         this.origin = query;
         this.time = seconds;

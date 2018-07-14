@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -29,13 +29,33 @@ import java.util.Map;
 import org.cactoos.Scalar;
 
 /**
+ * Result as XML.
+ *
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class ResultAsXml implements Scalar<String> {
+    /**
+     * Statement that returns a Rows.
+     */
     private final Statement<Rows> statement;
+
+    /**
+     * Root tag in the XML.
+     */
     private final String root;
+
+    /**
+     * Child tag in the XML.
+     */
     private final String child;
 
+    /**
+     * Ctor.
+     * @param stmt A statement
+     * @param root A root tag
+     * @param child A child tag
+     */
     public ResultAsXml(
         final Statement<Rows> stmt,
         final String root,

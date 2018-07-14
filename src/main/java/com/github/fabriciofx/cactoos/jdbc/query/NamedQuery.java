@@ -33,12 +33,26 @@ import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
 
 /**
+ * Named parameters query.
+ *
  * @since 0.1
  */
 public final class NamedQuery implements Query {
+    /**
+     * SQL query.
+     */
     private final Scalar<String> sql;
+
+    /**
+     * SQL query parameters.
+     */
     private final DataValues values;
 
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param vals SQL query parameters
+     */
     public NamedQuery(
         final String sql,
         final DataValue<?>... vals

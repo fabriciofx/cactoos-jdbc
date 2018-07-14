@@ -33,12 +33,26 @@ import org.cactoos.list.ListOf;
 import org.cactoos.scalar.StickyScalar;
 
 /**
+ * Batch query.
+ *
  * @since 0.1
  */
 public final class BatchQuery implements Query {
+    /**
+     * SQL query.
+     */
     private final Scalar<String> sql;
+
+    /**
+     * A list of SQL query parameters.
+     */
     private final List<DataValues> values;
 
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param vals A list of SQL query parameters
+     */
     public BatchQuery(
         final String sql,
         final DataValues... vals

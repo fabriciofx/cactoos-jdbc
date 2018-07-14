@@ -31,12 +31,28 @@ import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 /**
+ * Transaction.
+ *
+ * @param <T> Type of the result
  * @since 0.1
  */
+@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
 public final class Transaction<T> implements Statement<T> {
+    /**
+     * The session.
+     */
     private final Session session;
+
+    /**
+     * Callable to be executed in a transaction.
+     */
     private final Callable<T> callable;
 
+    /**
+     * Ctor.
+     * @param sssn A session
+     * @param call A Callable to be executed in a transaction
+     */
     public Transaction(final TransactedSession sssn, final Callable<T> call) {
         this.session = sssn;
         this.callable = call;
@@ -49,6 +65,7 @@ public final class Transaction<T> implements Statement<T> {
             final T ret = this.callable.call();
             connection.commit();
             return () -> ret;
+            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
             connection.rollback();
             throw ex;

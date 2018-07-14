@@ -26,10 +26,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import org.cactoos.io.ResourceOf;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.TextHasString;
 
 /**
  * Agenda tests.
@@ -37,15 +38,14 @@ import org.junit.Test;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class AgendaTest {
     @Test
-    public void agenda() throws Exception {
-        final Session session = new LoggedSession(
-            new NoAuthSession(
-                new H2Source("agendadb")
-            ),
-            "agenda"
+    public void addContact() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("agendadb")
         );
         new SqlScript(
             session,
@@ -54,25 +54,38 @@ public final class AgendaTest {
             )
         ).exec();
         final Contacts contacts = new SqlContacts(session);
-        final Contact joseph = contacts.contact("Joseph Klimber");
-        final Phone tim = joseph.phones().phone("99991234", "TIM");
-        joseph.phones().phone("98812564", "Oi");
-        System.out.println(joseph.asString());
-        joseph.asString();
+        final Contact contact = contacts.contact("Donald Knuth");
+        contact.phones().phone("99991234", "TIM");
+        contact.phones().phone("98812564", "Oi");
+        MatcherAssert.assertThat(
+            "Can't add an agenda contact",
+            contact,
+            new TextHasString(
+                String.join(
+                    "\n",
+                    "Name: Donald Knuth",
+                    "Phone: 99991234 (TIM)",
+                    "Phone: 98812564 (Oi)"
+                )
+            )
+        );
+    }
 
-        final Contact maria = contacts.find("maria").get(0);
-        System.out.println(maria.asString());
-        maria.asString();
-
-        tim.change("99994321", "TIM");
-        //System.out.println(joseph.asString());
-
-//        tim.delete();
-//        System.out.println(joseph.asString());
-
-
-//        maria.delete();
-//        final Contact deleted = contacts.find("maria");
-//        System.out.println(deleted.asString());
+    @Test
+    public void findContact() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("agendadb2")
+        );
+        new SqlScript(
+            session,
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+            )
+        ).exec();
+        MatcherAssert.assertThat(
+            "Can't find an agenda contact",
+            new SqlContacts(session).find("maria").get(0),
+            new TextHasString("Name: Maria Souza")
+        );
     }
 }

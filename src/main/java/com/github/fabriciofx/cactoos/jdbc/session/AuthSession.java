@@ -28,13 +28,32 @@ import java.sql.Connection;
 import javax.sql.DataSource;
 
 /**
+ * Authenticated session.
+ *
  * @since 0.1
  */
 public final class AuthSession implements Session {
+    /**
+     * The DataSource.
+     */
     private final DataSource source;
+
+    /**
+     * User name.
+     */
     private final String user;
+
+    /**
+     * User password.
+     */
     private final String password;
 
+    /**
+     * Ctor.
+     * @param source DataSource
+     * @param user User name
+     * @param password User password
+     */
     public AuthSession(
         final DataSource source,
         final String user,

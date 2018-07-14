@@ -28,29 +28,48 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 
 /**
+ * Decimal val.
+ *
  * @since 0.1
  */
 public final class DecimalValue implements DataValue<BigDecimal> {
-    private final String name;
-    private final BigDecimal value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final BigDecimal val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public DecimalValue(final String name, final String value) {
         this(name, new BigDecimal(value));
     }
 
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public DecimalValue(final String name, final BigDecimal value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public BigDecimal value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -58,11 +77,11 @@ public final class DecimalValue implements DataValue<BigDecimal> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBigDecimal(index, this.value);
+        stmt.setBigDecimal(index, this.val);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 }

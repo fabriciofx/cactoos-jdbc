@@ -31,11 +31,31 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  * @since 0.1
  */
 public interface Phone {
+    /**
+     * Retrieve contact's phone number.
+     * @return The number
+     * @throws Exception If fails
+     */
     String number() throws Exception;
 
+    /**
+     * Retrieve contact's phone operator.
+     * @return The operator's name
+     * @throws Exception If fails
+     */
     String operator() throws Exception;
 
-    void delete () throws Exception;
+    /**
+     * Delete a contact's phone.
+     * @throws Exception If fails
+     */
+    void delete() throws Exception;
 
+    /**
+     * Change the contact's number and operator.
+     * @param number The new number
+     * @param operator The new operator
+     * @throws Exception If fails
+     */
     void change(String number, String operator) throws Exception;
 }

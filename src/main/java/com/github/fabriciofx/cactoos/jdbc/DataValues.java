@@ -33,7 +33,18 @@ import java.sql.PreparedStatement;
  * @since 0.1
  */
 public interface DataValues extends Iterable<DataValue<?>> {
+    /**
+     * Add a value into DataValues set.
+     * @param value The value to be added
+     * @return The new DataValues with added value
+     */
     DataValues with(final DataValue<?> value);
 
+    /**
+     * Set the PreparedStatement with all data values.
+     * @param stmt The PreparedStatement
+     * @return The setted PreparedStatement
+     * @throws Exception If fails
+     */
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;
 }

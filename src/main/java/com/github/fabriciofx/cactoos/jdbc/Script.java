@@ -31,5 +31,9 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.1
  */
 public interface Script {
+    /**
+     * Execute it.
+     * @throws Exception If fails
+     */
     void exec() throws Exception;
 }

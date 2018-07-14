@@ -27,7 +27,10 @@ import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import org.cactoos.text.JoinedText;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
  * Update tests.
@@ -35,22 +38,29 @@ import org.junit.Test;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
  */
 public final class UpdateTest {
     @Test
     public void update() throws Exception {
-        System.out.println(
+        MatcherAssert.assertThat(
+            "Can't create a table",
             new ResultAsValue<>(
                 new Update(
                     new NoAuthSession(
                         new H2Source("testdb")
                     ),
                     new NamedQuery(
-                        "CREATE TABLE foo1 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                        new JoinedText(
+                            "",
+                            "CREATE TABLE foo1 (id INT AUTO_INCREMENT, ",
+                            "name VARCHAR(50))"
+                        ).asString()
                     )
                 ),
                 Integer.class
-            ).value()
+            ),
+            new ScalarHasValue<>(0)
         );
     }
 }

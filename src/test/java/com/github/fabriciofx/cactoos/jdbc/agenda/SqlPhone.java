@@ -40,11 +40,29 @@ import java.util.UUID;
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlPhone implements Phone {
+    /**
+     * Session.
+     */
     private final Session session;
+
+    /**
+     * Contact's ID.
+     */
     private final UUID contact;
+
+    /**
+     * Sequential number.
+     */
     private final int seq;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param contact Contact's ID
+     * @param seq Sequential number
+     */
     public SqlPhone(final Session sssn, final UUID contact, final int seq) {
         this.session = sssn;
         this.contact = contact;
@@ -57,7 +75,11 @@ public final class SqlPhone implements Phone {
             new Select(
                 this.session,
                 new NamedQuery(
-                    "SELECT number FROM phone WHERE (contact = :contact) AND (seq = :seq)",
+                    String.join(
+                        "",
+                        "SELECT number FROM phone WHERE (contact = :contact) ",
+                        "AND (seq = :seq)"
+                    ),
                     new AnyValue("contact", this.contact),
                     new IntValue("seq", this.seq)
                 )
@@ -72,7 +94,11 @@ public final class SqlPhone implements Phone {
             new Select(
                 this.session,
                 new NamedQuery(
-                    "SELECT operator FROM phone WHERE (contact = :contact) AND (seq = :seq)",
+                    String.join(
+                        "",
+                        "SELECT operator FROM phone WHERE (contact = :contact)",
+                        " AND (seq = :seq)"
+                    ),
                     new AnyValue("contact", this.contact),
                     new IntValue("seq", this.seq)
                 )
@@ -101,8 +127,11 @@ public final class SqlPhone implements Phone {
         new Update(
             this.session,
             new NamedQuery(
-                "UPDATE phone SET number = :number, operator = :operator " +
-                    "WHERE (contact = :contact) AND (seq = :seq)",
+                String.join(
+                    "",
+                    "UPDATE phone SET number = :number, operator = :operator ",
+                    "WHERE (contact = :contact) AND (seq = :seq)"
+                ),
                 new TextValue("number", number),
                 new TextValue("operator", operator),
                 new AnyValue("contact", this.contact),

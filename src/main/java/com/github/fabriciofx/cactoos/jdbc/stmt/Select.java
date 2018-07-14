@@ -34,12 +34,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
+ * Select.
+ *
  * @since 0.1
  */
 public final class Select implements Statement<Rows> {
+    /**
+     * The session.
+     */
     private final Session session;
+
+    /**
+     * The SQL query.
+     */
     private final Query query;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param qry A SQL query
+     */
     public Select(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;
@@ -47,6 +61,7 @@ public final class Select implements Statement<Rows> {
 
     @Override
     public Result<Rows> result() throws Exception {
+        // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
                 stmt.execute();

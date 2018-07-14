@@ -43,11 +43,32 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
+ * Transacted connection.
+ *
  * @since 0.1
+ * @checkstyle ParameterNameCheck (500 lines)
+ * @checkstyle ParameterNumberCheck (500 lines)
+ * @checkstyle TooManyMethods (500 lines)
  */
+@SuppressWarnings(
+    {
+        "PMD.TooManyMethods",
+        "PMD.LongVariable",
+        "PMD.UseVarargs",
+        "PMD.BooleanGetMethodName",
+        "PMD.ExcessivePublicCount"
+    }
+)
 public final class TransactedConnection implements Connection {
+    /**
+     * The connection.
+     */
     private final Connection origin;
 
+    /**
+     * Ctor.
+     * @param connection A Connection
+     */
     public TransactedConnection(final Connection connection) {
         this.origin = connection;
     }

@@ -25,6 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
@@ -32,7 +33,10 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
  * Insert tests.
@@ -40,29 +44,35 @@ import org.junit.Test;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
-        System.out.println(
-            new Update(
-                session,
-                new NamedQuery(
-                    "CREATE TABLE foo2 (id INT AUTO_INCREMENT, name VARCHAR(50))"
-                )
-            ).result()
-        );
-        System.out.println(
-            new Insert(
-                session,
-                new NamedQuery(
-                    "INSERT INTO foo2 (name) VALUES (:name)",
-                    new TextValue("name", "Yegor Bugayenko")
-                )
-            ).result()
+        new Update(
+            session,
+            new NamedQuery(
+                "CREATE TABLE t01 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+            )
+        ).result();
+        MatcherAssert.assertThat(
+            "Can't insert into table",
+            new ResultAsValue<>(
+                new Insert(
+                    session,
+                    new NamedQuery(
+                        "INSERT INTO t01 (name) VALUES (:name)",
+                        new TextValue("name", "Yegor Bugayenko")
+                    )
+                ),
+                Boolean.class
+            ),
+            new ScalarHasValue<>(false)
         );
     }
 
@@ -74,45 +84,53 @@ public final class InsertTest {
         new Update(
             session,
             new NamedQuery(
-                "CREATE TABLE foo3 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50))"
             )
         ).result();
-        System.out.println(
-            new ResultAsValues<>(
+        MatcherAssert.assertThat(
+            "Can't insert with an integer keys",
+            () -> new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
                     new KeyedQuery(
-                        "INSERT INTO foo3 (name) VALUES (:name)",
-                        new TextValue("name", "Yegor Bugayenko")
+                        "INSERT INTO t02 (name) VALUES (:name)",
+                        new TextValue("name", "Jeff Malony")
                     )
                 ),
                 Integer.class
-            ).value()
+            ).value().get(0),
+            new ScalarHasValue<>(1)
         );
     }
 
     @Test
-    public void insertWithKeysUuid() throws Exception {
+    public void insertWithUuidKeys() throws Exception {
         final Session session = new NoAuthSession(
             new H2Source("testdb")
         );
         new Update(
             session,
             new NamedQuery(
-                "CREATE TABLE foo4 (id UUID DEFAULT RANDOM_UUID(), name VARCHAR(50))"
+                String.join(
+                    "",
+                    "CREATE TABLE t03 (id UUID DEFAULT RANDOM_UUID(),",
+                    "name VARCHAR(50))"
+                )
             )
         ).result();
-        System.out.println(
+        MatcherAssert.assertThat(
+            "Can't insert with a uuid keys",
             new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
                     new KeyedQuery(
-                        "INSERT INTO foo4 (name) VALUES (:name)",
-                        new TextValue("name", "Yegor Bugayenko")
+                        "INSERT INTO t03 (name) VALUES (:name)",
+                        new TextValue("name", "Marie Curie")
                     )
                 ),
                 UUID.class
-            ).value().get(0).toString()
+            ).value().get(0).toString(),
+            Matchers.containsString("-")
         );
     }
 }

@@ -36,8 +36,15 @@ import java.util.List;
  * @since 0.1
  */
 public final class SmartDataValues implements DataValues {
+    /**
+     * Values.
+     */
     private final List<DataValue<?>> values;
 
+    /**
+     * Ctor.
+     * @param prms List of DataValue
+     */
     public SmartDataValues(final DataValue<?>... prms) {
         this.values = Arrays.asList(prms);
     }

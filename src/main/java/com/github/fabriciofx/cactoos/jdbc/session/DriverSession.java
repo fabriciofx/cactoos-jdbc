@@ -28,13 +28,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
+ * Driver session.
+ *
  * @since 0.1
  */
 public final class DriverSession implements Session {
+    /**
+     * JDBC URL.
+     */
     private final String url;
+
+    /**
+     * User name.
+     */
     private final String username;
+
+    /**
+     * User password.
+     */
     private final String password;
 
+    /**
+     * Ctor.
+     * @param url JDBC URL
+     * @param user User name
+     * @param password User password
+     */
     public DriverSession(
         final String url,
         final String user,

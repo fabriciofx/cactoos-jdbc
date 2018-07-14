@@ -28,11 +28,20 @@ import java.sql.Connection;
 import javax.sql.DataSource;
 
 /**
+ * No authenticated session.
+ *
  * @since 0.1
  */
 public final class NoAuthSession implements Session {
+    /**
+     * DataSource.
+     */
     private final DataSource source;
 
+    /**
+     * Ctor.
+     * @param source DataSource
+     */
     public NoAuthSession(final DataSource source) {
         this.source = source;
     }

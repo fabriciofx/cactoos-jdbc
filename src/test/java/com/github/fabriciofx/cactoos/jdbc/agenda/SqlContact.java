@@ -39,9 +39,21 @@ import java.util.UUID;
  * @since 0.1
  */
 public final class SqlContact implements Contact {
+    /**
+     * Session.
+     */
     private final Session session;
+
+    /**
+     * Contact's ID.
+     */
     private final UUID id;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param id A Contact's ID
+     */
     public SqlContact(final Session sssn, final UUID id) {
         this.session = sssn;
         this.id = id;

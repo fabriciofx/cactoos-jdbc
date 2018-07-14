@@ -42,9 +42,24 @@ import java.util.UUID;
  *
  * @since 0.1
  */
+@SuppressWarnings(
+    {
+        "PMD.AvoidCatchingGenericException",
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidThrowingRawExceptionTypes"
+    }
+)
 public final class SqlContacts implements Contacts {
+    /**
+     * Session.
+     */
     private final Session session;
 
+    /**
+     * Ctor.
+     * @param sssn A Session.
+     */
     public SqlContacts(final Session sssn) {
         this.session = sssn;
     }
@@ -70,7 +85,11 @@ public final class SqlContacts implements Contacts {
             new Select(
                 this.session,
                 new NamedQuery(
-                    "SELECT id FROM contact WHERE name ILIKE '%' || :name || '%'",
+                    String.join(
+                        "",
+                        "SELECT id FROM contact WHERE name ILIKE ",
+                        "'%' || :name || '%'"
+                    ),
                     new TextValue("name", name)
                 )
             ),
@@ -100,8 +119,9 @@ public final class SqlContacts implements Contacts {
                 list.add(new SqlContact(this.session, id));
             }
             return list.iterator();
+            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
-            throw new RuntimeException("Error in interator of contacts");
+            throw new RuntimeException("Error in contacts iterator", ex);
         }
     }
 }

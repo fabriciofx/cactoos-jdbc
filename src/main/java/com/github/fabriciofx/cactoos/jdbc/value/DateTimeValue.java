@@ -29,25 +29,39 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
+ * DateTime val.
+ *
  * @since 0.1
  */
 public final class DateTimeValue implements DataValue<LocalDateTime> {
-    private final String name;
-    private final LocalDateTime value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final LocalDateTime val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public DateTimeValue(final String name, final LocalDateTime value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public LocalDateTime value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -55,11 +69,11 @@ public final class DateTimeValue implements DataValue<LocalDateTime> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setTimestamp(index, Timestamp.valueOf(this.value));
+        stmt.setTimestamp(index, Timestamp.valueOf(this.val));
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 }

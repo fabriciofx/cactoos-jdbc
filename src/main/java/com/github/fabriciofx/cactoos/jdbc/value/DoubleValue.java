@@ -27,25 +27,39 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 
 /**
+ * Double val.
+ *
  * @since 0.1
  */
 public final class DoubleValue implements DataValue<Double> {
-    private final String name;
-    private final Double value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final Double val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The val
+     */
     public DoubleValue(final String name, final Double value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public Double value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -53,11 +67,11 @@ public final class DoubleValue implements DataValue<Double> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDouble(index, this.value);
+        stmt.setDouble(index, this.val);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 }

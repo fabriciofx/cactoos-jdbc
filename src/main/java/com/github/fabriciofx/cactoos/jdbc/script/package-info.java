@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.script;
 
 /**
  * Script.
  *
  * @since 0.1
  */
+package com.github.fabriciofx.cactoos.jdbc.script;

@@ -35,5 +35,10 @@ import java.sql.Connection;
  * @since 0.1
  */
 public interface Session {
+    /**
+     * Create a {@link java.sql.Connection}.
+     * @return A {@link java.sql.Connection}
+     * @throws Exception If fails
+     */
     Connection connection() throws Exception;
 }

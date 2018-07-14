@@ -30,13 +30,17 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.Batch;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
 /**
  * Batch tests.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class BatchTest {
     @Test
     public void batch() throws Exception {
@@ -46,27 +50,30 @@ public final class BatchTest {
         new Update(
             session,
             new NamedQuery(
-                "CREATE TABLE person (" +
-                    "id INT AUTO_INCREMENT, " +
-                    "name VARCHAR(50), " +
-                    "age INT" +
-                ")"
+                new JoinedText(
+                    "",
+                    "CREATE TABLE client (id INT AUTO_INCREMENT,",
+                    "name VARCHAR(50), age INT)"
+                ).asString()
             )
         ).result();
         new Batch(
             session,
             new BatchQuery(
-                "INSERT INTO person (name, age) VALUES (:name, :age)",
+                "INSERT INTO client (name, age) VALUES (:name, :age)",
                 new SmartDataValues(
                     new TextValue("name", "Jeff Bridges"),
+                    // @checkstyle MagicNumber (1 line)
                     new IntValue("age", 34)
                 ),
                 new SmartDataValues(
                     new TextValue("name", "Anna Miller"),
+                    // @checkstyle MagicNumber (1 line)
                     new IntValue("age", 26)
                 ),
                 new SmartDataValues(
                     new TextValue("name", "Michal Douglas"),
+                    // @checkstyle MagicNumber (1 line)
                     new IntValue("age", 32)
                 )
             )

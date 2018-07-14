@@ -25,11 +25,14 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Transaction;
 import org.cactoos.io.ResourceOf;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -38,6 +41,8 @@ import org.junit.Test;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class TransactionTest {
     @Test
@@ -53,16 +58,29 @@ public final class TransactionTest {
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
             )
         ).exec();
-        new Transaction<>(
-            session,
-            () -> {
-                final Contact einstein = new SqlContacts(session)
-                    .contact("Albert Einstein");
-                einstein.phones().phone("912232325", "TIM");
-                einstein.phones().phone("982231234", "Oi");
-                System.out.println(einstein.asString());
-                return einstein;
-            }
-        ).result();
+        MatcherAssert.assertThat(
+            "Can't perform a transaction",
+            new ResultAsValue<>(
+                new Transaction<>(
+                    session,
+                    () -> {
+                        final Contact einstein = new SqlContacts(session)
+                            .contact("Albert Einstein");
+                        einstein.phones().phone("912232325", "TIM");
+                        einstein.phones().phone("982231234", "Oi");
+                        return einstein.asString();
+                    }
+                ),
+                String.class
+            ).value(),
+            Matchers.containsString(
+                String.join(
+                    "\n",
+                    "Name: Albert Einstein",
+                    "Phone: 912232325 (TIM)",
+                    "Phone: 982231234 (Oi)"
+                )
+            )
+        );
     }
 }

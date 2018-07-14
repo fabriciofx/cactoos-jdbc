@@ -30,11 +30,23 @@ import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
 
 /**
+ * Transacted session.
+ *
+ * <p>Produces a {@link java.sql.Connection} that only closes on commit() or
+ * rollback()</p>
+ *
  * @since 0.1
  */
 public final class TransactedSession implements Session {
+    /**
+     * Holded connection.
+     */
     private final Scalar<Connection> scalar;
 
+    /**
+     * Ctor.
+     * @param session Session
+     */
     public TransactedSession(final Session session) {
         this.scalar = new StickyScalar<>(
             () -> {

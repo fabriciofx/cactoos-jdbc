@@ -32,6 +32,7 @@ import org.cactoos.Scalar;
  *
  * <p>There is no thread-safety guarantee.
  *
+ * @param <T> Type of the result
  * @since 0.1
  */
 public interface Result<T> extends Scalar<T> {

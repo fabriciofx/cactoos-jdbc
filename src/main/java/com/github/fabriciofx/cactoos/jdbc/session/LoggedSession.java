@@ -36,20 +36,57 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
 
 /**
+ * Logged session.
+ *
  * @since 0.1
  */
+@SuppressWarnings({"PMD.LoggerIsNotStaticFinal", "PMD.MoreThanOneLogger"})
 public final class LoggedSession implements Session {
+    /**
+     * The session.
+     */
     private final Session origin;
-    private final String source;
-    private final Logger logger;
-    private final UncheckedScalar<Level> level;
-    private final AtomicInteger connectionsId;
-    private final AtomicInteger statementsId;
 
+    /**
+     * Where the data comes from.
+     */
+    private final String source;
+
+    /**
+     * The logger.
+     */
+    private final Logger logger;
+
+    /**
+     * The logger level.
+     */
+    private final UncheckedScalar<Level> level;
+
+    /**
+     * The connections id.
+     */
+    private final AtomicInteger connections;
+
+    /**
+     * The statements id.
+     */
+    private final AtomicInteger statements;
+
+    /**
+     * Ctor.
+     * @param session A Session
+     * @param source Where the data comes from
+     */
     public LoggedSession(final Session session, final String source) {
         this(session, source, Logger.getLogger(source));
     }
 
+    /**
+     * Ctor.
+     * @param session A Session
+     * @param src Where the data comes from
+     * @param lgr A logger
+     */
     public LoggedSession(
         final Session session,
         final String src,
@@ -73,8 +110,8 @@ public final class LoggedSession implements Session {
                 }
             )
         );
-        this.connectionsId = new AtomicInteger();
-        this.statementsId = new AtomicInteger();
+        this.connections = new AtomicInteger();
+        this.statements = new AtomicInteger();
     }
 
     @Override
@@ -97,7 +134,7 @@ public final class LoggedSession implements Session {
                 new FormattedText(
                     "[%s] Connection[#%d] has been opened with properties %s",
                     this.source,
-                    this.connectionsId.get(),
+                    this.connections.get(),
                     strb.toString().substring(0, strb.length() - 2)
                 )
             ).asString()
@@ -107,8 +144,8 @@ public final class LoggedSession implements Session {
             this.source,
             this.logger,
             this.level.value(),
-            this.connectionsId.getAndIncrement(),
-            this.statementsId
+            this.connections.getAndIncrement(),
+            this.statements
         );
     }
 }

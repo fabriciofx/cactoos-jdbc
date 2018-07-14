@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License (MIT)
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
@@ -42,23 +42,51 @@ import java.util.UUID;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings(
+    {
+        "PMD.AvoidCatchingGenericException",
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidThrowingRawExceptionTypes"
+    }
+)
 public final class SqlPhones implements Phones {
+    /**
+     * Session.
+     */
     private final Session session;
+
+    /**
+     * Contact's ID.
+     */
     private final UUID contact;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param contact A Contact's ID
+     */
     public SqlPhones(final Session sssn, final UUID contact) {
         this.session = sssn;
         this.contact = contact;
     }
 
     @Override
-    public Phone phone(final String number, final String operator) throws Exception{
+    public Phone phone(
+        final String number,
+        final String operator
+    ) throws Exception {
         final Integer seq = new ResultAsValues<>(
             new InsertWithKeys(
                 this.session,
                 new KeyedQuery(
-                    "INSERT INTO phone (contact, number, operator) VALUES (:contact, :number, :operator)",
+                    String.join(
+                        "",
+                        "INSERT INTO phone (contact, number, operator) ",
+                        "VALUES (:contact, :number, :operator)"
+                    ),
                     new AnyValue("contact", this.contact),
                     new TextValue("number", number),
                     new TextValue("operator", operator)
@@ -87,6 +115,7 @@ public final class SqlPhones implements Phones {
                 list.add(new SqlPhone(this.session, this.contact, seq));
             }
             return list.iterator();
+            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }

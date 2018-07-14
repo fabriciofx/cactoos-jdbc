@@ -33,7 +33,19 @@ import java.util.List;
  * @since 0.1
  */
 public interface Contacts extends Iterable<Contact> {
+    /**
+     * Create a new Contact.
+     * @param name Contact's name
+     * @return A Contact
+     * @throws Exception If fails
+     */
     Contact contact(String name) throws Exception;
 
+    /**
+     * Search for a Contact.
+     * @param name Contact's name
+     * @return A list of Contacts
+     * @throws Exception If fails
+     */
     List<Contact> find(String name) throws Exception;
 }

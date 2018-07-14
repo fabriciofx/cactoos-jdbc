@@ -28,12 +28,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
+ * Max rows per query.
+ *
  * @since 0.1
  */
 public final class MaxRowsQuery implements Query {
+    /**
+     * The query to be decorated.
+     */
     private final Query origin;
+
+    /**
+     * Number of rows per query.
+     */
     private final int rows;
 
+    /**
+     * Ctor.
+     * @param query The SQL query
+     * @param max The max number of rows
+     */
     public MaxRowsQuery(final Query query, final int max) {
         this.origin = query;
         this.rows = max;

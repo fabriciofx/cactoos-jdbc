@@ -28,7 +28,10 @@ import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import org.cactoos.text.JoinedText;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.TextHasString;
 
 /**
  * NamedQuery tests.
@@ -36,66 +39,81 @@ import org.junit.Test;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class NamedQueryTest {
     @Test
     public void withoutValues() throws Exception {
-        System.out.println(
-            new NamedQuery(
-                "SELECT * FROM employee"
-            ).asString()
+        MatcherAssert.assertThat(
+            "Can't build a named query without values",
+            new NamedQuery("SELECT * FROM employee"),
+            new TextHasString("SELECT * FROM employee")
         );
     }
 
     @Test
     public void valid() throws Exception {
-        System.out.println(
+        MatcherAssert.assertThat(
+            "Can't build a simple named query",
             new NamedQuery(
                 "INSERT INTO foo2 (name) VALUES (:name)",
                 new TextValue("name", "Yegor Bugayenko")
-            ).asString()
+            ),
+            new TextHasString("INSERT INTO foo2 (name) VALUES (?)")
         );
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalid() throws Exception {
-        System.out.println(
-            new NamedQuery(
-                "INSERT INTO foo2 (name) VALUES (:name)",
-                new TextValue("address", "Sunset Boulevard")
-            ).asString()
-        );
+        new NamedQuery(
+            "INSERT INTO foo2 (name) VALUES (:name)",
+            new TextValue("address", "Sunset Boulevard")
+        ).asString();
     }
 
     @Test
     public void manyValues() throws Exception {
-        System.out.println(
+        MatcherAssert.assertThat(
+            "Can't build a named query with many values",
             new NamedQuery(
-                "INSERT INTO employee " +
-                    "(name, birthday, address, married, salary) " +
-                    "VALUES (:name, :birthday, :address, :married, :salary)",
+                new JoinedText(
+                    "",
+                    "INSERT INTO employee ",
+                    "(name, birthday, address, married, salary) ",
+                    "VALUES (:name, :birthday, :address, :married, :salary)"
+                ).asString(),
                 new TextValue("name", "John Wick"),
                 new DateValue("birthday", "1980-08-16"),
                 new TextValue("address", "Boulevard Street, 34"),
                 new BoolValue("married", false),
                 new DecimalValue("salary", "13456.00")
-            ).asString()
+            ),
+            new TextHasString(
+                new JoinedText(
+                    "",
+                    "INSERT INTO employee ",
+                    "(name, birthday, address, married, salary) ",
+                    "VALUES (?, ?, ?, ?, ?)"
+                ).asString()
+            )
         );
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void outOfOrder() throws Exception {
-        System.out.println(
-            new NamedQuery(
-                "INSERT INTO employee " +
-                    "(name, birthday, address, married, salary) " +
-                    "VALUES (:name, :birthday, :address, :married, :salary)",
-                new TextValue("name", "John Wick"),
-                new DateValue("address", "1980-08-16"),
-                new TextValue("birthday", "Boulevard Street, 34"),
-                new BoolValue("married", false),
-                new DecimalValue("salary", "13456.00")
-            ).asString()
-        );
+        new NamedQuery(
+            new JoinedText(
+                "",
+                "INSERT INTO employee ",
+                "(name, birthday, address, married, salary) ",
+                "VALUES (:name, :birthday, :address, :married, :salary)"
+            ).asString(),
+            new TextValue("name", "John Wick"),
+            new DateValue("address", "1980-08-16"),
+            new TextValue("birthday", "Boulevard Street, 34"),
+            new BoolValue("married", false),
+            new DecimalValue("salary", "13456.00")
+        ).asString();
     }
 }

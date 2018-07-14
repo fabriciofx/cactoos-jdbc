@@ -26,23 +26,42 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.cactoos.Scalar;
 
 /**
+ * Parse named parameters in the SQL.
+ *
  * @since 0.1
  */
 public final class ParsedSql implements Scalar<String>  {
+    /**
+     * SQL query.
+     */
     private final String sql;
+
+    /**
+     * SQL query parameters.
+     */
     private final DataValues values;
 
+    /**
+     * Ctor.
+     * @param sql SQL query
+     * @param vals SQL query parameters
+     */
     public ParsedSql(final String sql, final DataValue<?>... vals) {
         this(sql, new SmartDataValues(vals));
     }
 
+    /**
+     * Ctor.
+     * @param sql SQL query
+     * @param vals SQL query parameters
+     */
     public ParsedSql(final String sql, final DataValues vals) {
         this.sql = sql;
         this.values = vals;
@@ -50,19 +69,18 @@ public final class ParsedSql implements Scalar<String>  {
 
     @Override
     public String value() throws Exception {
-        final List<String> fields = new ArrayList<>();
+        final List<String> fields = new LinkedList<>();
         final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
         final Matcher matcher = find.matcher(this.sql);
         while (matcher.find()) {
             fields.add(matcher.group().substring(1));
         }
-        final String parsed = this.sql.replaceAll(find.pattern(), "?");
         int idx = 0;
         for (final DataValue<?> val : this.values) {
             if (!val.name().equals(fields.get(idx))) {
                 throw new IllegalArgumentException(
                     String.format(
-                        "NamedQuery parameter #%d (%s) is wrong or out of order",
+                        "Query parameter #%d (%s) is wrong or out of order",
                         idx + 1,
                         val.name()
                     )
@@ -70,6 +88,6 @@ public final class ParsedSql implements Scalar<String>  {
             }
             ++idx;
         }
-        return parsed;
+        return this.sql.replaceAll(find.pattern(), "?");
     }
 }

@@ -31,12 +31,27 @@ import java.util.Map;
 import org.cactoos.Scalar;
 
 /**
+ * Result as values.
+ *
+ * @param <T> Type of the result
  * @since 0.1
  */
 public final class ResultAsValues<T> implements Scalar<List<T>> {
+    /**
+     * Statement that returns a Rows.
+     */
     private final Statement<Rows> statement;
+
+    /**
+     * Type value to return.
+     */
     private final Class<T> type;
 
+    /**
+     * Ctor.
+     * @param stmt A statement that returns a Rows
+     * @param tpe Type value to return
+     */
     public ResultAsValues(final Statement<Rows> stmt, final Class<T> tpe) {
         this.statement = stmt;
         this.type = tpe;

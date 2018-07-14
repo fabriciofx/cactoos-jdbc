@@ -32,12 +32,26 @@ import java.io.InputStream;
 import org.cactoos.Input;
 
 /**
+ * SQL Script.
+ *
  * @since 0.1
  */
 public final class SqlScript implements Script {
+    /**
+     * Session.
+     */
     private final Session session;
+
+    /**
+     * Input.
+     */
     private final Input input;
 
+    /**
+     * Ctor.
+     * @param sssn Session where script will be executed
+     * @param npt Input to be used in the session
+     */
     public SqlScript(final Session sssn, final Input npt) {
         this.session = sssn;
         this.input = npt;
@@ -47,9 +61,13 @@ public final class SqlScript implements Script {
     public void exec() throws Exception {
         try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             final InputStream inpt = this.input.stream();
+            // @checkstyle MagicNumber (1 line)
             final byte[] buf = new byte[1024];
-            int length;
-            while ((length = inpt.read(buf)) != -1) {
+            while (true) {
+                final int length = inpt.read(buf);
+                if (length == -1) {
+                    break;
+                }
                 baos.write(buf, 0, length);
             }
             final String sql = baos.toString("UTF-8");

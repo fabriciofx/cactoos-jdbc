@@ -36,7 +36,17 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public interface DataValue<T> extends Scalar<T>, Text {
+    /**
+     * Get the data value name.
+     * @return The name
+     */
     String name();
 
+    /**
+     * Set the PreparedStatement with data value.
+     * @param stmt The PreparedStatement
+     * @param index Value position in the PreparedStatement
+     * @throws Exception If fails
+     */
     void prepare(PreparedStatement stmt, int index) throws Exception;
 }

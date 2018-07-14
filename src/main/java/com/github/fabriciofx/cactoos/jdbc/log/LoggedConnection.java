@@ -50,16 +50,64 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
 
 /**
+ * Logged Connection.
+ *
  * @since 0.1
+ * @checkstyle ParameterNameCheck (700 lines)
+ * @checkstyle ParameterNumberCheck (700 lines)
  */
+@SuppressWarnings(
+    {
+        "PMD.TooManyMethods",
+        "PMD.LongVariable",
+        "PMD.UseVarargs",
+        "PMD.LoggerIsNotStaticFinal",
+        "PMD.BooleanGetMethodName",
+        "PMD.ExcessivePublicCount",
+        "PMD.AvoidDuplicateLiterals"
+    }
+)
 public final class LoggedConnection implements Connection {
+    /**
+     * The connection.
+     */
     private final Connection origin;
-    private final String source;
-    private final Logger logger;
-    private final Level level;
-    private final int num;
-    private final AtomicInteger statementsId;
 
+    /**
+     * The name of source data.
+     */
+    private final String source;
+
+    /**
+     * The logger.
+     */
+    private final Logger logger;
+
+    /**
+     * The log level.
+     */
+    private final Level level;
+
+    /**
+     * The connection id.
+     */
+    private final int num;
+
+    /**
+     * The statements id.
+     */
+    private final AtomicInteger statements;
+
+    /**
+     * Ctor.
+     *
+     * @param connection Decorated connection
+     * @param src The name of source data
+     * @param lggr The logger
+     * @param lvl The log level
+     * @param num The connection id
+     * @param stmtsId The statement id
+     */
     public LoggedConnection(
         final Connection connection,
         final String src,
@@ -73,7 +121,7 @@ public final class LoggedConnection implements Connection {
         this.logger = lggr;
         this.level = lvl;
         this.num = num;
-        this.statementsId = stmtsId;
+        this.statements = stmtsId;
     }
 
     @Override
@@ -83,9 +131,9 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Statement[#%d] has been opened.",
+                    "[%s] Statement[#%d] created.",
                     this.source,
-                    this.statementsId.get()
+                    this.statements.get()
                 )
             ).asString()
         );
@@ -100,9 +148,9 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] has been opened using SQL '%s'.",
+                    "[%s] PreparedStatement[#%d] created using SQL '%s'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql
                 )
             ).asString()
@@ -112,7 +160,7 @@ public final class LoggedConnection implements Connection {
             this.source,
             this.logger,
             this.level,
-            this.statementsId.getAndIncrement()
+            this.statements.getAndIncrement()
         );
     }
 
@@ -123,9 +171,9 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] CallableStatement[#%d] has been opened using SQL '%s'.",
+                    "[%s] CallableStatement[#%d] created using SQL '%s'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql
                 )
             ).asString()
@@ -140,7 +188,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] SQL '%s' has been converted to '%s.",
+                    "[%s] SQL '%s' converted to '%s.",
                     this.source,
                     sql,
                     nat
@@ -157,7 +205,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been changed to '%s'.",
+                    "[%s] changed to '%s'.",
                     this.source,
                     autoCommit
                 )
@@ -180,7 +228,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been executed in %dms.",
+                    "[%s] executed in %dms.",
                     this.source,
                     millis
                 )
@@ -198,7 +246,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been executed in %dms.",
+                    "[%s] executed in %dms.",
                     this.source,
                     millis
                 )
@@ -213,7 +261,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] has been closed. ",
+                    "[%s] Connection[#%d] closed. ",
                     this.source,
                     this.num
                 )
@@ -238,7 +286,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been changed to '%s'. ",
+                    "[%s] changed to '%s'. ",
                     this.source,
                     readOnly
                 )
@@ -258,7 +306,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been changed to '%s'. ",
+                    "[%s] changed to '%s'. ",
                     this.source,
                     catalog
                 )
@@ -272,15 +320,15 @@ public final class LoggedConnection implements Connection {
     }
 
     @Override
-    public void setTransactionIsolation(final int level) throws SQLException {
-        this.origin.setTransactionIsolation(level);
+    public void setTransactionIsolation(final int lvl) throws SQLException {
+        this.origin.setTransactionIsolation(lvl);
         this.logger.log(
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] has been changed to level '%d'. ",
+                    "[%s] changed to level '%d'. ",
                     this.source,
-                    level
+                    lvl
                 )
             ).asString()
         );
@@ -314,7 +362,7 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] warnings has been cleaned. ",
+                    "[%s] warnings cleaned. ",
                     this.source
                 )
             ).asString()
@@ -334,9 +382,10 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Statement[#%d] has been opened with type '%d' and concurrency '%d'.",
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] Statement[#%d] created with type '%d' and concurrency '%d'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     resultSetType,
                     resultSetConcurrency
                 )
@@ -360,9 +409,10 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] has been opened using SQL '%s', type '%d' and concurrency '%d'.",
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql,
                     resultSetType,
                     resultSetConcurrency
@@ -387,9 +437,10 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] CallableStatement[#%d] has been opened using SQL '%s', type '%d' and concurrency '%d'.",
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] CallableStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql,
                     resultSetType,
                     resultSetConcurrency
@@ -473,9 +524,10 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] has been opened using SQL '%s', type '%d', concurrency '%d' and holdability '%d'.",
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d', concurrency '%d' and holdability '%d'.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql,
                     resultSetType,
                     resultSetConcurrency,
@@ -520,9 +572,10 @@ public final class LoggedConnection implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] has been opened using SQL '%s' and %s.",
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s' and %s.",
                     this.source,
-                    this.statementsId.get(),
+                    this.statements.get(),
                     sql,
                     msg
                 )

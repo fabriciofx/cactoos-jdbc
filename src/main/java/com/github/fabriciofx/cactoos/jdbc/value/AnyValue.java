@@ -27,25 +27,39 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 
 /**
+ * Any val.
+ *
  * @since 0.1
  */
 public final class AnyValue implements DataValue<Object> {
-    private final String name;
-    private final Object value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final Object val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public AnyValue(final String name, final Object value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public Object value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -53,11 +67,11 @@ public final class AnyValue implements DataValue<Object> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.value);
+        stmt.setObject(index, this.val);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 }

@@ -21,57 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
-
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.sql.PreparedStatement;
 
 /**
- * Boolean val.
+ * Agenda demo application.
  *
  * @since 0.1
  */
-public final class BoolValue implements DataValue<Boolean> {
-    /**
-     * Name.
-     */
-    private final String nam;
-
-    /**
-     * Value.
-     */
-    private final Boolean val;
-
-    /**
-     * Ctor.
-     * @param name The name
-     * @param value The value
-     */
-    public BoolValue(final String name, final Boolean value) {
-        this.nam = name;
-        this.val = value;
-    }
-
-    @Override
-    public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Boolean value() throws Exception {
-        return this.val;
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setBoolean(index, this.val);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.val.toString();
-    }
-}
+package com.github.fabriciofx.cactoos.jdbc.agenda;

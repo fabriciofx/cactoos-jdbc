@@ -33,6 +33,10 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public interface Contact extends Text {
+    /**
+     * A Empty Contact.
+     * @checkstyle AnonInnerLengthCheck (500 lines)
+     */
     Contact NOBODY = new Contact() {
         @Override
         public String name() throws Exception {
@@ -56,11 +60,30 @@ public interface Contact extends Text {
         }
     };
 
+    /**
+     * Retrieve the Contact's name.
+     * @return Name
+     * @throws Exception I fails
+     */
     String name() throws Exception;
 
+    /**
+     * Retrieve the Contact's phones.
+     * @return Phones
+     * @throws Exception If fails
+     */
     Phones phones() throws Exception;
 
+    /**
+     * Delete a Contact.
+     * @throws Exception I fails
+     */
     void delete() throws Exception;
 
+    /**
+     * Rename a Contact.
+     * @param name New name
+     * @throws Exception If fails
+     */
     void rename(String name) throws Exception;
 }

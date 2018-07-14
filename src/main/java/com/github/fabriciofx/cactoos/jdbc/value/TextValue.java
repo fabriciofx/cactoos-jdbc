@@ -27,25 +27,39 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
 
 /**
+ * String val.
+ *
  * @since 0.1
  */
 public final class TextValue implements DataValue<String> {
-    private final String name;
-    private final String value;
+    /**
+     * Name.
+     */
+    private final String nam;
 
+    /**
+     * Value.
+     */
+    private final String val;
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
     public TextValue(final String name, final String value) {
-        this.name = name;
-        this.value = value;
+        this.nam = name;
+        this.val = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.nam;
     }
 
     @Override
     public String value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
@@ -53,11 +67,11 @@ public final class TextValue implements DataValue<String> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setString(index, this.value);
+        stmt.setString(index, this.val);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value;
+        return this.val;
     }
 }

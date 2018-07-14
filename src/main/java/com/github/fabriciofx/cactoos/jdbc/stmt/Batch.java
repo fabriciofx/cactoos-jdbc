@@ -31,12 +31,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
+ * Batch statements.
+ *
  * @since 0.1
  */
 public final class Batch implements Statement<int[]> {
+    /**
+     * The session.
+     */
     private final Session session;
+
+    /**
+     * The SQL query.
+     */
     private final Query query;
 
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param qry A SQL query
+     */
     public Batch(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;

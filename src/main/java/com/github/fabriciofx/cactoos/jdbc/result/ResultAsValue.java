@@ -27,12 +27,27 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import org.cactoos.Scalar;
 
 /**
+ * Result as value.
+ *
+ * @param <T> Type of the result
  * @since 0.1
  */
 public final class ResultAsValue<T> implements Scalar<T> {
+    /**
+     * Statement.
+     */
     private final Statement<T> statement;
+
+    /**
+     * Type value to return.
+     */
     private final Class<T> type;
 
+    /**
+     * Ctor.
+     * @param stmt A statement
+     * @param tpe Which type to return
+     */
     public ResultAsValue(final Statement<T> stmt, final Class<T> tpe) {
         this.statement = stmt;
         this.type = tpe;
