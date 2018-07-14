@@ -23,8 +23,8 @@
  */
 
 /**
- * Agenda demo test application.
+ * Queries tests.
  *
  * @since 0.1
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
+package com.github.fabriciofx.cactoos.jdbc.query;
