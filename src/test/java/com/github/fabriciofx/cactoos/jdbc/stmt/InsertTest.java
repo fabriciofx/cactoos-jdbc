@@ -60,7 +60,7 @@ public final class InsertTest {
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't insert into table",
+            "Can't loggedUpdate into table",
             new ResultAsValue<>(
                 new Insert(
                     session,
@@ -87,7 +87,7 @@ public final class InsertTest {
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't insert with an integer keys",
+            "Can't loggedUpdate with an integer keys",
             () -> new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
@@ -118,7 +118,7 @@ public final class InsertTest {
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't insert with a uuid keys",
+            "Can't loggedUpdate with a uuid keys",
             new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
