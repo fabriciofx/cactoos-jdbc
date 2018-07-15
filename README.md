@@ -131,29 +131,29 @@ final List<Double> salaries = new ResultToValues<>(
 ).value();
 ```
 
-### Transactions
+### Transaction
 
-`TransactedSession` is a class decorates a `Session` to support transactions.
-`TransactedSession` generates an unique `TransactedConnection` which isn't auto
-commited `Connection` and only closes when a `commmit()` or `rollback()` is
-done. Hence, you can pass an instance of `TransactedSession` to all SQL objects
-that can close a connection, but the connection won't be closed (until a
-`commit()` or `rollback()`) which will be done into a `Transaction` class.
-Let's make an example:
-
+To enable a transaction you will need to do two things:
+1. Decorates a `Session` object using a `TransactedSession` object, like here:
 ```java
 final TransactedSession transacted = new TransactedSession(session);
+```
+2. Use a `Transaction` object to perform all transacted operations, like here:
+```java
 new Transaction(
   transacted,
   () -> {
-    final Contact einstein = new SqlContacts(transacted)
+    final Contact contact = new SqlContacts(transacted)
         .contact("Albert Einstein");
-    einstein.phones().phone("912232325", "TIM");
-    einstein.phones().phone("982231234", "Oi");
-    return einstein;
+    contact.phones().phone("912232325", "TIM");
+    contact.phones().phone("982231234", "Oi");
+    return contact;
   }
 ).result();
 ```
+
+To a complete example, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/blob/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/stmt/TransactionTest.java).
+
 
 ### Logging
 To enable logging just decorate a `Session` object:

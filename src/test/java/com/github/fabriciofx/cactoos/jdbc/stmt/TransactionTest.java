@@ -47,13 +47,13 @@ import org.junit.Test;
 public final class TransactionTest {
     @Test
     public void agenda() throws Exception {
-        final TransactedSession session = new TransactedSession(
+        final TransactedSession transacted = new TransactedSession(
             new NoAuthSession(
                 new H2Source("testdb")
             )
         );
         new SqlScript(
-            session,
+            transacted,
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
             )
@@ -62,13 +62,13 @@ public final class TransactionTest {
             "Can't perform a transaction",
             new ResultAsValue<>(
                 new Transaction<>(
-                    session,
+                    transacted,
                     () -> {
-                        final Contact einstein = new SqlContacts(session)
+                        final Contact contact = new SqlContacts(transacted)
                             .contact("Albert Einstein");
-                        einstein.phones().phone("912232325", "TIM");
-                        einstein.phones().phone("982231234", "Oi");
-                        return einstein.asString();
+                        contact.phones().phone("912232325", "TIM");
+                        contact.phones().phone("982231234", "Oi");
+                        return contact.asString();
                     }
                 ),
                 String.class
