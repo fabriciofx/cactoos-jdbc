@@ -9,7 +9,7 @@
 
 **ATTENTION**: We're still in a very early alpha version, the API may and
 *will* change frequently. Please, use it at your own risk, until we release
-version 1.0 (Sep 2018).
+version 1.0 (Nov 2018).
 
 **Cactoos JDBC** is a collection of object-oriented Java wrapper classes to
 [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity).
@@ -81,11 +81,11 @@ new Update(
 ```
 
 ### Insert
-Let's insert a new employee:
+Let's insert a new employee and return the id of inserted employee.
 ```java
 final int id = new ResultToValue<>(
     new InsertWithKeys(
-        this.session,
+        session,
         new KeyedQuery(
             "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
             new TextValue("name", "Jeff Bridge"),
@@ -143,7 +143,7 @@ new Transaction(
         .contact("Albert Einstein");
     einstein.phones().phone("912232325", "TIM");
     einstein.phones().phone("982231234", "Oi");
-    return einstein;    
+    return einstein;
   }
 ).result();
 ```
@@ -164,20 +164,7 @@ $ mvn clean install -Pqulice
 ## Contributions
 
 Contributions are welcome! Please, open an issue before submit any kind (ideas,
-documentation, code, money, ...) of contribution.
-
-
-## Acknowledgements
-
-David West ([Blog](http://davewest.us/)) for:
-- [Object Thinking](http://amzn.to/2BVeiNl) Book
-
-[@yegor256](https://github.com/yegor256) as Yegor Bugayenko ([Blog](https://wwww.yegor256.com)) for:
-- [Elegant Objects](https://www.yegor256.com/elegant-objects.html) [Vol. 1](http://amzn.to/2BXdZSs) and [Vol. 2](http://amzn.to/2BuFFP4) Books
-- [jcabi-jdbc](https://jdbc.jcabi.com/index.html) JDBC wrapper which Cactoos JDBC is based too
-
-[@mdbs99](https://github.com/mdbs99) as Marcos Douglas B. Santos ([Blog](https://wwww.objectpascalprogramming.com)) for:
-- OOP suggestions and discussion
+documentation, code, ...) of contribution.
 
 
 ## License
@@ -203,3 +190,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## Acknowledgements
+
+David West ([Blog](http://davewest.us/)) for:
+- [Object Thinking](http://amzn.to/2BVeiNl) Book
+
+[@yegor256](https://github.com/yegor256) as Yegor Bugayenko ([Blog](https://wwww.yegor256.com)) for:
+- [Elegant Objects](https://www.yegor256.com/elegant-objects.html) [Vol. 1](http://amzn.to/2BXdZSs) and [Vol. 2](http://amzn.to/2BuFFP4) Books
+- [jcabi-jdbc](https://jdbc.jcabi.com/index.html) JDBC wrapper which Cactoos JDBC is based too
+
+[@mdbs99](https://github.com/mdbs99) as Marcos Douglas B. Santos ([Blog](https://wwww.objectpascalprogramming.com)) for:
+- OOP suggestions and discussion
