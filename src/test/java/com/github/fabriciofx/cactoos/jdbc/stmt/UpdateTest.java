@@ -24,11 +24,20 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.Server;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import java.io.IOException;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -41,26 +50,106 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  */
 public final class UpdateTest {
+//    private static final Server server = new MySqlServer(12345, "testdb");
+//
+//    @BeforeClass
+//    public static void setUpAll() throws Exception {
+//        UpdateTest.server.start();
+//    }
+//
+//    @AfterClass
+//    public static void tearDownAll() throws Exception {
+//        UpdateTest.server.stop();
+//    }
+
+//    @Ignore
     @Test
-    public void update() throws Exception {
+    public void createDatabase() throws IOException {
         MatcherAssert.assertThat(
-            "Can't create a table",
+            "Can't create a database",
             new ResultAsValue<>(
                 new Update(
-                    new NoAuthSession(
-                        new H2Source("testdb")
+                    new AuthSession(
+                        new MySqlSource(""),
+                        "root",
+                        ""
                     ),
                     new NamedQuery(
                         new JoinedText(
                             "",
-                            "CREATE TABLE foo1 (id INT AUTO_INCREMENT, ",
-                            "name VARCHAR(50))"
+                            "CREATE DATABASE IF NOT EXISTS foodb CHARACTER ",
+                            "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
                         ).asString()
                     )
                 ),
                 Integer.class
             ),
-            new ScalarHasValue<>(0)
+            new ScalarHasValue<>(1)
         );
+    }
+
+    @BeforeClass
+    public static void setup() throws Exception {
+        new Update(
+            new AuthSession(
+                new MySqlSource(""),
+                "root",
+                ""
+            ),
+            new NamedQuery(
+                new JoinedText(
+                    "",
+                    "CREATE DATABASE IF NOT EXISTS testdb CHARACTER ",
+                    "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+                ).asString()
+            )
+        ).result();
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        new Update(
+            new AuthSession(
+                new MySqlSource(""),
+                "root",
+                ""
+            ),
+            new NamedQuery("DROP DATABASE IF EXISTS testdb")
+        ).result();
+    }
+
+    @Test
+    public void createTable() throws Exception {
+         final Session[] sessions = {
+//            new NoAuthSession(
+//                new H2Source("testdb")
+//            ),
+            new AuthSession(
+//                new MySqlSource("localhost", 12345, "testdb"),
+                new MySqlSource("testdb"),
+                "root",
+                ""
+            )
+        };
+        for (final Session session : sessions) {
+            MatcherAssert.assertThat(
+                "Can't create a table",
+                new ResultAsValue<>(
+                    new Update(
+                        session,
+                        new NamedQuery(
+                            new JoinedText(
+                                "",
+                                "CREATE TABLE testdb.foo1 ",
+                                "(id INT AUTO_INCREMENT, ",
+                                "name VARCHAR(50), PRIMARY KEY (id))"
+                            ).asString()
+                        )
+                    ),
+                    Integer.class
+                ),
+                new ScalarHasValue<>(0)
+            );
+        }
     }
 }

@@ -56,11 +56,15 @@ public final class InsertTest {
         new Update(
             session,
             new NamedQuery(
-                "CREATE TABLE t01 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                String.join(
+                    "",
+                    "CREATE TABLE t01 (id INT AUTO_INCREMENT,",
+                    "name VARCHAR(50), PRIMARY KEY (id))"
+                )
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't loggedUpdate into table",
+            "Can't insert into table",
             new ResultAsValue<>(
                 new Insert(
                     session,
@@ -83,11 +87,15 @@ public final class InsertTest {
         new Update(
             session,
             new NamedQuery(
-                "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50))"
+                String.join(
+                    "",
+                    "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
+                    "name VARCHAR(50), PRIMARY KEY (id))"
+                )
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't loggedUpdate with an integer keys",
+            "Can't insert with an integer keys",
             () -> new ResultAsValues<>(
                 new InsertWithKeys(
                     session,
@@ -113,12 +121,12 @@ public final class InsertTest {
                 String.join(
                     "",
                     "CREATE TABLE t03 (id UUID DEFAULT RANDOM_UUID(),",
-                    "name VARCHAR(50))"
+                    "name VARCHAR(50), PRIMARY KEY (id))"
                 )
             )
         ).result();
         MatcherAssert.assertThat(
-            "Can't loggedUpdate with a uuid keys",
+            "Can't insert with a uuid keys",
             new ResultAsValues<>(
                 new InsertWithKeys(
                     session,

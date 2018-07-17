@@ -24,14 +24,21 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -41,43 +48,96 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@Ignore
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class BatchTest {
-    @Test
-    public void batch() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
+//    private static final Server server = new MySqlServer(12345, "testdb");
+//
+//    @BeforeClass
+//    public static void setUpAll() throws Exception {
+//        BatchTest.server.start();
+//    }
+//
+//    @AfterClass
+//    public static void tearDownAll() throws Exception {
+//        BatchTest.server.stop();
+//    }
+
+    @BeforeClass
+    public static void setup() throws Exception {
         new Update(
-            session,
+            new AuthSession(
+                new MySqlSource(""),
+                "root",
+                ""
+            ),
             new NamedQuery(
                 new JoinedText(
                     "",
-                    "CREATE TABLE client (id INT AUTO_INCREMENT,",
-                    "name VARCHAR(50), age INT)"
+                    "CREATE DATABASE IF NOT EXISTS testdb CHARACTER ",
+                    "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
                 ).asString()
             )
         ).result();
-        new Batch(
-            session,
-            new BatchQuery(
-                "INSERT INTO client (name, age) VALUES (:name, :age)",
-                new SmartDataValues(
-                    new TextValue("name", "Jeff Bridges"),
-                    // @checkstyle MagicNumber (1 line)
-                    new IntValue("age", 34)
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "Anna Miller"),
-                    // @checkstyle MagicNumber (1 line)
-                    new IntValue("age", 26)
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "Michal Douglas"),
-                    // @checkstyle MagicNumber (1 line)
-                    new IntValue("age", 32)
-                )
-            )
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        new Update(
+            new AuthSession(
+                new MySqlSource(""),
+                "root",
+                ""
+            ),
+            new NamedQuery("DROP DATABASE IF EXISTS testdb")
         ).result();
+    }
+
+    @Test
+    public void batch() throws Exception {
+        final Session[] sessions = {
+//            new NoAuthSession(
+//                new H2Source("testdb")
+//            ),
+            new AuthSession(
+//                new MySqlSource(12345, "testdb"),
+                new MySqlSource("testdb"),
+                "root",
+                ""
+            )
+        };
+        for (final Session session : sessions) {
+            new Update(
+                session,
+                new NamedQuery(
+                    new JoinedText(
+                        "",
+                        "CREATE TABLE testdb.client (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), age INT, PRIMARY KEY (id))"
+                    ).asString()
+                )
+            ).result();
+            new Batch(
+                session,
+                new BatchQuery(
+                    "INSERT INTO testdb.client (name, age) VALUES (:name, :age)",
+                    new SmartDataValues(
+                        new TextValue("name", "Jeff Bridges"),
+                        // @checkstyle MagicNumber (1 line)
+                        new IntValue("age", 34)
+                    ),
+                    new SmartDataValues(
+                        new TextValue("name", "Anna Miller"),
+                        // @checkstyle MagicNumber (1 line)
+                        new IntValue("age", 26)
+                    ),
+                    new SmartDataValues(
+                        new TextValue("name", "Michal Douglas"),
+                        // @checkstyle MagicNumber (1 line)
+                        new IntValue("age", 32)
+                    )
+                )
+            ).result();
+        }
     }
 }

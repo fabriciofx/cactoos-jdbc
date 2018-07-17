@@ -55,7 +55,7 @@ public final class TransactionTest {
         new SqlScript(
             transacted,
             new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
         ).exec();
         MatcherAssert.assertThat(

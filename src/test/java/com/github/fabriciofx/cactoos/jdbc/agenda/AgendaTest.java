@@ -50,7 +50,7 @@ public final class AgendaTest {
         new SqlScript(
             session,
             new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
         ).exec();
         final Contacts contacts = new SqlContacts(session);
@@ -79,7 +79,7 @@ public final class AgendaTest {
         new SqlScript(
             session,
             new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
         ).exec();
         MatcherAssert.assertThat(

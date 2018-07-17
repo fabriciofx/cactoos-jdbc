@@ -63,9 +63,10 @@ public final class SelectTest {
             new NamedQuery(
                 new JoinedText(
                     "",
-                    "CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
+                    //"CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
+                    "CREATE TABLE employee (id INT AUTO_INCREMENT,",
                     "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
-                    "married BOOLEAN, salary DECIMAL(20,2))"
+                    "married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
                 ).asString()
             )
         ).result();
@@ -134,7 +135,7 @@ public final class SelectTest {
                     "",
                     "CREATE TABLE person (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
-                    "working BOOLEAN, height DECIMAL(20,2))"
+                    "working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                 ).asString()
             )
         ).result();
