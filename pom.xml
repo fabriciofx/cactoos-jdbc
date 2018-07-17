@@ -31,7 +31,7 @@ SOFTWARE.
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
   <description>A true OO implementation of the JDBC API</description>
@@ -59,7 +59,7 @@ SOFTWARE.
         <role>Architect</role>
         <role>Developer</role>
       </roles>
-      <timezone>-7</timezone>
+      <timezone>-3</timezone>
     </developer>
   </developers>
   <issueManagement>
