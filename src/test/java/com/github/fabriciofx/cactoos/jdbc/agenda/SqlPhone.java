@@ -89,14 +89,14 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public String operator() throws Exception {
+    public String carrier() throws Exception {
         return new ResultAsValues<>(
             new Select(
                 this.session,
                 new NamedQuery(
                     String.join(
                         "",
-                        "SELECT operator FROM phone WHERE (contact = :contact)",
+                        "SELECT carrier FROM phone WHERE (contact = :contact)",
                         " AND (seq = :seq)"
                     ),
                     new AnyValue("contact", this.contact),
@@ -122,18 +122,18 @@ public final class SqlPhone implements Phone {
     @Override
     public void change(
         final String number,
-        final String operator
+        final String carrier
     ) throws Exception {
         new Update(
             this.session,
             new NamedQuery(
                 String.join(
                     "",
-                    "UPDATE phone SET number = :number, operator = :operator ",
+                    "UPDATE phone SET number = :number, carrier = :carrier ",
                     "WHERE (contact = :contact) AND (seq = :seq)"
                 ),
                 new TextValue("number", number),
-                new TextValue("operator", operator),
+                new TextValue("carrier", carrier),
                 new AnyValue("contact", this.contact),
                 new IntValue("seq", this.seq)
             )

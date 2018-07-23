@@ -8,7 +8,7 @@ CREATE TABLE phone (
   contact UUID NOT NULL,
   seq INT AUTO_INCREMENT,
   number VARCHAR(10) NOT NULL,
-  operator VARCHAR(10) NOT NULL,
+  carrier VARCHAR(10) NOT NULL,
   FOREIGN KEY(contact) REFERENCES contact(id),
   PRIMARY KEY(contact, seq)
 );

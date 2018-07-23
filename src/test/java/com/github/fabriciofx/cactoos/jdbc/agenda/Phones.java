@@ -34,9 +34,9 @@ public interface Phones extends Iterable<Phone> {
     /**
      * Create a new contact's phone.
      * @param number The contact's phone number
-     * @param operator The contact's phone operator
+     * @param carrier The contact's phone carrier
      * @return The Phone
      * @throws Exception If fails
      */
-    Phone phone(String number, String operator) throws Exception;
+    Phone phone(String number, String carrier) throws Exception;
 }

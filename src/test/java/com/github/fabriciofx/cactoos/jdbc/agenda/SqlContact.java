@@ -110,7 +110,7 @@ public final class SqlContact implements Contact {
                 String.format(
                     "Phone: %s (%s)\n",
                     phone.number(),
-                    phone.operator()
+                    phone.carrier()
                 )
             );
         }

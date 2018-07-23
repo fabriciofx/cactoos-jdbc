@@ -76,7 +76,7 @@ public final class SqlPhones implements Phones {
     @Override
     public Phone phone(
         final String number,
-        final String operator
+        final String carrier
     ) throws Exception {
         final Integer seq = new ResultAsValues<>(
             new InsertWithKeys(
@@ -84,12 +84,12 @@ public final class SqlPhones implements Phones {
                 new KeyedQuery(
                     String.join(
                         "",
-                        "INSERT INTO phone (contact, number, operator) ",
-                        "VALUES (:contact, :number, :operator)"
+                        "INSERT INTO phone (contact, number, carrier) ",
+                        "VALUES (:contact, :number, :carrier)"
                     ),
                     new AnyValue("contact", this.contact),
                     new TextValue("number", number),
-                    new TextValue("operator", operator)
+                    new TextValue("carrier", carrier)
                 )
             ),
             Integer.class
