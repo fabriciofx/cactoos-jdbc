@@ -29,6 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.TextHasString;
 
@@ -86,6 +87,26 @@ public final class AgendaTest {
             "Can't find an agenda contact",
             new SqlContacts(session).find("maria").get(0),
             new TextHasString("Name: Maria Souza")
+        );
+    }
+
+    @Test
+    public void renameContact() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("agendadb3")
+        );
+        new SqlScript(
+            session,
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+            )
+        ).exec();
+        final Contact contact = new SqlContacts(session).find("maria").get(0);
+        contact.rename("Maria Lima");
+        MatcherAssert.assertThat(
+            "Can't rename an agenda contact",
+            new SqlContacts(session).find("maria").get(0),
+            new TextHasString("Name: Maria Lima")
         );
     }
 }
