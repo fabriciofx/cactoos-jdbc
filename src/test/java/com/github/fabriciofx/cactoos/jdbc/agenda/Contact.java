@@ -34,33 +34,6 @@ import org.cactoos.Text;
  */
 public interface Contact extends Text {
     /**
-     * A Empty Contact.
-     * @checkstyle AnonInnerLengthCheck (500 lines)
-     */
-    Contact NOBODY = new Contact() {
-        @Override
-        public String name() throws Exception {
-            throw new UnsupportedOperationException();
-        }
-        @Override
-        public Phones phones() throws Exception {
-            throw new UnsupportedOperationException();
-        }
-        @Override
-        public void delete() throws Exception {
-            throw new UnsupportedOperationException();
-        }
-        @Override
-        public void rename(final String name) throws Exception {
-            throw new UnsupportedOperationException();
-        }
-        @Override
-        public String asString() throws Exception {
-            throw new UnsupportedOperationException();
-        }
-    };
-
-    /**
      * Retrieve the Contact's name.
      * @return Name
      * @throws Exception I fails
