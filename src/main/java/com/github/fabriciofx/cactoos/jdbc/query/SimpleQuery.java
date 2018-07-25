@@ -33,11 +33,11 @@ import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
 
 /**
- * Named parameters query.
+ * Simple parameters query.
  *
  * @since 0.1
  */
-public final class NamedQuery implements Query {
+public final class SimpleQuery implements Query {
     /**
      * SQL query.
      */
@@ -53,7 +53,7 @@ public final class NamedQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public NamedQuery(
+    public SimpleQuery(
         final String sql,
         final DataValue<?>... vals
     ) {

@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -74,7 +74,7 @@ public final class SqlPhone implements Phone {
         return new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
+                new SimpleQuery(
                     String.join(
                         "",
                         "SELECT number FROM phone WHERE (contact = :contact) ",
@@ -93,7 +93,7 @@ public final class SqlPhone implements Phone {
         return new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
+                new SimpleQuery(
                     String.join(
                         "",
                         "SELECT carrier FROM phone WHERE (contact = :contact)",
@@ -111,7 +111,7 @@ public final class SqlPhone implements Phone {
     public void delete() throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
+            new SimpleQuery(
                 "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
                 new AnyValue("contact", this.contact),
                 new IntValue("seq", this.seq)
@@ -126,7 +126,7 @@ public final class SqlPhone implements Phone {
     ) throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
+            new SimpleQuery(
                 String.join(
                     "",
                     "UPDATE phone SET number = :number, carrier = :carrier ",

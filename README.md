@@ -80,7 +80,7 @@ Now, let's create a table using a `Update` command:
 ```java
 new Update(
     session,
-    new NamedQuery(
+    new SimpleQuery(
         "CREATE TABLE employee (id INT AUTO_INCREMENT, " +
         "name VARCHAR(50), salary DOUBLE)"
     )
@@ -109,7 +109,7 @@ Let's retrieve the name of a employee:
 final String name = new ResultToValue<>(
     new Select(
         session,
-        new NamedQuery(
+        new SimpleQuery(
             "SELECT name FROM employee WHERE id = :id",
             new IntValue("id", 123)
         )
@@ -123,7 +123,7 @@ Let's retrieve all employee salaries:
 final List<Double> salaries = new ResultToValues<>(
     new Select(
         session,
-        new NamedQuery(
+        new SimpleQuery(
             "SELECT salary FROM employee"
         )
     ),

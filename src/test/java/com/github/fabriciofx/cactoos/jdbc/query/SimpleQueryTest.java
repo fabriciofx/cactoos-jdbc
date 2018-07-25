@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.llorllale.cactoos.matchers.TextHasString;
 
 /**
- * NamedQuery tests.
+ * SimpleQuery tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -41,12 +41,12 @@ import org.llorllale.cactoos.matchers.TextHasString;
  * @checkstyle JavadocMethodCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class NamedQueryTest {
+public final class SimpleQueryTest {
     @Test
     public void withoutValues() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a named query without values",
-            new NamedQuery("SELECT * FROM employee"),
+            new SimpleQuery("SELECT * FROM employee"),
             new TextHasString("SELECT * FROM employee")
         );
     }
@@ -55,7 +55,7 @@ public final class NamedQueryTest {
     public void valid() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a simple named query",
-            new NamedQuery(
+            new SimpleQuery(
                 "INSERT INTO foo2 (name) VALUES (:name)",
                 new TextValue("name", "Yegor Bugayenko")
             ),
@@ -65,7 +65,7 @@ public final class NamedQueryTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void invalid() throws Exception {
-        new NamedQuery(
+        new SimpleQuery(
             "INSERT INTO foo2 (name) VALUES (:name)",
             new TextValue("address", "Sunset Boulevard")
         ).asString();
@@ -75,7 +75,7 @@ public final class NamedQueryTest {
     public void manyValues() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a named query with many values",
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
                     "",
                     "INSERT INTO employee ",
@@ -101,7 +101,7 @@ public final class NamedQueryTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void outOfOrder() throws Exception {
-        new NamedQuery(
+        new SimpleQuery(
             new JoinedText(
                 "",
                 "INSERT INTO employee ",

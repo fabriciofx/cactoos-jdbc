@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -60,7 +60,7 @@ public final class SelectTest {
         );
         new Update(
             session,
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
                     "",
                     "CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
@@ -99,7 +99,7 @@ public final class SelectTest {
                 new ResultAsXml(
                     new Select(
                         session,
-                        new NamedQuery(
+                        new SimpleQuery(
                             "SELECT * FROM employee"
                         )
                     ),
@@ -129,7 +129,7 @@ public final class SelectTest {
         );
         new Update(
             session,
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
                     "",
                     "CREATE TABLE person (id UUID DEFAULT RANDOM_UUID(),",
@@ -168,7 +168,7 @@ public final class SelectTest {
             new ResultAsValues<>(
                 new Select(
                     session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT name FROM person"
                     )
                 ),

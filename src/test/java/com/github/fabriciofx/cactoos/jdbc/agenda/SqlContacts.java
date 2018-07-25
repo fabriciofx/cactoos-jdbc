@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -84,7 +84,7 @@ public final class SqlContacts implements Contacts {
         final List<UUID> ids = new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
+                new SimpleQuery(
                     String.join(
                         "",
                         "SELECT id FROM contact WHERE name ILIKE ",
@@ -108,7 +108,7 @@ public final class SqlContacts implements Contacts {
             final List<UUID> ids = new ResultAsValues<>(
                 new Select(
                     this.session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT id FROM contact"
                     )
                 ),

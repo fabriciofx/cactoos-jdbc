@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import org.cactoos.text.JoinedText;
@@ -50,7 +50,7 @@ public final class UpdateTest {
                     new NoAuthSession(
                         new H2Source("testdb")
                     ),
-                    new NamedQuery(
+                    new SimpleQuery(
                         new JoinedText(
                             "",
                             "CREATE TABLE foo1 (id INT AUTO_INCREMENT, ",

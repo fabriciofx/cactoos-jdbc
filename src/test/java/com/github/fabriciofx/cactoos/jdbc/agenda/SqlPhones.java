@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -103,7 +103,7 @@ public final class SqlPhones implements Phones {
             final List<Integer> seqs = new ResultAsValues<>(
                 new Select(
                     this.session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT seq FROM phone WHERE contact = :contact",
                         new AnyValue("contact", this.contact)
                     )
