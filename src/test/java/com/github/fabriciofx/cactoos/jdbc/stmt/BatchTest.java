@@ -52,10 +52,10 @@ public final class BatchTest {
             session,
             new SimpleQuery(
                 new JoinedText(
-                    "",
+                    " ",
                     "CREATE TABLE client (id INT AUTO_INCREMENT,",
                     "name VARCHAR(50), age INT)"
-                ).asString()
+                )
             )
         ).result();
         new Batch(

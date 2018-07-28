@@ -62,22 +62,22 @@ public final class SelectTest {
             session,
             new SimpleQuery(
                 new JoinedText(
-                    "",
+                    " ",
                     "CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
                     "married BOOLEAN, salary DECIMAL(20,2))"
-                ).asString()
+                )
             )
         ).result();
         new Batch(
             session,
             new BatchQuery(
                 new JoinedText(
-                    "",
-                    "INSERT INTO employee ",
-                    "(name, birthday, address, married, salary) ",
+                    " ",
+                    "INSERT INTO employee",
+                    "(name, birthday, address, married, salary)",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
-                ).asString(),
+                ),
                 new SmartDataValues(
                     new TextValue("name", "John Wick"),
                     new DateValue("birthday", "1980-08-16"),
@@ -131,20 +131,20 @@ public final class SelectTest {
             session,
             new SimpleQuery(
                 new JoinedText(
-                    "",
+                    " ",
                     "CREATE TABLE person (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
                     "working BOOLEAN, height DECIMAL(20,2))"
-                ).asString()
+                )
             )
         ).result();
         new Batch(
             session,
             new BatchQuery(
                 new JoinedText(
-                    "",
-                    "INSERT INTO person ",
-                    "(name, created_at, city, working, height) ",
+                    " ",
+                    "INSERT INTO person",
+                    "(name, created_at, city, working, height)",
                     "VALUES (:name, :created_at, :city, :working, :height)"
                 ).asString(),
                 new SmartDataValues(

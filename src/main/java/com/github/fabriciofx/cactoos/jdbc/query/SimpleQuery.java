@@ -29,8 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import org.cactoos.Scalar;
-import org.cactoos.scalar.StickyScalar;
+import org.cactoos.Text;
 
 /**
  * Simple parameters query.
@@ -41,7 +40,7 @@ public final class SimpleQuery implements Query {
     /**
      * SQL query.
      */
-    private final Scalar<String> sql;
+    private final Text sql;
 
     /**
      * SQL query parameters.
@@ -53,11 +52,17 @@ public final class SimpleQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public SimpleQuery(
-        final String sql,
-        final DataValue<?>... vals
-    ) {
-        this.sql = new StickyScalar<>(new ParsedSql(sql, vals));
+    public SimpleQuery(final String sql, final DataValue<?>... vals) {
+        this(() -> sql, vals);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param vals SQL query parameters
+     */
+    public SimpleQuery(final Text sql, final DataValue<?>... vals) {
+        this.sql = new ParsedSql(sql, vals);
         this.values = new SmartDataValues(vals);
     }
 
@@ -66,7 +71,7 @@ public final class SimpleQuery implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.value()
+            this.sql.asString()
         );
         this.values.prepare(stmt);
         return stmt;
@@ -74,6 +79,6 @@ public final class SimpleQuery implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql.value();
+        return this.sql.asString();
     }
 }

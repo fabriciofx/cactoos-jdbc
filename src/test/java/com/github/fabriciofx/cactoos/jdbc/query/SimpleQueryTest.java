@@ -77,11 +77,11 @@ public final class SimpleQueryTest {
             "Can't build a named query with many values",
             new SimpleQuery(
                 new JoinedText(
-                    "",
-                    "INSERT INTO employee ",
-                    "(name, birthday, address, married, salary) ",
+                    " ",
+                    "INSERT INTO employee",
+                    "(name, birthday, address, married, salary)",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
-                ).asString(),
+                ),
                 new TextValue("name", "John Wick"),
                 new DateValue("birthday", "1980-08-16"),
                 new TextValue("address", "Boulevard Street, 34"),
@@ -90,11 +90,11 @@ public final class SimpleQueryTest {
             ),
             new TextHasString(
                 new JoinedText(
-                    "",
-                    "INSERT INTO employee ",
-                    "(name, birthday, address, married, salary) ",
+                    " ",
+                    "INSERT INTO employee",
+                    "(name, birthday, address, married, salary)",
                     "VALUES (?, ?, ?, ?, ?)"
-                ).asString()
+                )
             )
         );
     }
@@ -103,11 +103,11 @@ public final class SimpleQueryTest {
     public void outOfOrder() throws Exception {
         new SimpleQuery(
             new JoinedText(
-                "",
-                "INSERT INTO employee ",
-                "(name, birthday, address, married, salary) ",
+                " ",
+                "INSERT INTO employee",
+                "(name, birthday, address, married, salary)",
                 "VALUES (:name, :birthday, :address, :married, :salary)"
-            ).asString(),
+            ),
             new TextValue("name", "John Wick"),
             new DateValue("address", "1980-08-16"),
             new TextValue("birthday", "Boulevard Street, 34"),

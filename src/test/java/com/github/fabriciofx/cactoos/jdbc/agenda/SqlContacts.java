@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Contacts for SQL.
@@ -41,6 +42,7 @@ import java.util.UUID;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings(
     {
@@ -85,9 +87,9 @@ public final class SqlContacts implements Contacts {
             new Select(
                 this.session,
                 new SimpleQuery(
-                    String.join(
-                        "",
-                        "SELECT id FROM contact WHERE name ILIKE ",
+                    new JoinedText(
+                        " ",
+                        "SELECT id FROM contact WHERE name ILIKE",
                         "'%' || :name || '%'"
                     ),
                     new TextValue("name", name)

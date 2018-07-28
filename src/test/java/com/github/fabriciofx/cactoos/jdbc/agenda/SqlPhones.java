@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Phones for SQL.
@@ -82,9 +83,9 @@ public final class SqlPhones implements Phones {
             new InsertWithKeys(
                 this.session,
                 new KeyedQuery(
-                    String.join(
-                        "",
-                        "INSERT INTO phone (contact, number, carrier) ",
+                    new JoinedText(
+                        " ",
+                        "INSERT INTO phone (contact, number, carrier)",
                         "VALUES (:contact, :number, :carrier)"
                     ),
                     new AnyValue("contact", this.contact),

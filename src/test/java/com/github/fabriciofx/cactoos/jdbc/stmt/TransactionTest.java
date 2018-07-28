@@ -31,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -74,12 +75,12 @@ public final class TransactionTest {
                 String.class
             ).value(),
             Matchers.containsString(
-                String.join(
+                new JoinedText(
                     "\n",
                     "Name: Albert Einstein",
                     "Phone: 912232325 (TIM)",
                     "Phone: 982231234 (Oi)"
-                )
+                ).asString()
             )
         );
     }

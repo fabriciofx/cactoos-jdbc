@@ -52,10 +52,10 @@ public final class UpdateTest {
                     ),
                     new SimpleQuery(
                         new JoinedText(
-                            "",
-                            "CREATE TABLE foo1 (id INT AUTO_INCREMENT, ",
+                            " ",
+                            "CREATE TABLE foo1 (id INT AUTO_INCREMENT,",
                             "name VARCHAR(50))"
-                        ).asString()
+                        )
                     )
                 ),
                 Integer.class

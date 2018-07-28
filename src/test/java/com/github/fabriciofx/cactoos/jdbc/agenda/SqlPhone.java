@@ -32,6 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Phone for SQL.
@@ -39,6 +40,7 @@ import java.util.UUID;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlPhone implements Phone {
@@ -75,9 +77,9 @@ public final class SqlPhone implements Phone {
             new Select(
                 this.session,
                 new SimpleQuery(
-                    String.join(
-                        "",
-                        "SELECT number FROM phone WHERE (contact = :contact) ",
+                    new JoinedText(
+                        " ",
+                        "SELECT number FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
                     new AnyValue("contact", this.contact),
@@ -94,10 +96,10 @@ public final class SqlPhone implements Phone {
             new Select(
                 this.session,
                 new SimpleQuery(
-                    String.join(
-                        "",
+                    new JoinedText(
+                        " ",
                         "SELECT carrier FROM phone WHERE (contact = :contact)",
-                        " AND (seq = :seq)"
+                        "AND (seq = :seq)"
                     ),
                     new AnyValue("contact", this.contact),
                     new IntValue("seq", this.seq)
@@ -127,9 +129,9 @@ public final class SqlPhone implements Phone {
         new Update(
             this.session,
             new SimpleQuery(
-                String.join(
-                    "",
-                    "UPDATE phone SET number = :number, carrier = :carrier ",
+                new JoinedText(
+                    " ",
+                    "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact = :contact) AND (seq = :seq)"
                 ),
                 new TextValue("number", number),

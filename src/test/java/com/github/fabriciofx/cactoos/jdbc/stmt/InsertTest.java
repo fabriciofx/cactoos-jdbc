@@ -32,6 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -110,8 +111,8 @@ public final class InsertTest {
         new Update(
             session,
             new SimpleQuery(
-                String.join(
-                    "",
+                new JoinedText(
+                    " ",
                     "CREATE TABLE t03 (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(50))"
                 )
