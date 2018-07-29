@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.JoinedText;
 
 /**
  * MySQL result source, for unit testing.
@@ -46,19 +48,17 @@ public final class MySqlSource implements DataSource {
 
     /**
      * Ctor.
-     * @param dbname Database name
      */
-    public MySqlSource(final String dbname) {
-        this(3306, dbname);
+    public MySqlSource() {
+        this("");
     }
 
     /**
      * Ctor.
-     * @param port Server port
      * @param dbname Database name
      */
-    public MySqlSource(final int port, final String dbname) {
-        this("localhost", port, dbname);
+    public MySqlSource(final String dbname) {
+        this("localhost", 3306, dbname);
     }
 
     /**
@@ -86,8 +86,8 @@ public final class MySqlSource implements DataSource {
                 () -> {
                     final MysqlDataSource mds = new MysqlDataSource();
                     mds.setUrl(
-                        String.format(
-                            String.join(
+                        new FormattedText(
+                            new JoinedText(
                                 "",
                                 "jdbc:mysql://%s:%d/%s?useSSL=false",
                                 "&useTimezone=true&serverTimezone=UTC"
@@ -95,7 +95,7 @@ public final class MySqlSource implements DataSource {
                             hostname,
                             port,
                             dbname
-                        )
+                        ).asString()
                     );
                     return mds;
                 }

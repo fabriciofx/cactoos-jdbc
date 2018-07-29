@@ -23,14 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.Databases;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
 import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
@@ -40,6 +39,8 @@ import java.time.LocalDate;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -53,129 +54,138 @@ import org.junit.Test;
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SelectTest {
+    private static Databases DATABASES = new Databases();
+
+    @BeforeClass
+    public static void setupClass() throws Exception {
+        SelectTest.DATABASES.start();
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        SelectTest.DATABASES.stop();
+    }
+
     @Test
     public void select() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    //"CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
-                    "CREATE TABLE employee (id INT AUTO_INCREMENT,",
-                    "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
-                    "married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
+        for (final Session session : SelectTest.DATABASES.sessions()) {
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE testdb.employee (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
+                        "married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
+                    )
                 )
-            )
-        ).result();
-        new Batch(
-            session,
-            new BatchQuery(
-                new JoinedText(
-                    " ",
-                    "INSERT INTO employee",
-                    "(name, birthday, address, married, salary)",
-                    "VALUES (:name, :birthday, :address, :married, :salary)"
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "John Wick"),
-                    new DateValue("birthday", "1980-08-16"),
-                    new TextValue("address", "Boulevard Street, 34"),
-                    new BoolValue("married", false),
-                    new DecimalValue("salary", "13456.00")
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "Adam Park"),
-                    new DateValue("birthday", "1985-07-10"),
-                    new TextValue("address", "Sunset Place, 14"),
-                    new BoolValue("married", true),
-                    new DecimalValue("salary", "12345.00")
-                )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            XhtmlMatchers.xhtml(
-                new ResultAsXml(
-                    new Select(
-                        session,
-                        new SimpleQuery(
-                            "SELECT * FROM employee"
-                        )
+            ).result();
+            new Batch(
+                session,
+                new BatchQuery(
+                    new JoinedText(
+                        " ",
+                        "INSERT INTO testdb.employee",
+                        "(name, birthday, address, married, salary)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)"
                     ),
-                    "employees",
-                    "employee"
-                ).value()
-            ),
-            XhtmlMatchers.hasXPaths(
-                "/employees/employee/name[text()='John Wick']",
-                "/employees/employee/birthday[text()='1980-08-16']",
-                "/employees/employee/address[text()='Boulevard Street, 34']",
-                "/employees/employee/married[text()='false']",
-                "/employees/employee/salary[text()='13456.00']",
-                "/employees/employee/name[text()='Adam Park']",
-                "/employees/employee/birthday[text()='1985-07-10']",
-                "/employees/employee/address[text()='Sunset Place, 14']",
-                "/employees/employee/married[text()='true']",
-                "/employees/employee/salary[text()='12345.00']"
-            )
-        );
+                    new SmartDataValues(
+                        new TextValue("name", "John Wick"),
+                        new DateValue("birthday", "1980-08-15"),
+                        new TextValue("address", "Boulevard Street, 34"),
+                        new BoolValue("married", false),
+                        new DecimalValue("salary", "13456.00")
+                    ),
+                    new SmartDataValues(
+                        new TextValue("name", "Adam Park"),
+                        new DateValue("birthday", "1985-07-09"),
+                        new TextValue("address", "Sunset Place, 14"),
+                        new BoolValue("married", true),
+                        new DecimalValue("salary", "12345.00")
+                    )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                XhtmlMatchers.xhtml(
+                    new ResultAsXml(
+                        new Select(
+                            session,
+                            new SimpleQuery(
+                                "SELECT * FROM testdb.employee"
+                            )
+                        ),
+                        "employees",
+                        "employee"
+                    ).value()
+                ),
+                XhtmlMatchers.hasXPaths(
+                    "/employees/employee/name[text()='John Wick']",
+                    "/employees/employee/birthday[text()='1980-08-16']",
+                    "/employees/employee/address[text()='Boulevard Street, 34']",
+                    "/employees/employee/married[text()='false']",
+                    "/employees/employee/salary[text()='13456.00']",
+                    "/employees/employee/name[text()='Adam Park']",
+                    "/employees/employee/birthday[text()='1985-07-09']",
+                    "/employees/employee/address[text()='Sunset Place, 14']",
+                    "/employees/employee/married[text()='true']",
+                    "/employees/employee/salary[text()='12345.00']"
+                )
+            );
+        }
     }
 
     @Test
     public void any() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "CREATE TABLE person (id UUID DEFAULT RANDOM_UUID(),",
-                    "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
-                    "working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
-                )
-            )
-        ).result();
-        new Batch(
-            session,
-            new BatchQuery(
-                new JoinedText(
-                    " ",
-                    "INSERT INTO person",
-                    "(name, created_at, city, working, height)",
-                    "VALUES (:name, :created_at, :city, :working, :height)"
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "Rob Pike"),
-                    new DateValue("created_at", LocalDate.now()),
-                    new TextValue("city", "San Francisco"),
-                    new BoolValue("working", true),
-                    new DecimalValue("height", "1.86")
-                ),
-                new SmartDataValues(
-                    new TextValue("name", "Ana Pivot"),
-                    new DateValue("created_at", LocalDate.now()),
-                    new TextValue("city", "Washington"),
-                    new BoolValue("working", false),
-                    new DecimalValue("height", "1.62")
-                )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            "Can't select a person name",
-            new ResultAsValues<>(
-                new Select(
-                    session,
-                    new SimpleQuery(
-                        "SELECT name FROM person"
+        for (final Session session : SelectTest.DATABASES.sessions()) {
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE testdb.person (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
+                        "working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
-                ),
-                String.class
-            ).value().get(0),
-            Matchers.equalTo("Rob Pike")
-        );
+                )
+            ).result();
+            new Batch(
+                session,
+                new BatchQuery(
+                    new JoinedText(
+                        " ",
+                        "INSERT INTO testdb.person",
+                        "(name, created_at, city, working, height)",
+                        "VALUES (:name, :created_at, :city, :working, :height)"
+                    ),
+                    new SmartDataValues(
+                        new TextValue("name", "Rob Pike"),
+                        new DateValue("created_at", LocalDate.now()),
+                        new TextValue("city", "San Francisco"),
+                        new BoolValue("working", true),
+                        new DecimalValue("height", "1.86")
+                    ),
+                    new SmartDataValues(
+                        new TextValue("name", "Ana Pivot"),
+                        new DateValue("created_at", LocalDate.now()),
+                        new TextValue("city", "Washington"),
+                        new BoolValue("working", false),
+                        new DecimalValue("height", "1.62")
+                    )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't select a person name",
+                new ResultAsValues<>(
+                    new Select(
+                        session,
+                        new SimpleQuery(
+                            "SELECT name FROM testdb.person"
+                        )
+                    ),
+                    String.class
+                ).value().get(0),
+                Matchers.equalTo("Rob Pike")
+            );
+        }
     }
 }

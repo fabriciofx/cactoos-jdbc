@@ -23,18 +23,17 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.Databases;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
-import java.util.UUID;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -49,96 +48,75 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class InsertTest {
+    private static Databases DATABASES = new Databases();
+
+    @BeforeClass
+    public static void setupClass() throws Exception {
+        InsertTest.DATABASES.start();
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        InsertTest.DATABASES.stop();
+    }
+
     @Test
     public void insert() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "CREATE TABLE t01 (id INT AUTO_INCREMENT,",
-                    "name VARCHAR(50), PRIMARY KEY (id))"
-                )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            "Can't insert into table",
-            new ResultAsValue<>(
-                new Insert(
-                    session,
-                    new SimpleQuery(
-                        "INSERT INTO t01 (name) VALUES (:name)",
-                        new TextValue("name", "Yegor Bugayenko")
+        for (final Session session : InsertTest.DATABASES.sessions()) {
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE testdb.t01 (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), PRIMARY KEY (id))"
                     )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't insert into table",
+                new ResultAsValue<>(
+                    new Insert(
+                        session,
+                        new SimpleQuery(
+                            "INSERT INTO testdb.t01 (name) VALUES (:name)",
+                            new TextValue("name", "Yegor Bugayenko")
+                        )
+                    ),
+                    Boolean.class
                 ),
-                Boolean.class
-            ),
-            new ScalarHasValue<>(false)
-        );
+                new ScalarHasValue<>(false)
+            );
+        }
     }
 
     @Test
     public void insertWithKeys() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
-                    "name VARCHAR(50), PRIMARY KEY (id))"
-                )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            "Can't insert with an integer keys",
-            () -> new ResultAsValues<>(
-                new InsertWithKeys(
-                    session,
-                    new KeyedQuery(
-                        "INSERT INTO t02 (name) VALUES (:name)",
-                        new TextValue("name", "Jeff Malony")
+        for (final Session session : InsertTest.DATABASES.sessions()) {
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE testdb.t02 (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), PRIMARY KEY (id))"
                     )
-                ),
-                Integer.class
-            ).value().get(0),
-            new ScalarHasValue<>(1)
-        );
-    }
-
-    @Test
-    public void insertWithUuidKeys() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("testdb")
-        );
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "CREATE TABLE t03 (id UUID DEFAULT RANDOM_UUID(),",
-                    "name VARCHAR(50), PRIMARY KEY (id))"
                 )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            "Can't insert with a uuid keys",
-            new ResultAsValues<>(
-                new InsertWithKeys(
-                    session,
-                    new KeyedQuery(
-                        "INSERT INTO t03 (name) VALUES (:name)",
-                        new TextValue("name", "Marie Curie")
-                    )
-                ),
-                UUID.class
-            ).value().get(0).toString(),
-            Matchers.containsString("-")
-        );
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't insert with an integer keys",
+                () -> new ResultAsValues<>(
+                    new InsertWithKeys(
+                        session,
+                        new KeyedQuery(
+                            "INSERT INTO testdb.t02 (name) VALUES (:name)",
+                            new TextValue("name", "Jeff Malony")
+                        )
+                    ),
+                    Integer.class
+                ).value().get(0),
+                new ScalarHasValue<>(1)
+            );
+        }
     }
 }

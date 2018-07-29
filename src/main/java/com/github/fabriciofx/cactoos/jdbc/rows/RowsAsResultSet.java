@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.rows;
 
 import com.github.fabriciofx.cactoos.jdbc.Rows;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Iterator;
@@ -61,10 +62,15 @@ public final class RowsAsResultSet implements Rows {
         while (rset.next()) {
             final Map<String, Object> fields = new LinkedHashMap<>();
             for (int idx = 1; idx <= cols; ++idx) {
-                fields.put(
-                    rsmd.getColumnName(idx).toLowerCase(),
-                    rset.getObject(idx)
-                );
+                final String name = rsmd.getColumnName(idx).toLowerCase();
+                final Object data = rset.getObject(idx);
+                // todo: workaround to make MySQL's int auto_increment works
+                if (data instanceof BigInteger &&
+                    name.equals("generated_key")) {
+                    fields.put(name, rset.getInt(idx));
+                    continue;
+                }
+                fields.put(name, data);
             }
             this.rows.add(fields);
         }

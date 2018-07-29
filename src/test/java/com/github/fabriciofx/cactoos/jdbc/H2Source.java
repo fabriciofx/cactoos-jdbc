@@ -54,6 +54,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
+import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.text.FormattedText;
 
 /**
  * H2 result source, for unit testing.
@@ -62,19 +65,14 @@ import javax.sql.DataSource;
  */
 public final class H2Source implements DataSource {
     /**
-     * Default JDBC URL.
+     * JDBC URL.
      */
-    private static final String URL = "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1";
+    private final UncheckedScalar<String> url;
 
     /**
      * H2 driver.
      */
     private final Driver driver;
-
-    /**
-     * Unique name of the DB.
-     */
-    private final String name;
 
     /**
      * Public ctor.
@@ -91,15 +89,22 @@ public final class H2Source implements DataSource {
      */
     public H2Source(final Driver drvr, final String dbname) {
         this.driver = drvr;
-        this.name = dbname;
+        this.url = new UncheckedScalar<>(
+            new StickyScalar<>(
+                () -> new FormattedText(
+                    "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF " +
+                        "NOT EXISTS %s\\;SET SCHEMA %s",
+                    dbname,
+                    dbname,
+                    dbname
+                ).asString()
+            )
+        );
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-        return this.driver.connect(
-            String.format(H2Source.URL, this.name),
-            new Properties()
-        );
+        return this.driver.connect(this.url.value(), new Properties());
     }
 
     @Override
@@ -110,10 +115,7 @@ public final class H2Source implements DataSource {
         final Properties props = new Properties();
         props.put("user", username);
         props.put("password", password);
-        return this.driver.connect(
-            String.format(H2Source.URL, this.name),
-            props
-        );
+        return this.driver.connect(this.url.value(), props);
     }
 
     @Override

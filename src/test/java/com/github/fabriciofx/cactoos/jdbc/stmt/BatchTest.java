@@ -23,18 +23,16 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.Databases;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,65 +42,23 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@Ignore
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class BatchTest {
-//    private static final Server server = new MySqlServer(12345, "testdb");
-//
-//    @BeforeClass
-//    public static void setUpAll() throws Exception {
-//        BatchTest.server.start();
-//    }
-//
-//    @AfterClass
-//    public static void tearDownAll() throws Exception {
-//        BatchTest.server.stop();
-//    }
+    private static Databases DATABASES = new Databases();
 
     @BeforeClass
-    public static void setup() throws Exception {
-        new Update(
-            new AuthSession(
-                new MySqlSource(""),
-                "root",
-                ""
-            ),
-            new SimpleQuery(
-                new JoinedText(
-                    "",
-                    "CREATE DATABASE IF NOT EXISTS testdb CHARACTER ",
-                    "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-                )
-            )
-        ).result();
+    public static void setupClass() throws Exception {
+        BatchTest.DATABASES.start();
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
-        new Update(
-            new AuthSession(
-                new MySqlSource(""),
-                "root",
-                ""
-            ),
-            new SimpleQuery("DROP DATABASE IF EXISTS testdb")
-        ).result();
+    public static void tearDownClass() throws Exception {
+        BatchTest.DATABASES.stop();
     }
 
     @Test
     public void batch() throws Exception {
-        final Session[] sessions = {
-//            new NoAuthSession(
-//                new H2Source("testdb")
-//            ),
-            new AuthSession(
-//                new MySqlSource(12345, "testdb"),
-                new MySqlSource("testdb"),
-                "root",
-                ""
-            )
-        };
-        for (final Session session : sessions) {
+        for (final Session session : BatchTest.DATABASES.sessions()) {
             new Update(
                 session,
                 new SimpleQuery(
@@ -110,7 +66,7 @@ public final class BatchTest {
                         " ",
                         "CREATE TABLE testdb.client (id INT AUTO_INCREMENT,",
                         "name VARCHAR(50), age INT, PRIMARY KEY (id))"
-                    ).asString()
+                    )
                 )
             ).result();
             new Batch(
