@@ -39,11 +39,11 @@ public interface Phone {
     String number() throws Exception;
 
     /**
-     * Retrieve contact's phone operator.
-     * @return The operator's name
+     * Retrieve contact's phone carrier.
+     * @return The carrier's name
      * @throws Exception If fails
      */
-    String operator() throws Exception;
+    String carrier() throws Exception;
 
     /**
      * Delete a contact's phone.
@@ -52,10 +52,10 @@ public interface Phone {
     void delete() throws Exception;
 
     /**
-     * Change the contact's number and operator.
+     * Change the contact's number and carrier.
      * @param number The new number
-     * @param operator The new operator
+     * @param carrier The new carrier
      * @throws Exception If fails
      */
-    void change(String number, String operator) throws Exception;
+    void change(String number, String carrier) throws Exception;
 }

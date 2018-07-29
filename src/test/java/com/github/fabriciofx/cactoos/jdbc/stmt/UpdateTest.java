@@ -23,21 +23,16 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
-import com.github.fabriciofx.cactoos.jdbc.MySqlServer;
 import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
-import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import java.io.IOException;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -74,12 +69,12 @@ public final class UpdateTest {
                         "root",
                         ""
                     ),
-                    new NamedQuery(
+                    new SimpleQuery(
                         new JoinedText(
-                            "",
+                            " ",
                             "CREATE DATABASE IF NOT EXISTS foodb CHARACTER ",
                             "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-                        ).asString()
+                        )
                     )
                 ),
                 Integer.class
@@ -96,7 +91,7 @@ public final class UpdateTest {
                 "root",
                 ""
             ),
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
                     "",
                     "CREATE DATABASE IF NOT EXISTS testdb CHARACTER ",
@@ -114,7 +109,7 @@ public final class UpdateTest {
                 "root",
                 ""
             ),
-            new NamedQuery("DROP DATABASE IF EXISTS testdb")
+            new SimpleQuery("DROP DATABASE IF EXISTS testdb")
         ).result();
     }
 
@@ -137,13 +132,13 @@ public final class UpdateTest {
                 new ResultAsValue<>(
                     new Update(
                         session,
-                        new NamedQuery(
+                        new SimpleQuery(
                             new JoinedText(
-                                "",
-                                "CREATE TABLE testdb.foo1 ",
-                                "(id INT AUTO_INCREMENT, ",
+                                " ",
+                                "CREATE TABLE testdb.foo1",
+                                "(id INT AUTO_INCREMENT,",
                                 "name VARCHAR(50), PRIMARY KEY (id))"
-                            ).asString()
+                            )
                         )
                     ),
                     Integer.class

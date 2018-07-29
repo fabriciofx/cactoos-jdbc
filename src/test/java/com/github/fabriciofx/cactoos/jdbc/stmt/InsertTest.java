@@ -26,12 +26,13 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -55,9 +56,9 @@ public final class InsertTest {
         );
         new Update(
             session,
-            new NamedQuery(
-                String.join(
-                    "",
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
                     "CREATE TABLE t01 (id INT AUTO_INCREMENT,",
                     "name VARCHAR(50), PRIMARY KEY (id))"
                 )
@@ -68,7 +69,7 @@ public final class InsertTest {
             new ResultAsValue<>(
                 new Insert(
                     session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "INSERT INTO t01 (name) VALUES (:name)",
                         new TextValue("name", "Yegor Bugayenko")
                     )
@@ -86,9 +87,9 @@ public final class InsertTest {
         );
         new Update(
             session,
-            new NamedQuery(
-                String.join(
-                    "",
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
                     "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
                     "name VARCHAR(50), PRIMARY KEY (id))"
                 )
@@ -117,9 +118,9 @@ public final class InsertTest {
         );
         new Update(
             session,
-            new NamedQuery(
-                String.join(
-                    "",
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
                     "CREATE TABLE t03 (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(50), PRIMARY KEY (id))"
                 )

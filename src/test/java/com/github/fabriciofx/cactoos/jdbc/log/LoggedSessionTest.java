@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.log;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -55,7 +55,7 @@ public final class LoggedSessionTest {
             "cactoos-jdbc",
             logger
         );
-        new Update(session, new NamedQuery(sql)).result();
+        new Update(session, new SimpleQuery(sql)).result();
         MatcherAssert.assertThat(
             "Can't log from cactoos-jdbc",
             logger.toString(),

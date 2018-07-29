@@ -31,22 +31,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.cactoos.Scalar;
+import org.cactoos.Text;
+import org.cactoos.scalar.StickyScalar;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.JoinedText;
 
 /**
  * Parse named parameters in the SQL.
  *
  * @since 0.1
  */
-public final class ParsedSql implements Scalar<String>  {
+public final class ParsedSql implements Text  {
     /**
      * SQL query.
      */
-    private final String sql;
-
-    /**
-     * SQL query parameters.
-     */
-    private final DataValues values;
+    private final Scalar<String> sql;
 
     /**
      * Ctor.
@@ -54,6 +53,15 @@ public final class ParsedSql implements Scalar<String>  {
      * @param vals SQL query parameters
      */
     public ParsedSql(final String sql, final DataValue<?>... vals) {
+        this(() -> sql, new SmartDataValues(vals));
+    }
+
+    /**
+     * Ctor.
+     * @param sql SQL query
+     * @param vals SQL query parameters
+     */
+    public ParsedSql(final Text sql, final DataValue<?>... vals) {
         this(sql, new SmartDataValues(vals));
     }
 
@@ -62,32 +70,40 @@ public final class ParsedSql implements Scalar<String>  {
      * @param sql SQL query
      * @param vals SQL query parameters
      */
-    public ParsedSql(final String sql, final DataValues vals) {
-        this.sql = sql;
-        this.values = vals;
+    public ParsedSql(final Text sql, final DataValues vals) {
+        this.sql = new StickyScalar<>(
+            () -> {
+                final String str = sql.asString();
+                final List<String> fields = new LinkedList<>();
+                final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+                final Matcher matcher = find.matcher(str);
+                while (matcher.find()) {
+                    fields.add(matcher.group().substring(1));
+                }
+                int idx = 0;
+                for (final DataValue<?> val : vals) {
+                    if (!val.name().equals(fields.get(idx))) {
+                        throw new IllegalArgumentException(
+                            new FormattedText(
+                                new JoinedText(
+                                    " ",
+                                    "SQL #%d (%s) parameter is wrong",
+                                    "or out of order"
+                                ),
+                                idx + 1,
+                                val.name()
+                            ).asString()
+                        );
+                    }
+                    ++idx;
+                }
+                return str.replaceAll(find.pattern(), "?");
+            }
+        );
     }
 
     @Override
-    public String value() throws Exception {
-        final List<String> fields = new LinkedList<>();
-        final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
-        final Matcher matcher = find.matcher(this.sql);
-        while (matcher.find()) {
-            fields.add(matcher.group().substring(1));
-        }
-        int idx = 0;
-        for (final DataValue<?> val : this.values) {
-            if (!val.name().equals(fields.get(idx))) {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "Query parameter #%d (%s) is wrong or out of order",
-                        idx + 1,
-                        val.name()
-                    )
-                );
-            }
-            ++idx;
-        }
-        return this.sql.replaceAll(find.pattern(), "?");
+    public String asString() throws Exception {
+        return this.sql.value();
     }
 }

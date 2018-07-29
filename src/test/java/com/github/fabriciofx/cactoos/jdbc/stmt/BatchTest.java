@@ -23,16 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
-import com.github.fabriciofx.cactoos.jdbc.MySqlServer;
 import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
-import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
@@ -71,12 +67,12 @@ public final class BatchTest {
                 "root",
                 ""
             ),
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
                     "",
                     "CREATE DATABASE IF NOT EXISTS testdb CHARACTER ",
                     "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-                ).asString()
+                )
             )
         ).result();
     }
@@ -89,7 +85,7 @@ public final class BatchTest {
                 "root",
                 ""
             ),
-            new NamedQuery("DROP DATABASE IF EXISTS testdb")
+            new SimpleQuery("DROP DATABASE IF EXISTS testdb")
         ).result();
     }
 
@@ -109,9 +105,9 @@ public final class BatchTest {
         for (final Session session : sessions) {
             new Update(
                 session,
-                new NamedQuery(
+                new SimpleQuery(
                     new JoinedText(
-                        "",
+                        " ",
                         "CREATE TABLE testdb.client (id INT AUTO_INCREMENT,",
                         "name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     ).asString()

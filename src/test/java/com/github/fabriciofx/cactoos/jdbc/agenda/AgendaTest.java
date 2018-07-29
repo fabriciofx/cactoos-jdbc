@@ -88,4 +88,24 @@ public final class AgendaTest {
             new TextHasString("Name: Maria Souza")
         );
     }
+
+    @Test
+    public void renameContact() throws Exception {
+        final Session session = new NoAuthSession(
+            new H2Source("agendadb3")
+        );
+        new SqlScript(
+            session,
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb.sql"
+            )
+        ).exec();
+        final Contact contact = new SqlContacts(session).find("maria").get(0);
+        contact.rename("Maria Lima");
+        MatcherAssert.assertThat(
+            "Can't rename an agenda contact",
+            new SqlContacts(session).find("maria").get(0),
+            new TextHasString("Name: Maria Lima")
+        );
+    }
 }

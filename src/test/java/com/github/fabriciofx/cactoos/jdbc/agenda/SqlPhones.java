@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Phones for SQL.
@@ -76,20 +77,20 @@ public final class SqlPhones implements Phones {
     @Override
     public Phone phone(
         final String number,
-        final String operator
+        final String carrier
     ) throws Exception {
         final Integer seq = new ResultAsValues<>(
             new InsertWithKeys(
                 this.session,
                 new KeyedQuery(
-                    String.join(
-                        "",
-                        "INSERT INTO phone (contact, number, operator) ",
-                        "VALUES (:contact, :number, :operator)"
+                    new JoinedText(
+                        " ",
+                        "INSERT INTO phone (contact, number, carrier)",
+                        "VALUES (:contact, :number, :carrier)"
                     ),
                     new AnyValue("contact", this.contact),
                     new TextValue("number", number),
-                    new TextValue("operator", operator)
+                    new TextValue("carrier", carrier)
                 )
             ),
             Integer.class
@@ -103,7 +104,7 @@ public final class SqlPhones implements Phones {
             final List<Integer> seqs = new ResultAsValues<>(
                 new Select(
                     this.session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT seq FROM phone WHERE contact = :contact",
                         new AnyValue("contact", this.contact)
                     )

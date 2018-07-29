@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Contacts for SQL.
@@ -41,6 +42,7 @@ import java.util.UUID;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings(
     {
@@ -84,10 +86,10 @@ public final class SqlContacts implements Contacts {
         final List<UUID> ids = new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
-                    String.join(
-                        "",
-                        "SELECT id FROM contact WHERE name ILIKE ",
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "SELECT id FROM contact WHERE name ILIKE",
                         "'%' || :name || '%'"
                     ),
                     new TextValue("name", name)
@@ -108,7 +110,7 @@ public final class SqlContacts implements Contacts {
             final List<UUID> ids = new ResultAsValues<>(
                 new Select(
                     this.session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT id FROM contact"
                     )
                 ),

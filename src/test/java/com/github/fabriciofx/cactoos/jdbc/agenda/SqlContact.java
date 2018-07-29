@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -64,7 +64,7 @@ public final class SqlContact implements Contact {
         return new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
+                new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
                     new TextValue("id", this.id.toString())
                 )
@@ -82,7 +82,7 @@ public final class SqlContact implements Contact {
     public void delete() throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
+            new SimpleQuery(
                 "DELETE FROM contact WHERE id = :id",
                 new TextValue("id", this.id.toString())
             )
@@ -93,7 +93,7 @@ public final class SqlContact implements Contact {
     public void rename(final String name) throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
+            new SimpleQuery(
                 "UPDATE contact SET name = :name WHERE id = :id",
                 new TextValue("name", name),
                 new TextValue("id", this.id.toString())
@@ -110,7 +110,7 @@ public final class SqlContact implements Contact {
                 String.format(
                     "Phone: %s (%s)\n",
                     phone.number(),
-                    phone.operator()
+                    phone.carrier()
                 )
             );
         }

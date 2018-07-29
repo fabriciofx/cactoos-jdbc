@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -60,25 +60,25 @@ public final class SelectTest {
         );
         new Update(
             session,
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
-                    "",
+                    " ",
                     //"CREATE TABLE employee (id UUID DEFAULT RANDOM_UUID(),",
                     "CREATE TABLE employee (id INT AUTO_INCREMENT,",
                     "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
                     "married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
-                ).asString()
+                )
             )
         ).result();
         new Batch(
             session,
             new BatchQuery(
                 new JoinedText(
-                    "",
-                    "INSERT INTO employee ",
-                    "(name, birthday, address, married, salary) ",
+                    " ",
+                    "INSERT INTO employee",
+                    "(name, birthday, address, married, salary)",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
-                ).asString(),
+                ),
                 new SmartDataValues(
                     new TextValue("name", "John Wick"),
                     new DateValue("birthday", "1980-08-16"),
@@ -100,7 +100,7 @@ public final class SelectTest {
                 new ResultAsXml(
                     new Select(
                         session,
-                        new NamedQuery(
+                        new SimpleQuery(
                             "SELECT * FROM employee"
                         )
                     ),
@@ -130,24 +130,24 @@ public final class SelectTest {
         );
         new Update(
             session,
-            new NamedQuery(
+            new SimpleQuery(
                 new JoinedText(
-                    "",
+                    " ",
                     "CREATE TABLE person (id UUID DEFAULT RANDOM_UUID(),",
                     "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
                     "working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
-                ).asString()
+                )
             )
         ).result();
         new Batch(
             session,
             new BatchQuery(
                 new JoinedText(
-                    "",
-                    "INSERT INTO person ",
-                    "(name, created_at, city, working, height) ",
+                    " ",
+                    "INSERT INTO person",
+                    "(name, created_at, city, working, height)",
                     "VALUES (:name, :created_at, :city, :working, :height)"
-                ).asString(),
+                ),
                 new SmartDataValues(
                     new TextValue("name", "Rob Pike"),
                     new DateValue("created_at", LocalDate.now()),
@@ -169,7 +169,7 @@ public final class SelectTest {
             new ResultAsValues<>(
                 new Select(
                     session,
-                    new NamedQuery(
+                    new SimpleQuery(
                         "SELECT name FROM person"
                     )
                 ),

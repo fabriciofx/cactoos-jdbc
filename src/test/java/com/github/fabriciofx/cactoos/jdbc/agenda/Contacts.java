@@ -44,7 +44,7 @@ public interface Contacts extends Iterable<Contact> {
     /**
      * Search for a Contact.
      * @param name Contact's name
-     * @return A list of Contacts
+     * @return A list contains Contact or an empty list if not
      * @throws Exception If fails
      */
     List<Contact> find(String name) throws Exception;

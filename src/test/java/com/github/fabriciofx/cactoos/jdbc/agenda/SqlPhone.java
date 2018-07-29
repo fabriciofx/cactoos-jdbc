@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -32,6 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
+import org.cactoos.text.JoinedText;
 
 /**
  * Phone for SQL.
@@ -39,6 +40,7 @@ import java.util.UUID;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlPhone implements Phone {
@@ -74,10 +76,10 @@ public final class SqlPhone implements Phone {
         return new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
-                    String.join(
-                        "",
-                        "SELECT number FROM phone WHERE (contact = :contact) ",
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "SELECT number FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
                     new AnyValue("contact", this.contact),
@@ -89,15 +91,15 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public String operator() throws Exception {
+    public String carrier() throws Exception {
         return new ResultAsValues<>(
             new Select(
                 this.session,
-                new NamedQuery(
-                    String.join(
-                        "",
-                        "SELECT operator FROM phone WHERE (contact = :contact)",
-                        " AND (seq = :seq)"
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "SELECT carrier FROM phone WHERE (contact = :contact)",
+                        "AND (seq = :seq)"
                     ),
                     new AnyValue("contact", this.contact),
                     new IntValue("seq", this.seq)
@@ -111,7 +113,7 @@ public final class SqlPhone implements Phone {
     public void delete() throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
+            new SimpleQuery(
                 "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
                 new AnyValue("contact", this.contact),
                 new IntValue("seq", this.seq)
@@ -122,18 +124,18 @@ public final class SqlPhone implements Phone {
     @Override
     public void change(
         final String number,
-        final String operator
+        final String carrier
     ) throws Exception {
         new Update(
             this.session,
-            new NamedQuery(
-                String.join(
-                    "",
-                    "UPDATE phone SET number = :number, operator = :operator ",
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
+                    "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact = :contact) AND (seq = :seq)"
                 ),
                 new TextValue("number", number),
-                new TextValue("operator", operator),
+                new TextValue("carrier", carrier),
                 new AnyValue("contact", this.contact),
                 new IntValue("seq", this.seq)
             )

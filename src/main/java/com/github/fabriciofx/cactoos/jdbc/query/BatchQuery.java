@@ -28,9 +28,8 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
-import org.cactoos.Scalar;
+import org.cactoos.Text;
 import org.cactoos.list.ListOf;
-import org.cactoos.scalar.StickyScalar;
 
 /**
  * Batch query.
@@ -41,7 +40,7 @@ public final class BatchQuery implements Query {
     /**
      * SQL query.
      */
-    private final Scalar<String> sql;
+    private final Text sql;
 
     /**
      * A list of SQL query parameters.
@@ -53,11 +52,17 @@ public final class BatchQuery implements Query {
      * @param sql The SQL query
      * @param vals A list of SQL query parameters
      */
-    public BatchQuery(
-        final String sql,
-        final DataValues... vals
-    ) {
-        this.sql = new StickyScalar<>(new ParsedSql(sql, vals[0]));
+    public BatchQuery(final String sql, final DataValues... vals) {
+        this(() -> sql, vals);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param vals A list of SQL query parameters
+     */
+    public BatchQuery(final Text sql, final DataValues... vals) {
+        this.sql = new ParsedSql(sql, vals[0]);
         this.values = new ListOf<>(vals);
     }
 
@@ -66,7 +71,7 @@ public final class BatchQuery implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.value()
+            this.sql.asString()
         );
         for (final DataValues vals : this.values) {
             vals.prepare(stmt);
@@ -77,6 +82,6 @@ public final class BatchQuery implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql.value();
+        return this.sql.asString();
     }
 }
