@@ -23,10 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import org.cactoos.text.FormattedText;
 
 /**
  * Smart Data Values.
@@ -39,35 +41,58 @@ public final class SmartDataValues implements DataValues {
     /**
      * Values.
      */
-    private final List<DataValue<?>> values;
+    private final List<DataValue> values;
 
     /**
      * Ctor.
-     * @param prms List of DataValue
+     * @param vals List of DataValue
      */
-    public SmartDataValues(final DataValue<?>... prms) {
-        this.values = Arrays.asList(prms);
+    public SmartDataValues(final DataValue... vals) {
+        this.values = Arrays.asList(vals);
     }
 
     @Override
-    public DataValues with(final DataValue<?> value) {
-        this.values.add(value);
-        return this;
-    }
-
-    @Override
-    public PreparedStatement prepare(final PreparedStatement stmt)
-        throws Exception {
-        int index = 1;
-        for (final DataValue<?> value : this.values) {
-            value.prepare(stmt, index);
-            ++index;
+    public PreparedStatement prepare(
+        final PreparedStatement stmt
+    ) throws Exception {
+        int idx = 1;
+        for (final DataValue value : this.values) {
+            value.prepare(stmt, idx);
+            ++idx;
         }
         return stmt;
     }
 
     @Override
-    public Iterator<DataValue<?>> iterator() {
+    public DataValue value(final Object data) {
+        DataValue result = new AnyValue();
+        for (final DataValue val : this.values) {
+            if (val.match(data)) {
+                result = val;
+                break;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void check(final List<String> fields) throws Exception {
+        int idx = 0;
+        for (final DataValue val : this.values) {
+            if (!val.name().equals(fields.get(idx))) {
+                throw new IllegalArgumentException(
+                    new FormattedText(
+                        "SQL parameter #%d is wrong or out of order",
+                        idx + 1
+                    ).asString()
+                );
+            }
+            ++idx;
+        }
+    }
+
+    @Override
+    public Iterator<DataValue> iterator() {
         return this.values.iterator();
     }
 }

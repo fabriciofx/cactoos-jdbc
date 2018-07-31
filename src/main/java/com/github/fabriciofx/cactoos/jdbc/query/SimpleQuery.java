@@ -52,7 +52,7 @@ public final class SimpleQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public SimpleQuery(final String sql, final DataValue<?>... vals) {
+    public SimpleQuery(final String sql, final DataValue... vals) {
         this(() -> sql, vals);
     }
 
@@ -61,7 +61,7 @@ public final class SimpleQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public SimpleQuery(final Text sql, final DataValue<?>... vals) {
+    public SimpleQuery(final Text sql, final DataValue... vals) {
         this.sql = new ParsedSql(sql, vals);
         this.values = new SmartDataValues(vals);
     }

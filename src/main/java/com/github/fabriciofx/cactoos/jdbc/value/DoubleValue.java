@@ -25,41 +25,44 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Double val.
+ * Double value.
  *
  * @since 0.1
  */
-public final class DoubleValue implements DataValue<Double> {
+public final class DoubleValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final Double val;
+    private final Double value;
+
+    /**
+     * Ctor.
+     */
+    public DoubleValue() {
+        this("unknown", 0.0);
+    }
 
     /**
      * Ctor.
      * @param name The name
-     * @param value The val
+     * @param value The value
      */
     public DoubleValue(final String name, final Double value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Double value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +70,24 @@ public final class DoubleValue implements DataValue<Double> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDouble(index, this.val);
+        stmt.setDouble(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(Double.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getDouble(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

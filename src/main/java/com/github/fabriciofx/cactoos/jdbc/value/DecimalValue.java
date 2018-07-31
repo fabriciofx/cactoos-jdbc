@@ -26,22 +26,30 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Decimal val.
+ * Decimal value.
  *
  * @since 0.1
  */
-public final class DecimalValue implements DataValue<BigDecimal> {
+public final class DecimalValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final BigDecimal val;
+    private final BigDecimal value;
+
+    /**
+     * Ctor.
+     */
+    public DecimalValue() {
+        this("unknown", BigDecimal.ZERO);
+    }
 
     /**
      * Ctor.
@@ -58,18 +66,13 @@ public final class DecimalValue implements DataValue<BigDecimal> {
      * @param value The value
      */
     public DecimalValue(final String name, final BigDecimal value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public BigDecimal value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -77,11 +80,24 @@ public final class DecimalValue implements DataValue<BigDecimal> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBigDecimal(index, this.val);
+        stmt.setBigDecimal(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(BigDecimal.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getBigDecimal(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

@@ -25,22 +25,30 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Any val.
+ * Any value.
  *
  * @since 0.1
  */
-public final class AnyValue implements DataValue<Object> {
+public final class AnyValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final Object val;
+    private final Object value;
+
+    /**
+     * Ctor.
+     */
+    public AnyValue() {
+        this("unknown", new Object());
+    }
 
     /**
      * Ctor.
@@ -48,18 +56,13 @@ public final class AnyValue implements DataValue<Object> {
      * @param value The value
      */
     public AnyValue(final String name, final Object value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Object value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +70,23 @@ public final class AnyValue implements DataValue<Object> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.val);
+        stmt.setObject(index, this.value);
+    }
+    @Override
+    public boolean match(final Object value) {
+        return true;
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getObject(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

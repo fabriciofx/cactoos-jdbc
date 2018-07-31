@@ -23,8 +23,17 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.rows;
 
+import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
-import java.math.BigInteger;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DateTimeValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
+import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
+import com.github.fabriciofx.cactoos.jdbc.value.LongValue;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Iterator;
@@ -51,11 +60,42 @@ public final class RowsAsResultSet implements Rows {
     private final List<Map<String, Object>> rows;
 
     /**
+     * Data Values.
+     */
+    private final DataValues values;
+
+    /**
      * Ctor.
      * @param rset A ResultSet
      * @throws Exception If fails
      */
     public RowsAsResultSet(final ResultSet rset) throws Exception {
+        this(
+            rset,
+            new SmartDataValues(
+                new TextValue(),
+                new IntValue(),
+                new DateTimeValue(),
+                new DateValue(),
+                new DecimalValue(),
+                new BoolValue(),
+                new LongValue(),
+                new DoubleValue()
+            )
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param rset A ResultSet
+     * @param values A DataValues that contains DataValue to convert data
+     * @throws Exception If fails
+     */
+    public RowsAsResultSet(
+        final ResultSet rset,
+        final DataValues values
+    ) throws Exception {
+        this.values = values;
         this.rows = new LinkedList<>();
         final ResultSetMetaData rsmd = rset.getMetaData();
         final int cols = rsmd.getColumnCount();
@@ -64,13 +104,10 @@ public final class RowsAsResultSet implements Rows {
             for (int idx = 1; idx <= cols; ++idx) {
                 final String name = rsmd.getColumnName(idx).toLowerCase();
                 final Object data = rset.getObject(idx);
-                // todo: workaround to make MySQL's int auto_increment works
-                if (data instanceof BigInteger &&
-                    name.equals("generated_key")) {
-                    fields.put(name, rset.getInt(idx));
-                    continue;
-                }
-                fields.put(name, data);
+                fields.put(
+                    name,
+                    this.values.value(data).apply(rset, idx)
+                );
             }
             this.rows.add(fields);
         }

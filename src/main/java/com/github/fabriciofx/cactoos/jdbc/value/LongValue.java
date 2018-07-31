@@ -25,22 +25,30 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Long val.
+ * Long value.
  *
  * @since 0.1
  */
-public final class LongValue implements DataValue<Long> {
+public final class LongValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final Long val;
+    private final Long value;
+
+    /**
+     * Ctor.
+     */
+    public LongValue() {
+        this("unknown", 0L);
+    }
 
     /**
      * Ctor.
@@ -48,18 +56,13 @@ public final class LongValue implements DataValue<Long> {
      * @param value The value
      */
     public LongValue(final String name, final Long value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Long value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +70,24 @@ public final class LongValue implements DataValue<Long> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setLong(index, this.val);
+        stmt.setLong(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(Long.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getLong(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

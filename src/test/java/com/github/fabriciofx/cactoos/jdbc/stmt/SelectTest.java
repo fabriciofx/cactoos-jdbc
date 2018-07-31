@@ -41,6 +41,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -66,6 +67,7 @@ public final class SelectTest {
         SelectTest.DATABASES.stop();
     }
 
+    @Ignore
     @Test
     public void select() throws Exception {
         for (final Session session : SelectTest.DATABASES.sessions()) {

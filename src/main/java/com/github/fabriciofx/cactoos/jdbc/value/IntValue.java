@@ -24,23 +24,32 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Integer val.
+ * Integer value.
  *
  * @since 0.1
  */
-public final class IntValue implements DataValue<Integer> {
+public final class IntValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final Integer val;
+    private final Integer value;
+
+    /**
+     * Ctor.
+     */
+    public IntValue() {
+        this("unknown", 0);
+    }
 
     /**
      * Ctor.
@@ -48,18 +57,13 @@ public final class IntValue implements DataValue<Integer> {
      * @param value The value
      */
     public IntValue(final String name, final Integer value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Integer value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +71,25 @@ public final class IntValue implements DataValue<Integer> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setInt(index, this.val);
+        stmt.setInt(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(Integer.class) ||
+            value.getClass().equals(BigInteger.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getInt(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

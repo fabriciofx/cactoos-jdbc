@@ -52,7 +52,7 @@ public final class KeyedQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public KeyedQuery(final String sql, final DataValue<?>... vals) {
+    public KeyedQuery(final String sql, final DataValue... vals) {
         this(() -> sql, vals);
     }
 
@@ -61,7 +61,7 @@ public final class KeyedQuery implements Query {
      * @param sql The SQL query
      * @param vals SQL query parameters
      */
-    public KeyedQuery(final Text sql, final DataValue<?>... vals) {
+    public KeyedQuery(final Text sql, final DataValue... vals) {
         this.sql = new ParsedSql(sql, vals);
         this.values = new SmartDataValues(vals);
     }

@@ -33,8 +33,6 @@ import java.util.regex.Pattern;
 import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.scalar.StickyScalar;
-import org.cactoos.text.FormattedText;
-import org.cactoos.text.JoinedText;
 
 /**
  * Parse named parameters in the SQL.
@@ -52,7 +50,7 @@ public final class ParsedSql implements Text  {
      * @param sql SQL query
      * @param vals SQL query parameters
      */
-    public ParsedSql(final String sql, final DataValue<?>... vals) {
+    public ParsedSql(final String sql, final DataValue... vals) {
         this(() -> sql, new SmartDataValues(vals));
     }
 
@@ -61,7 +59,7 @@ public final class ParsedSql implements Text  {
      * @param sql SQL query
      * @param vals SQL query parameters
      */
-    public ParsedSql(final Text sql, final DataValue<?>... vals) {
+    public ParsedSql(final Text sql, final DataValue... vals) {
         this(sql, new SmartDataValues(vals));
     }
 
@@ -80,23 +78,7 @@ public final class ParsedSql implements Text  {
                 while (matcher.find()) {
                     fields.add(matcher.group().substring(1));
                 }
-                int idx = 0;
-                for (final DataValue<?> val : vals) {
-                    if (!val.name().equals(fields.get(idx))) {
-                        throw new IllegalArgumentException(
-                            new FormattedText(
-                                new JoinedText(
-                                    " ",
-                                    "SQL #%d (%s) parameter is wrong",
-                                    "or out of order"
-                                ),
-                                idx + 1,
-                                val.name()
-                            ).asString()
-                        );
-                    }
-                    ++idx;
-                }
+                vals.check(fields);
                 return str.replaceAll(find.pattern(), "?");
             }
         );

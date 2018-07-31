@@ -25,24 +25,32 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * DateTime val.
+ * DateTime value.
  *
  * @since 0.1
  */
-public final class DateTimeValue implements DataValue<LocalDateTime> {
+public final class DateTimeValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final LocalDateTime val;
+    private final LocalDateTime value;
+
+    /**
+     * Ctor.
+     */
+    public DateTimeValue() {
+        this("now", LocalDateTime.now());
+    }
 
     /**
      * Ctor.
@@ -50,18 +58,13 @@ public final class DateTimeValue implements DataValue<LocalDateTime> {
      * @param value The value
      */
     public DateTimeValue(final String name, final LocalDateTime value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public LocalDateTime value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -69,11 +72,24 @@ public final class DateTimeValue implements DataValue<LocalDateTime> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setTimestamp(index, Timestamp.valueOf(this.val));
+        stmt.setTimestamp(index, Timestamp.valueOf(this.value));
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(Timestamp.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getTimestamp(index).toLocalDateTime();
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

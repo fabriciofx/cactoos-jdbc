@@ -25,22 +25,30 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * String val.
+ * String value.
  *
  * @since 0.1
  */
-public final class TextValue implements DataValue<String> {
+public final class TextValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final String val;
+    private final String value;
+
+    /**
+     * Ctor.
+     */
+    public TextValue() {
+        this("unknown", "undefined");
+    }
 
     /**
      * Ctor.
@@ -48,18 +56,13 @@ public final class TextValue implements DataValue<String> {
      * @param value The value
      */
     public TextValue(final String name, final String value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public String value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +70,24 @@ public final class TextValue implements DataValue<String> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setString(index, this.val);
+        stmt.setString(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(String.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getString(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val;
+        return this.value;
     }
 }

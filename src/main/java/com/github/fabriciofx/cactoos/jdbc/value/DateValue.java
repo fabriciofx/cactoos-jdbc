@@ -26,23 +26,31 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 
 /**
- * Date val.
+ * Date value.
  *
  * @since 0.1
  */
-public final class DateValue implements DataValue<LocalDate> {
+public final class DateValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final LocalDate val;
+    private final LocalDate value;
+
+    /**
+     * Ctor.
+     */
+    public DateValue() {
+        this("today", LocalDate.now());
+    }
 
     /**
      * Ctor.
@@ -59,18 +67,13 @@ public final class DateValue implements DataValue<LocalDate> {
      * @param value The value
      */
     public DateValue(final String name, final LocalDate value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public LocalDate value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -78,11 +81,24 @@ public final class DateValue implements DataValue<LocalDate> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDate(index, java.sql.Date.valueOf(this.val));
+        stmt.setDate(index, java.sql.Date.valueOf(this.value));
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(java.sql.Date.class);
+    }
+
+    @Override
+    public Object apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getDate(index).toLocalDate();
     }
 
     @Override
     public String asString() throws IOException {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

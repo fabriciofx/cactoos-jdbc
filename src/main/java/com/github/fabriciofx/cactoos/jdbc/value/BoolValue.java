@@ -25,22 +25,30 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Boolean val.
+ * Boolean value.
  *
  * @since 0.1
  */
-public final class BoolValue implements DataValue<Boolean> {
+public final class BoolValue implements DataValue {
     /**
      * Name.
      */
-    private final String nam;
+    private final String name;
 
     /**
      * Value.
      */
-    private final Boolean val;
+    private final Boolean value;
+
+    /**
+     * Ctor.
+     */
+    public BoolValue() {
+        this("unknown", true);
+    }
 
     /**
      * Ctor.
@@ -48,18 +56,13 @@ public final class BoolValue implements DataValue<Boolean> {
      * @param value The value
      */
     public BoolValue(final String name, final Boolean value) {
-        this.nam = name;
-        this.val = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public String name() {
-        return this.nam;
-    }
-
-    @Override
-    public Boolean value() throws Exception {
-        return this.val;
+        return this.name;
     }
 
     @Override
@@ -67,11 +70,24 @@ public final class BoolValue implements DataValue<Boolean> {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBoolean(index, this.val);
+        stmt.setBoolean(index, this.value);
+    }
+
+    @Override
+    public boolean match(final Object value) {
+        return value.getClass().equals(Boolean.class);
+    }
+
+    @Override
+    public Boolean apply(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getBoolean(index);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.val.toString();
+        return this.value.toString();
     }
 }

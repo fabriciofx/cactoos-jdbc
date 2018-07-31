@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import org.cactoos.Scalar;
+import java.sql.ResultSet;
 import org.cactoos.Text;
 
 /**
@@ -35,7 +35,7 @@ import org.cactoos.Text;
  * @param <T> Type of value
  * @since 0.1
  */
-public interface DataValue<T> extends Scalar<T>, Text {
+public interface DataValue extends Text {
     /**
      * Get the data value name.
      * @return The name
@@ -49,4 +49,8 @@ public interface DataValue<T> extends Scalar<T>, Text {
      * @throws Exception If fails
      */
     void prepare(PreparedStatement stmt, int index) throws Exception;
+
+    boolean match(Object value);
+
+    Object apply(ResultSet rset, int index) throws Exception;
 }
