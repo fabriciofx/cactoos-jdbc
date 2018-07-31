@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Databases;
+import com.github.fabriciofx.cactoos.jdbc.Sources;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
@@ -48,21 +48,11 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class InsertTest {
-    private static Databases DATABASES = new Databases();
-
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        InsertTest.DATABASES.start();
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-        InsertTest.DATABASES.stop();
-    }
-
     @Test
     public void insert() throws Exception {
-        for (final Session session : InsertTest.DATABASES.sessions()) {
+        final Sources sources = new Sources();
+        sources.start();
+        for (final Session session : sources.sessions()) {
             new Update(
                 session,
                 new SimpleQuery(
@@ -88,11 +78,14 @@ public final class InsertTest {
                 new ScalarHasValue<>(false)
             );
         }
+        sources.stop();
     }
 
     @Test
     public void insertWithKeys() throws Exception {
-        for (final Session session : InsertTest.DATABASES.sessions()) {
+        final Sources sources = new Sources();
+        sources.start();
+        for (final Session session : sources.sessions()) {
             new Update(
                 session,
                 new SimpleQuery(
@@ -118,5 +111,6 @@ public final class InsertTest {
                 new ScalarHasValue<>(1)
             );
         }
+        sources.stop();
     }
 }

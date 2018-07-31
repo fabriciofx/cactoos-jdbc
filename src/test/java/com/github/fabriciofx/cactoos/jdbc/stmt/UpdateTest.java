@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Databases;
+import com.github.fabriciofx.cactoos.jdbc.Sources;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
@@ -43,21 +43,11 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  */
 public final class UpdateTest {
-    private static Databases DATABASES = new Databases();
-
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        UpdateTest.DATABASES.start();
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-        UpdateTest.DATABASES.stop();
-    }
-
     @Test
     public void createTable() throws Exception {
-        for (final Session session : UpdateTest.DATABASES.sessions()) {
+        final Sources sources = new Sources();
+        sources.start();
+        for (final Session session : sources.sessions()) {
             MatcherAssert.assertThat(
                 "Can't create a table",
                 new ResultAsValue<>(
@@ -77,5 +67,6 @@ public final class UpdateTest {
                 new ScalarHasValue<>(0)
             );
         }
+        sources.stop();
     }
 }

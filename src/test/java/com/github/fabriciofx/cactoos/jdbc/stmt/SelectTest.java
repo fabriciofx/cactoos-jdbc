@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Databases;
+import com.github.fabriciofx.cactoos.jdbc.Sources;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
@@ -55,22 +55,11 @@ import org.junit.Test;
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SelectTest {
-    private static Databases DATABASES = new Databases();
-
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        SelectTest.DATABASES.start();
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-        SelectTest.DATABASES.stop();
-    }
-
-    @Ignore
     @Test
     public void select() throws Exception {
-        for (final Session session : SelectTest.DATABASES.sessions()) {
+        final Sources sources = new Sources();
+        sources.start();
+        for (final Session session : sources.sessions()) {
             new Update(
                 session,
                 new SimpleQuery(
@@ -134,11 +123,14 @@ public final class SelectTest {
                 )
             );
         }
+        sources.stop();
     }
 
     @Test
     public void any() throws Exception {
-        for (final Session session : SelectTest.DATABASES.sessions()) {
+        final Sources sources = new Sources();
+        sources.start();
+        for (final Session session : sources.sessions()) {
             new Update(
                 session,
                 new SimpleQuery(
@@ -189,5 +181,6 @@ public final class SelectTest {
                 Matchers.equalTo("Rob Pike")
             );
         }
+        sources.stop();
     }
 }

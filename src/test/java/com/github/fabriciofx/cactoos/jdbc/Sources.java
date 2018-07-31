@@ -29,10 +29,10 @@ import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.text.JoinedText;
 
-public final class Databases implements Server {
+public final class Sources implements Server {
     private final Session[] sessions;
 
-    public Databases() {
+    public Sources() {
         this(
             new NoAuthSession(
                 new H2Source("testdb")
@@ -45,7 +45,7 @@ public final class Databases implements Server {
         );
     }
 
-    public Databases(final Session... sssns) {
+    public Sources(final Session... sssns) {
         this.sessions = sssns;
     }
 
