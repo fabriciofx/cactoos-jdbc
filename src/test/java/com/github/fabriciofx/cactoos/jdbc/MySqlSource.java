@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
-import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.SolidScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
@@ -45,13 +45,6 @@ public final class MySqlSource implements DataSource {
      * Origin DataSource.
      */
     private final UncheckedScalar<MysqlDataSource> origin;
-
-    /**
-     * Ctor.
-     */
-    public MySqlSource() {
-        this("");
-    }
 
     /**
      * Ctor.
@@ -82,7 +75,7 @@ public final class MySqlSource implements DataSource {
         final String dbname
     ) {
         this.origin = new UncheckedScalar<>(
-            new StickyScalar<>(
+            new SolidScalar<>(
                 () -> {
                     final MysqlDataSource mds = new MysqlDataSource();
                     mds.setUrl(

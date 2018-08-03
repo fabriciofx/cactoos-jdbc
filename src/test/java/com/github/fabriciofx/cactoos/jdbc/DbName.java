@@ -23,23 +23,36 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-/**
- * Script.
- *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
- */
-public interface Script {
-    Script NOP = new Script() {
-        @Override
-        public void exec() throws Exception {
-        }
-    };
+import java.util.Random;
+import org.cactoos.Text;
 
-    /**
-     * Execute it.
-     * @throws Exception If fails
-     */
-    void exec() throws Exception;
+public final class DbName implements Text {
+    private final String lexicon;
+    private final Random random;
+    private final int length;
+
+    public DbName() {
+        this("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5);
+    }
+
+    public DbName(final String lex, final int len) {
+        this.lexicon = lex;
+        this.length = len;
+        this.random = new Random();
+    }
+
+    @Override
+    public String asString() throws Exception {
+        final StringBuilder strb = new StringBuilder(this.length);
+        for (int len = 0; len < this.length; len++) {
+            strb.append(
+                this.lexicon.charAt(
+                    this.random.nextInt(
+                        this.lexicon.length()
+                    )
+                )
+            );
+        }
+        return strb.toString();
+    }
 }

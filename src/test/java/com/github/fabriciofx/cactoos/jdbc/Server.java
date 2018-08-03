@@ -42,4 +42,6 @@ public interface Server {
      * @throws Exception If fails
      */
     void stop() throws Exception;
+
+    Session session();
 }

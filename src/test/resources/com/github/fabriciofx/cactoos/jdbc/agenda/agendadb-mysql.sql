@@ -1,8 +1,10 @@
-DROP DATABASE IF EXISTS agendadb;
-
-CREATE DATABASE IF NOT EXISTS agendadb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE agendadb;
+-- DROP DATABASE IF EXISTS agendadb;
+--
+-- CREATE DATABASE IF NOT EXISTS agendadb
+--   CHARACTER SET utf8mb4
+--   COLLATE utf8mb4_unicode_ci;
+--
+-- USE agendadb;
 
 CREATE TABLE contact (
   id BINARY(16) NOT NULL,

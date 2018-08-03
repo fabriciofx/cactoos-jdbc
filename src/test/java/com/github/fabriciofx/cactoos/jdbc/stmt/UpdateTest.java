@@ -23,14 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Sources;
+import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -45,28 +43,26 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class UpdateTest {
     @Test
     public void createTable() throws Exception {
-        final Sources sources = new Sources();
-        sources.start();
-        for (final Session session : sources.sessions()) {
-            MatcherAssert.assertThat(
-                "Can't create a table",
-                new ResultAsValue<>(
-                    new Update(
-                        session,
-                        new SimpleQuery(
-                            new JoinedText(
-                                " ",
-                                "CREATE TABLE testdb.foo1",
-                                "(id INT AUTO_INCREMENT,",
-                                "name VARCHAR(50), PRIMARY KEY (id))"
+        try (final Servers servers = new Servers()) {
+            for (final Session session : servers.sessions()) {
+                MatcherAssert.assertThat(
+                    "Can't create a table",
+                    new ResultAsValue<>(
+                        new Update(
+                            session,
+                            new SimpleQuery(
+                                new JoinedText(
+                                    " ",
+                                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT,",
+                                    "name VARCHAR(50), PRIMARY KEY (id))"
+                                )
                             )
-                        )
+                        ),
+                        Integer.class
                     ),
-                    Integer.class
-                ),
-                new ScalarHasValue<>(0)
-            );
+                    new ScalarHasValue<>(0)
+                );
+            }
         }
-        sources.stop();
     }
 }

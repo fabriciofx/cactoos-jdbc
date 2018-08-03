@@ -57,6 +57,7 @@ import javax.sql.DataSource;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
+import org.cactoos.text.JoinedText;
 
 /**
  * H2 result source, for unit testing.
@@ -92,8 +93,11 @@ public final class H2Source implements DataSource {
         this.url = new UncheckedScalar<>(
             new StickyScalar<>(
                 () -> new FormattedText(
-                    "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF " +
-                        "NOT EXISTS %s\\;SET SCHEMA %s",
+                    new JoinedText(
+                        "",
+                        "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;",
+                        "INIT=CREATE SCHEMA IF NOT EXISTS %s\\;SET SCHEMA %s"
+                    ),
                     dbname,
                     dbname,
                     dbname

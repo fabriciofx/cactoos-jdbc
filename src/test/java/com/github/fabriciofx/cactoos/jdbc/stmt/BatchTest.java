@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Sources;
+import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
@@ -31,8 +31,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -46,41 +44,40 @@ import org.junit.Test;
 public final class BatchTest {
     @Test
     public void batch() throws Exception {
-        final Sources sources = new Sources();
-        sources.start();
-        for (final Session session : sources.sessions()) {
-            new Update(
-                session,
-                new SimpleQuery(
-                    new JoinedText(
-                        " ",
-                        "CREATE TABLE testdb.client (id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50), age INT, PRIMARY KEY (id))"
+        try (final Servers servers = new Servers()) {
+            for (final Session session : servers.sessions()) {
+                new Update(
+                    session,
+                    new SimpleQuery(
+                        new JoinedText(
+                            " ",
+                            "CREATE TABLE client (id INT AUTO_INCREMENT,",
+                            "name VARCHAR(50), age INT, PRIMARY KEY (id))"
+                        )
                     )
-                )
-            ).result();
-            new Batch(
-                session,
-                new BatchQuery(
-                    "INSERT INTO testdb.client (name, age) VALUES (:name, :age)",
-                    new SmartDataValues(
-                        new TextValue("name", "Jeff Bridges"),
-                        // @checkstyle MagicNumber (1 line)
-                        new IntValue("age", 34)
-                    ),
-                    new SmartDataValues(
-                        new TextValue("name", "Anna Miller"),
-                        // @checkstyle MagicNumber (1 line)
-                        new IntValue("age", 26)
-                    ),
-                    new SmartDataValues(
-                        new TextValue("name", "Michal Douglas"),
-                        // @checkstyle MagicNumber (1 line)
-                        new IntValue("age", 32)
+                ).result();
+                new Batch(
+                    session,
+                    new BatchQuery(
+                        "INSERT INTO client (name, age) VALUES (:name, :age)",
+                        new SmartDataValues(
+                            new TextValue("name", "Jeff Bridges" ),
+                            // @checkstyle MagicNumber (1 line)
+                            new IntValue("age", 34)
+                        ),
+                        new SmartDataValues(
+                            new TextValue("name", "Anna Miller" ),
+                            // @checkstyle MagicNumber (1 line)
+                            new IntValue("age", 26)
+                        ),
+                        new SmartDataValues(
+                            new TextValue("name", "Michal Douglas" ),
+                            // @checkstyle MagicNumber (1 line)
+                            new IntValue("age", 32)
+                        )
                     )
-                )
-            ).result();
+                ).result();
+            }
         }
-        sources.stop();
     }
 }

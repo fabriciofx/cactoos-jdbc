@@ -23,23 +23,45 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-/**
- * Script.
- *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
- */
-public interface Script {
-    Script NOP = new Script() {
-        @Override
-        public void exec() throws Exception {
-        }
-    };
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.cactoos.list.ListOf;
 
-    /**
-     * Execute it.
-     * @throws Exception If fails
-     */
-    void exec() throws Exception;
+public final class Servers implements Closeable {
+    private final List<Server> all;
+
+    public Servers() {
+        this(
+            new H2Server(),
+            new MySqlServer()
+        );
+    }
+
+    public Servers(final Server... srvs) {
+        this.all = new ListOf<>(srvs);
+    }
+
+    public Iterable<Session> sessions() throws Exception {
+        final List<Session> sessions = new ArrayList<>();
+        for (final Server server : this.all) {
+            server.start();
+            sessions.add(server.session());
+        }
+        return sessions;
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            for (final Server server : this.all) {
+                server.stop();
+            }
+        } catch(final Exception ex) {
+            throw new IOException(ex);
+        }
+    }
 }

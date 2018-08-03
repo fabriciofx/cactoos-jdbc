@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Sources;
+import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
@@ -32,8 +32,6 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -50,67 +48,65 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
-        final Sources sources = new Sources();
-        sources.start();
-        for (final Session session : sources.sessions()) {
-            new Update(
-                session,
-                new SimpleQuery(
-                    new JoinedText(
-                        " ",
-                        "CREATE TABLE testdb.t01 (id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50), PRIMARY KEY (id))"
-                    )
-                )
-            ).result();
-            MatcherAssert.assertThat(
-                "Can't insert into table",
-                new ResultAsValue<>(
-                    new Insert(
-                        session,
-                        new SimpleQuery(
-                            "INSERT INTO testdb.t01 (name) VALUES (:name)",
-                            new TextValue("name", "Yegor Bugayenko")
+        try (final Servers servers = new Servers()) {
+            for (final Session session : servers.sessions()) {
+                new Update(
+                    session,
+                    new SimpleQuery(
+                        new JoinedText(
+                            " ",
+                            "CREATE TABLE t01 (id INT AUTO_INCREMENT,",
+                            "name VARCHAR(50), PRIMARY KEY (id))"
                         )
+                    )
+                ).result();
+                MatcherAssert.assertThat(
+                    "Can't insert into table",
+                    new ResultAsValue<>(
+                        new Insert(
+                            session,
+                            new SimpleQuery(
+                                "INSERT INTO t01 (name) VALUES (:name)",
+                                new TextValue("name", "Yegor Bugayenko" )
+                            )
+                        ),
+                        Boolean.class
                     ),
-                    Boolean.class
-                ),
-                new ScalarHasValue<>(false)
-            );
+                    new ScalarHasValue<>(false)
+                );
+            }
         }
-        sources.stop();
     }
 
     @Test
     public void insertWithKeys() throws Exception {
-        final Sources sources = new Sources();
-        sources.start();
-        for (final Session session : sources.sessions()) {
-            new Update(
-                session,
-                new SimpleQuery(
-                    new JoinedText(
-                        " ",
-                        "CREATE TABLE testdb.t02 (id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50), PRIMARY KEY (id))"
-                    )
-                )
-            ).result();
-            MatcherAssert.assertThat(
-                "Can't insert with an integer keys",
-                () -> new ResultAsValues<>(
-                    new InsertWithKeys(
-                        session,
-                        new KeyedQuery(
-                            "INSERT INTO testdb.t02 (name) VALUES (:name)",
-                            new TextValue("name", "Jeff Malony")
+        try (final Servers servers = new Servers()) {
+            for (final Session session : servers.sessions()) {
+                new Update(
+                    session,
+                    new SimpleQuery(
+                        new JoinedText(
+                            " ",
+                            "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
+                            "name VARCHAR(50), PRIMARY KEY (id))"
                         )
-                    ),
-                    Integer.class
-                ).value().get(0),
-                new ScalarHasValue<>(1)
-            );
+                    )
+                ).result();
+                MatcherAssert.assertThat(
+                    "Can't insert with an integer keys",
+                    () -> new ResultAsValues<>(
+                        new InsertWithKeys(
+                            session,
+                            new KeyedQuery(
+                                "INSERT INTO t02 (name) VALUES (:name)",
+                                new TextValue("name", "Jeff Malony" )
+                            )
+                        ),
+                        Integer.class
+                    ).value().get(0),
+                    new ScalarHasValue<>(1)
+                );
+            }
         }
-        sources.stop();
     }
 }
