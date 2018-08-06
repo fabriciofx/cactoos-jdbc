@@ -30,16 +30,10 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * @since 0.1
  */
-public interface Script {
-    Script NOP = new Script() {
-        @Override
-        public void exec() throws Exception {
-        }
-    };
-
+public interface Script<T> {
     /**
      * Execute it.
      * @throws Exception If fails
      */
-    void exec() throws Exception;
+    void exec(T context) throws Exception;
 }

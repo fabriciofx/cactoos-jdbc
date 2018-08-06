@@ -23,10 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -44,68 +45,104 @@ import org.llorllale.cactoos.matchers.TextHasString;
 public final class AgendaTest {
     @Test
     public void addContact() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("agendadb")
-        );
-        new SqlScript(
-            session,
-            new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
-            )
-        ).exec();
-        final Contacts contacts = new SqlContacts(session);
-        final Contact contact = contacts.contact("Donald Knuth");
-        contact.phones().phone("99991234", "TIM");
-        contact.phones().phone("98812564", "Oi");
-        MatcherAssert.assertThat(
-            "Can't add an agenda contact",
-            contact,
-            new TextHasString(
-                String.join(
-                    "\n",
-                    "Name: Donald Knuth",
-                    "Phone: 99991234 (TIM)",
-                    "Phone: 98812564 (Oi)"
+        try (
+            final Servers servers = new Servers(
+                new H2Server(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                        )
+                    )
+                ),
+                new MySqlServer(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                        )
+                    )
                 )
             )
-        );
+        ) {
+            for (final Session session : servers.sessions()) {
+                final Contacts contacts = new SqlContacts(session);
+                final Contact contact = contacts.contact("Donald Knuth");
+                contact.phones().phone("99991234", "TIM");
+                contact.phones().phone("98812564", "Oi");
+                MatcherAssert.assertThat(
+                    "Can't add an agenda contact",
+                    contact,
+                    new TextHasString(
+                        String.join(
+                            "\n",
+                            "Name: Donald Knuth",
+                            "Phone: 99991234 (TIM)",
+                            "Phone: 98812564 (Oi)"
+                        )
+                    )
+                );
+            }
+        }
     }
 
     @Test
     public void findContact() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("agendadb2")
-        );
-        new SqlScript(
-            session,
-            new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+        try (
+            final Servers servers = new Servers(
+                new H2Server(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                        )
+                    )
+                ),
+                new MySqlServer(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                        )
+                    )
+                )
             )
-        ).exec();
-        MatcherAssert.assertThat(
-            "Can't find an agenda contact",
-            new SqlContacts(session).find("maria").get(0),
-            new TextHasString("Name: Maria Souza")
-        );
+        ) {
+            for (final Session session : servers.sessions()) {
+                MatcherAssert.assertThat(
+                    "Can't find an agenda contact",
+                    new SqlContacts(session).find("maria").get(0),
+                    new TextHasString("Name: Maria Souza")
+                );
+            }
+        }
     }
 
     @Test
     public void renameContact() throws Exception {
-        final Session session = new NoAuthSession(
-            new H2Source("agendadb3")
-        );
-        new SqlScript(
-            session,
-            new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+        try (
+            final Servers servers = new Servers(
+                new H2Server(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                        )
+                    )
+                ),
+                new MySqlServer(
+                    new SqlScript(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                        )
+                    )
+                )
             )
-        ).exec();
-        final Contact contact = new SqlContacts(session).find("maria").get(0);
-        contact.rename("Maria Lima");
-        MatcherAssert.assertThat(
-            "Can't rename an agenda contact",
-            new SqlContacts(session).find("maria").get(0),
-            new TextHasString("Name: Maria Lima")
-        );
+        ) {
+            for (final Session session : servers.sessions()) {
+                final Contact contact = new SqlContacts(session).find("maria").get(0);
+                contact.rename("Maria Lima");
+                MatcherAssert.assertThat(
+                    "Can't rename an agenda contact",
+                    new SqlContacts(session).find("maria").get(0),
+                    new TextHasString("Name: Maria Lima")
+                );
+            }
+        }
     }
 }

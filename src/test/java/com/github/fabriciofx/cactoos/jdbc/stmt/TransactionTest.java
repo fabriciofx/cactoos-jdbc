@@ -54,11 +54,10 @@ public final class TransactionTest {
             )
         );
         new SqlScript(
-            transacted,
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
-        ).exec();
+        ).exec(transacted);
         MatcherAssert.assertThat(
             "Can't perform a transaction",
             new ResultAsValue<>(

@@ -21,50 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.server;
+package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.DbName;
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Script;
-import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.script.NopScript;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import java.sql.Connection;
-import org.cactoos.scalar.StickyScalar;
-import org.cactoos.scalar.UncheckedScalar;
 
-public final class H2Server implements Server {
-    private final UncheckedScalar<String> dbname;
-    private final Script<Session> script;
-
-    public H2Server() {
-        this(new NopScript());
-    }
-
-    public H2Server(final Script<Session> scrpt) {
-        this.dbname = new UncheckedScalar<>(
-            new StickyScalar<>(
-                () -> new DbName().asString()
-            )
-        );
-        this.script = scrpt;
-    }
-
+public final class NopScript implements Script<Session> {
     @Override
-    public void start() throws Exception {
-        this.script.exec(this.session());
-    }
-
-    @Override
-    public void stop() throws Exception {
-    }
-
-    @Override
-    public Session session() {
-        return new NoAuthSession(
-            new H2Source(this.dbname.value())
-        );
+    public void exec(final Session context) throws Exception {
     }
 }

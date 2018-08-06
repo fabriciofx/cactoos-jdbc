@@ -29,6 +29,8 @@ import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.script.NopScript;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
@@ -43,13 +45,13 @@ public final class MySqlServer implements Server {
     private final int port;
     private final String username;
     private final String password;
-    private final Script script;
+    private final Script<Session> script;
 
     public MySqlServer() {
-        this(Script.NOP);
+        this(new NopScript());
     }
 
-    public MySqlServer(final Script scrpt) {
+    public MySqlServer(final Script<Session> scrpt) {
         this("localhost", 3306, "root", "", scrpt);
     }
 
@@ -58,7 +60,7 @@ public final class MySqlServer implements Server {
         final int prt,
         final String srnm,
         final String psswrd,
-        final Script scrpt
+        final Script<Session> scrpt
     ) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(
@@ -92,7 +94,7 @@ public final class MySqlServer implements Server {
                 )
             )
         ).result();
-        this.script.exec();
+        this.script.exec(this.session());
     }
 
     @Override

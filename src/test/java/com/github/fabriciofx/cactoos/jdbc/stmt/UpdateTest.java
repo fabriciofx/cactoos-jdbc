@@ -23,10 +23,20 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -64,5 +74,28 @@ public final class UpdateTest {
                 );
             }
         }
+    }
+
+    @Test
+    public void longQuery() throws Exception {
+        final Session session = new AuthSession(
+            new MySqlSource("localhost", 3306, ""),
+            "root",
+            ""
+        );
+        final URL url = this.getClass().getClassLoader().getResource(
+            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql-old.sql"
+        );
+        final List<String> lines = Files.readAllLines(
+            Paths.get(url.toURI())
+        );
+        final String sql = String.join("", lines);
+        final Query query = new SimpleQuery(sql);
+        System.out.println(sql);
+        System.out.println(query.asString());
+        new Update(
+            session,
+            query
+        ).result();
     }
 }
