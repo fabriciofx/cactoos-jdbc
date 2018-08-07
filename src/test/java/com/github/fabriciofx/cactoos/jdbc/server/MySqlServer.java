@@ -23,14 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
-import com.github.fabriciofx.cactoos.jdbc.DbName;
+import com.github.fabriciofx.cactoos.jdbc.RandomText;
 import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
 import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.script.NopScript;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
@@ -64,7 +63,7 @@ public final class MySqlServer implements Server {
     ) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(
-                () -> new DbName().asString()
+                () -> new RandomText().asString()
             )
         );
         this.session = new AuthSession(

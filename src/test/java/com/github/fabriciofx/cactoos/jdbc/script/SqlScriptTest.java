@@ -21,38 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.script;
 
-import java.util.Random;
-import org.cactoos.Text;
+import com.github.fabriciofx.cactoos.jdbc.Server;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import org.cactoos.io.ResourceOf;
+import org.junit.Test;
 
-public final class DbName implements Text {
-    private final String lexicon;
-    private final Random random;
-    private final int length;
-
-    public DbName() {
-        this("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5);
-    }
-
-    public DbName(final String lex, final int len) {
-        this.lexicon = lex;
-        this.length = len;
-        this.random = new Random();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        final StringBuilder strb = new StringBuilder(this.length);
-        for (int len = 0; len < this.length; len++) {
-            strb.append(
-                this.lexicon.charAt(
-                    this.random.nextInt(
-                        this.lexicon.length()
-                    )
+public final class SqlScriptTest {
+    @Test
+    public void h2() throws Exception {
+        final Server h2 = new H2Server(
+            new SqlScript(
+                new ResourceOf(
+                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                 )
-            );
-        }
-        return strb.toString();
+            )
+        );
+        h2.start();
+        h2.stop();
+    }
+
+    @Test
+    public void mysql() throws Exception {
+        final Server mysql = new MySqlServer(
+            new NewSqlScript(
+                new ResourceOf(
+                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                )
+            )
+        );
+        mysql.start();
+        mysql.stop();
     }
 }

@@ -17,14 +17,14 @@ CREATE TABLE phone (
 -- create a trigger to do it.
 DROP TRIGGER IF EXISTS tr_contact_id;
 
-DELIMITER ;;
+DELIMITER \\
 CREATE TRIGGER `tg_contact_id`
 BEFORE INSERT ON `contact` FOR EACH ROW
 BEGIN
   IF new.id IS NULL THEN
     SET new.id = UNHEX(REPLACE(UUID(), "-",""));
   END IF;
-END;;
+END\\
 DELIMITER ;
 
 INSERT INTO contact(name) VALUES ('Joseph Klimber');
