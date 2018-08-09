@@ -30,6 +30,9 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import org.cactoos.Input;
+import org.cactoos.Text;
+import org.cactoos.text.SplitText;
+import org.cactoos.text.TrimmedText;
 
 /**
  * SQL Script.
@@ -63,11 +66,12 @@ public final class SqlScript implements Script<Session> {
                 }
                 baos.write(buf, 0, length);
             }
-            final String sql = baos.toString("UTF-8");
-            new Update(
-                session,
-                new SimpleQuery(sql)
-            ).result();
+            for (final Text sql : new SplitText(baos.toString("UTF-8"), ";")) {
+                new Update(
+                    session,
+                    new SimpleQuery(new TrimmedText(sql))
+                ).result();
+            }
         }
     }
 }

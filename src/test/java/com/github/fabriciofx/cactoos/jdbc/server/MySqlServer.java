@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
-import com.github.fabriciofx.cactoos.jdbc.RandomText;
 import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
 import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Server;
@@ -36,6 +35,7 @@ import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
+import org.cactoos.text.RandomText;
 
 public final class MySqlServer implements Server {
     private final UncheckedScalar<String> dbname;
@@ -63,7 +63,12 @@ public final class MySqlServer implements Server {
     ) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(
-                () -> new RandomText().asString()
+                () -> new RandomText(
+                    5,
+                    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                    'y', 'z'
+                ).asString()
             )
         );
         this.session = new AuthSession(
