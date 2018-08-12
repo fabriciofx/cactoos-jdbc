@@ -21,61 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
+public interface SqlScript {
+    SqlScript NOP = context -> { };
 
-/**
- * Decimal value.
- *
- * @since 0.1
- */
-public final class DecimalValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final BigDecimal value;
-
-    /**
-     * Ctor.
-     */
-    public DecimalValue() {
-        this(BigDecimal.ZERO);
-    }
-
-    /**
-     * Ctor.
-     * @param value The value
-     */
-    public DecimalValue(final String value) {
-        this(new BigDecimal(value));
-    }
-
-    /**
-     * Ctor.
-     * @param value The value
-     */
-    public DecimalValue(final BigDecimal value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(BigDecimal.class);
-    }
-
-    @Override
-    public Object value(
-        final ResultSet rset,
-        final int index
-    ) throws Exception {
-        return rset.getBigDecimal(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
-    }
+    void exec(Session session) throws Exception;
 }

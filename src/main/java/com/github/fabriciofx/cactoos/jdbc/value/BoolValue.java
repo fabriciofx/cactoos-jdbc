@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -34,11 +33,6 @@ import java.sql.ResultSet;
  */
 public final class BoolValue implements DataValue {
     /**
-     * Name.
-     */
-    private final String name;
-
-    /**
      * Value.
      */
     private final Boolean value;
@@ -47,30 +41,15 @@ public final class BoolValue implements DataValue {
      * Ctor.
      */
     public BoolValue() {
-        this("unknown", true);
+        this(true);
     }
 
     /**
      * Ctor.
-     * @param name The name
      * @param value The value
      */
-    public BoolValue(final String name, final Boolean value) {
-        this.name = name;
+    public BoolValue(final Boolean value) {
         this.value = value;
-    }
-
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setBoolean(index, this.value);
     }
 
     @Override
@@ -79,7 +58,7 @@ public final class BoolValue implements DataValue {
     }
 
     @Override
-    public Boolean apply(
+    public Boolean value(
         final ResultSet rset,
         final int index
     ) throws Exception {

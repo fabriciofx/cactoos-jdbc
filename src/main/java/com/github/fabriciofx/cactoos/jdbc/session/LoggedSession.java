@@ -135,7 +135,7 @@ public final class LoggedSession implements Session {
                     "[%s] Connection[#%d] has been opened with properties %s",
                     this.source,
                     this.connections.get(),
-                    strb.toString().substring(0, strb.length() - 2)
+                    strb.toString()
                 )
             ).asString()
         );

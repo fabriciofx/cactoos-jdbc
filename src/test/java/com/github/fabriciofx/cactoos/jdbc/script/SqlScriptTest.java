@@ -33,7 +33,7 @@ public final class SqlScriptTest {
     @Test
     public void h2() throws Exception {
         final Server h2 = new H2Server(
-            new SqlScript(
+            new SqlScriptFromInput(
                 new ResourceOf(
                     "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                 )
@@ -46,7 +46,7 @@ public final class SqlScriptTest {
     @Test
     public void mysql() throws Exception {
         final Server mysql = new MySqlServer(
-            new NewSqlScript(
+            new OldSqlScriptFromInput(
                 new ResourceOf(
                     "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
                 )

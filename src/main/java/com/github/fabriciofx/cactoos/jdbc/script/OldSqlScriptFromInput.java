@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -56,7 +56,7 @@ import org.cactoos.io.ResourceOf;
  * Tool to run database scripts. This version of the script can be found at
  * https://gist.github.com/git-commit/8716469
  */
-public final class NewSqlScript implements Script<Session> {
+public final class OldSqlScriptFromInput implements SqlScript {
     private static final String DEFAULT_DELIMITER = ";";
     private static final String DELIMITER_LINE_REGEX = "(?i)DELIMITER.+";
     private static final String DELIMITER_LINE_SPLIT_REGEX = "(?i)DELIMITER";
@@ -64,18 +64,18 @@ public final class NewSqlScript implements Script<Session> {
     private final Input input;
     private final boolean stopOnError;
     private final boolean autoCommit;
-    private String delimiter = NewSqlScript.DEFAULT_DELIMITER;
+    private String delimiter = OldSqlScriptFromInput.DEFAULT_DELIMITER;
     private boolean fullLineDelimiter = false;
 
-    public NewSqlScript(final String script) {
+    public OldSqlScriptFromInput(final String script) {
         this(new ResourceOf(script));
     }
 
-    public NewSqlScript(final Input input) {
-        this(input, false, true, NewSqlScript.DEFAULT_DELIMITER, false);
+    public OldSqlScriptFromInput(final Input input) {
+        this(input, false, true, OldSqlScriptFromInput.DEFAULT_DELIMITER, false);
     }
 
-    public NewSqlScript(
+    public OldSqlScriptFromInput(
         final Input input,
         final boolean autoCommit,
         final boolean stopOnError,
@@ -149,7 +149,7 @@ public final class NewSqlScript implements Script<Session> {
                     || this.fullLineDelimiter
                     && trimmedLine.equals(this.delimiter)) {
                     final Pattern pattern = Pattern
-                        .compile(NewSqlScript.DELIMITER_LINE_REGEX);
+                        .compile(OldSqlScriptFromInput.DELIMITER_LINE_REGEX);
                     final Matcher matcher = pattern.matcher(trimmedLine);
                     if (matcher.matches()) {
                         setDelimiter(

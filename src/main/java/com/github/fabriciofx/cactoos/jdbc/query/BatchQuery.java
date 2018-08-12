@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.QueryParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -45,25 +45,25 @@ public final class BatchQuery implements Query {
     /**
      * A list of SQL query parameters.
      */
-    private final List<DataValues> values;
+    private final List<QueryParams> params;
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param vals A list of SQL query parameters
+     * @param params A list of SQL query parameters
      */
-    public BatchQuery(final String sql, final DataValues... vals) {
-        this(() -> sql, vals);
+    public BatchQuery(final String sql, final QueryParams... params) {
+        this(() -> sql, params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param vals A list of SQL query parameters
+     * @param params A list of SQL query parameters
      */
-    public BatchQuery(final Text sql, final DataValues... vals) {
-        this.sql = new ParsedSql(sql, vals[0]);
-        this.values = new ListOf<>(vals);
+    public BatchQuery(final Text sql, final QueryParams... params) {
+        this.sql = new ParsedSql(sql, params[0]);
+        this.params = new ListOf<>(params);
     }
 
     @Override
@@ -73,8 +73,8 @@ public final class BatchQuery implements Query {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString()
         );
-        for (final DataValues vals : this.values) {
-            vals.prepare(stmt);
+        for (final QueryParams params : this.params) {
+            params.prepare(stmt);
             stmt.addBatch();
         }
         return stmt;

@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import com.github.fabriciofx.cactoos.jdbc.query.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -57,7 +57,7 @@ public final class SimpleQueryTest {
             "Can't build a simple named query",
             new SimpleQuery(
                 "INSERT INTO foo2 (name) VALUES (:name)",
-                new TextValue("name", "Yegor Bugayenko")
+                new TextParam("name", "Yegor Bugayenko")
             ),
             new TextHasString("INSERT INTO foo2 (name) VALUES (?)")
         );
@@ -67,7 +67,7 @@ public final class SimpleQueryTest {
     public void invalid() throws Exception {
         new SimpleQuery(
             "INSERT INTO foo2 (name) VALUES (:name)",
-            new TextValue("address", "Sunset Boulevard")
+            new TextParam("address", "Sunset Boulevard")
         ).asString();
     }
 
@@ -82,11 +82,11 @@ public final class SimpleQueryTest {
                     "(name, birthday, address, married, salary)",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
                 ),
-                new TextValue("name", "John Wick"),
-                new DateValue("birthday", "1980-08-16"),
-                new TextValue("address", "Boulevard Street, 34"),
-                new BoolValue("married", false),
-                new DecimalValue("salary", "13456.00")
+                new TextParam("name", "John Wick"),
+                new DateParam("birthday", "1980-08-16"),
+                new TextParam("address", "Boulevard Street, 34"),
+                new BoolParam("married", false),
+                new DecimalParam("salary", "13456.00")
             ),
             new TextHasString(
                 new JoinedText(
@@ -108,11 +108,11 @@ public final class SimpleQueryTest {
                 "(name, birthday, address, married, salary)",
                 "VALUES (:name, :birthday, :address, :married, :salary)"
             ),
-            new TextValue("name", "John Wick"),
-            new DateValue("address", "1980-08-16"),
-            new TextValue("birthday", "Boulevard Street, 34"),
-            new BoolValue("married", false),
-            new DecimalValue("salary", "13456.00")
+            new TextParam("name", "John Wick"),
+            new DateParam("address", "1980-08-16"),
+            new TextParam("birthday", "Boulevard Street, 34"),
+            new BoolParam("married", false),
+            new DecimalParam("salary", "13456.00")
         ).asString();
     }
 }

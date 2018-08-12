@@ -21,13 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.script;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
 
-import com.github.fabriciofx.cactoos.jdbc.Script;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import java.sql.PreparedStatement;
 
-public final class NopScript implements Script<Session> {
+/**
+ * Any value.
+ *
+ * @since 0.1
+ */
+public final class AnyParam implements QueryParam {
+    /**
+     * Name.
+     */
+    private final String name;
+
+    /**
+     * Value.
+     */
+    private final Object value;
+
+    /**
+     * Ctor.
+     */
+    public AnyParam() {
+        this("unknown", new Object());
+    }
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
+    public AnyParam(final String name, final Object value) {
+        this.name = name;
+        this.value = value;
+    }
+
     @Override
-    public void exec(final Session context) throws Exception {
+    public String name() {
+        return this.name;
+    }
+
+    @Override
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
+        stmt.setObject(index, this.value);
+    }
+
+    @Override
+    public String asString() throws Exception {
+        return this.value.toString();
     }
 }

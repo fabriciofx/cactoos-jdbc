@@ -25,12 +25,12 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.AnyParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
-import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
 import org.cactoos.text.JoinedText;
 
@@ -82,8 +82,8 @@ public final class SqlPhone implements Phone {
                         "SELECT number FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
+                    new AnyParam("contact", this.contact),
+                    new IntParam("seq", this.seq)
                 )
             ),
             String.class
@@ -101,8 +101,8 @@ public final class SqlPhone implements Phone {
                         "SELECT carrier FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
-                    new AnyValue("contact", this.contact),
-                    new IntValue("seq", this.seq)
+                    new AnyParam("contact", this.contact),
+                    new IntParam("seq", this.seq)
                 )
             ),
             String.class
@@ -115,8 +115,8 @@ public final class SqlPhone implements Phone {
             this.session,
             new SimpleQuery(
                 "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                new AnyValue("contact", this.contact),
-                new IntValue("seq", this.seq)
+                new AnyParam("contact", this.contact),
+                new IntParam("seq", this.seq)
             )
         ).result();
     }
@@ -134,10 +134,10 @@ public final class SqlPhone implements Phone {
                     "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact = :contact) AND (seq = :seq)"
                 ),
-                new TextValue("number", number),
-                new TextValue("carrier", carrier),
-                new AnyValue("contact", this.contact),
-                new IntValue("seq", this.seq)
+                new TextParam("number", number),
+                new TextParam("carrier", carrier),
+                new AnyParam("contact", this.contact),
+                new IntParam("seq", this.seq)
             )
         ).result();
     }

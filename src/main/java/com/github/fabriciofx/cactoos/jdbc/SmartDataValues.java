@@ -24,11 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
-import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import org.cactoos.text.FormattedText;
 
 /**
  * Smart Data Values.
@@ -52,18 +50,6 @@ public final class SmartDataValues implements DataValues {
     }
 
     @Override
-    public PreparedStatement prepare(
-        final PreparedStatement stmt
-    ) throws Exception {
-        int idx = 1;
-        for (final DataValue value : this.values) {
-            value.prepare(stmt, idx);
-            ++idx;
-        }
-        return stmt;
-    }
-
-    @Override
     public DataValue value(final Object data) {
         DataValue result = new AnyValue();
         for (final DataValue val : this.values) {
@@ -73,22 +59,6 @@ public final class SmartDataValues implements DataValues {
             }
         }
         return result;
-    }
-
-    @Override
-    public void check(final List<String> fields) throws Exception {
-        int idx = 0;
-        for (final DataValue val : this.values) {
-            if (!val.name().equals(fields.get(idx))) {
-                throw new IllegalArgumentException(
-                    new FormattedText(
-                        "SQL parameter #%d is wrong or out of order",
-                        idx + 1
-                    ).asString()
-                );
-            }
-            ++idx;
-        }
     }
 
     @Override

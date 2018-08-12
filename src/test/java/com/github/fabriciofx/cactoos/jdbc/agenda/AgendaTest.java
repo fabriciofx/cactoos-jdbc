@@ -25,7 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScript;
+import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import org.cactoos.io.ResourceOf;
@@ -47,15 +48,15 @@ public final class AgendaTest {
     public void addContact() throws Exception {
         try (
             final Servers servers = new Servers(
-                new H2Server(
-                    new SqlScript(
-                        new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
-                        )
-                    )
-                ),
+//                new H2Server(
+//                    new OldSqlScriptFromInput(
+//                        new ResourceOf(
+//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+//                        )
+//                    )
+//                )
                 new MySqlServer(
-                    new SqlScript(
+                    new OldSqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
                         )
@@ -89,14 +90,14 @@ public final class AgendaTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(
-                    new SqlScript(
+                    new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                         )
                     )
                 ),
                 new MySqlServer(
-                    new SqlScript(
+                    new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
                         )
@@ -119,14 +120,14 @@ public final class AgendaTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(
-                    new SqlScript(
+                    new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                         )
                     )
                 ),
                 new MySqlServer(
-                    new SqlScript(
+                    new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
                         )

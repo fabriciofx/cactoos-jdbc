@@ -21,18 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 
 /**
  * Decimal value.
  *
  * @since 0.1
  */
-public final class DecimalValue implements DataValue {
+public final class DecimalParam implements QueryParam {
+    /**
+     * Name.
+     */
+    private final String name;
+
     /**
      * Value.
      */
@@ -41,37 +46,40 @@ public final class DecimalValue implements DataValue {
     /**
      * Ctor.
      */
-    public DecimalValue() {
-        this(BigDecimal.ZERO);
+    public DecimalParam() {
+        this("unknown", BigDecimal.ZERO);
     }
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The value
      */
-    public DecimalValue(final String value) {
-        this(new BigDecimal(value));
+    public DecimalParam(final String name, final String value) {
+        this(name, new BigDecimal(value));
     }
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The value
      */
-    public DecimalValue(final BigDecimal value) {
+    public DecimalParam(final String name, final BigDecimal value) {
+        this.name = name;
         this.value = value;
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(BigDecimal.class);
+    public String name() {
+        return this.name;
     }
 
     @Override
-    public Object value(
-        final ResultSet rset,
+    public void prepare(
+        final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        return rset.getBigDecimal(index);
+        stmt.setBigDecimal(index, this.value);
     }
 
     @Override

@@ -25,11 +25,11 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.SmartQueryParams;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
@@ -60,20 +60,20 @@ public final class BatchTest {
                     session,
                     new BatchQuery(
                         "INSERT INTO client (name, age) VALUES (:name, :age)",
-                        new SmartDataValues(
-                            new TextValue("name", "Jeff Bridges" ),
+                        new SmartQueryParams(
+                            new TextParam("name", "Jeff Bridges" ),
                             // @checkstyle MagicNumber (1 line)
-                            new IntValue("age", 34)
+                            new IntParam("age", 34)
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "Anna Miller" ),
+                        new SmartQueryParams(
+                            new TextParam("name", "Anna Miller" ),
                             // @checkstyle MagicNumber (1 line)
-                            new IntValue("age", 26)
+                            new IntParam("age", 26)
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "Michal Douglas" ),
+                        new SmartQueryParams(
+                            new TextParam("name", "Michal Douglas" ),
                             // @checkstyle MagicNumber (1 line)
-                            new IntValue("age", 32)
+                            new IntParam("age", 32)
                         )
                     )
                 ).result();

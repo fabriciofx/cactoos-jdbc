@@ -26,11 +26,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.AnyParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,9 +88,9 @@ public final class SqlPhones implements Phones {
                         "INSERT INTO phone (contact, number, carrier)",
                         "VALUES (:contact, :number, :carrier)"
                     ),
-                    new AnyValue("contact", this.contact),
-                    new TextValue("number", number),
-                    new TextValue("carrier", carrier)
+                    new AnyParam("contact", this.contact),
+                    new TextParam("number", number),
+                    new TextParam("carrier", carrier)
                 )
             ),
             Integer.class
@@ -106,7 +106,7 @@ public final class SqlPhones implements Phones {
                     this.session,
                     new SimpleQuery(
                         "SELECT seq FROM phone WHERE contact = :contact",
-                        new AnyValue("contact", this.contact)
+                        new AnyParam("contact", this.contact)
                     )
                 ),
                 Integer.class

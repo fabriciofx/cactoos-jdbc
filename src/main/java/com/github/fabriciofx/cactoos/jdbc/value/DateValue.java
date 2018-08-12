@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 
@@ -36,11 +35,6 @@ import java.time.LocalDate;
  */
 public final class DateValue implements DataValue {
     /**
-     * Name.
-     */
-    private final String name;
-
-    /**
      * Value.
      */
     private final LocalDate value;
@@ -49,39 +43,23 @@ public final class DateValue implements DataValue {
      * Ctor.
      */
     public DateValue() {
-        this("today", LocalDate.now());
+        this(LocalDate.now());
     }
 
     /**
      * Ctor.
-     * @param name The name
      * @param value The value
      */
-    public DateValue(final String name, final String value) {
-        this(name, LocalDate.parse(value));
+    public DateValue(final String value) {
+        this(LocalDate.parse(value));
     }
 
     /**
      * Ctor.
-     * @param name The name
      * @param value The value
      */
-    public DateValue(final String name, final LocalDate value) {
-        this.name = name;
+    public DateValue(final LocalDate value) {
         this.value = value;
-    }
-
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setDate(index, java.sql.Date.valueOf(this.value));
     }
 
     @Override
@@ -90,7 +68,7 @@ public final class DateValue implements DataValue {
     }
 
     @Override
-    public Object apply(
+    public Object value(
         final ResultSet rset,
         final int index
     ) throws Exception {

@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import com.github.fabriciofx.cactoos.jdbc.QueryParams;
+import com.github.fabriciofx.cactoos.jdbc.SmartQueryParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
@@ -45,25 +45,25 @@ public final class SimpleQuery implements Query {
     /**
      * SQL query parameters.
      */
-    private final DataValues values;
+    private final QueryParams params;
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param vals SQL query parameters
+     * @param params SQL query parameters
      */
-    public SimpleQuery(final String sql, final DataValue... vals) {
-        this(() -> sql, vals);
+    public SimpleQuery(final String sql, final QueryParam... params) {
+        this(() -> sql, params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param vals SQL query parameters
+     * @param params SQL query parameters
      */
-    public SimpleQuery(final Text sql, final DataValue... vals) {
-        this.sql = new ParsedSql(sql, vals);
-        this.values = new SmartDataValues(vals);
+    public SimpleQuery(final Text sql, final QueryParam... params) {
+        this.sql = new ParsedSql(sql, params);
+        this.params = new SmartQueryParams(params);
     }
 
     @Override
@@ -73,7 +73,7 @@ public final class SimpleQuery implements Query {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString()
         );
-        this.values.prepare(stmt);
+        this.params.prepare(stmt);
         return stmt;
     }
 

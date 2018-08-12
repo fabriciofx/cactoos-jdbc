@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +31,6 @@ import org.cactoos.list.ListOf;
 
 public final class Servers implements Closeable {
     private final List<Server> all;
-
-    public Servers() {
-        this(
-            new H2Server(),
-            new MySqlServer()
-        );
-    }
 
     public Servers(final Server... srvs) {
         this.all = new ListOf<>(srvs);

@@ -21,57 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import java.sql.PreparedStatement;
 
 /**
- * Decimal value.
+ * Long value.
  *
  * @since 0.1
  */
-public final class DecimalValue implements DataValue {
+public final class LongParam implements QueryParam {
+    /**
+     * Name.
+     */
+    private final String name;
+
     /**
      * Value.
      */
-    private final BigDecimal value;
+    private final Long value;
 
     /**
      * Ctor.
      */
-    public DecimalValue() {
-        this(BigDecimal.ZERO);
+    public LongParam() {
+        this("unknown", 0L);
     }
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The value
      */
-    public DecimalValue(final String value) {
-        this(new BigDecimal(value));
-    }
-
-    /**
-     * Ctor.
-     * @param value The value
-     */
-    public DecimalValue(final BigDecimal value) {
+    public LongParam(final String name, final Long value) {
+        this.name = name;
         this.value = value;
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(BigDecimal.class);
+    public String name() {
+        return this.name;
     }
 
     @Override
-    public Object value(
-        final ResultSet rset,
+    public void prepare(
+        final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        return rset.getBigDecimal(index);
+        stmt.setLong(index, this.value);
     }
 
     @Override

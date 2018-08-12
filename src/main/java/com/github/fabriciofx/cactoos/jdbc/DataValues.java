@@ -23,26 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.PreparedStatement;
-import java.util.List;
-
-/**
- * A set of Data Values.
- *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
- */
 public interface DataValues extends Iterable<DataValue> {
-    /**
-     * Set the PreparedStatement with all data values.
-     * @param stmt The PreparedStatement
-     * @return The setted PreparedStatement
-     * @throws Exception If fails
-     */
-    PreparedStatement prepare(PreparedStatement stmt) throws Exception;
-
-    DataValue value(Object data);
-
-    void check(List<String> fields) throws Exception;
+    DataValue value(final Object data);
 }

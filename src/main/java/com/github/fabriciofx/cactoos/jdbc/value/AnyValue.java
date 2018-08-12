@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -34,11 +33,6 @@ import java.sql.ResultSet;
  */
 public final class AnyValue implements DataValue {
     /**
-     * Name.
-     */
-    private final String name;
-
-    /**
      * Value.
      */
     private final Object value;
@@ -47,38 +41,24 @@ public final class AnyValue implements DataValue {
      * Ctor.
      */
     public AnyValue() {
-        this("unknown", new Object());
+        this(new Object());
     }
 
     /**
      * Ctor.
-     * @param name The name
      * @param value The value
      */
-    public AnyValue(final String name, final Object value) {
-        this.name = name;
+    public AnyValue(final Object value) {
         this.value = value;
     }
 
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setObject(index, this.value);
-    }
     @Override
     public boolean match(final Object value) {
         return true;
     }
 
     @Override
-    public Object apply(
+    public Object value(
         final ResultSet rset,
         final int index
     ) throws Exception {

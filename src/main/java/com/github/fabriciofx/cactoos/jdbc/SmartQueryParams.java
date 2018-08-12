@@ -21,65 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.QueryParam;
-import com.github.fabriciofx.cactoos.jdbc.QueryParams;
-import com.github.fabriciofx.cactoos.jdbc.SmartQueryParams;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import org.cactoos.Text;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import org.cactoos.text.FormattedText;
 
 /**
- * Keyed query.
+ * Smart Query Params.
+ *
+ * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
  */
-public final class KeyedQuery implements Query {
+public final class SmartQueryParams implements QueryParams {
     /**
-     * SQL query.
+     * Values.
      */
-    private final Text sql;
-
-    /**
-     * SQL query parameters.
-     */
-    private final QueryParams params;
+    private final List<QueryParam> params;
 
     /**
      * Ctor.
-     * @param sql The SQL query
-     * @param params SQL query parameters
+     * @param params List of DataValue
      */
-    public KeyedQuery(final String sql, final QueryParam... params) {
-        this(() -> sql, params);
-    }
-
-    /**
-     * Ctor.
-     * @param sql The SQL query
-     * @param params SQL query parameters
-     */
-    public KeyedQuery(final Text sql, final QueryParam... params) {
-        this.sql = new ParsedSql(sql, params);
-        this.params = new SmartQueryParams(params);
+    public SmartQueryParams(final QueryParam... params) {
+        this.params = Arrays.asList(params);
     }
 
     @Override
-    public PreparedStatement prepared(
-        final Connection connection
+    public PreparedStatement prepare(
+        final PreparedStatement stmt
     ) throws Exception {
-        final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.asString(),
-            java.sql.Statement.RETURN_GENERATED_KEYS
-        );
-        this.params.prepare(stmt);
+        int idx = 1;
+        for (final QueryParam param : this.params) {
+            param.prepare(stmt, idx);
+            ++idx;
+        }
         return stmt;
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.sql.asString();
+    public void check(final List<String> fields) throws Exception {
+        int idx = 0;
+        for (final QueryParam param : this.params) {
+            if (!param.name().equals(fields.get(idx))) {
+                throw new IllegalArgumentException(
+                    new FormattedText(
+                        "SQL parameter #%d is wrong or out of order",
+                        idx + 1
+                    ).asString()
+                );
+            }
+            ++idx;
+        }
+    }
+
+    @Override
+    public Iterator<QueryParam> iterator() {
+        return this.params.iterator();
     }
 }

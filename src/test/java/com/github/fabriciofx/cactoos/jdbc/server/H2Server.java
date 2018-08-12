@@ -24,10 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.H2Source;
-import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.script.NopScript;
+import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
@@ -35,13 +34,13 @@ import org.cactoos.text.RandomText;
 
 public final class H2Server implements Server {
     private final UncheckedScalar<String> dbname;
-    private final Script<Session> script;
+    private final SqlScript script;
 
     public H2Server() {
-        this(new NopScript());
+        this(SqlScript.NOP);
     }
 
-    public H2Server(final Script<Session> scrpt) {
+    public H2Server(final SqlScript scrpt) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(
                 () -> new RandomText(

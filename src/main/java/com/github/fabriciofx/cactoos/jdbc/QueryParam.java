@@ -21,61 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import org.cactoos.Text;
 
 /**
- * Decimal value.
+ * A named value.
  *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @param <T> Type of value
  * @since 0.1
  */
-public final class DecimalValue implements DataValue {
+public interface QueryParam extends Text {
     /**
-     * Value.
+     * Get the data value name.
+     * @return The name
      */
-    private final BigDecimal value;
-
-    /**
-     * Ctor.
-     */
-    public DecimalValue() {
-        this(BigDecimal.ZERO);
-    }
+    String name();
 
     /**
-     * Ctor.
-     * @param value The value
+     * Set the PreparedStatement with data value.
+     * @param stmt The PreparedStatement
+     * @param index Value position in the PreparedStatement
+     * @throws Exception If fails
      */
-    public DecimalValue(final String value) {
-        this(new BigDecimal(value));
-    }
-
-    /**
-     * Ctor.
-     * @param value The value
-     */
-    public DecimalValue(final BigDecimal value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(BigDecimal.class);
-    }
-
-    @Override
-    public Object value(
-        final ResultSet rset,
-        final int index
-    ) throws Exception {
-        return rset.getBigDecimal(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
-    }
+    void prepare(PreparedStatement stmt, int index) throws Exception;
 }

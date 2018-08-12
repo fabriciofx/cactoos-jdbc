@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import com.github.fabriciofx.cactoos.jdbc.QueryParams;
+import com.github.fabriciofx.cactoos.jdbc.SmartQueryParams;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -48,27 +48,27 @@ public final class ParsedSql implements Text  {
     /**
      * Ctor.
      * @param sql SQL query
-     * @param vals SQL query parameters
+     * @param params SQL query parameters
      */
-    public ParsedSql(final String sql, final DataValue... vals) {
-        this(() -> sql, new SmartDataValues(vals));
+    public ParsedSql(final String sql, final QueryParam... params) {
+        this(() -> sql, new SmartQueryParams(params));
     }
 
     /**
      * Ctor.
      * @param sql SQL query
-     * @param vals SQL query parameters
+     * @param params SQL query parameters
      */
-    public ParsedSql(final Text sql, final DataValue... vals) {
-        this(sql, new SmartDataValues(vals));
+    public ParsedSql(final Text sql, final QueryParam... params) {
+        this(sql, new SmartQueryParams(params));
     }
 
     /**
      * Ctor.
      * @param sql SQL query
-     * @param vals SQL query parameters
+     * @param params SQL query parameters
      */
-    public ParsedSql(final Text sql, final DataValues vals) {
+    public ParsedSql(final Text sql, final QueryParams params) {
         this.sql = new StickyScalar<>(
             () -> {
                 final String str = sql.asString();
@@ -78,7 +78,7 @@ public final class ParsedSql implements Text  {
                 while (matcher.find()) {
                     fields.add(matcher.group().substring(1));
                 }
-                vals.check(fields);
+                params.check(fields);
                 return str.replaceAll(find.pattern(), "?");
             }
         );

@@ -27,9 +27,9 @@ import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -67,7 +67,7 @@ public final class InsertTest {
                             session,
                             new SimpleQuery(
                                 "INSERT INTO t01 (name) VALUES (:name)",
-                                new TextValue("name", "Yegor Bugayenko" )
+                                new TextParam("name", "Yegor Bugayenko" )
                             )
                         ),
                         Boolean.class
@@ -99,7 +99,7 @@ public final class InsertTest {
                             session,
                             new KeyedQuery(
                                 "INSERT INTO t02 (name) VALUES (:name)",
-                                new TextValue("name", "Jeff Malony" )
+                                new TextParam("name", "Jeff Malony" )
                             )
                         ),
                         Integer.class

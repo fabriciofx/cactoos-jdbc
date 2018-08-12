@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.cactoos.Text;
 
@@ -36,21 +35,7 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public interface DataValue extends Text {
-    /**
-     * Get the data value name.
-     * @return The name
-     */
-    String name();
-
-    /**
-     * Set the PreparedStatement with data value.
-     * @param stmt The PreparedStatement
-     * @param index Value position in the PreparedStatement
-     * @throws Exception If fails
-     */
-    void prepare(PreparedStatement stmt, int index) throws Exception;
-
     boolean match(Object value);
 
-    Object apply(ResultSet rset, int index) throws Exception;
+    Object value(ResultSet rset, int index) throws Exception;
 }

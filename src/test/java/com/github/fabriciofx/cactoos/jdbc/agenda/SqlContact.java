@@ -25,10 +25,10 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.UUID;
 
 /**
@@ -66,7 +66,7 @@ public final class SqlContact implements Contact {
                 this.session,
                 new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
-                    new TextValue("id", this.id.toString())
+                    new TextParam("id", this.id.toString())
                 )
             ),
             String.class
@@ -84,7 +84,7 @@ public final class SqlContact implements Contact {
             this.session,
             new SimpleQuery(
                 "DELETE FROM contact WHERE id = :id",
-                new TextValue("id", this.id.toString())
+                new TextParam("id", this.id.toString())
             )
         ).result();
     }
@@ -95,8 +95,8 @@ public final class SqlContact implements Contact {
             this.session,
             new SimpleQuery(
                 "UPDATE contact SET name = :name WHERE id = :id",
-                new TextValue("name", name),
-                new TextValue("id", this.id.toString())
+                new TextParam("name", name),
+                new TextParam("id", this.id.toString())
             )
         ).result();
     }

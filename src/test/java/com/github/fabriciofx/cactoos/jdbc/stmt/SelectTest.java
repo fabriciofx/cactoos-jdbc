@@ -25,15 +25,15 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
+import com.github.fabriciofx.cactoos.jdbc.SmartQueryParams;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
-import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import org.cactoos.text.JoinedText;
@@ -78,19 +78,19 @@ public final class SelectTest {
                             "(name, birthday, address, married, salary)",
                             "VALUES (:name, :birthday, :address, :married, :salary)"
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "John Wick" ),
-                            new DateValue("birthday", "1980-08-15" ),
-                            new TextValue("address", "Boulevard Street, 34" ),
-                            new BoolValue("married", false),
-                            new DecimalValue("salary", "13456.00" )
+                        new SmartQueryParams(
+                            new TextParam("name", "John Wick" ),
+                            new DateParam("birthday", "1980-08-15" ),
+                            new TextParam("address", "Boulevard Street, 34" ),
+                            new BoolParam("married", false),
+                            new DecimalParam("salary", "13456.00" )
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "Adam Park" ),
-                            new DateValue("birthday", "1985-07-09" ),
-                            new TextValue("address", "Sunset Place, 14" ),
-                            new BoolValue("married", true),
-                            new DecimalValue("salary", "12345.00" )
+                        new SmartQueryParams(
+                            new TextParam("name", "Adam Park" ),
+                            new DateParam("birthday", "1985-07-09" ),
+                            new TextParam("address", "Sunset Place, 14" ),
+                            new BoolParam("married", true),
+                            new DecimalParam("salary", "12345.00" )
                         )
                     )
                 ).result();
@@ -148,19 +148,19 @@ public final class SelectTest {
                             "(name, created_at, city, working, height)",
                             "VALUES (:name, :created_at, :city, :working, :height)"
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "Rob Pike" ),
-                            new DateValue("created_at", LocalDate.now()),
-                            new TextValue("city", "San Francisco" ),
-                            new BoolValue("working", true),
-                            new DecimalValue("height", "1.86" )
+                        new SmartQueryParams(
+                            new TextParam("name", "Rob Pike" ),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "San Francisco" ),
+                            new BoolParam("working", true),
+                            new DecimalParam("height", "1.86" )
                         ),
-                        new SmartDataValues(
-                            new TextValue("name", "Ana Pivot" ),
-                            new DateValue("created_at", LocalDate.now()),
-                            new TextValue("city", "Washington" ),
-                            new BoolValue("working", false),
-                            new DecimalValue("height", "1.62" )
+                        new SmartQueryParams(
+                            new TextParam("name", "Ana Pivot" ),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "Washington" ),
+                            new BoolParam("working", false),
+                            new DecimalParam("height", "1.62" )
                         )
                     )
                 ).result();

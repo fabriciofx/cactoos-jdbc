@@ -21,61 +21,70 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.time.LocalDate;
 
 /**
- * Decimal value.
+ * Date value.
  *
  * @since 0.1
  */
-public final class DecimalValue implements DataValue {
+public final class DateParam implements QueryParam {
+    /**
+     * Name.
+     */
+    private final String name;
+
     /**
      * Value.
      */
-    private final BigDecimal value;
+    private final LocalDate value;
 
     /**
      * Ctor.
      */
-    public DecimalValue() {
-        this(BigDecimal.ZERO);
+    public DateParam() {
+        this("today", LocalDate.now());
     }
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The value
      */
-    public DecimalValue(final String value) {
-        this(new BigDecimal(value));
+    public DateParam(final String name, final String value) {
+        this(name, LocalDate.parse(value));
     }
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The value
      */
-    public DecimalValue(final BigDecimal value) {
+    public DateParam(final String name, final LocalDate value) {
+        this.name = name;
         this.value = value;
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(BigDecimal.class);
+    public String name() {
+        return this.name;
     }
 
     @Override
-    public Object value(
-        final ResultSet rset,
+    public void prepare(
+        final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        return rset.getBigDecimal(index);
+        stmt.setDate(index, java.sql.Date.valueOf(this.value));
     }
 
     @Override
-    public String asString() throws Exception {
+    public String asString() throws IOException {
         return this.value.toString();
     }
 }

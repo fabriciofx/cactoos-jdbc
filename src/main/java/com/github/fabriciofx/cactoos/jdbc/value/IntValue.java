@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.math.BigInteger;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -35,11 +34,6 @@ import java.sql.ResultSet;
  */
 public final class IntValue implements DataValue {
     /**
-     * Name.
-     */
-    private final String name;
-
-    /**
      * Value.
      */
     private final Integer value;
@@ -48,30 +42,15 @@ public final class IntValue implements DataValue {
      * Ctor.
      */
     public IntValue() {
-        this("unknown", 0);
+        this(0);
     }
 
     /**
      * Ctor.
-     * @param name The name
      * @param value The value
      */
-    public IntValue(final String name, final Integer value) {
-        this.name = name;
+    public IntValue(final Integer value) {
         this.value = value;
-    }
-
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public void prepare(
-        final PreparedStatement stmt,
-        final int index
-    ) throws Exception {
-        stmt.setInt(index, this.value);
     }
 
     @Override
@@ -81,7 +60,7 @@ public final class IntValue implements DataValue {
     }
 
     @Override
-    public Object apply(
+    public Object value(
         final ResultSet rset,
         final int index
     ) throws Exception {

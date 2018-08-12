@@ -26,10 +26,10 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,7 +73,7 @@ public final class SqlContacts implements Contacts {
                 this.session,
                 new KeyedQuery(
                     "INSERT INTO contact (name) VALUES (:name)",
-                    new TextValue("name", name)
+                    new TextParam("name", name)
                 )
             ),
             UUID.class
@@ -92,7 +92,7 @@ public final class SqlContacts implements Contacts {
                         "SELECT id FROM contact WHERE name ILIKE",
                         "'%' || :name || '%'"
                     ),
-                    new TextValue("name", name)
+                    new TextParam("name", name)
                 )
             ),
             UUID.class

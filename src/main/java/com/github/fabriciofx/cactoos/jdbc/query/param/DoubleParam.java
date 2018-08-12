@@ -21,19 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
+
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
+import java.sql.PreparedStatement;
 
 /**
- * Script.
- *
- * <p>There is no thread-safety guarantee.
+ * Double value.
  *
  * @since 0.1
  */
-public interface Script<T> {
+public final class DoubleParam implements QueryParam {
     /**
-     * Execute it.
-     * @throws Exception If fails
+     * Name.
      */
-    void exec(T context) throws Exception;
+    private final String name;
+
+    /**
+     * Value.
+     */
+    private final Double value;
+
+    /**
+     * Ctor.
+     */
+    public DoubleParam() {
+        this("unknown", 0.0);
+    }
+
+    /**
+     * Ctor.
+     * @param name The name
+     * @param value The value
+     */
+    public DoubleParam(final String name, final Double value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    @Override
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
+        stmt.setDouble(index, this.value);
+    }
+
+    @Override
+    public String asString() throws Exception {
+        return this.value.toString();
+    }
 }

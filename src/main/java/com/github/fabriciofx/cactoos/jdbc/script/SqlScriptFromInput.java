@@ -23,9 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ import org.cactoos.text.TrimmedText;
  *
  * @since 0.1
  */
-public final class SqlScript implements Script<Session> {
+public final class SqlScriptFromInput implements SqlScript {
     /**
      * Input.
      */
@@ -49,7 +50,7 @@ public final class SqlScript implements Script<Session> {
      * Ctor.
      * @param npt Input to be used in the session
      */
-    public SqlScript(final Input npt) {
+    public SqlScriptFromInput(final Input npt) {
         this.input = npt;
     }
 
@@ -68,7 +69,7 @@ public final class SqlScript implements Script<Session> {
             }
             for (final Text sql : new SplitText(baos.toString("UTF-8"), ";")) {
                 new Update(
-                    session,
+                    new LoggedSession(session, "SqlScriptFromInput"),
                     new SimpleQuery(new TrimmedText(sql))
                 ).result();
             }

@@ -106,7 +106,7 @@ public final class RowsAsResultSet implements Rows {
                 final Object data = rset.getObject(idx);
                 fields.put(
                     name,
-                    this.values.value(data).apply(rset, idx)
+                    this.values.value(data).value(rset, idx)
                 );
             }
             this.rows.add(fields);
