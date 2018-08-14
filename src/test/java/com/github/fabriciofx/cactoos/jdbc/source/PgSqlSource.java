@@ -34,24 +34,25 @@ import org.cactoos.scalar.SolidScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
+import org.postgresql.ds.PGSimpleDataSource;
 
 /**
  * MySQL result source, for unit testing.
  *
  * @since 0.2
  */
-public final class MySqlSource implements DataSource {
+public final class PgSqlSource implements DataSource {
     /**
      * Origin DataSource.
      */
-    private final UncheckedScalar<MysqlDataSource> origin;
+    private final UncheckedScalar<PGSimpleDataSource> origin;
 
     /**
      * Ctor.
      * @param dbname Database name
      */
-    public MySqlSource(final String dbname) {
-        this("localhost", 3306, dbname);
+    public PgSqlSource(final String dbname) {
+        this("localhost", dbname);
     }
 
     /**
@@ -59,8 +60,8 @@ public final class MySqlSource implements DataSource {
      * @param hostname Server hostname or IPv4 Address
      * @param dbname Database name
      */
-    public MySqlSource(final String hostname, final String dbname) {
-        this(hostname, 3306, dbname);
+    public PgSqlSource(final String hostname, final String dbname) {
+        this(hostname, 5432, dbname);
     }
 
     /**
@@ -69,7 +70,7 @@ public final class MySqlSource implements DataSource {
      * @param port Server port
      * @param dbname Database name
      */
-    public MySqlSource(
+    public PgSqlSource(
         final String hostname,
         final int port,
         final String dbname
@@ -77,20 +78,16 @@ public final class MySqlSource implements DataSource {
         this.origin = new UncheckedScalar<>(
             new SolidScalar<>(
                 () -> {
-                    final MysqlDataSource mds = new MysqlDataSource();
-                    mds.setUrl(
+                    final PGSimpleDataSource pds = new PGSimpleDataSource();
+                    pds.setUrl(
                         new FormattedText(
-                            new JoinedText(
-                                "",
-                                "jdbc:mysql://%s:%d/%s?useSSL=false",
-                                "&useTimezone=true&serverTimezone=UTC"
-                            ),
+                            "jdbc:postgresql://%s:%d/%s",
                             hostname,
                             port,
                             dbname
                         ).asString()
                     );
-                    return mds;
+                    return pds;
                 }
             )
         );
