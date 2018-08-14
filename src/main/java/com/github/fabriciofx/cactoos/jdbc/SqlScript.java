@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 public interface SqlScript {
-    SqlScript NOP = context -> { };
+    SqlScript NOP = session -> { };
 
     void exec(Session session) throws Exception;
 }

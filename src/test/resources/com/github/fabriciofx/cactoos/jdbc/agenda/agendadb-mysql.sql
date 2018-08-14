@@ -13,18 +13,18 @@ CREATE TABLE phone (
   CONSTRAINT pk_phone_contact_seq PRIMARY KEY(seq, contact)
 );
 
--- MySQL doesn't allow use a function as default value of a field. So, we MUST
+-- MySQL doesn't allow use a function as default apply of a field. So, we MUST
 -- create a trigger to do it.
 DROP TRIGGER IF EXISTS tr_contact_id;
 
-DELIMITER \\
-CREATE TRIGGER `tg_contact_id`
+DELIMITER $$
+CREATE TRIGGER `tr_contact_id`
 BEFORE INSERT ON `contact` FOR EACH ROW
 BEGIN
   IF new.id IS NULL THEN
     SET new.id = UNHEX(REPLACE(UUID(), "-",""));
   END IF;
-END\\
+END $$
 DELIMITER ;
 
 INSERT INTO contact(name) VALUES ('Joseph Klimber');
