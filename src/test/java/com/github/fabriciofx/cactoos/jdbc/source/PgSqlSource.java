@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,7 +32,6 @@ import javax.sql.DataSource;
 import org.cactoos.scalar.SolidScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.JoinedText;
 import org.postgresql.ds.PGSimpleDataSource;
 
 /**
