@@ -23,12 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
-import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
+import com.github.fabriciofx.cactoos.jdbc.source.PgSqlSource;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
@@ -36,7 +36,7 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 import org.cactoos.text.RandomText;
 
-public final class MySqlServer implements Server {
+public final class PgSqlServer implements Server {
     private final UncheckedScalar<String> dbname;
     private final Session session;
     private final String host;
@@ -45,15 +45,15 @@ public final class MySqlServer implements Server {
     private final String password;
     private final SqlScript script;
 
-    public MySqlServer() {
+    public PgSqlServer() {
         this(SqlScript.NOP);
     }
 
-    public MySqlServer(final SqlScript scrpt) {
-        this("localhost", 3306, "root", "", scrpt);
+    public PgSqlServer(final SqlScript scrpt) {
+        this("localhost", 5432, "postgres", "postgres", scrpt);
     }
 
-    public MySqlServer(
+    public PgSqlServer(
         final String hst,
         final int prt,
         final String srnm,
@@ -71,7 +71,7 @@ public final class MySqlServer implements Server {
             )
         );
         this.session = new AuthSession(
-            new MySqlSource(hst, prt, ""),
+            new PgSqlSource(hst, prt, ""),
             srnm,
             psswrd
         );
@@ -90,33 +90,39 @@ public final class MySqlServer implements Server {
                 new FormattedText(
                     new JoinedText(
                         " ",
-                        "CREATE DATABASE IF NOT EXISTS %s CHARACTER",
-                        "SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+                        "CREATE DATABASE \"%s\" WITH OWNER \"%s\"",
+                        "ENCODING 'UTF8' TEMPLATE template0;",
+                        "CREATE EXTENSION IF NOT EXISTS \"pgcrypto\";"
                     ),
-                    this.dbname.value()
+                    this.dbname.value(),
+                    this.username
                 )
             )
         ).result();
+//        new Update(
+//            this.session,
+//            new SimpleQuery()
+//        ).result();
         this.script.exec(this.session());
     }
 
     @Override
     public void stop() throws Exception {
-//        new Update(
-//            this.session,
-//            new SimpleQuery(
-//                new FormattedText(
-//                    "DROP DATABASE IF EXISTS %s",
-//                    this.dbname.value()
-//                )
-//            )
-//        ).result();
+        new Update(
+            this.session,
+            new SimpleQuery(
+                new FormattedText(
+                    "DROP DATABASE IF EXISTS %s",
+                    this.dbname.value()
+                )
+            )
+        ).result();
     }
 
     @Override
     public Session session() {
         return new AuthSession(
-            new MySqlSource(
+            new PgSqlSource(
                 this.host,
                 this.port,
                 this.dbname.value()

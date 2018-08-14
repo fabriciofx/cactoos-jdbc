@@ -23,12 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
-import com.github.fabriciofx.cactoos.jdbc.MySqlSource;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
+import com.github.fabriciofx.cactoos.jdbc.source.MySqlSource;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
@@ -102,15 +102,15 @@ public final class MySqlServer implements Server {
 
     @Override
     public void stop() throws Exception {
-        new Update(
-            this.session,
-            new SimpleQuery(
-                new FormattedText(
-                    "DROP DATABASE IF EXISTS %s",
-                    this.dbname.value()
-                )
-            )
-        ).result();
+//        new Update(
+//            this.session,
+//            new SimpleQuery(
+//                new FormattedText(
+//                    "DROP DATABASE IF EXISTS %s",
+//                    this.dbname.value()
+//                )
+//            )
+//        ).result();
     }
 
     @Override
