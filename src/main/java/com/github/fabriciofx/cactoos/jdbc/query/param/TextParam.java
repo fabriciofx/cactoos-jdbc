@@ -44,13 +44,6 @@ public final class TextParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public TextParam() {
-        this("unknown", "undefined");
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

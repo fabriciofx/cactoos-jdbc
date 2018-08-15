@@ -46,13 +46,6 @@ public final class DateParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public DateParam() {
-        this("today", LocalDate.now());
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

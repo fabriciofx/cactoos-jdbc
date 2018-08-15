@@ -44,13 +44,6 @@ public final class AnyParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public AnyParam() {
-        this("unknown", new Object());
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

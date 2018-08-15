@@ -44,13 +44,6 @@ public final class IntParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public IntParam() {
-        this("unknown", 0);
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

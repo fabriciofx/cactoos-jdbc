@@ -44,13 +44,6 @@ public final class LongParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public LongParam() {
-        this("unknown", 0L);
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

@@ -44,13 +44,6 @@ public final class BoolParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public BoolParam() {
-        this("unknown", true);
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

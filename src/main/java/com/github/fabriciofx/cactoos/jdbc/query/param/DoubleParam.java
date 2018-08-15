@@ -44,13 +44,6 @@ public final class DoubleParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public DoubleParam() {
-        this("unknown", 0.0);
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */

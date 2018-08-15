@@ -45,13 +45,6 @@ public final class DecimalParam implements QueryParam {
 
     /**
      * Ctor.
-     */
-    public DecimalParam() {
-        this("unknown", BigDecimal.ZERO);
-    }
-
-    /**
-     * Ctor.
      * @param name The name
      * @param value The value
      */
