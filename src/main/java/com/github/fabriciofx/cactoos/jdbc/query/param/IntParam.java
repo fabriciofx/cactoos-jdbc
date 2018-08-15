@@ -45,7 +45,7 @@ public final class IntParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public IntParam(final String name, final Integer value) {
         this.name = name;

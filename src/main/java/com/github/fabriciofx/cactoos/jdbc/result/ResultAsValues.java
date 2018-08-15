@@ -43,14 +43,14 @@ public final class ResultAsValues<T> implements Scalar<List<T>> {
     private final Statement<Rows> statement;
 
     /**
-     * Type value to return.
+     * Type data to return.
      */
     private final Class<T> type;
 
     /**
      * Ctor.
      * @param stmt A statement that returns a Rows
-     * @param tpe Type value to return
+     * @param tpe Type data to return
      */
     public ResultAsValues(final Statement<Rows> stmt, final Class<T> tpe) {
         this.statement = stmt;

@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.util.List;
 
 /**
  * A set of Data Values.
@@ -42,5 +41,5 @@ public interface QueryParams extends Iterable<QueryParam> {
      */
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;
 
-    void check(List<String> fields) throws Exception;
+    boolean contains(String name);
 }

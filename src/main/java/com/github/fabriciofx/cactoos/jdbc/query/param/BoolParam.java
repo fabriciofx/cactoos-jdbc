@@ -45,7 +45,7 @@ public final class BoolParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public BoolParam(final String name, final Boolean value) {
         this.name = name;

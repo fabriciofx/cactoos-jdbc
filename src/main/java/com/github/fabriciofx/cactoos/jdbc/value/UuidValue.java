@@ -29,7 +29,7 @@ import java.sql.ResultSet;
 import java.util.UUID;
 
 /**
- * UUID value.
+ * UUID data.
  *
  * @since 0.2
  */
@@ -38,6 +38,13 @@ public final class UuidValue implements DataValue {
      * Value.
      */
     private final UUID value;
+
+    /**
+     * Ctor.
+     */
+    public UuidValue() {
+        this(UUID.randomUUID());
+    }
 
     /**
      * Ctor.
@@ -53,7 +60,7 @@ public final class UuidValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

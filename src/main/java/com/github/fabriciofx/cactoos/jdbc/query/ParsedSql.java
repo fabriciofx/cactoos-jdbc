@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.scalar.StickyScalar;
+import org.cactoos.text.FormattedText;
 
 /**
  * Parse named parameters in the SQL.
@@ -72,13 +73,22 @@ public final class ParsedSql implements Text  {
         this.sql = new StickyScalar<>(
             () -> {
                 final String str = sql.asString();
-                final List<String> fields = new LinkedList<>();
+                final List<String> names = new LinkedList<>();
                 final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
                 final Matcher matcher = find.matcher(str);
                 while (matcher.find()) {
-                    fields.add(matcher.group().substring(1));
+                    names.add(matcher.group().substring(1));
                 }
-                params.check(fields);
+                for (int idx = 0; idx < names.size(); ++idx) {
+                    if (!params.contains(names.get(idx))) {
+                        throw new IllegalArgumentException(
+                            new FormattedText(
+                                "SQL parameter #%d is wrong or out of order",
+                                idx + 1
+                            ).asString()
+                        );
+                    }
+                }
                 return str.replaceAll(find.pattern(), "?");
             }
         );

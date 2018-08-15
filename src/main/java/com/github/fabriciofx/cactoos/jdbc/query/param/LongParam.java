@@ -45,7 +45,7 @@ public final class LongParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public LongParam(final String name, final Long value) {
         this.name = name;

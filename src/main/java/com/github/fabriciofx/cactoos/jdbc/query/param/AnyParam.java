@@ -45,7 +45,7 @@ public final class AnyParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public AnyParam(final String name, final Object value) {
         this.name = name;

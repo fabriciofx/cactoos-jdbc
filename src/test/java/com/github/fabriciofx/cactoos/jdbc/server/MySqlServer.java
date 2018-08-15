@@ -103,7 +103,7 @@ public final class MySqlServer implements Server {
 //            new SimpleQuery(
 //                new FormattedText(
 //                    "DROP DATABASE IF EXISTS %s",
-//                    this.dbname.value()
+//                    this.dbname.data()
 //                )
 //            )
 //        ).result();

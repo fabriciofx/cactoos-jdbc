@@ -27,22 +27,22 @@ import java.sql.PreparedStatement;
 import org.cactoos.Text;
 
 /**
- * A named value.
+ * A named data.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of value
+ * @param <T> Type of data
  * @since 0.1
  */
 public interface QueryParam extends Text {
     /**
-     * Get the data value name.
+     * Get the data data name.
      * @return The name
      */
     String name();
 
     /**
-     * Set the PreparedStatement with data value.
+     * Set the PreparedStatement with data data.
      * @param stmt The PreparedStatement
      * @param index Value position in the PreparedStatement
      * @throws Exception If fails

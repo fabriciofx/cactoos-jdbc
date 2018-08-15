@@ -33,7 +33,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 public interface Statement<T> {
     /**
-     * Execute it and returns a single or set of value(s).
+     * Execute it and returns a single or set of data(s).
      * @return A Result of a type
      * @throws Exception If fails
      */

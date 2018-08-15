@@ -29,7 +29,7 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 
 /**
- * Date value.
+ * Date data.
  *
  * @since 0.1
  */
@@ -48,7 +48,7 @@ public final class DateValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DateValue(final String value) {
         this(LocalDate.parse(value));
@@ -56,7 +56,7 @@ public final class DateValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DateValue(final LocalDate value) {
         this.value = value;
@@ -68,7 +68,7 @@ public final class DateValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

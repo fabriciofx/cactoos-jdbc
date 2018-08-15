@@ -24,9 +24,18 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
-import java.util.Arrays;
+import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DateTimeValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
+import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
+import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
+import com.github.fabriciofx.cactoos.jdbc.value.LongValue;
+import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import com.github.fabriciofx.cactoos.jdbc.value.UuidValue;
 import java.util.Iterator;
 import java.util.List;
+import org.cactoos.list.ListOf;
 
 /**
  * Smart Data Values.
@@ -43,10 +52,27 @@ public final class SmartDataValues implements DataValues {
 
     /**
      * Ctor.
+     */
+    public SmartDataValues() {
+        this(
+            new TextValue(),
+            new IntValue(),
+            new DateTimeValue(),
+            new DateValue(),
+            new DecimalValue(),
+            new BoolValue(),
+            new LongValue(),
+            new DoubleValue(),
+            new UuidValue()
+        );
+    }
+
+    /**
+     * Ctor.
      * @param vals List of DataValue
      */
     public SmartDataValues(final DataValue... vals) {
-        this.values = Arrays.asList(vals);
+        this.values = new ListOf<>(vals);
     }
 
     @Override

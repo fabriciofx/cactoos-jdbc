@@ -26,10 +26,11 @@ package com.github.fabriciofx.cactoos.jdbc.value;
 import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * DateTime value.
+ * DateTime data.
  *
  * @since 0.1
  */
@@ -48,7 +49,7 @@ public final class DateTimeValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DateTimeValue(final LocalDateTime value) {
         this.value = value;
@@ -60,7 +61,7 @@ public final class DateTimeValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

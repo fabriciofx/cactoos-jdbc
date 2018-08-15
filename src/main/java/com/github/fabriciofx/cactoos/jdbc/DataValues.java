@@ -24,5 +24,5 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 public interface DataValues extends Iterable<DataValue> {
-    DataValue value(final Object data);
+    DataValue value(Object data);
 }

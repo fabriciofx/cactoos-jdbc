@@ -79,7 +79,7 @@ public final class LoggedPreparedStatement implements PreparedStatement {
     private final PreparedStatement origin;
 
     /**
-     * The name of source data.
+     * The name of source value.
      */
     private final String source;
 
@@ -459,7 +459,7 @@ public final class LoggedPreparedStatement implements PreparedStatement {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value and '%d' type.",
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' data and '%d' type.",
                     this.source,
                     this.id,
                     parameterIndex,

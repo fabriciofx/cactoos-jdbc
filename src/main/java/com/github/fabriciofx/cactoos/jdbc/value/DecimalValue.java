@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 
 /**
- * Decimal value.
+ * Decimal data.
  *
  * @since 0.1
  */
@@ -47,7 +47,7 @@ public final class DecimalValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DecimalValue(final String value) {
         this(new BigDecimal(value));
@@ -55,7 +55,7 @@ public final class DecimalValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DecimalValue(final BigDecimal value) {
         this.value = value;
@@ -67,7 +67,7 @@ public final class DecimalValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

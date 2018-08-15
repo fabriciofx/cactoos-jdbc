@@ -47,7 +47,7 @@ public final class DateParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public DateParam(final String name, final String value) {
         this(name, LocalDate.parse(value));
@@ -56,7 +56,7 @@ public final class DateParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public DateParam(final String name, final LocalDate value) {
         this.name = name;

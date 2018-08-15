@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import org.cactoos.Scalar;
 
 /**
- * Result as value.
+ * Result as data.
  *
  * @param <T> Type of the result
  * @since 0.1
@@ -39,7 +39,7 @@ public final class ResultAsValue<T> implements Scalar<T> {
     private final Statement<T> statement;
 
     /**
-     * Type value to return.
+     * Type data to return.
      */
     private final Class<T> type;
 

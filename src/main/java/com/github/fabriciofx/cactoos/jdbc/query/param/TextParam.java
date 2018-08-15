@@ -45,7 +45,7 @@ public final class TextParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public TextParam(final String name, final String value) {
         this.name = name;

@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.ResultSet;
 
 /**
- * Boolean value.
+ * Boolean data.
  *
  * @since 0.1
  */
@@ -46,7 +46,7 @@ public final class BoolValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public BoolValue(final Boolean value) {
         this.value = value;
@@ -58,7 +58,7 @@ public final class BoolValue implements DataValue {
     }
 
     @Override
-    public Boolean value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

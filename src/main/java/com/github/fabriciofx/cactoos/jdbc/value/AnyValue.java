@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.ResultSet;
 
 /**
- * Any value.
+ * Any data.
  *
  * @since 0.1
  */
@@ -46,7 +46,7 @@ public final class AnyValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public AnyValue(final Object value) {
         this.value = value;
@@ -58,7 +58,7 @@ public final class AnyValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

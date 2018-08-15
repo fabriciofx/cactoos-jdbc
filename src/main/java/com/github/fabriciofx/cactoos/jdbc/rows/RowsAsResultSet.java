@@ -70,19 +70,7 @@ public final class RowsAsResultSet implements Rows {
      * @throws Exception If fails
      */
     public RowsAsResultSet(final ResultSet rset) throws Exception {
-        this(
-            rset,
-            new SmartDataValues(
-                new TextValue(),
-                new IntValue(),
-                new DateTimeValue(),
-                new DateValue(),
-                new DecimalValue(),
-                new BoolValue(),
-                new LongValue(),
-                new DoubleValue()
-            )
-        );
+        this(rset, new SmartDataValues());
     }
 
     /**
@@ -106,7 +94,7 @@ public final class RowsAsResultSet implements Rows {
                 final Object data = rset.getObject(idx);
                 fields.put(
                     name,
-                    this.values.value(data).value(rset, idx)
+                    this.values.value(data).data(rset, idx)
                 );
             }
             this.rows.add(fields);

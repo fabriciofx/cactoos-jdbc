@@ -24,10 +24,11 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import org.cactoos.text.FormattedText;
+import java.util.Map;
+import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.UncheckedScalar;
 
 /**
  * Smart Query Params.
@@ -38,16 +39,26 @@ import org.cactoos.text.FormattedText;
  */
 public final class SmartQueryParams implements QueryParams {
     /**
-     * Values.
+     * Params.
      */
-    private final List<QueryParam> params;
+    private final UncheckedScalar<Map<String, QueryParam>> params;
 
     /**
      * Ctor.
-     * @param params List of DataValue
+     * @param prms List of DataValue
      */
-    public SmartQueryParams(final QueryParam... params) {
-        this.params = Arrays.asList(params);
+    public SmartQueryParams(final QueryParam... prms) {
+        this.params = new UncheckedScalar<>(
+            new StickyScalar<>(
+                () -> {
+                    final Map<String, QueryParam> map = new HashMap<>();
+                    for (final QueryParam param : prms) {
+                        map.put(param.name(), param);
+                    }
+                    return map;
+                }
+            )
+        );
     }
 
     @Override
@@ -55,7 +66,7 @@ public final class SmartQueryParams implements QueryParams {
         final PreparedStatement stmt
     ) throws Exception {
         int idx = 1;
-        for (final QueryParam param : this.params) {
+        for (final QueryParam param : this.params.value().values()) {
             param.prepare(stmt, idx);
             ++idx;
         }
@@ -63,23 +74,12 @@ public final class SmartQueryParams implements QueryParams {
     }
 
     @Override
-    public void check(final List<String> fields) throws Exception {
-        int idx = 0;
-        for (final QueryParam param : this.params) {
-            if (!param.name().equals(fields.get(idx))) {
-                throw new IllegalArgumentException(
-                    new FormattedText(
-                        "SQL parameter #%d is wrong or out of order",
-                        idx + 1
-                    ).asString()
-                );
-            }
-            ++idx;
-        }
+    public boolean contains(final String name) {
+        return this.params.value().keySet().contains(name);
     }
 
     @Override
     public Iterator<QueryParam> iterator() {
-        return this.params.iterator();
+        return this.params.value().values().iterator();
     }
 }

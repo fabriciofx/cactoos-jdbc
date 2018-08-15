@@ -45,7 +45,7 @@ public final class DoubleParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public DoubleParam(final String name, final Double value) {
         this.name = name;

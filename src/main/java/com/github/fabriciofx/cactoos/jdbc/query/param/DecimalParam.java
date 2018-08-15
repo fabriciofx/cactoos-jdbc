@@ -46,7 +46,7 @@ public final class DecimalParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public DecimalParam(final String name, final String value) {
         this(name, new BigDecimal(value));
@@ -55,7 +55,7 @@ public final class DecimalParam implements QueryParam {
     /**
      * Ctor.
      * @param name The name
-     * @param value The value
+     * @param value The data
      */
     public DecimalParam(final String name, final BigDecimal value) {
         this.name = name;

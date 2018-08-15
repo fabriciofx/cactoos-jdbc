@@ -28,7 +28,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 
 /**
- * Integer value.
+ * Integer data.
  *
  * @since 0.1
  */
@@ -47,7 +47,7 @@ public final class IntValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public IntValue(final Integer value) {
         this.value = value;
@@ -60,7 +60,7 @@ public final class IntValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

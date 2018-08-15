@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.ResultSet;
 
 /**
- * Double value.
+ * Double data.
  *
  * @since 0.1
  */
@@ -46,7 +46,7 @@ public final class DoubleValue implements DataValue {
 
     /**
      * Ctor.
-     * @param value The value
+     * @param value The data
      */
     public DoubleValue(final Double value) {
         this.value = value;
@@ -58,7 +58,7 @@ public final class DoubleValue implements DataValue {
     }
 
     @Override
-    public Object value(
+    public Object data(
         final ResultSet rset,
         final int index
     ) throws Exception {

@@ -27,15 +27,14 @@ import java.sql.ResultSet;
 import org.cactoos.Text;
 
 /**
- * A named value.
+ * A data value.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of value
  * @since 0.1
  */
 public interface DataValue extends Text {
     boolean match(Object value);
 
-    Object value(ResultSet rset, int index) throws Exception;
+    Object data(ResultSet rset, int index) throws Exception;
 }
