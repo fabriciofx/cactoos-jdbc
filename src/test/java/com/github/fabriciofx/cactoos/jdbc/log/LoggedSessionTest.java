@@ -23,11 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.log;
 
-import com.github.fabriciofx.cactoos.jdbc.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
+import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
