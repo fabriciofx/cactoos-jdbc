@@ -27,9 +27,9 @@ import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.sql.PreparedStatement;
 
 /**
- * Long value.
+ * Long param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class LongParam implements QueryParam {
     /**

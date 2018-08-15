@@ -29,9 +29,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * DateTime value.
+ * DateTime param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class DateTimeParam implements QueryParam {
     /**

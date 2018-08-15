@@ -28,9 +28,9 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 
 /**
- * Decimal value.
+ * Decimal param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class DecimalParam implements QueryParam {
     /**

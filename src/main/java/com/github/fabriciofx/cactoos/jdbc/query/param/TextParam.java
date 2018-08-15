@@ -27,9 +27,9 @@ import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.sql.PreparedStatement;
 
 /**
- * String value.
+ * String param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class TextParam implements QueryParam {
     /**

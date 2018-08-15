@@ -29,9 +29,9 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 
 /**
- * Date value.
+ * Date param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class DateParam implements QueryParam {
     /**

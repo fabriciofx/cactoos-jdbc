@@ -27,9 +27,9 @@ import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.sql.PreparedStatement;
 
 /**
- * Boolean value.
+ * Boolean param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class BoolParam implements QueryParam {
     /**

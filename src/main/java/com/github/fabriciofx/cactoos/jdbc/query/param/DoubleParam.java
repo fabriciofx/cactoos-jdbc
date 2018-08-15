@@ -27,9 +27,9 @@ import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.sql.PreparedStatement;
 
 /**
- * Double value.
+ * Double param.
  *
- * @since 0.1
+ * @since 0.2
  */
 public final class DoubleParam implements QueryParam {
     /**
