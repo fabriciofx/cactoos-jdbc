@@ -34,6 +34,8 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import org.cactoos.text.JoinedText;
@@ -56,7 +58,12 @@ public final class SelectTest {
     @Ignore
     @Test
     public void select() throws Exception {
-        try (final Servers servers = new Servers()) {
+        try (
+            final Servers servers = new Servers(
+                new H2Server(),
+                new MySqlServer()
+            )
+        ) {
             for (final Session session : servers.sessions()) {
                 new Update(
                     session,
@@ -80,17 +87,17 @@ public final class SelectTest {
                         ),
                         new SmartQueryParams(
                             new TextParam("name", "John Wick" ),
-                            new DateParam("birthday", "1980-08-15" ),
-                            new TextParam("address", "Boulevard Street, 34" ),
+                            new DateParam("birthday", "1980-08-15"),
+                            new TextParam("address", "Boulevard Street, 34"),
                             new BoolParam("married", false),
-                            new DecimalParam("salary", "13456.00" )
+                            new DecimalParam("salary", "13456.00")
                         ),
                         new SmartQueryParams(
-                            new TextParam("name", "Adam Park" ),
-                            new DateParam("birthday", "1985-07-09" ),
-                            new TextParam("address", "Sunset Place, 14" ),
+                            new TextParam("name", "Adam Park"),
+                            new DateParam("birthday", "1985-07-09"),
+                            new TextParam("address", "Sunset Place, 14"),
                             new BoolParam("married", true),
-                            new DecimalParam("salary", "12345.00" )
+                            new DecimalParam("salary", "12345.00")
                         )
                     )
                 ).result();
@@ -126,7 +133,12 @@ public final class SelectTest {
 
     @Test
     public void any() throws Exception {
-        try (final Servers servers = new Servers()) {
+        try (
+            final Servers servers = new Servers(
+                new H2Server(),
+                new MySqlServer()
+            )
+        ) {
             for (final Session session : servers.sessions()) {
                 new Update(
                     session,
@@ -149,18 +161,18 @@ public final class SelectTest {
                             "VALUES (:name, :created_at, :city, :working, :height)"
                         ),
                         new SmartQueryParams(
-                            new TextParam("name", "Rob Pike" ),
+                            new TextParam("name", "Rob Pike"),
                             new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "San Francisco" ),
+                            new TextParam("city", "San Francisco"),
                             new BoolParam("working", true),
-                            new DecimalParam("height", "1.86" )
+                            new DecimalParam("height", "1.86")
                         ),
                         new SmartQueryParams(
-                            new TextParam("name", "Ana Pivot" ),
+                            new TextParam("name", "Ana Pivot"),
                             new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "Washington" ),
+                            new TextParam("city", "Washington"),
                             new BoolParam("working", false),
-                            new DecimalParam("height", "1.62" )
+                            new DecimalParam("height", "1.62")
                         )
                     )
                 ).result();
@@ -175,7 +187,7 @@ public final class SelectTest {
                         ),
                         String.class
                     ).value().get(0),
-                    Matchers.equalTo("Rob Pike" )
+                    Matchers.equalTo("Rob Pike")
                 );
             }
         }

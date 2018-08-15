@@ -56,7 +56,10 @@ public final class UuidValue implements DataValue {
 
     @Override
     public boolean match(final Object value) {
-        return value instanceof byte[] && ((byte[]) value).length == 16;
+        return byte[].class.equals(value.getClass()) &&
+            byte[].class.cast(value).length == 16 &&
+            UUID.class.cast(value).variant() == 2 &&
+            UUID.class.cast(value).version() == 4;
     }
 
     @Override

@@ -30,6 +30,8 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -48,7 +50,12 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
-        try (final Servers servers = new Servers()) {
+        try (
+            final Servers servers = new Servers(
+                new H2Server(),
+                new MySqlServer()
+            )
+        ) {
             for (final Session session : servers.sessions()) {
                 new Update(
                     session,
@@ -67,7 +74,7 @@ public final class InsertTest {
                             session,
                             new SimpleQuery(
                                 "INSERT INTO t01 (name) VALUES (:name)",
-                                new TextParam("name", "Yegor Bugayenko" )
+                                new TextParam("name", "Yegor Bugayenko")
                             )
                         ),
                         Boolean.class

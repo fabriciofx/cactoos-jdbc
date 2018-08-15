@@ -28,6 +28,8 @@ import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
 import com.github.fabriciofx.cactoos.jdbc.source.MySqlSource;
 import java.net.URL;
@@ -50,7 +52,12 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class UpdateTest {
     @Test
     public void createTable() throws Exception {
-        try (final Servers servers = new Servers()) {
+        try (
+            final Servers servers = new Servers(
+                new H2Server(),
+                new MySqlServer()
+            )
+        ) {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
                     "Can't create a table",

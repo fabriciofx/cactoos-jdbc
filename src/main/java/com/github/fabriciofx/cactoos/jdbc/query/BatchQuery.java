@@ -50,20 +50,20 @@ public final class BatchQuery implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param params A list of SQL query parameters
+     * @param prms A list of SQL query parameters
      */
-    public BatchQuery(final String sql, final QueryParams... params) {
-        this(() -> sql, params);
+    public BatchQuery(final String sql, final QueryParams... prms) {
+        this(() -> sql, prms);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param params A list of SQL query parameters
+     * @param prms A list of SQL query parameters
      */
-    public BatchQuery(final Text sql, final QueryParams... params) {
-        this.sql = new ParsedSql(sql, params[0]);
-        this.params = new ListOf<>(params);
+    public BatchQuery(final Text sql, final QueryParams... prms) {
+        this.sql = new ParsedSql(sql, prms[0]);
+        this.params = new ListOf<>(prms);
     }
 
     @Override

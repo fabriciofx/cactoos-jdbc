@@ -50,20 +50,20 @@ public final class KeyedQuery implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param params SQL query parameters
+     * @param prms SQL query parameters
      */
-    public KeyedQuery(final String sql, final QueryParam... params) {
-        this(() -> sql, params);
+    public KeyedQuery(final String sql, final QueryParam... prms) {
+        this(() -> sql, prms);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param params SQL query parameters
+     * @param prms SQL query parameters
      */
-    public KeyedQuery(final Text sql, final QueryParam... params) {
-        this.sql = new ParsedSql(sql, params);
-        this.params = new SmartQueryParams(params);
+    public KeyedQuery(final Text sql, final QueryParam... prms) {
+        this.sql = new ParsedSql(sql, prms);
+        this.params = new SmartQueryParams(prms);
     }
 
     @Override

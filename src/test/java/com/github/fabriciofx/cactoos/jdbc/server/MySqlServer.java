@@ -35,7 +35,6 @@ import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
-import org.cactoos.text.RandomText;
 
 public final class MySqlServer implements Server {
     private final UncheckedScalar<String> dbname;
@@ -98,15 +97,15 @@ public final class MySqlServer implements Server {
 
     @Override
     public void stop() throws Exception {
-//        new Update(
-//            this.session,
-//            new SimpleQuery(
-//                new FormattedText(
-//                    "DROP DATABASE IF EXISTS %s",
-//                    this.dbname.data()
-//                )
-//            )
-//        ).result();
+        new Update(
+            this.session,
+            new SimpleQuery(
+                new FormattedText(
+                    "DROP DATABASE IF EXISTS %s",
+                    this.dbname.value()
+                )
+            )
+        ).result();
     }
 
     @Override
