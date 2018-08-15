@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
+import com.github.fabriciofx.cactoos.jdbc.RandomDatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
@@ -62,12 +63,7 @@ public final class PgSqlServer implements Server {
     ) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(
-                () -> new RandomText(
-                    5,
-                    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-                    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-                    'y', 'z'
-                ).asString()
+                () -> new RandomDatabaseName().asString()
             )
         );
         this.session = new AuthSession(

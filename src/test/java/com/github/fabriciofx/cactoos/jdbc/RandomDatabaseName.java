@@ -21,47 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.server;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.RandomDatabaseName;
-import com.github.fabriciofx.cactoos.jdbc.Server;
-import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
-import org.cactoos.scalar.StickyScalar;
-import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.Text;
+import org.cactoos.text.RandomText;
 
-public final class H2Server implements Server {
-    private final UncheckedScalar<String> dbname;
-    private final SqlScript script;
+public final class RandomDatabaseName implements Text {
+    private final Text name;
 
-    public H2Server() {
-        this(SqlScript.NOP);
-    }
-
-    public H2Server(final SqlScript scrpt) {
-        this.dbname = new UncheckedScalar<>(
-            new StickyScalar<>(
-                () -> new RandomDatabaseName().asString()
+    public RandomDatabaseName() {
+        this(
+            new RandomText(
+                5,
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
             )
         );
-        this.script = scrpt;
+    }
+
+    public RandomDatabaseName(final Text txt) {
+        this.name = txt;
     }
 
     @Override
-    public void start() throws Exception {
-        this.script.exec(this.session());
-    }
-
-    @Override
-    public void stop() throws Exception {
-    }
-
-    @Override
-    public Session session() {
-        return new NoAuthSession(
-            new H2Source(this.dbname.value())
-        );
+    public String asString() throws Exception {
+        return this.name.asString();
     }
 }
