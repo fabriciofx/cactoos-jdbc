@@ -21,19 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.query.param;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.nio.ByteBuffer;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.util.UUID;
 
 /**
- * UUID value.
+ * UUID param.
  *
  * @since 0.2
  */
-public final class UuidValue implements DataValue {
+public final class UuidParam implements QueryParam {
+    /**
+     * Name.
+     */
+    private final String name;
+
     /**
      * Value.
      */
@@ -41,24 +46,28 @@ public final class UuidValue implements DataValue {
 
     /**
      * Ctor.
+     * @param name The name
      * @param value The apply
      */
-    public UuidValue(final UUID value) {
+    public UuidParam(final String name, final UUID value) {
+        this.name = name;
         this.value = value;
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value instanceof byte[] && ((byte[]) value).length == 16;
+    public String name() {
+        return this.name;
     }
 
     @Override
-    public Object value(
-        final ResultSet rset,
+    public void prepare(
+        final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        final ByteBuffer bbuf = ByteBuffer.wrap(rset.getBytes(index));
-        return new UUID(bbuf.getLong(), bbuf.getLong());
+        final ByteBuffer bbuf = ByteBuffer.wrap(new byte[16]);
+        bbuf.putLong(this.value.getMostSignificantBits());
+        bbuf.putLong(this.value.getLeastSignificantBits());
+        stmt.setBytes(index, bbuf.array());
     }
 
     @Override
