@@ -21,58 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.nio.ByteBuffer;
 import java.sql.ResultSet;
 import java.util.UUID;
 
 /**
- * UUID data.
+ * UUID type.
  *
  * @since 0.2
  */
-public final class UuidValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final UUID value;
-
+public final class UuidType implements DataType<UUID> {
     /**
      * Ctor.
      */
-    public UuidValue() {
-        this(UUID.randomUUID());
-    }
-
-    /**
-     * Ctor.
-     * @param value The apply
-     */
-    public UuidValue(final UUID value) {
-        this.value = value;
+    public UuidType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return byte[].class.equals(value.getClass()) &&
-            byte[].class.cast(value).length == 16 &&
-            UUID.class.cast(value).variant() == 2 &&
-            UUID.class.cast(value).version() == 4;
+    public boolean match(final Object data) {
+        return byte[].class.equals(data.getClass()) &&
+            byte[].class.cast(data).length == 16 &&
+            UUID.class.cast(data).variant() == 2 &&
+            UUID.class.cast(data).version() == 4;
     }
 
     @Override
-    public Object data(
+    public UUID data(
         final ResultSet rset,
         final int index
     ) throws Exception {
         final ByteBuffer bbuf = ByteBuffer.wrap(rset.getBytes(index));
         return new UUID(bbuf.getLong(), bbuf.getLong());
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
     }
 }

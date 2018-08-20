@@ -21,40 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
 
 /**
- * String data.
+ * Any type.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class TextValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final String value;
-
+public final class AnyType implements DataType<Object> {
     /**
      * Ctor.
      */
-    public TextValue() {
-        this("undefined");
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public TextValue(final String value) {
-        this.value = value;
+    public AnyType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(String.class);
+    public boolean match(final Object data) {
+        return true;
     }
 
     @Override
@@ -62,11 +48,6 @@ public final class TextValue implements DataValue {
         final ResultSet rset,
         final int index
     ) throws Exception {
-        return rset.getString(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value;
+        return rset.getObject(index);
     }
 }

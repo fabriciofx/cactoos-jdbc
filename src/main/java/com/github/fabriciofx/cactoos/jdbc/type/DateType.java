@@ -21,8 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-public interface DataValues extends Iterable<DataValue> {
-    DataValue value(Object data);
+import com.github.fabriciofx.cactoos.jdbc.DataType;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+
+/**
+ * Date type.
+ *
+ * @since 0.2
+ */
+public final class DateType implements DataType<LocalDate> {
+    /**
+     * Ctor.
+     */
+    public DateType() {
+    }
+
+    @Override
+    public boolean match(final Object data) {
+        return java.sql.Date.class.equals(data.getClass());
+    }
+
+    @Override
+    public LocalDate data(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getDate(index).toLocalDate();
+    }
 }

@@ -21,62 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.io.IOException;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
+import java.math.BigInteger;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 
 /**
- * Date data.
+ * Integer type.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class DateValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final LocalDate value;
-
+public final class IntType implements DataType<Integer> {
     /**
      * Ctor.
      */
-    public DateValue() {
-        this(LocalDate.now());
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public DateValue(final String value) {
-        this(LocalDate.parse(value));
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public DateValue(final LocalDate value) {
-        this.value = value;
+    public IntType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(java.sql.Date.class);
+    public boolean match(final Object data) {
+        return Integer.class.equals(data.getClass()) ||
+            BigInteger.class.equals(data.getClass());
     }
 
     @Override
-    public Object data(
+    public Integer data(
         final ResultSet rset,
         final int index
     ) throws Exception {
-        return rset.getDate(index).toLocalDate();
-    }
-
-    @Override
-    public String asString() throws IOException {
-        return this.value.toString();
+        return rset.getInt(index);
     }
 }

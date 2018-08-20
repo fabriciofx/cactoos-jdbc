@@ -21,54 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
-import java.math.BigInteger;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
 
 /**
- * Integer data.
+ * Boolean type.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class IntValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final Integer value;
-
+public final class BoolType implements DataType<Boolean> {
     /**
      * Ctor.
      */
-    public IntValue() {
-        this(0);
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public IntValue(final Integer value) {
-        this.value = value;
+    public BoolType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(Integer.class) ||
-            value.getClass().equals(BigInteger.class);
+    public boolean match(final Object data) {
+        return Boolean.class.equals(data.getClass());
     }
 
     @Override
-    public Object data(
+    public Boolean data(
         final ResultSet rset,
         final int index
     ) throws Exception {
-        return rset.getInt(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+        return rset.getBoolean(index);
     }
 }

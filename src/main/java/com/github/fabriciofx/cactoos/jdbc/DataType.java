@@ -21,55 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-/**
- * DateTime data.
- *
- * @since 0.1
- */
-public final class DateTimeValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final LocalDateTime value;
+public interface DataType<T> {
+    boolean match(Object data);
 
-    /**
-     * Ctor.
-     */
-    public DateTimeValue() {
-        this(LocalDateTime.now());
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public DateTimeValue(final LocalDateTime value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(Timestamp.class);
-    }
-
-    @Override
-    public Object data(
-        final ResultSet rset,
-        final int index
-    ) throws Exception {
-        return rset.getTimestamp(index).toLocalDateTime();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
-    }
+    T data(ResultSet rset, int index) throws Exception;
 }

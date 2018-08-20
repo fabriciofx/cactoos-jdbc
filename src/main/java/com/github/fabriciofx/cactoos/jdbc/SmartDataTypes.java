@@ -23,62 +23,62 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.value.AnyValue;
-import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateTimeValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
-import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
-import com.github.fabriciofx.cactoos.jdbc.value.LongValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
-import com.github.fabriciofx.cactoos.jdbc.value.UuidValue;
+import com.github.fabriciofx.cactoos.jdbc.type.AnyType;
+import com.github.fabriciofx.cactoos.jdbc.type.BoolType;
+import com.github.fabriciofx.cactoos.jdbc.type.DateTimeType;
+import com.github.fabriciofx.cactoos.jdbc.type.DateType;
+import com.github.fabriciofx.cactoos.jdbc.type.DecimalType;
+import com.github.fabriciofx.cactoos.jdbc.type.DoubleType;
+import com.github.fabriciofx.cactoos.jdbc.type.IntType;
+import com.github.fabriciofx.cactoos.jdbc.type.LongType;
+import com.github.fabriciofx.cactoos.jdbc.type.TextType;
+import com.github.fabriciofx.cactoos.jdbc.type.UuidType;
 import java.util.Iterator;
 import java.util.List;
 import org.cactoos.list.ListOf;
 
 /**
- * Smart Data Values.
+ * Smart Data Types.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class SmartDataValues implements DataValues {
+public final class SmartDataTypes implements DataTypes {
     /**
-     * Values.
+     * Types.
      */
-    private final List<DataValue> values;
+    private final List<DataType<?>> types;
 
     /**
      * Ctor.
      */
-    public SmartDataValues() {
+    public SmartDataTypes() {
         this(
-            new TextValue(),
-            new IntValue(),
-            new DateTimeValue(),
-            new DateValue(),
-            new DecimalValue(),
-            new BoolValue(),
-            new LongValue(),
-            new DoubleValue(),
-            new UuidValue()
+            new UuidType(),
+            new TextType(),
+            new IntType(),
+            new DateTimeType(),
+            new DateType(),
+            new DecimalType(),
+            new BoolType(),
+            new LongType(),
+            new DoubleType()
         );
     }
 
     /**
      * Ctor.
-     * @param vals List of DataValue
+     * @param vals List of DataType
      */
-    public SmartDataValues(final DataValue... vals) {
-        this.values = new ListOf<>(vals);
+    public SmartDataTypes(final DataType<?>... vals) {
+        this.types = new ListOf<>(vals);
     }
 
     @Override
-    public DataValue value(final Object data) {
-        DataValue result = new AnyValue();
-        for (final DataValue val : this.values) {
+    public DataType<?> type(final Object data) {
+        DataType<?> result = new AnyType();
+        for (final DataType<?> val : this.types) {
             if (val.match(data)) {
                 result = val;
                 break;
@@ -88,7 +88,7 @@ public final class SmartDataValues implements DataValues {
     }
 
     @Override
-    public Iterator<DataValue> iterator() {
-        return this.values.iterator();
+    public Iterator<DataType<?>> iterator() {
+        return this.types.iterator();
     }
 }

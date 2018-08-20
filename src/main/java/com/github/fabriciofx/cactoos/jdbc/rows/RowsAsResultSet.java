@@ -23,17 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.rows;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValues;
+import com.github.fabriciofx.cactoos.jdbc.DataTypes;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
-import com.github.fabriciofx.cactoos.jdbc.SmartDataValues;
-import com.github.fabriciofx.cactoos.jdbc.value.BoolValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateTimeValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DateValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DecimalValue;
-import com.github.fabriciofx.cactoos.jdbc.value.DoubleValue;
-import com.github.fabriciofx.cactoos.jdbc.value.IntValue;
-import com.github.fabriciofx.cactoos.jdbc.value.LongValue;
-import com.github.fabriciofx.cactoos.jdbc.value.TextValue;
+import com.github.fabriciofx.cactoos.jdbc.SmartDataTypes;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Iterator;
@@ -60,9 +52,9 @@ public final class RowsAsResultSet implements Rows {
     private final List<Map<String, Object>> rows;
 
     /**
-     * Data Values.
+     * Data Types.
      */
-    private final DataValues values;
+    private final DataTypes types;
 
     /**
      * Ctor.
@@ -70,7 +62,7 @@ public final class RowsAsResultSet implements Rows {
      * @throws Exception If fails
      */
     public RowsAsResultSet(final ResultSet rset) throws Exception {
-        this(rset, new SmartDataValues());
+        this(rset, new SmartDataTypes());
     }
 
     /**
@@ -81,9 +73,9 @@ public final class RowsAsResultSet implements Rows {
      */
     public RowsAsResultSet(
         final ResultSet rset,
-        final DataValues values
+        final DataTypes values
     ) throws Exception {
-        this.values = values;
+        this.types = values;
         this.rows = new LinkedList<>();
         final ResultSetMetaData rsmd = rset.getMetaData();
         final int cols = rsmd.getColumnCount();
@@ -91,10 +83,10 @@ public final class RowsAsResultSet implements Rows {
             final Map<String, Object> fields = new LinkedHashMap<>();
             for (int idx = 1; idx <= cols; ++idx) {
                 final String name = rsmd.getColumnName(idx).toLowerCase();
-                final Object data = rset.getObject(idx);
+                final Object raw = rset.getObject(idx);
                 fields.put(
                     name,
-                    this.values.value(data).data(rset, idx)
+                    this.types.type(raw).data(rset, idx)
                 );
             }
             this.rows.add(fields);

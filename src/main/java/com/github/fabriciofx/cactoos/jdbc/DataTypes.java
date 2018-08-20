@@ -23,18 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.ResultSet;
-import org.cactoos.Text;
-
-/**
- * A data value.
- *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
- */
-public interface DataValue extends Text {
-    boolean match(Object value);
-
-    Object data(ResultSet rset, int index) throws Exception;
+public interface DataTypes extends Iterable<DataType<?>>{
+    DataType<?> type(Object data);
 }

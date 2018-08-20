@@ -21,10 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.type;
+
+import com.github.fabriciofx.cactoos.jdbc.DataType;
+import java.sql.ResultSet;
 
 /**
- * Data Value.
+ * Long type.
  *
- * @since 0.1
+ * @since 0.2
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+public final class LongType implements DataType<Long> {
+    /**
+     * Ctor.
+     */
+    public LongType() {
+    }
+
+    @Override
+    public boolean match(final Object data) {
+        return Long.class.equals(data.getClass());
+    }
+
+    @Override
+    public Long data(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getLong(index);
+    }
+}

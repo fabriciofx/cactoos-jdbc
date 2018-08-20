@@ -21,52 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
- * Long data.
+ * DateTime type.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class LongValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final Long value;
-
+public final class DateTimeType implements DataType<LocalDateTime> {
     /**
      * Ctor.
      */
-    public LongValue() {
-        this(0L);
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public LongValue(final Long value) {
-        this.value = value;
+    public DateTimeType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(Long.class);
+    public boolean match(final Object data) {
+        return Timestamp.class.equals(data.getClass());
     }
 
     @Override
-    public Object data(
+    public LocalDateTime data(
         final ResultSet rset,
         final int index
     ) throws Exception {
-        return rset.getLong(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
+        return rset.getTimestamp(index).toLocalDateTime();
     }
 }

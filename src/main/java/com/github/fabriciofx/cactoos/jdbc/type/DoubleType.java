@@ -21,52 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.value;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.DataValue;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
 
 /**
- * Double data.
+ * Double type.
  *
- * @since 0.1
+ * @since 0.2
  */
-public final class DoubleValue implements DataValue {
-    /**
-     * Value.
-     */
-    private final Double value;
-
+public final class DoubleType implements DataType<Double> {
     /**
      * Ctor.
      */
-    public DoubleValue() {
-        this(0.0);
-    }
-
-    /**
-     * Ctor.
-     * @param value The data
-     */
-    public DoubleValue(final Double value) {
-        this.value = value;
+    public DoubleType() {
     }
 
     @Override
-    public boolean match(final Object value) {
-        return value.getClass().equals(Double.class);
+    public boolean match(final Object data) {
+        return Double.class.equals(data.getClass());
     }
 
     @Override
-    public Object data(
+    public Double data(
         final ResultSet rset,
         final int index
     ) throws Exception {
         return rset.getDouble(index);
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.value.toString();
     }
 }
