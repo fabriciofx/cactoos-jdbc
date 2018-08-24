@@ -29,9 +29,9 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.source.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.source.MysqlSource;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +55,7 @@ public final class UpdateTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MySqlServer()
+                new MysqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -83,7 +83,7 @@ public final class UpdateTest {
     @Test
     public void longQuery() throws Exception {
         final Session session = new AuthSession(
-            new MySqlSource("localhost", 3306, ""),
+            new MysqlSource("localhost", 3306, ""),
             "root",
             ""
         );

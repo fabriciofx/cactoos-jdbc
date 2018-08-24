@@ -35,6 +35,7 @@ import com.github.fabriciofx.cactoos.jdbc.type.TextType;
 import com.github.fabriciofx.cactoos.jdbc.type.UuidType;
 import java.util.Iterator;
 import java.util.List;
+import org.cactoos.list.Joined;
 import org.cactoos.list.ListOf;
 
 /**
@@ -54,33 +55,44 @@ public final class SmartDataTypes implements DataTypes {
      * Ctor.
      */
     public SmartDataTypes() {
-        this(
-            new UuidType(),
-            new TextType(),
-            new IntType(),
-            new DateTimeType(),
-            new DateType(),
-            new DecimalType(),
-            new BoolType(),
-            new LongType(),
-            new DoubleType()
+        this(new ListOf<>());
+    }
+
+    /**
+     * Ctor.
+     * @param tps List of DataType
+     */
+    public SmartDataTypes(final DataType<?>... tps) {
+        this.types = new Joined<DataType<?>>(
+            new ListOf<>(
+                new UuidType(),
+                new TextType(),
+                new IntType(),
+                new DateTimeType(),
+                new DateType(),
+                new DecimalType(),
+                new BoolType(),
+                new LongType(),
+                new DoubleType()
+            ),
+            new ListOf<>(tps)
         );
     }
 
     /**
      * Ctor.
-     * @param vals List of DataType
+     * @param tps List of DataType
      */
-    public SmartDataTypes(final DataType<?>... vals) {
-        this.types = new ListOf<>(vals);
+    public SmartDataTypes(final Iterable<DataType<?>> tps) {
+        this.types = new ListOf<>(tps);
     }
 
     @Override
     public DataType<?> type(final Object data) {
         DataType<?> result = new AnyType();
-        for (final DataType<?> val : this.types) {
-            if (val.match(data)) {
-                result = val;
+        for (final DataType<?> type : this.types) {
+            if (type.match(data)) {
+                result = type;
                 break;
             }
         }

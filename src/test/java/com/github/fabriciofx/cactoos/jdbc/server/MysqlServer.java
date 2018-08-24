@@ -29,31 +29,30 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.source.MySqlSource;
+import com.github.fabriciofx.cactoos.jdbc.source.MysqlSource;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 
-public final class MySqlServer implements Server {
+public final class MysqlServer implements Server {
     private final UncheckedScalar<String> dbname;
-    private final Session session;
     private final String host;
     private final int port;
     private final String username;
     private final String password;
     private final SqlScript script;
 
-    public MySqlServer() {
+    public MysqlServer() {
         this(SqlScript.NOP);
     }
 
-    public MySqlServer(final SqlScript scrpt) {
+    public MysqlServer(final SqlScript scrpt) {
         this("localhost", 3306, "root", "", scrpt);
     }
 
-    public MySqlServer(
+    public MysqlServer(
         final String hst,
         final int prt,
         final String srnm,
@@ -65,11 +64,6 @@ public final class MySqlServer implements Server {
                 () -> new RandomDatabaseName().asString()
             )
         );
-        this.session = new AuthSession(
-            new MySqlSource(hst, prt, ""),
-            srnm,
-            psswrd
-        );
         this.host = hst;
         this.port = prt;
         this.username = srnm;
@@ -80,7 +74,15 @@ public final class MySqlServer implements Server {
     @Override
     public void start() throws Exception {
         new Update(
-            this.session,
+            new AuthSession(
+                new MysqlSource(
+                    this.host,
+                    this.port,
+                    ""
+                ),
+                this.username,
+                this.password
+            ),
             new SimpleQuery(
                 new FormattedText(
                     new JoinedText(
@@ -98,7 +100,15 @@ public final class MySqlServer implements Server {
     @Override
     public void stop() throws Exception {
         new Update(
-            this.session,
+            new AuthSession(
+                new MysqlSource(
+                    this.host,
+                    this.port,
+                    ""
+                ),
+                this.username,
+                this.password
+            ),
             new SimpleQuery(
                 new FormattedText(
                     "DROP DATABASE IF EXISTS %s",
@@ -111,7 +121,7 @@ public final class MySqlServer implements Server {
     @Override
     public Session session() {
         return new AuthSession(
-            new MySqlSource(
+            new MysqlSource(
                 this.host,
                 this.port,
                 this.dbname.value()

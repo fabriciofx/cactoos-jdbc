@@ -30,10 +30,8 @@ import com.github.fabriciofx.cactoos.jdbc.query.BatchQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
-import org.cactoos.io.ResourceOf;
+import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
@@ -51,7 +49,7 @@ public final class BatchTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MySqlServer()
+                new MysqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {

@@ -39,7 +39,7 @@ import org.postgresql.ds.PGSimpleDataSource;
  *
  * @since 0.2
  */
-public final class PgSqlSource implements DataSource {
+public final class PsqlSource implements DataSource {
     /**
      * Origin DataSource.
      */
@@ -49,7 +49,7 @@ public final class PgSqlSource implements DataSource {
      * Ctor.
      * @param dbname Database name
      */
-    public PgSqlSource(final String dbname) {
+    public PsqlSource(final String dbname) {
         this("localhost", dbname);
     }
 
@@ -58,7 +58,7 @@ public final class PgSqlSource implements DataSource {
      * @param hostname Server hostname or IPv4 Address
      * @param dbname Database name
      */
-    public PgSqlSource(final String hostname, final String dbname) {
+    public PsqlSource(final String hostname, final String dbname) {
         this(hostname, 5432, dbname);
     }
 
@@ -68,7 +68,7 @@ public final class PgSqlSource implements DataSource {
      * @param port Server port
      * @param dbname Database name
      */
-    public PgSqlSource(
+    public PsqlSource(
         final String hostname,
         final int port,
         final String dbname

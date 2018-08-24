@@ -31,7 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public final class InsertTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MySqlServer()
+                new MysqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {

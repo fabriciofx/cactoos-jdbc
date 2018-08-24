@@ -21,34 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.script;
+package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.Server;
-import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
-public final class SqlScriptTest {
+public final class MysqlServerTest {
     @Test
-    public void h2() throws Exception {
-        final Server h2 = new H2Server(
-            new SqlScriptFromInput(
-                new ResourceOf(
-                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
-                )
-            )
-        );
-        h2.start();
-        h2.stop();
-    }
-
-    @Test
-    public void mysql() throws Exception {
+    public void startAndStop() throws Exception {
         final Server mysql = new MysqlServer(
             new OldSqlScriptFromInput(
                 new ResourceOf(
-                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                    new JoinedText(
+                        "/",
+                        "com/github/fabriciofx/cactoos/jdbc/agenda",
+                        "agendadb-mysql.sql"
+                    )
                 )
             )
         );

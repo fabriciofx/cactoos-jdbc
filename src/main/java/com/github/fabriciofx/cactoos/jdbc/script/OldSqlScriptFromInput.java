@@ -91,8 +91,7 @@ public final class OldSqlScriptFromInput implements SqlScript {
 
     @Override
     public void exec(final Session session) throws Exception {
-        try {
-            final Connection connection = session.connection();
+        try (final Connection connection = session.connection()) {
             final boolean originalAutoCommit = connection.getAutoCommit();
             try {
                 if (originalAutoCommit != this.autoCommit) {

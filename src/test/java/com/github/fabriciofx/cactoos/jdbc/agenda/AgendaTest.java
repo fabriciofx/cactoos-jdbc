@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MySqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public final class AgendaTest {
 //                        )
 //                    )
 //                )
-                new MySqlServer(
+                new MysqlServer(
                     new OldSqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
@@ -96,7 +96,7 @@ public final class AgendaTest {
                         )
                     )
                 ),
-                new MySqlServer(
+                new MysqlServer(
                     new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
@@ -126,7 +126,7 @@ public final class AgendaTest {
                         )
                     )
                 ),
-                new MySqlServer(
+                new MysqlServer(
                     new SqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"

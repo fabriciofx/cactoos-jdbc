@@ -26,15 +26,20 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
-public final class PgSqlServerTest {
+public final class PsqlServerTest {
     @Test
-    public void start() throws Exception {
-        final Server pgsql = new PgSqlServer(
+    public void startAndStop() throws Exception {
+        final Server pgsql = new PsqlServer(
             new OldSqlScriptFromInput(
                 new ResourceOf(
-                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-pgsql.sql"
+                    new JoinedText(
+                        "/",
+                        "com/github/fabriciofx/cactoos/jdbc/agenda",
+                        "agendadb-psql.sql"
+                    )
                 )
             )
         );

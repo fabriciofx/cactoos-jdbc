@@ -40,7 +40,7 @@ import org.cactoos.text.JoinedText;
  *
  * @since 0.2
  */
-public final class MySqlSource implements DataSource {
+public final class MysqlSource implements DataSource {
     /**
      * Origin DataSource.
      */
@@ -50,7 +50,7 @@ public final class MySqlSource implements DataSource {
      * Ctor.
      * @param dbname Database name
      */
-    public MySqlSource(final String dbname) {
+    public MysqlSource(final String dbname) {
         this("localhost", dbname);
     }
 
@@ -59,7 +59,7 @@ public final class MySqlSource implements DataSource {
      * @param hostname Server hostname or IPv4 Address
      * @param dbname Database name
      */
-    public MySqlSource(final String hostname, final String dbname) {
+    public MysqlSource(final String hostname, final String dbname) {
         this(hostname, 3306, dbname);
     }
 
@@ -69,7 +69,7 @@ public final class MySqlSource implements DataSource {
      * @param port Server port
      * @param dbname Database name
      */
-    public MySqlSource(
+    public MysqlSource(
         final String hostname,
         final int port,
         final String dbname

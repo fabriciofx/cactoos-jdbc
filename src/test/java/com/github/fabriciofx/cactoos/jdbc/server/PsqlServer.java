@@ -29,32 +29,31 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.source.PgSqlSource;
+import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
+import com.github.fabriciofx.cactoos.jdbc.source.PsqlSource;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
-import org.cactoos.text.RandomText;
 
-public final class PgSqlServer implements Server {
+public final class PsqlServer implements Server {
     private final UncheckedScalar<String> dbname;
-    private final Session session;
     private final String host;
     private final int port;
     private final String username;
     private final String password;
     private final SqlScript script;
 
-    public PgSqlServer() {
+    public PsqlServer() {
         this(SqlScript.NOP);
     }
 
-    public PgSqlServer(final SqlScript scrpt) {
+    public PsqlServer(final SqlScript scrpt) {
         this("localhost", 5432, "postgres", "postgres", scrpt);
     }
 
-    public PgSqlServer(
+    public PsqlServer(
         final String hst,
         final int prt,
         final String srnm,
@@ -66,11 +65,6 @@ public final class PgSqlServer implements Server {
                 () -> new RandomDatabaseName().asString()
             )
         );
-        this.session = new AuthSession(
-            new PgSqlSource(hst, prt, ""),
-            srnm,
-            psswrd
-        );
         this.host = hst;
         this.port = prt;
         this.username = srnm;
@@ -81,31 +75,42 @@ public final class PgSqlServer implements Server {
     @Override
     public void start() throws Exception {
         new Update(
-            this.session,
+            new AuthSession(
+                new PsqlSource(
+                    this.host,
+                    this.port,
+                    ""
+                ),
+                this.username,
+                this.password
+            ),
             new SimpleQuery(
                 new FormattedText(
                     new JoinedText(
                         " ",
-                        "CREATE DATABASE \"%s\" WITH OWNER \"%s\"",
-                        "ENCODING 'UTF8' TEMPLATE template0;",
-                        "CREATE EXTENSION IF NOT EXISTS \"pgcrypto\";"
+                        "CREATE DATABASE %s WITH OWNER %s",
+                        "ENCODING utf8 TEMPLATE template1;"
                     ),
                     this.dbname.value(),
                     this.username
                 )
             )
         ).result();
-//        new Update(
-//            this.session,
-//            new SimpleQuery()
-//        ).result();
         this.script.exec(this.session());
     }
 
     @Override
     public void stop() throws Exception {
         new Update(
-            this.session,
+            new AuthSession(
+                new PsqlSource(
+                    this.host,
+                    this.port,
+                    ""
+                ),
+                this.username,
+                this.password
+            ),
             new SimpleQuery(
                 new FormattedText(
                     "DROP DATABASE IF EXISTS %s",
@@ -118,7 +123,7 @@ public final class PgSqlServer implements Server {
     @Override
     public Session session() {
         return new AuthSession(
-            new PgSqlSource(
+            new PsqlSource(
                 this.host,
                 this.port,
                 this.dbname.value()
