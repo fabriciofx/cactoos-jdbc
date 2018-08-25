@@ -24,9 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+import org.cactoos.list.ListOf;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 
@@ -41,7 +41,7 @@ public final class SmartQueryParams implements QueryParams {
     /**
      * Params.
      */
-    private final UncheckedScalar<Map<String, QueryParam>> params;
+    private final UncheckedScalar<List<QueryParam>> params;
 
     /**
      * Ctor.
@@ -50,13 +50,7 @@ public final class SmartQueryParams implements QueryParams {
     public SmartQueryParams(final QueryParam... prms) {
         this.params = new UncheckedScalar<>(
             new StickyScalar<>(
-                () -> {
-                    final Map<String, QueryParam> map = new HashMap<>();
-                    for (final QueryParam param : prms) {
-                        map.put(param.name(), param);
-                    }
-                    return map;
-                }
+                () -> new ListOf<>(prms)
             )
         );
     }
@@ -66,7 +60,7 @@ public final class SmartQueryParams implements QueryParams {
         final PreparedStatement stmt
     ) throws Exception {
         int idx = 1;
-        for (final QueryParam param : this.params.value().values()) {
+        for (final QueryParam param : this.params.value()) {
             param.prepare(stmt, idx);
             ++idx;
         }
@@ -74,12 +68,12 @@ public final class SmartQueryParams implements QueryParams {
     }
 
     @Override
-    public boolean contains(final String name) {
-        return this.params.value().keySet().contains(name);
+    public boolean contains(final String name, final int idx) {
+        return this.params.value().get(idx).name().equals(name);
     }
 
     @Override
     public Iterator<QueryParam> iterator() {
-        return this.params.value().values().iterator();
+        return this.params.value().iterator();
     }
 }

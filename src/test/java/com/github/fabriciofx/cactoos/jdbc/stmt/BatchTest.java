@@ -32,6 +32,9 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import java.security.SecureRandom;
+import java.util.Random;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
@@ -49,7 +52,8 @@ public final class BatchTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MysqlServer()
+                new MysqlServer(),
+                new PsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -58,7 +62,7 @@ public final class BatchTest {
                     new SimpleQuery(
                         new JoinedText(
                             " ",
-                            "CREATE TABLE client (id INT AUTO_INCREMENT,",
+                            "CREATE TABLE client (id INT,",
                             "name VARCHAR(50), age INT, PRIMARY KEY (id))"
                         )
                     )
@@ -66,18 +70,21 @@ public final class BatchTest {
                 new Batch(
                     session,
                     new BatchQuery(
-                        "INSERT INTO client (name, age) VALUES (:name, :age)",
+                        "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new SmartQueryParams(
+                            new IntParam("id", 1),
                             new TextParam("name", "Jeff Bridges"),
                             // @checkstyle MagicNumber (1 line)
                             new IntParam("age", 34)
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 2),
                             new TextParam("name", "Anna Miller"),
                             // @checkstyle MagicNumber (1 line)
                             new IntParam("age", 26)
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 3),
                             new TextParam("name", "Michal Douglas"),
                             // @checkstyle MagicNumber (1 line)
                             new IntParam("age", 32)

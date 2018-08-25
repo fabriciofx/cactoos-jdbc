@@ -29,6 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -48,17 +49,24 @@ public final class AgendaTest {
     public void addContact() throws Exception {
         try (
             final Servers servers = new Servers(
-//                new H2Server(
-//                    new OldSqlScriptFromInput(
-//                        new ResourceOf(
-//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
-//                        )
-//                    )
-//                )
+                new H2Server(
+                    new OldSqlScriptFromInput(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                        )
+                    )
+                ),
                 new MysqlServer(
                     new OldSqlScriptFromInput(
                         new ResourceOf(
                             "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                        )
+                    )
+                ),
+                new PsqlServer(
+                    new OldSqlScriptFromInput(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
                         )
                     )
                 )

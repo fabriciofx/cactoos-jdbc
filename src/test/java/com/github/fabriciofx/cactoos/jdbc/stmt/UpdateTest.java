@@ -23,19 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.source.MysqlSource;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -55,7 +49,8 @@ public final class UpdateTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MysqlServer()
+                new MysqlServer(),
+                new PsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -67,7 +62,7 @@ public final class UpdateTest {
                             new SimpleQuery(
                                 new JoinedText(
                                     " ",
-                                    "CREATE TABLE foo1 (id INT AUTO_INCREMENT,",
+                                    "CREATE TABLE foo1 (id INT,",
                                     "name VARCHAR(50), PRIMARY KEY (id))"
                                 )
                             )
@@ -78,28 +73,5 @@ public final class UpdateTest {
                 );
             }
         }
-    }
-
-    @Test
-    public void longQuery() throws Exception {
-        final Session session = new AuthSession(
-            new MysqlSource("localhost", 3306, ""),
-            "root",
-            ""
-        );
-        final URL url = this.getClass().getClassLoader().getResource(
-            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql-old.sql"
-        );
-        final List<String> lines = Files.readAllLines(
-            Paths.get(url.toURI())
-        );
-        final String sql = String.join("", lines);
-        final Query query = new SimpleQuery(sql);
-        System.out.println(sql);
-        System.out.println(query.asString());
-        new Update(
-            session,
-            query
-        ).result();
     }
 }

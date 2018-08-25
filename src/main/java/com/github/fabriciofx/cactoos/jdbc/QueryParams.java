@@ -41,5 +41,5 @@ public interface QueryParams extends Iterable<QueryParam> {
      */
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;
 
-    boolean contains(String name);
+    boolean contains(String name, int idx);
 }

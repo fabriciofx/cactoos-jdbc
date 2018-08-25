@@ -80,7 +80,7 @@ public final class ParsedSql implements Text  {
                     names.add(matcher.group().substring(1));
                 }
                 for (int idx = 0; idx < names.size(); ++idx) {
-                    if (!params.contains(names.get(idx))) {
+                    if (!params.contains(names.get(idx), idx)) {
                         throw new IllegalArgumentException(
                             new FormattedText(
                                 "SQL parameter #%d is wrong or out of order",

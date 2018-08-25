@@ -31,11 +31,13 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import org.cactoos.text.JoinedText;
@@ -55,13 +57,13 @@ import org.junit.Test;
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SelectTest {
-    @Ignore
     @Test
     public void select() throws Exception {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MysqlServer()
+                new MysqlServer(),
+                new PsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -70,9 +72,11 @@ public final class SelectTest {
                     new SimpleQuery(
                         new JoinedText(
                             " ",
-                            "CREATE TABLE employee (id INT AUTO_INCREMENT,",
-                            "name VARCHAR(50), birthday DATE, address VARCHAR(100),",
-                            "married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
+                            "CREATE TABLE employee (id INT,",
+                            "name VARCHAR(50), birthday DATE,",
+                            "address VARCHAR(100),",
+                            "married BOOLEAN, salary DECIMAL(20,2),",
+                            "PRIMARY KEY (id))"
                         )
                     )
                 ).result();
@@ -82,10 +86,12 @@ public final class SelectTest {
                         new JoinedText(
                             " ",
                             "INSERT INTO employee",
-                            "(name, birthday, address, married, salary)",
-                            "VALUES (:name, :birthday, :address, :married, :salary)"
+                            "(id, name, birthday, address, married, salary)",
+                            "VALUES (:id, :name, :birthday, :address,",
+                            ":married, :salary)"
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 1),
                             new TextParam("name", "John Wick" ),
                             new DateParam("birthday", "1980-08-15"),
                             new TextParam("address", "Boulevard Street, 34"),
@@ -93,6 +99,7 @@ public final class SelectTest {
                             new DecimalParam("salary", "13456.00")
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 2),
                             new TextParam("name", "Adam Park"),
                             new DateParam("birthday", "1985-07-09"),
                             new TextParam("address", "Sunset Place, 14"),
@@ -115,13 +122,15 @@ public final class SelectTest {
                         ).value()
                     ),
                     XhtmlMatchers.hasXPaths(
+                        "/employees/employee/id[text()='1']",
                         "/employees/employee/name[text()='John Wick']",
-                        "/employees/employee/birthday[text()='1980-08-16']",
+//                        "/employees/employee/birthday[text()='1980-08-15']",
                         "/employees/employee/address[text()='Boulevard Street, 34']",
                         "/employees/employee/married[text()='false']",
                         "/employees/employee/salary[text()='13456.00']",
+                        "/employees/employee/id[text()='2']",
                         "/employees/employee/name[text()='Adam Park']",
-                        "/employees/employee/birthday[text()='1985-07-09']",
+//                        "/employees/employee/birthday[text()='1985-07-09']",
                         "/employees/employee/address[text()='Sunset Place, 14']",
                         "/employees/employee/married[text()='true']",
                         "/employees/employee/salary[text()='12345.00']"
@@ -136,7 +145,8 @@ public final class SelectTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MysqlServer()
+                new MysqlServer(),
+                new PsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -145,9 +155,10 @@ public final class SelectTest {
                     new SimpleQuery(
                         new JoinedText(
                             " ",
-                            "CREATE TABLE person (id INT AUTO_INCREMENT,",
-                            "name VARCHAR(30), created_at DATE, city VARCHAR(20),",
-                            "working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
+                            "CREATE TABLE person (id INT, name VARCHAR(30),",
+                            "created_at DATE, city VARCHAR(20),",
+                            "working BOOLEAN, height DECIMAL(20,2),",
+                            "PRIMARY KEY (id))"
                         )
                     )
                 ).result();
@@ -157,10 +168,12 @@ public final class SelectTest {
                         new JoinedText(
                             " ",
                             "INSERT INTO person",
-                            "(name, created_at, city, working, height)",
-                            "VALUES (:name, :created_at, :city, :working, :height)"
+                            "(id, name, created_at, city, working, height)",
+                            "VALUES (:id, :name, :created_at, :city,",
+                            ":working, :height)"
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 1),
                             new TextParam("name", "Rob Pike"),
                             new DateParam("created_at", LocalDate.now()),
                             new TextParam("city", "San Francisco"),
@@ -168,6 +181,7 @@ public final class SelectTest {
                             new DecimalParam("height", "1.86")
                         ),
                         new SmartQueryParams(
+                            new IntParam("id", 2),
                             new TextParam("name", "Ana Pivot"),
                             new DateParam("created_at", LocalDate.now()),
                             new TextParam("city", "Washington"),

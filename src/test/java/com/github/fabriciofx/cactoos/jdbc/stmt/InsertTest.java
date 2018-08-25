@@ -27,11 +27,13 @@ import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -53,7 +55,8 @@ public final class InsertTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(),
-                new MysqlServer()
+                new MysqlServer(),
+                new PsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -62,8 +65,8 @@ public final class InsertTest {
                     new SimpleQuery(
                         new JoinedText(
                             " ",
-                            "CREATE TABLE t01 (id INT AUTO_INCREMENT,",
-                            "name VARCHAR(50), PRIMARY KEY (id))"
+                            "CREATE TABLE t01 (id INT, name VARCHAR(50),",
+                            "PRIMARY KEY (id))"
                         )
                     )
                 ).result();
@@ -73,7 +76,8 @@ public final class InsertTest {
                         new Insert(
                             session,
                             new SimpleQuery(
-                                "INSERT INTO t01 (name) VALUES (:name)",
+                                "INSERT INTO t01 (id, name) VALUES (:id, :name)",
+                                new IntParam("id", 1),
                                 new TextParam("name", "Yegor Bugayenko")
                             )
                         ),
@@ -87,7 +91,13 @@ public final class InsertTest {
 
     @Test
     public void insertWithKeys() throws Exception {
-        try (final Servers servers = new Servers()) {
+        try (
+            final Servers servers = new Servers(
+                new H2Server(),
+                new MysqlServer(),
+                new PsqlServer()
+            )
+        ) {
             for (final Session session : servers.sessions()) {
                 new Update(
                     session,
