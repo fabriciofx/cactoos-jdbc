@@ -88,6 +88,7 @@ public final class SqlPhones implements Phones {
                         "INSERT INTO phone (contact, number, carrier)",
                         "VALUES (:contact, :number, :carrier)"
                     ),
+                    "seq",
                     new AnyParam("contact", this.contact),
                     new TextParam("number", number),
                     new TextParam("carrier", carrier)

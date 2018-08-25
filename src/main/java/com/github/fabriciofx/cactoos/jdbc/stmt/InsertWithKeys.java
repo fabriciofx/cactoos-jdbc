@@ -64,7 +64,7 @@ public final class InsertWithKeys implements Statement<Rows> {
         // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
-                stmt.execute();
+                stmt.executeUpdate();
                 try (final ResultSet rset = stmt.getGeneratedKeys()) {
                     final Rows rows = new RowsAsResultSet(rset);
                     return () -> rows;

@@ -56,13 +56,13 @@ public final class AgendaTest {
                         )
                     )
                 ),
-                new MysqlServer(
-                    new OldSqlScriptFromInput(
-                        new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
-                        )
-                    )
-                ),
+//                new MysqlServer(
+//                    new OldSqlScriptFromInput(
+//                        new ResourceOf(
+//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+//                        )
+//                    )
+//                ),
                 new PsqlServer(
                     new OldSqlScriptFromInput(
                         new ResourceOf(

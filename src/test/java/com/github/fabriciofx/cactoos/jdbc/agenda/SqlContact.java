@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -66,7 +67,7 @@ public final class SqlContact implements Contact {
                 this.session,
                 new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
-                    new TextParam("id", this.id.toString())
+                    new UuidParam("id", this.id)
                 )
             ),
             String.class

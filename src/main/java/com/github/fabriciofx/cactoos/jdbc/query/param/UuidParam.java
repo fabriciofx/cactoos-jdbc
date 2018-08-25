@@ -64,10 +64,11 @@ public final class UuidParam implements QueryParam {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        final ByteBuffer bbuf = ByteBuffer.wrap(new byte[16]);
-        bbuf.putLong(this.value.getMostSignificantBits());
-        bbuf.putLong(this.value.getLeastSignificantBits());
-        stmt.setBytes(index, bbuf.array());
+//        final ByteBuffer bbuf = ByteBuffer.wrap(new byte[16]);
+//        bbuf.putLong(this.value.getMostSignificantBits());
+//        bbuf.putLong(this.value.getLeastSignificantBits());
+//        stmt.setBytes(index, bbuf.array());
+        stmt.setObject(index, this.value);
     }
 
     @Override

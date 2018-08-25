@@ -42,7 +42,8 @@ public final class UuidType implements DataType<UUID> {
 
     @Override
     public boolean match(final Object data) {
-        return byte[].class.equals(data.getClass()) &&
+        return UUID.class.equals(data.getClass()) ||
+            byte[].class.equals(data.getClass()) &&
             byte[].class.cast(data).length == 16 &&
             UUID.class.cast(data).variant() == 2 &&
             UUID.class.cast(data).version() == 4;
@@ -53,7 +54,14 @@ public final class UuidType implements DataType<UUID> {
         final ResultSet rset,
         final int index
     ) throws Exception {
-        final ByteBuffer bbuf = ByteBuffer.wrap(rset.getBytes(index));
-        return new UUID(bbuf.getLong(), bbuf.getLong());
+        final UUID uuid;
+        final Object data = rset.getObject(index);
+        if (UUID.class.equals(data.getClass())) {
+            uuid = (UUID) data;
+        } else {
+            final ByteBuffer bbuf = ByteBuffer.wrap(rset.getBytes(index));
+            uuid = new UUID(bbuf.getLong(), bbuf.getLong());
+        }
+        return uuid;
     }
 }

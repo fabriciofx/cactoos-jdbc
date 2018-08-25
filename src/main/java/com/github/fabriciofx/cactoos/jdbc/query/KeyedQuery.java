@@ -43,6 +43,11 @@ public final class KeyedQuery implements Query {
     private final Text sql;
 
     /**
+     * Primary key's name
+     */
+    private final String key;
+
+    /**
      * SQL query parameters.
      */
     private final QueryParams params;
@@ -62,7 +67,22 @@ public final class KeyedQuery implements Query {
      * @param prms SQL query parameters
      */
     public KeyedQuery(final Text sql, final QueryParam... prms) {
+        this(sql, "id", prms);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param pknm, The SQL query
+     * @param prms SQL query parameters
+     */
+    public KeyedQuery(
+        final Text sql,
+        final String pknm,
+        final QueryParam... prms
+    ) {
         this.sql = new ParsedSql(sql, prms);
+        this.key = pknm;
         this.params = new SmartQueryParams(prms);
     }
 
@@ -72,7 +92,9 @@ public final class KeyedQuery implements Query {
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString(),
-            java.sql.Statement.RETURN_GENERATED_KEYS
+            new String[] {
+                this.key
+            }
         );
         this.params.prepare(stmt);
         return stmt;
