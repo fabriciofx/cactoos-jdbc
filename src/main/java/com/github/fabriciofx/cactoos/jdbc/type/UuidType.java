@@ -57,7 +57,7 @@ public final class UuidType implements DataType<UUID> {
         final UUID uuid;
         final Object data = rset.getObject(index);
         if (UUID.class.equals(data.getClass())) {
-            uuid = (UUID) data;
+            uuid = UUID.class.cast(data);
         } else {
             final ByteBuffer bbuf = ByteBuffer.wrap(rset.getBytes(index));
             uuid = new UUID(bbuf.getLong(), bbuf.getLong());
