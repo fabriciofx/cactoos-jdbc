@@ -1,7 +1,7 @@
 CREATE TABLE contact (
   id UUID DEFAULT RANDOM_UUID(),
   name VARCHAR(50) NOT NULL,
-  PRIMARY KEY(id)
+  CONSTRAINT pk_contact PRIMARY KEY(id)
 );
 
 CREATE TABLE phone (
@@ -9,8 +9,8 @@ CREATE TABLE phone (
   seq INT AUTO_INCREMENT,
   number VARCHAR(10) NOT NULL,
   carrier VARCHAR(10) NOT NULL,
-  FOREIGN KEY(contact) REFERENCES contact(id),
-  PRIMARY KEY(contact, seq)
+  CONSTRAINT fk_phone_contact FOREIGN KEY(contact) REFERENCES contact(id),
+  CONSTRAINT pk_phone PRIMARY KEY(seq, contact)
 );
 
 INSERT INTO contact(name) VALUES ('Joseph Klimber');

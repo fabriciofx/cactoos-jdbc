@@ -1,7 +1,7 @@
 CREATE TABLE contact (
   id BINARY(16) NOT NULL,
   name VARCHAR(50) NOT NULL,
-  CONSTRAINT pk_contact_id PRIMARY KEY(id)
+  CONSTRAINT pk_contact PRIMARY KEY(id)
 );
 
 CREATE TABLE phone (
@@ -10,7 +10,7 @@ CREATE TABLE phone (
   number VARCHAR(10) NOT NULL,
   carrier VARCHAR(10) NOT NULL,
   CONSTRAINT fk_phone_contact FOREIGN KEY(contact) REFERENCES contact(id),
-  CONSTRAINT pk_phone_contact_seq PRIMARY KEY(seq, contact)
+  CONSTRAINT pk_phone PRIMARY KEY(seq, contact)
 );
 
 -- MySQL doesn't allow use a function as default apply of a field. So, we MUST
