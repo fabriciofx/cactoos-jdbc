@@ -89,27 +89,27 @@ public final class AgendaTest {
     public void findContact() throws Exception {
         try (
             final Servers servers = new Servers(
-//                new H2Server(
-//                    new OldSqlScriptFromInput(
-//                        new ResourceOf(
-//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
-//                        )
-//                    )
-//                )
-//                new PsqlServer(
-//                    new OldSqlScriptFromInput(
-//                        new ResourceOf(
-//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
-//                        )
-//                    )
-//                )
-                new MysqlServer(
+                new H2Server(
                     new OldSqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                        )
+                    )
+                ),
+                new PsqlServer(
+                    new OldSqlScriptFromInput(
+                        new ResourceOf(
+                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
                         )
                     )
                 )
+//                new MysqlServer(
+//                    new OldSqlScriptFromInput(
+//                        new ResourceOf(
+//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+//                        )
+//                    )
+//                )
             )
         ) {
             for (final Session session : servers.sessions()) {

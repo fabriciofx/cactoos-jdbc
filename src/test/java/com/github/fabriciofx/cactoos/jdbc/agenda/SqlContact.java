@@ -87,7 +87,7 @@ public final class SqlContact implements Contact {
             this.session,
             new SimpleQuery(
                 "DELETE FROM contact WHERE id = :id",
-                new TextParam("id", this.id.toString())
+                new UuidParam("id", this.id)
             )
         ).result();
     }
@@ -99,7 +99,7 @@ public final class SqlContact implements Contact {
             new SimpleQuery(
                 "UPDATE contact SET name = :name WHERE id = :id",
                 new TextParam("name", name),
-                new TextParam("id", this.id.toString())
+                new UuidParam("id", this.id)
             )
         ).result();
     }
