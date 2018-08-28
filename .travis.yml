@@ -18,7 +18,14 @@ env:
 services:
     - mysql
     - postgresql
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
 before_install:
-    - psql -c 'CREATE EXTENSION pgcrypto;' -U postgres template1
+  - psql -c "CREATE EXTENSION pgcrypto;" -U postgres template1
+  - psql -c "ALTER USER postgres WITH PASSWORD 'postgres';" -U postgres
 jdk:
   - oraclejdk8
