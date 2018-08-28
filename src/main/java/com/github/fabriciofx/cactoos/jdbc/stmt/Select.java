@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
@@ -32,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.rows.RowsAsResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.cactoos.Scalar;
 
 /**
  * Select.
@@ -60,7 +60,7 @@ public final class Select implements Statement<Rows> {
     }
 
     @Override
-    public Result<Rows> result() throws Exception {
+    public Scalar<Rows> result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {

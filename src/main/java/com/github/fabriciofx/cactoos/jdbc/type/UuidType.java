@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.type;
 import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.nio.ByteBuffer;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.UUID;
 
 /**
@@ -41,12 +42,8 @@ public final class UuidType implements DataType<UUID> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return UUID.class.equals(data.getClass()) ||
-            byte[].class.equals(data.getClass()) &&
-            byte[].class.cast(data).length == 16 &&
-            UUID.class.cast(data).variant() == 2 &&
-            UUID.class.cast(data).version() == 4;
+    public boolean match(final int type) {
+        return type == Types.OTHER || type == Types.BINARY;
     }
 
     @Override

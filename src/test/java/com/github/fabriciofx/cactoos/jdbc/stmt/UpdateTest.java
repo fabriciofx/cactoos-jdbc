@@ -66,8 +66,7 @@ public final class UpdateTest {
                                     "name VARCHAR(50), PRIMARY KEY (id))"
                                 )
                             )
-                        ),
-                        Integer.class
+                        )
                     ),
                     new ScalarHasValue<>(0)
                 );

@@ -21,44 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.type;
 
-import com.github.fabriciofx.cactoos.jdbc.Rows;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.cactoos.Scalar;
+import com.github.fabriciofx.cactoos.jdbc.DataType;
+import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
- * Result as values.
+ * Double type.
  *
- * @param <T> Type of the result
- * @since 0.1
+ * @since 0.2
  */
-public final class ResultAsValues<T> implements Scalar<List<T>> {
-    /**
-     * Statement that returns a Rows.
-     */
-    private final Statement<Rows> statement;
-
+public final class RealType implements DataType<Double> {
     /**
      * Ctor.
-     * @param stmt A statement that returns a Rows
      */
-    public ResultAsValues(final Statement<Rows> stmt) {
-        this.statement = stmt;
+    public RealType() {
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<T> value() throws Exception {
-        final List<T> values = new LinkedList<>();
-        for (final Map<String, Object> row : this.statement.result().value()) {
-            for (final Object obj : row.values()) {
-                values.add((T) obj);
-            }
-        }
-        return values;
+    public boolean match(final int type) {
+        return type == Types.DOUBLE ||
+            type == Types.FLOAT ||
+            type == Types.REAL;
+    }
+
+    @Override
+    public Double data(
+        final ResultSet rset,
+        final int index
+    ) throws Exception {
+        return rset.getDouble(index);
     }
 }

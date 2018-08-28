@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Fabrício Barros Cabral
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to def person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -28,14 +28,13 @@ import com.github.fabriciofx.cactoos.jdbc.type.BoolType;
 import com.github.fabriciofx.cactoos.jdbc.type.DateTimeType;
 import com.github.fabriciofx.cactoos.jdbc.type.DateType;
 import com.github.fabriciofx.cactoos.jdbc.type.DecimalType;
-import com.github.fabriciofx.cactoos.jdbc.type.DoubleType;
 import com.github.fabriciofx.cactoos.jdbc.type.IntType;
 import com.github.fabriciofx.cactoos.jdbc.type.LongType;
+import com.github.fabriciofx.cactoos.jdbc.type.RealType;
 import com.github.fabriciofx.cactoos.jdbc.type.TextType;
 import com.github.fabriciofx.cactoos.jdbc.type.UuidType;
 import java.util.Iterator;
 import java.util.List;
-import org.cactoos.list.Joined;
 import org.cactoos.list.ListOf;
 
 /**
@@ -51,47 +50,31 @@ public final class SmartDataTypes implements DataTypes {
      */
     private final List<DataType<?>> types;
 
+    private final DataType<?> def;
+
     /**
      * Ctor.
      */
     public SmartDataTypes() {
-        this(new ListOf<>());
-    }
-
-    /**
-     * Ctor.
-     * @param tps List of DataType
-     */
-    public SmartDataTypes(final DataType<?>... tps) {
-        this.types = new Joined<DataType<?>>(
-            new ListOf<>(
-                new UuidType(),
-                new TextType(),
-                new IntType(),
-                new DateTimeType(),
-                new DateType(),
-                new DecimalType(),
-                new BoolType(),
-                new LongType(),
-                new DoubleType()
-            ),
-            new ListOf<>(tps)
+        this.types = new ListOf<>(
+            new UuidType(),
+            new TextType(),
+            new IntType(),
+            new DateTimeType(),
+            new DateType(),
+            new DecimalType(),
+            new BoolType(),
+            new LongType(),
+            new RealType()
         );
-    }
-
-    /**
-     * Ctor.
-     * @param tps List of DataType
-     */
-    public SmartDataTypes(final Iterable<DataType<?>> tps) {
-        this.types = new ListOf<>(tps);
+        this.def = new AnyType();
     }
 
     @Override
-    public DataType<?> type(final Object data) {
-        DataType<?> result = new AnyType();
+    public DataType<?> type(final int code) {
+        DataType<?> result = this.def;
         for (final DataType<?> type : this.types) {
-            if (type.match(data)) {
+            if (type.match(code)) {
                 result = type;
                 break;
             }

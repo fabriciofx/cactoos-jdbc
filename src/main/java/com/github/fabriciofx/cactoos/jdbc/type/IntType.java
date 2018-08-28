@@ -24,8 +24,8 @@
 package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
-import java.math.BigInteger;
 import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * Integer type.
@@ -40,9 +40,10 @@ public final class IntType implements DataType<Integer> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return Integer.class.equals(data.getClass()) ||
-            BigInteger.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.INTEGER ||
+            type == Types.SMALLINT ||
+            type == Types.TINYINT;
     }
 
     @Override

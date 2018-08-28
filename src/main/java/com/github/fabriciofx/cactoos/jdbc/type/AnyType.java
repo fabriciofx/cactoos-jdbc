@@ -39,7 +39,7 @@ public final class AnyType implements DataType<Object> {
     }
 
     @Override
-    public boolean match(final Object data) {
+    public boolean match(final int type) {
         return true;
     }
 

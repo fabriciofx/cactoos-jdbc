@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
@@ -30,10 +31,10 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import java.util.Collections;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -52,6 +53,7 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
+        Collections.emptyList();
         try (
             final Servers servers = new Servers(
                 new H2Server(),
@@ -80,8 +82,7 @@ public final class InsertTest {
                                 new IntParam("id", 1),
                                 new TextParam("name", "Yegor Bugayenko")
                             )
-                        ),
-                        Boolean.class
+                        )
                     ),
                     new ScalarHasValue<>(false)
                 );
@@ -90,40 +91,95 @@ public final class InsertTest {
     }
 
     @Test
-    public void insertWithKeys() throws Exception {
-        try (
-            final Servers servers = new Servers(
-                new H2Server(),
-                new MysqlServer(),
-                new PsqlServer()
-            )
-        ) {
-            for (final Session session : servers.sessions()) {
-                new Update(
-                    session,
-                    new SimpleQuery(
-                        new JoinedText(
-                            " ",
-                            "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
-                            "name VARCHAR(50), PRIMARY KEY (id))"
+    public void insertWithKeysH2() throws Exception {
+        try (final Server server = new H2Server()) {
+            server.start();
+            final Session session = server.session();
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), PRIMARY KEY (id))"
+                    )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't insert with an integer keys",
+                new ResultAsValue<>(
+                    new InsertWithKeys<>(
+                        session,
+                        new KeyedQuery(
+                            "INSERT INTO t02 (name) VALUES (:name)",
+                            new TextParam("name", "Jeff Malony" )
                         )
                     )
-                ).result();
-                MatcherAssert.assertThat(
-                    "Can't insert with an integer keys",
-                    () -> new ResultAsValues<>(
-                        new InsertWithKeys(
-                            session,
-                            new KeyedQuery(
-                                "INSERT INTO t02 (name) VALUES (:name)",
-                                new TextParam("name", "Jeff Malony" )
-                            )
-                        ),
-                        Integer.class
-                    ).value().get(0),
-                    new ScalarHasValue<>(1)
-                );
-            }
+                ),
+                new ScalarHasValue<>(1)
+            );
+        }
+    }
+
+    @Test
+    public void insertWithKeysPsql() throws Exception {
+        try (final Server server = new PsqlServer()) {
+            server.start();
+            final Session session = server.session();
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE t02 (id SERIAL,",
+                        "name VARCHAR(50), PRIMARY KEY (id))"
+                    )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't insert with an integer keys",
+                new ResultAsValue<>(
+                    new InsertWithKeys<>(
+                        session,
+                        new KeyedQuery(
+                            "INSERT INTO t02 (name) VALUES (:name)",
+                            new TextParam("name", "Jeff Malony" )
+                        )
+                    )
+                ),
+                new ScalarHasValue<>(1)
+            );
+        }
+    }
+
+    @Test
+    public void insertWithKeysMysql() throws Exception {
+        try (final Server server = new MysqlServer()) {
+            server.start();
+            final Session session = server.session();
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50), PRIMARY KEY (id))"
+                    )
+                )
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't insert with an integer keys",
+                new ResultAsValue<>(
+                    new InsertWithKeys<>(
+                        session,
+                        new KeyedQuery(
+                            "INSERT INTO t02 (name) VALUES (:name)",
+                            new TextParam("name", "Jeff Malony" )
+                        )
+                    )
+                ),
+                new ScalarHasValue<>(1L)
+            );
         }
     }
 }

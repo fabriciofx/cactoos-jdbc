@@ -30,7 +30,9 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.util.List;
 import java.util.UUID;
+import org.cactoos.Scalar;
 
 /**
  * Contact for SQL.
@@ -62,16 +64,16 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        return new ResultAsValues<>(
+        final Scalar<List<String>> names = new ResultAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
                     new UuidParam("id", this.id)
                 )
-            ),
-            String.class
-        ).value().get(0);
+            )
+        );
+        return names.value().get(0);
     }
 
     @Override

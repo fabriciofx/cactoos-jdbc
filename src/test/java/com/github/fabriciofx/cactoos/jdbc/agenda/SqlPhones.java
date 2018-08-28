@@ -26,8 +26,9 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.AnyParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.Scalar;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -79,8 +81,8 @@ public final class SqlPhones implements Phones {
         final String number,
         final String carrier
     ) throws Exception {
-        final Integer seq = new ResultAsValues<>(
-            new InsertWithKeys(
+        final Scalar<Integer> seq = new ResultAsValue<>(
+            new InsertWithKeys<>(
                 this.session,
                 new KeyedQuery(
                     new JoinedText(
@@ -89,31 +91,29 @@ public final class SqlPhones implements Phones {
                         "VALUES (:contact, :number, :carrier)"
                     ),
                     "seq",
-                    new AnyParam("contact", this.contact),
+                    new UuidParam("contact", this.contact),
                     new TextParam("number", number),
                     new TextParam("carrier", carrier)
                 )
-            ),
-            Integer.class
-        ).value().get(0);
-        return new SqlPhone(this.session, this.contact, seq);
+            )
+        );
+        return new SqlPhone(this.session, this.contact, seq.value());
     }
 
     @Override
     public Iterator<Phone> iterator() {
         try {
-            final List<Integer> seqs = new ResultAsValues<>(
+            final Scalar<List<Integer>> seqs = new ResultAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
                         "SELECT seq FROM phone WHERE contact = :contact",
-                        new AnyParam("contact", this.contact)
+                        new UuidParam("contact", this.contact)
                     )
-                ),
-                Integer.class
-            ).value();
+                )
+            );
             final List<Phone> list = new LinkedList<>();
-            for (final int seq : seqs) {
+            for (final int seq : seqs.value()) {
                 list.add(new SqlPhone(this.session, this.contact, seq));
             }
             return list.iterator();

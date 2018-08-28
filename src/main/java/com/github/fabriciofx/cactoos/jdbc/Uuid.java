@@ -21,33 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.type;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.DataType;
-import java.sql.ResultSet;
+import java.util.UUID;
+import org.cactoos.Scalar;
+import org.cactoos.Text;
 
-/**
- * Double type.
- *
- * @since 0.2
- */
-public final class DoubleType implements DataType<Double> {
-    /**
-     * Ctor.
-     */
-    public DoubleType() {
+public final class Uuid implements Scalar<UUID>, Text {
+    private final UUID value;
+
+    public Uuid() {
+        this(UUID.randomUUID());
+    }
+
+    public Uuid(final UUID val) {
+        this.value = val;
     }
 
     @Override
-    public boolean match(final Object data) {
-        return Double.class.equals(data.getClass());
+    public UUID value() throws Exception {
+        return this.value;
     }
 
     @Override
-    public Double data(
-        final ResultSet rset,
-        final int index
-    ) throws Exception {
-        return rset.getDouble(index);
+    public String asString() throws Exception {
+        return this.value.toString();
+    }
+
+    public String asSmallString() throws Exception {
+        return this.asString().substring(0, 5);
     }
 }

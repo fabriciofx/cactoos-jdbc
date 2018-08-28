@@ -69,7 +69,7 @@ public final class SqlScriptFromInput implements SqlScript {
             }
             for (final Text sql : new SplitText(baos.toString("UTF-8"), ";")) {
                 new Update(
-                    new LoggedSession(session, "SqlScriptFromInput"),
+                    session,
                     new SimpleQuery(new TrimmedText(sql))
                 ).result();
             }

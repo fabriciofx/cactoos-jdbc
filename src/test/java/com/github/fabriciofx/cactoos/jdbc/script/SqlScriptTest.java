@@ -33,7 +33,7 @@ public final class SqlScriptTest {
     @Test
     public void h2() throws Exception {
         final Server h2 = new H2Server(
-            new SqlScriptFromInput(
+            new OldSqlScriptFromInput(
                 new ResourceOf(
                     "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                 )

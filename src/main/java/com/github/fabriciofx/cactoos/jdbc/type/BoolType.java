@@ -25,6 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * Boolean type.
@@ -39,8 +40,8 @@ public final class BoolType implements DataType<Boolean> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return Boolean.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.BOOLEAN;
     }
 
     @Override

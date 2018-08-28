@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.rows;
 
+import com.github.fabriciofx.cactoos.jdbc.DataType;
 import com.github.fabriciofx.cactoos.jdbc.DataTypes;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.SmartDataTypes;
@@ -83,18 +84,22 @@ public final class RowsAsResultSet implements Rows {
             final Map<String, Object> fields = new LinkedHashMap<>();
             for (int idx = 1; idx <= cols; ++idx) {
                 final String name = rsmd.getColumnName(idx).toLowerCase();
+                final int code = rsmd.getColumnType(idx);
                 final Object raw = rset.getObject(idx);
-                System.out.println(
-                    String.format(
-                        "Name: %s, Type: %s, Value: %s",
-                        name,
-                        raw.getClass().getSimpleName(),
-                        raw.toString()
-                    )
-                );
+//                System.out.println(
+//                    String.format(
+//                        "Name: %s, Type: %d, Class: %s, Object: %s",
+//                        name,
+//                        code,
+//                        rsmd.getColumnClassName(idx),
+//                        raw.getClass().getSimpleName()
+//                    )
+//                );
+                final DataType<?> type = this.types.type(code);
+//                System.out.println("DataType: " + type.getClass().getSimpleName());
                 fields.put(
                     name,
-                    this.types.type(raw).data(rset, idx)
+                    type.data(rset, idx)
                 );
             }
             this.rows.add(fields);
@@ -104,5 +109,11 @@ public final class RowsAsResultSet implements Rows {
     @Override
     public Iterator<Map<String, Object>> iterator() {
         return this.rows.iterator();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T data(final int row, final int column) throws Exception {
+        return (T) this.rows.get(row).values().toArray()[column];
     }
 }

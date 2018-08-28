@@ -35,4 +35,5 @@ import java.util.Map;
  * @since 0.1
  */
 public interface Rows extends Iterable<Map<String, Object>> {
+    <T> T data(int row, int column) throws Exception;
 }

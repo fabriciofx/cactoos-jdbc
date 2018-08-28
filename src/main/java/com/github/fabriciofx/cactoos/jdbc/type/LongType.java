@@ -24,7 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
+import java.math.BigInteger;
 import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * Long type.
@@ -39,8 +41,8 @@ public final class LongType implements DataType<Long> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return Long.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.BIGINT;
     }
 
     @Override
@@ -48,6 +50,6 @@ public final class LongType implements DataType<Long> {
         final ResultSet rset,
         final int index
     ) throws Exception {
-        return rset.getLong(index);
+        return BigInteger.class.cast(rset.getObject(index)).longValue();
     }
 }

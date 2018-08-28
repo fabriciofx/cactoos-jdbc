@@ -25,6 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.time.LocalDate;
 
 /**
@@ -40,8 +41,8 @@ public final class DateType implements DataType<LocalDate> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return java.sql.Date.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.DATE;
     }
 
     @Override

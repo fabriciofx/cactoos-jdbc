@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
@@ -32,13 +31,14 @@ import com.github.fabriciofx.cactoos.jdbc.rows.RowsAsResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.cactoos.Scalar;
 
 /**
  * Insert with keys.
  *
  * @since 0.1
  */
-public final class InsertWithKeys implements Statement<Rows> {
+public final class InsertWithKeys<T> implements Statement<T> {
     /**
      * The session.
      */
@@ -60,14 +60,14 @@ public final class InsertWithKeys implements Statement<Rows> {
     }
 
     @Override
-    public Result<Rows> result() throws Exception {
+    public Scalar<T> result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
                 stmt.executeUpdate();
                 try (final ResultSet rset = stmt.getGeneratedKeys()) {
                     final Rows rows = new RowsAsResultSet(rset);
-                    return () -> rows;
+                    return () -> rows.data(0, 0);
                 }
             }
         }

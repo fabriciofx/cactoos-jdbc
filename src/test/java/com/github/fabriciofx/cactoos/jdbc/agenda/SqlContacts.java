@@ -24,17 +24,17 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.cactoos.Scalar;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -69,37 +69,35 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact contact(final String name) throws Exception {
-        final UUID id = new ResultAsValues<>(
-            new InsertWithKeys(
-                this.session,
-                new KeyedQuery(
-                    "INSERT INTO contact (name) VALUES (:name)",
-                    new TextParam("name", name)
-                )
-            ),
-            UUID.class
-        ).value().get(0);
+        final UUID id = UUID.randomUUID();
+        new Insert(
+            this.session,
+            new SimpleQuery(
+                "INSERT INTO contact (id, name) VALUES (:id, :name)",
+                new UuidParam("id", id),
+                new TextParam("name", name)
+            )
+        ).result();
         return new SqlContact(this.session, id);
     }
 
     @Override
     public List<Contact> find(final String name) throws Exception {
-        final List<UUID> ids = new ResultAsValues<>(
+        final Scalar<List<UUID>> ids = new ResultAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
                     new JoinedText(
                         " ",
-                        "SELECT id FROM contact WHERE name ILIKE",
+                        "SELECT id FROM contact WHERE LOWER(name) LIKE",
                         "'%' || :name || '%'"
                     ),
-                    new TextParam("name", name)
+                    new TextParam("name", name.toLowerCase())
                 )
-            ),
-            UUID.class
-        ).value();
+            )
+        );
         final List<Contact> founds = new LinkedList<>();
-        for (final UUID id : ids) {
+        for (final UUID id : ids.value()) {
             founds.add(new SqlContact(this.session, id));
         }
         return founds;
@@ -108,17 +106,16 @@ public final class SqlContacts implements Contacts {
     @Override
     public Iterator<Contact> iterator() {
         try {
-            final List<UUID> ids = new ResultAsValues<>(
+            final Scalar<List<UUID>> ids = new ResultAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
                         "SELECT id FROM contact"
                     )
-                ),
-                UUID.class
-            ).value();
+                )
+            );
             final List<Contact> list = new LinkedList<>();
-            for (final UUID id : ids) {
+            for (final UUID id : ids.value()) {
                 list.add(new SqlContact(this.session, id));
             }
             return list.iterator();

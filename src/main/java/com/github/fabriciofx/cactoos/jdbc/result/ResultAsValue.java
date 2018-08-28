@@ -39,22 +39,15 @@ public final class ResultAsValue<T> implements Scalar<T> {
     private final Statement<T> statement;
 
     /**
-     * Type data to return.
-     */
-    private final Class<T> type;
-
-    /**
      * Ctor.
      * @param stmt A statement
-     * @param tpe Which type to return
      */
-    public ResultAsValue(final Statement<T> stmt, final Class<T> tpe) {
+    public ResultAsValue(final Statement<T> stmt) {
         this.statement = stmt;
-        this.type = tpe;
     }
 
     @Override
     public T value() throws Exception {
-        return this.type.cast(this.statement.result().value());
+        return this.statement.result().value();
     }
 }

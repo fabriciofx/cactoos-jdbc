@@ -70,8 +70,7 @@ public final class TransactionTest {
                         contact.phones().phone("982231234", "Oi");
                         return contact.asString();
                     }
-                ),
-                String.class
+                )
             ).value(),
             Matchers.containsString(
                 new JoinedText(

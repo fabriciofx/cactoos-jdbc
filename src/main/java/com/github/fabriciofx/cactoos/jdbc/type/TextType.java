@@ -25,6 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * String type.
@@ -39,8 +40,13 @@ public final class TextType implements DataType<String> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return String.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.VARCHAR ||
+            type == Types.LONGVARCHAR ||
+            type == Types.CHAR ||
+            type == Types.NVARCHAR ||
+            type == Types.NCHAR ||
+            type == Types.LONGNVARCHAR;
     }
 
     @Override

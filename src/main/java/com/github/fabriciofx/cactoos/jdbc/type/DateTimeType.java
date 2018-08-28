@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.type;
 
 import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
@@ -41,8 +41,9 @@ public final class DateTimeType implements DataType<LocalDateTime> {
     }
 
     @Override
-    public boolean match(final Object data) {
-        return Timestamp.class.equals(data.getClass());
+    public boolean match(final int type) {
+        return type == Types.TIMESTAMP ||
+            type == Types.TIMESTAMP_WITH_TIMEZONE;
     }
 
     @Override

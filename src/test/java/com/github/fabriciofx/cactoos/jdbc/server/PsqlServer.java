@@ -29,9 +29,9 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.session.AuthSession;
-import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.source.PsqlSource;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.io.IOException;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
@@ -131,5 +131,14 @@ public final class PsqlServer implements Server {
             this.username,
             this.password
         );
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            this.stop();
+        } catch (final Exception ex) {
+            throw new IOException(ex);
+        }
     }
 }

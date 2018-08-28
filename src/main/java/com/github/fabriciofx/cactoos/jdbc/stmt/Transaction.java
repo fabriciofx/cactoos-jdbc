@@ -23,12 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
+import org.cactoos.Scalar;
 
 /**
  * Transaction.
@@ -59,7 +59,7 @@ public final class Transaction<T> implements Statement<T> {
     }
 
     @Override
-    public Result<T> result() throws Exception {
+    public Scalar<T> result() throws Exception {
         final Connection connection = this.session.connection();
         try {
             final T ret = this.callable.call();

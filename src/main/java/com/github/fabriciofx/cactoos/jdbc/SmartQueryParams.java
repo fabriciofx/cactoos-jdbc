@@ -68,8 +68,8 @@ public final class SmartQueryParams implements QueryParams {
     }
 
     @Override
-    public boolean contains(final String name, final int idx) {
-        return this.params.value().get(idx).name().equals(name);
+    public boolean contains(final String name, final int pos) {
+        return this.params.value().get(pos).name().equals(name);
     }
 
     @Override

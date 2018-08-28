@@ -24,5 +24,5 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 public interface DataTypes extends Iterable<DataType<?>>{
-    DataType<?> type(Object data);
+    DataType<?> type(int code);
 }

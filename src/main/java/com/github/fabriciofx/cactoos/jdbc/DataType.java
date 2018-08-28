@@ -26,7 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 import java.sql.ResultSet;
 
 public interface DataType<T> {
-    boolean match(Object data);
+    boolean match(int type);
 
     T data(ResultSet rset, int index) throws Exception;
 }

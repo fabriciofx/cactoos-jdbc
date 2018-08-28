@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import java.io.Closeable;
+
 /**
  * Server.
  *
@@ -30,7 +32,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * @since 0.2
  */
-public interface Server {
+public interface Server extends Closeable {
     /**
      * Start the server.
      * @throws Exception If fails
@@ -43,5 +45,9 @@ public interface Server {
      */
     void stop() throws Exception;
 
+    /**
+     * Return a Session from server.
+     * @return A Session
+     */
     Session session();
 }

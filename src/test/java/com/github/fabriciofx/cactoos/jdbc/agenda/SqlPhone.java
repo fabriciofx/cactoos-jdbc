@@ -25,13 +25,15 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.AnyParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.util.List;
 import java.util.UUID;
+import org.cactoos.Scalar;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -73,7 +75,7 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String number() throws Exception {
-        return new ResultAsValues<>(
+        final Scalar<List<String>> numbers = new ResultAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
@@ -82,17 +84,17 @@ public final class SqlPhone implements Phone {
                         "SELECT number FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
-                    new AnyParam("contact", this.contact),
+                    new UuidParam("contact", this.contact),
                     new IntParam("seq", this.seq)
                 )
-            ),
-            String.class
-        ).value().get(0);
+            )
+        );
+        return numbers.value().get(0);
     }
 
     @Override
     public String carrier() throws Exception {
-        return new ResultAsValues<>(
+        final Scalar<List<String>> carriers = new ResultAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
@@ -101,12 +103,12 @@ public final class SqlPhone implements Phone {
                         "SELECT carrier FROM phone WHERE (contact = :contact)",
                         "AND (seq = :seq)"
                     ),
-                    new AnyParam("contact", this.contact),
+                    new UuidParam("contact", this.contact),
                     new IntParam("seq", this.seq)
                 )
-            ),
-            String.class
-        ).value().get(0);
+            )
+        );
+        return carriers.value().get(0);
     }
 
     @Override
@@ -115,7 +117,7 @@ public final class SqlPhone implements Phone {
             this.session,
             new SimpleQuery(
                 "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                new AnyParam("contact", this.contact),
+                new UuidParam("contact", this.contact),
                 new IntParam("seq", this.seq)
             )
         ).result();
@@ -136,7 +138,7 @@ public final class SqlPhone implements Phone {
                 ),
                 new TextParam("number", number),
                 new TextParam("carrier", carrier),
-                new AnyParam("contact", this.contact),
+                new UuidParam("contact", this.contact),
                 new IntParam("seq", this.seq)
             )
         ).result();

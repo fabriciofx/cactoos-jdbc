@@ -33,8 +33,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
-import java.security.SecureRandom;
-import java.util.Random;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 

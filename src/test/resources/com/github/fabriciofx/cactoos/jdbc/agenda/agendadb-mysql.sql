@@ -13,20 +13,9 @@ CREATE TABLE phone (
   CONSTRAINT pk_phone PRIMARY KEY(seq, contact)
 );
 
--- MySQL doesn't allow use a function as default apply of a field. So, we MUST
--- create a trigger to do it.
-DROP TRIGGER IF EXISTS tr_contact_id;
-
-DELIMITER $$
-CREATE TRIGGER `tr_contact_id`
-BEFORE INSERT ON `contact` FOR EACH ROW
-BEGIN
-  IF new.id IS NULL THEN
-    SET new.id = UNHEX(REPLACE(UUID(), "-",""));
-  END IF;
-END $$
-DELIMITER ;
-
-INSERT INTO contact(name) VALUES ('Joseph Klimber');
-INSERT INTO contact(name) VALUES ('Maria Souza');
-INSERT INTO contact(name) VALUES ('Jeff Duham');
+INSERT INTO contact(id, name)
+  VALUES (unhex(replace(uuid(),'-','')), 'Joseph Klimber');
+INSERT INTO contact(id, name)
+  VALUES (unhex(replace(uuid(),'-','')), 'Maria Souza');
+INSERT INTO contact(id, name)
+  VALUES (unhex(replace(uuid(),'-','')), 'Jeff Duham');

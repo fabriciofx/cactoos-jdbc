@@ -29,6 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import java.io.IOException;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 
@@ -63,5 +64,9 @@ public final class H2Server implements Server {
         return new NoAuthSession(
             new H2Source(this.dbname.value())
         );
+    }
+
+    @Override
+    public void close() throws IOException {
     }
 }
