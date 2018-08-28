@@ -15,5 +15,10 @@ env:
   global:
     - MAVEN_OPTS="-Xmx256m"
     - JAVA_OPTS="-Xmx256m"
+services:
+    - mysql
+    - postgresql
+before_install:
+    - psql -c 'CREATE EXTENSION pgcrypto;' -U postgres template1
 jdk:
   - oraclejdk8
