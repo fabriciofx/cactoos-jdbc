@@ -1,5 +1,6 @@
+dist: trusty
 language: java
-sudo: false
+sudo: true
 cache:
   directories:
     - $HOME/.m2
