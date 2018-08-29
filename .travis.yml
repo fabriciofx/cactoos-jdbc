@@ -1,6 +1,6 @@
 dist: trusty
-language: java
 sudo: true
+language: java
 cache:
   directories:
     - $HOME/.m2
@@ -25,13 +25,13 @@ addons:
     packages:
       - postgresql-10
       - postgresql-client-10
-before_script:
+before_install:
   # Use default port
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
   # Use 9.6 auth config
   - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
   - sudo service postgresql restart
-before_install:
+before_script:
   - psql -U postgres -c "CREATE EXTENSION pgcrypto;" template1
   - psql -U postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
 jdk:
