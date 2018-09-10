@@ -21,50 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.cactoos.list.ListOf;
 
 /**
- * Represents a set of RDBMS servers.
+ * SQL Script tests.
  *
  * @since 0.2
  */
-public final class Servers implements Closeable {
-    /**
-     * All servers.
-     */
-    private final List<Server> all;
-
-    /**
-     * Ctor.
-     * @param srvs Servers.
-     */
-    public Servers(final Server... srvs) {
-        this.all = new ListOf<>(srvs);
-    }
-
-    public Iterable<Session> sessions() throws Exception {
-        final List<Session> sessions = new ArrayList<>();
-        for (final Server server : this.all) {
-            server.start();
-            sessions.add(server.session());
-        }
-        return sessions;
-    }
-
-    @Override
-    public void close() throws IOException {
-        try {
-            for (final Server server : this.all) {
-                server.stop();
-            }
-        } catch(final Exception ex) {
-            throw new IOException(ex);
-        }
-    }
-}
+package com.github.fabriciofx.cactoos.jdbc.script;

@@ -41,5 +41,11 @@ public interface QueryParams extends Iterable<QueryParam> {
      */
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;
 
+    /**
+     * Check if QueryParams contains a param at position.
+     * @param name The name of the parameter
+     * @param pos The position of the parameter
+     * @return true if contains or false if don't
+     */
     boolean contains(String name, int pos);
 }

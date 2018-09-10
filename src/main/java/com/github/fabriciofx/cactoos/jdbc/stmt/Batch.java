@@ -24,11 +24,11 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import org.cactoos.Scalar;
 
 /**
  * Batch statements.
@@ -57,7 +57,7 @@ public final class Batch implements Statement<int[]> {
     }
 
     @Override
-    public Scalar<int[]> result() throws Exception {
+    public Result<int[]> result() throws Exception {
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
                 final int[] ret = stmt.executeBatch();

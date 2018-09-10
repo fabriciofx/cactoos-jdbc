@@ -85,18 +85,7 @@ public final class RowsAsResultSet implements Rows {
             for (int idx = 1; idx <= cols; ++idx) {
                 final String name = rsmd.getColumnName(idx).toLowerCase();
                 final int code = rsmd.getColumnType(idx);
-                final Object raw = rset.getObject(idx);
-//                System.out.println(
-//                    String.format(
-//                        "Name: %s, Type: %d, Class: %s, Object: %s",
-//                        name,
-//                        code,
-//                        rsmd.getColumnClassName(idx),
-//                        raw.getClass().getSimpleName()
-//                    )
-//                );
                 final DataType<?> type = this.types.type(code);
-//                System.out.println("DataType: " + type.getClass().getSimpleName());
                 fields.put(
                     name,
                     type.data(rset, idx)

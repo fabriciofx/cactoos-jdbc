@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
@@ -60,7 +61,7 @@ public final class InsertWithKeys<T> implements Statement<T> {
     }
 
     @Override
-    public Scalar<T> result() throws Exception {
+    public Result<T> result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {

@@ -26,9 +26,20 @@ package com.github.fabriciofx.cactoos.jdbc;
 import org.cactoos.Text;
 import org.cactoos.text.RandomText;
 
+/**
+ * Random database name for tests.
+ *
+ * @since 0.2
+ */
 public final class RandomDatabaseName implements Text {
+    /**
+     * Database name.
+     */
     private final Text name;
 
+    /**
+     * Ctor.
+     */
     public RandomDatabaseName() {
         this(
             new RandomText(
@@ -39,6 +50,10 @@ public final class RandomDatabaseName implements Text {
         );
     }
 
+    /**
+     * Ctor.
+     * @param txt Database name
+     */
     public RandomDatabaseName(final Text txt) {
         this.name = txt;
     }

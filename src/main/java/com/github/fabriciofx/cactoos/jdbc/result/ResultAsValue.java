@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import org.cactoos.Scalar;
 
 /**
  * Result as data.
@@ -32,7 +32,7 @@ import org.cactoos.Scalar;
  * @param <T> Type of the result
  * @since 0.1
  */
-public final class ResultAsValue<T> implements Scalar<T> {
+public final class ResultAsValue<T> implements Result<T> {
     /**
      * Statement.
      */

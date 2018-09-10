@@ -25,8 +25,28 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.ResultSet;
 
+/**
+ * Data type.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @param <T> Type of data
+ * @since 0.2
+ */
 public interface DataType<T> {
+    /**
+     * Mach the code with the type.
+     * @param type Code of the type
+     * @return true if match or false otherwise.
+     */
     boolean match(int type);
 
+    /**
+     * Get the data from ResultSet.
+     * @param rset The ResultSet
+     * @param index The column index
+     * @return The data
+     * @throws Exception if fails
+     */
     T data(ResultSet rset, int index) throws Exception;
 }

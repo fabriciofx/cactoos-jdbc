@@ -33,14 +33,32 @@ import java.io.IOException;
 import org.cactoos.scalar.StickyScalar;
 import org.cactoos.scalar.UncheckedScalar;
 
+/**
+ * MySQL server, for unit testing.
+ *
+ * @since 0.2
+ */
 public final class H2Server implements Server {
+    /**
+     * The Database name.
+     */
     private final UncheckedScalar<String> dbname;
+    /**
+     * SQL Script to initialize the database.
+     */
     private final SqlScript script;
 
+    /**
+     * Ctor.
+     */
     public H2Server() {
         this(SqlScript.NOP);
     }
 
+    /**
+     * Ctor.
+     * @param scrpt SqlScript to initialize the database.
+     */
     public H2Server(final SqlScript scrpt) {
         this.dbname = new UncheckedScalar<>(
             new StickyScalar<>(

@@ -73,7 +73,7 @@ public final class KeyedQuery implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param pknm, The SQL query
+     * @param pknm, The primary key name
      * @param prms SQL query parameters
      */
     public KeyedQuery(

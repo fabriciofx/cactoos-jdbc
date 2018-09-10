@@ -34,7 +34,6 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
-import java.util.Collections;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -53,7 +52,6 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
-        Collections.emptyList();
         try (
             final Servers servers = new Servers(
                 new H2Server(),

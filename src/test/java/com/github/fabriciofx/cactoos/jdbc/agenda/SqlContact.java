@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
@@ -64,7 +65,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        final Scalar<List<String>> names = new ResultAsValues<>(
+        final Result<List<String>> names = new ResultAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(

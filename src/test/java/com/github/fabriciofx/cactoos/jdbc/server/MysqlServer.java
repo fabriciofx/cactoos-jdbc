@@ -37,22 +37,60 @@ import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 
+/**
+ * MySQL server, for unit testing.
+ *
+ * @since 0.2
+ */
 public final class MysqlServer implements Server {
+    /**
+     * Database name.
+     */
     private final UncheckedScalar<String> dbname;
+    /**
+     * Hostname.
+     */
     private final String host;
+    /**
+     * Port.
+     */
     private final int port;
+    /**
+     * Username.
+     */
     private final String username;
+    /**
+     * User password.
+     */
     private final String password;
+    /**
+     * SQL Script to initialize the database.
+     */
     private final SqlScript script;
 
+    /**
+     * Ctor.
+     */
     public MysqlServer() {
         this(SqlScript.NOP);
     }
 
+    /**
+     * Ctor.
+     * @param scrpt SQL Script to initialize the database
+     */
     public MysqlServer(final SqlScript scrpt) {
         this("localhost", 3306, "root", "", scrpt);
     }
 
+    /**
+     * Ctor.
+     * @param hst Hostname
+     * @param prt Port
+     * @param srnm Username
+     * @param psswrd User password
+     * @param scrpt SQL Script to initialize the database
+     */
     public MysqlServer(
         final String hst,
         final int prt,

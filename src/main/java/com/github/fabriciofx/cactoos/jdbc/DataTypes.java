@@ -23,6 +23,18 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+/**
+ * Set of DataType.
+ *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.2
+ */
 public interface DataTypes extends Iterable<DataType<?>>{
+    /**
+     * Get the DataType from the type code.
+     * @param code The code
+     * @return The DataType
+     */
     DataType<?> type(int code);
 }

@@ -29,6 +29,12 @@ import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import org.cactoos.io.ResourceOf;
 import org.junit.Test;
 
+/**
+ * SqlScript tests.
+ *
+ * @since 0.2
+ * @checkstyle JavadocMethodCheck (500 lines)
+ */
 public final class SqlScriptTest {
     @Test
     public void h2() throws Exception {

@@ -27,13 +27,28 @@ import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.Text;
 
+/**
+ * Universally Unique IDentifier (UUID).
+ *
+ * @since 0.2
+ */
 public final class Uuid implements Scalar<UUID>, Text {
+    /**
+     * UUID value.
+     */
     private final UUID value;
 
+    /**
+     * Ctor.
+     */
     public Uuid() {
         this(UUID.randomUUID());
     }
 
+    /**
+     * Ctor.
+     * @param val UUID.
+     */
     public Uuid(final UUID val) {
         this.value = val;
     }

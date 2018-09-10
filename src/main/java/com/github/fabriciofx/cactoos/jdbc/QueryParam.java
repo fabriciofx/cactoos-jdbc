@@ -31,7 +31,6 @@ import org.cactoos.Text;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of data
  * @since 0.1
  */
 public interface QueryParam extends Text {

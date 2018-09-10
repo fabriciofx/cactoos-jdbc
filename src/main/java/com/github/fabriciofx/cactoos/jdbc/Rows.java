@@ -35,5 +35,13 @@ import java.util.Map;
  * @since 0.1
  */
 public interface Rows extends Iterable<Map<String, Object>> {
+    /**
+     * Get the data in row and column.
+     * @param row The row number
+     * @param column The column number
+     * @param <T> The data type
+     * @return The data
+     * @throws Exception if fails
+     */
     <T> T data(int row, int column) throws Exception;
 }

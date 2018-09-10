@@ -29,6 +29,12 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
+/**
+ * PostgreSQL Server test.
+ *
+ * @since 0.2
+ * @checkstyle JavadocMethodCheck (500 lines)
+ */
 public final class PsqlServerTest {
     @Test
     public void startAndStop() throws Exception {

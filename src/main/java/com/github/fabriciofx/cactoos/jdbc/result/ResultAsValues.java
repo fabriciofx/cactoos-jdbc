@@ -23,12 +23,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.cactoos.Scalar;
 
 /**
  * Result as values.
@@ -36,7 +36,7 @@ import org.cactoos.Scalar;
  * @param <T> Type of the result
  * @since 0.1
  */
-public final class ResultAsValues<T> implements Scalar<List<T>> {
+public final class ResultAsValues<T> implements Result<List<T>> {
     /**
      * Statement that returns a Rows.
      */

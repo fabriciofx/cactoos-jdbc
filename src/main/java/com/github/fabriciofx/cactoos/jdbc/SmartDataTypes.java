@@ -50,6 +50,9 @@ public final class SmartDataTypes implements DataTypes {
      */
     private final List<DataType<?>> types;
 
+    /**
+     * Default data type.
+     */
     private final DataType<?> def;
 
     /**

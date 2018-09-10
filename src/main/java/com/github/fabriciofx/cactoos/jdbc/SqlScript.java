@@ -23,8 +23,21 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+/**
+ * SQL Script.
+ *
+ * @since 0.2
+ */
 public interface SqlScript {
+    /**
+     * SQL Script that executes nothing.
+     */
     SqlScript NOP = session -> { };
 
+    /**
+     * Execute a SQL Script in the Session.
+     * @param session A Session
+     * @throws Exception if fails.
+     */
     void exec(Session session) throws Exception;
 }

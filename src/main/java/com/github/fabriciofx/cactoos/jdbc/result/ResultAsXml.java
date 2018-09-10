@@ -23,10 +23,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
+import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.util.Map;
-import org.cactoos.Scalar;
 
 /**
  * Result as XML.
@@ -34,7 +34,7 @@ import org.cactoos.Scalar;
  * @since 0.1
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class ResultAsXml implements Scalar<String> {
+public final class ResultAsXml implements Result<String> {
     /**
      * Statement that returns a Rows.
      */
