@@ -73,8 +73,8 @@ public final class BatchQuery implements Query {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString()
         );
-        for (final QueryParams params : this.params) {
-            params.prepare(stmt);
+        for (final QueryParams prms : this.params) {
+            prms.prepare(stmt);
             stmt.addBatch();
         }
         return stmt;

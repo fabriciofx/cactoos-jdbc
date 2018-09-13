@@ -37,7 +37,7 @@ public interface DataType<T> {
     /**
      * Mach the code with the type.
      * @param type Code of the type
-     * @return true if match or false otherwise.
+     * @return True if match or false otherwise.
      */
     boolean match(int type);
 

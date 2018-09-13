@@ -41,12 +41,9 @@ public final class TextType implements DataType<String> {
 
     @Override
     public boolean match(final int type) {
-        return type == Types.VARCHAR ||
-            type == Types.LONGVARCHAR ||
-            type == Types.CHAR ||
-            type == Types.NVARCHAR ||
-            type == Types.NCHAR ||
-            type == Types.LONGNVARCHAR;
+        return type == Types.VARCHAR || type == Types.LONGVARCHAR ||
+            type == Types.CHAR || type == Types.NVARCHAR ||
+            type == Types.NCHAR || type == Types.LONGNVARCHAR;
     }
 
     @Override

@@ -32,7 +32,6 @@ import com.github.fabriciofx.cactoos.jdbc.rows.RowsAsResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import org.cactoos.Scalar;
 
 /**
  * Insert with keys.

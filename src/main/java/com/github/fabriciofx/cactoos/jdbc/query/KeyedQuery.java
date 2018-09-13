@@ -43,7 +43,7 @@ public final class KeyedQuery implements Query {
     private final Text sql;
 
     /**
-     * Primary key's name
+     * Primary key's name.
      */
     private final String key;
 
@@ -73,7 +73,7 @@ public final class KeyedQuery implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param pknm, The primary key name
+     * @param pknm The primary key name
      * @param prms SQL query parameters
      */
     public KeyedQuery(
@@ -90,12 +90,14 @@ public final class KeyedQuery implements Query {
     public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
+        final String[] names = {
+            this.key
+        };
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString(),
-            new String[] {
-                this.key
-            }
+            names
         );
+        stmt.
         this.params.prepare(stmt);
         return stmt;
     }

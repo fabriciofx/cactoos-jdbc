@@ -30,7 +30,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * @since 0.2
  */
-public interface DataTypes extends Iterable<DataType<?>>{
+public interface DataTypes extends Iterable<DataType<?>> {
     /**
      * Get the DataType from the type code.
      * @param code The code

@@ -141,7 +141,6 @@ public final class LoggedPreparedStatement implements PreparedStatement {
     @Override
     public int executeUpdate() throws SQLException {
         final Instant start = Instant.now();
-        //System.out.println("SQL: " + this.origin);
         final int updated = this.origin.executeUpdate();
         final Instant end = Instant.now();
         final long millis = Duration.between(start, end).toMillis();

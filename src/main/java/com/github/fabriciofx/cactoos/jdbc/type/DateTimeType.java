@@ -42,8 +42,7 @@ public final class DateTimeType implements DataType<LocalDateTime> {
 
     @Override
     public boolean match(final int type) {
-        return type == Types.TIMESTAMP ||
-            type == Types.TIMESTAMP_WITH_TIMEZONE;
+        return type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE;
     }
 
     @Override

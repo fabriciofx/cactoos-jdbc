@@ -45,7 +45,7 @@ public interface QueryParams extends Iterable<QueryParam> {
      * Check if QueryParams contains a param at position.
      * @param name The name of the parameter
      * @param pos The position of the parameter
-     * @return true if contains or false if don't
+     * @return True if contains or false if don't
      */
     boolean contains(String name, int pos);
 }

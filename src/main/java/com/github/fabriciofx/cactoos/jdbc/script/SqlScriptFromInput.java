@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.session.LoggedSession;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

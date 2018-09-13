@@ -42,8 +42,7 @@ public final class DecimalType implements DataType<BigDecimal> {
 
     @Override
     public boolean match(final int type) {
-        return type == Types.DECIMAL ||
-            type == Types.NUMERIC;
+        return type == Types.DECIMAL || type == Types.NUMERIC;
     }
 
     @Override

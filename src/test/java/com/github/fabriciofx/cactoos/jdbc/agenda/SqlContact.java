@@ -33,7 +33,6 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.List;
 import java.util.UUID;
-import org.cactoos.Scalar;
 
 /**
  * Contact for SQL.

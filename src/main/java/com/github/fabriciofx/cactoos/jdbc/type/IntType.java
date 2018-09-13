@@ -41,8 +41,7 @@ public final class IntType implements DataType<Integer> {
 
     @Override
     public boolean match(final int type) {
-        return type == Types.INTEGER ||
-            type == Types.SMALLINT ||
+        return type == Types.INTEGER || type == Types.SMALLINT ||
             type == Types.TINYINT;
     }
 
