@@ -110,7 +110,7 @@ public final class InsertTest {
                         session,
                         new KeyedQuery(
                             "INSERT INTO t02 (name) VALUES (:name)",
-                            new TextParam("name", "Jeff Malony" )
+                            new TextParam("name", "Jeff Malony")
                         )
                     )
                 ),
@@ -141,7 +141,7 @@ public final class InsertTest {
                         session,
                         new KeyedQuery(
                             "INSERT INTO t02 (name) VALUES (:name)",
-                            new TextParam("name", "Jeff Malony" )
+                            new TextParam("name", "Jeff Malony")
                         )
                     )
                 ),
@@ -172,7 +172,7 @@ public final class InsertTest {
                         session,
                         new KeyedQuery(
                             "INSERT INTO t02 (name) VALUES (:name)",
-                            new TextParam("name", "Jeff Malony" )
+                            new TextParam("name", "Jeff Malony")
                         )
                     )
                 ),

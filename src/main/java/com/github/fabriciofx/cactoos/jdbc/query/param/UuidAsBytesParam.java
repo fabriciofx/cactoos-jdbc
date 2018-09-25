@@ -37,7 +37,7 @@ public final class UuidAsBytesParam implements QueryParam {
     /**
      * Name.
      */
-    private final String name;
+    private final String id;
 
     /**
      * Value.
@@ -46,17 +46,17 @@ public final class UuidAsBytesParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The apply
      */
     public UuidAsBytesParam(final String name, final UUID value) {
-        this.name = name;
+        this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.id;
     }
 
     @Override
@@ -64,6 +64,7 @@ public final class UuidAsBytesParam implements QueryParam {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
+        // @checkstyle MagicNumber (1 line)
         final ByteBuffer bbuf = ByteBuffer.wrap(new byte[16]);
         bbuf.putLong(this.value.getMostSignificantBits());
         bbuf.putLong(this.value.getLeastSignificantBits());

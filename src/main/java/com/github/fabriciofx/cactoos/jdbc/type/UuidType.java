@@ -35,15 +35,10 @@ import java.util.UUID;
  * @since 0.2
  */
 public final class UuidType implements DataType<UUID> {
-    /**
-     * Ctor.
-     */
-    public UuidType() {
-    }
-
     @Override
     public boolean match(final int type) {
-        return type == Types.OTHER || type == Types.BINARY;
+        return type == Types.OTHER
+            || type == Types.BINARY;
     }
 
     @Override

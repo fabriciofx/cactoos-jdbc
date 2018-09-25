@@ -34,15 +34,10 @@ import java.time.LocalDateTime;
  * @since 0.2
  */
 public final class DateTimeType implements DataType<LocalDateTime> {
-    /**
-     * Ctor.
-     */
-    public DateTimeType() {
-    }
-
     @Override
     public boolean match(final int type) {
-        return type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE;
+        return type == Types.TIMESTAMP
+            || type == Types.TIMESTAMP_WITH_TIMEZONE;
     }
 
     @Override

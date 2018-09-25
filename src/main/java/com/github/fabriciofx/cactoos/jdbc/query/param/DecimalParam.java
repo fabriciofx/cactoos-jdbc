@@ -36,7 +36,7 @@ public final class DecimalParam implements QueryParam {
     /**
      * Name.
      */
-    private final String name;
+    private final String id;
 
     /**
      * Value.
@@ -45,7 +45,7 @@ public final class DecimalParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The data
      */
     public DecimalParam(final String name, final String value) {
@@ -54,17 +54,17 @@ public final class DecimalParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The data
      */
     public DecimalParam(final String name, final BigDecimal value) {
-        this.name = name;
+        this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.id;
     }
 
     @Override

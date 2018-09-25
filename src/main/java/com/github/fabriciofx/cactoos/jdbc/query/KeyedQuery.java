@@ -91,13 +91,12 @@ public final class KeyedQuery implements Query {
         final Connection connection
     ) throws Exception {
         final String[] names = {
-            this.key
+            this.key,
         };
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString(),
             names
         );
-        stmt.
         this.params.prepare(stmt);
         return stmt;
     }

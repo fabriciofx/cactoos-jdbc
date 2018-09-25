@@ -34,9 +34,9 @@ import org.cactoos.Text;
  */
 public final class Uuid implements Scalar<UUID>, Text {
     /**
-     * UUID value.
+     * UUID val.
      */
-    private final UUID value;
+    private final UUID val;
 
     /**
      * Ctor.
@@ -47,22 +47,26 @@ public final class Uuid implements Scalar<UUID>, Text {
 
     /**
      * Ctor.
-     * @param val UUID.
+     * @param uuid UUID.
      */
-    public Uuid(final UUID val) {
-        this.value = val;
+    public Uuid(final UUID uuid) {
+        this.val = uuid;
     }
 
     @Override
     public UUID value() throws Exception {
-        return this.value;
+        return this.val;
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.val.toString();
     }
 
+    /**
+     * @return A small string ID
+     * @throws Exception if fails
+     */
     public String asSmallString() throws Exception {
         return this.asString().substring(0, 5);
     }

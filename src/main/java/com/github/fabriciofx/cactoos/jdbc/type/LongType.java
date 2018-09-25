@@ -34,12 +34,6 @@ import java.sql.Types;
  * @since 0.2
  */
 public final class LongType implements DataType<Long> {
-    /**
-     * Ctor.
-     */
-    public LongType() {
-    }
-
     @Override
     public boolean match(final int type) {
         return type == Types.BIGINT;

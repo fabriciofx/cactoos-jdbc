@@ -34,12 +34,6 @@ import java.time.LocalDate;
  * @since 0.2
  */
 public final class DateType implements DataType<LocalDate> {
-    /**
-     * Ctor.
-     */
-    public DateType() {
-    }
-
     @Override
     public boolean match(final int type) {
         return type == Types.DATE;

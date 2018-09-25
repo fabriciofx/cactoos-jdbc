@@ -25,10 +25,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.script.OldSqlScriptFromInput;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.TextHasString;
@@ -41,23 +42,36 @@ import org.llorllale.cactoos.matchers.TextHasString;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings(
+    {
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.AvoidDuplicateLiterals"
+    }
+)
 public final class AgendaTest {
     @Test
     public void addContact() throws Exception {
         try (
             final Servers servers = new Servers(
                 new H2Server(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-h2.sql"
+                            )
                         )
                     )
                 ),
                 new PsqlServer(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-psql.sql"
+                            )
                         )
                     )
                 )
@@ -89,26 +103,27 @@ public final class AgendaTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-h2.sql"
+                            )
                         )
                     )
                 ),
                 new PsqlServer(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-psql.sql"
+                            )
                         )
                     )
                 )
-//                new MysqlServer(
-//                    new OldSqlScriptFromInput(
-//                        new ResourceOf(
-//                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
-//                        )
-//                    )
-//                )
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -126,23 +141,33 @@ public final class AgendaTest {
         try (
             final Servers servers = new Servers(
                 new H2Server(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-h2.sql"
+                            )
                         )
                     )
                 ),
                 new PsqlServer(
-                    new OldSqlScriptFromInput(
+                    new SqlScriptFromInput(
                         new ResourceOf(
-                            "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-psql.sql"
+                            new JoinedText(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/agenda",
+                                "agendadb-psql.sql"
+                            )
                         )
                     )
                 )
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Contact contact = new SqlContacts(session).find("maria").get(0);
+                final Contact contact = new SqlContacts(session)
+                    .find("maria")
+                    .get(0);
                 contact.rename("Maria Lima");
                 MatcherAssert.assertThat(
                     "Can't rename an agenda contact",

@@ -36,6 +36,7 @@ import java.sql.ResultSet;
 /**
  * Insert with keys.
  *
+ * @param <T> Type of the key
  * @since 0.1
  */
 public final class InsertWithKeys<T> implements Statement<T> {

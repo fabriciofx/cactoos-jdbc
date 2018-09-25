@@ -32,12 +32,6 @@ import java.sql.ResultSet;
  * @since 0.2
  */
 public final class AnyType implements DataType<Object> {
-    /**
-     * Ctor.
-     */
-    public AnyType() {
-    }
-
     @Override
     public boolean match(final int type) {
         return true;

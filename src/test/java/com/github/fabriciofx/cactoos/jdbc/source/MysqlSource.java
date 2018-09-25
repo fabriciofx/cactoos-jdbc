@@ -60,6 +60,7 @@ public final class MysqlSource implements DataSource {
      * @param dbname Database name
      */
     public MysqlSource(final String hostname, final String dbname) {
+        // @checkstyle MagicNumber (1 line)
         this(hostname, 3306, dbname);
     }
 

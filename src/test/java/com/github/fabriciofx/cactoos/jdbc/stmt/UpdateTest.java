@@ -43,6 +43,11 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals"
+    }
+)
 public final class UpdateTest {
     @Test
     public void createTable() throws Exception {

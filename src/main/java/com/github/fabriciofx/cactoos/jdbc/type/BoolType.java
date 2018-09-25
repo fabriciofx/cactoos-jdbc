@@ -33,12 +33,6 @@ import java.sql.Types;
  * @since 0.2
  */
 public final class BoolType implements DataType<Boolean> {
-    /**
-     * Ctor.
-     */
-    public BoolType() {
-    }
-
     @Override
     public boolean match(final int type) {
         return type == Types.BOOLEAN;

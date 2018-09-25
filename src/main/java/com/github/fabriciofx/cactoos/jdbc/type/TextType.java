@@ -33,17 +33,14 @@ import java.sql.Types;
  * @since 0.2
  */
 public final class TextType implements DataType<String> {
-    /**
-     * Ctor.
-     */
-    public TextType() {
-    }
-
     @Override
     public boolean match(final int type) {
-        return type == Types.VARCHAR || type == Types.LONGVARCHAR ||
-            type == Types.CHAR || type == Types.NVARCHAR ||
-            type == Types.NCHAR || type == Types.LONGNVARCHAR;
+        return type == Types.VARCHAR
+            || type == Types.LONGVARCHAR
+            || type == Types.CHAR
+            || type == Types.NVARCHAR
+            || type == Types.NCHAR
+            || type == Types.LONGNVARCHAR;
     }
 
     @Override

@@ -33,15 +33,11 @@ import java.sql.Types;
  * @since 0.2
  */
 public final class RealType implements DataType<Double> {
-    /**
-     * Ctor.
-     */
-    public RealType() {
-    }
-
     @Override
     public boolean match(final int type) {
-        return type == Types.DOUBLE || type == Types.FLOAT || type == Types.REAL;
+        return type == Types.DOUBLE
+            || type == Types.FLOAT
+            || type == Types.REAL;
     }
 
     @Override

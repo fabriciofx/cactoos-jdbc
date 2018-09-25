@@ -27,53 +27,51 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import org.cactoos.Input;
 import org.cactoos.Text;
-import org.cactoos.iterable.Filtered;
-import org.cactoos.iterable.Mapped;
-import org.cactoos.scalar.And;
-import org.cactoos.text.JoinedText;
 import org.cactoos.text.SplitText;
-import org.cactoos.text.TextOf;
 import org.cactoos.text.TrimmedText;
 
-public final class SqlScriptFromInput implements SqlScript {
+/**
+ * SQL Script.
+ *
+ * @since 0.1
+ */
+public final class BuggedSqlScriptFromInput implements SqlScript {
+    /**
+     * Input.
+     */
     private final Input input;
 
-    public SqlScriptFromInput(final Input input) {
-        this.input = input;
+    /**
+     * Ctor.
+     * @param npt Input to be used in the session
+     */
+    public BuggedSqlScriptFromInput(final Input npt) {
+        this.input = npt;
     }
 
     @Override
     public void exec(final Session session) throws Exception {
-        new And(
-            new Mapped<>(
-                (Text sql) -> new Update(
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            final InputStream inpt = this.input.stream();
+            // @checkstyle MagicNumber (1 line)
+            final byte[] buf = new byte[8192];
+            while (true) {
+                final int length = inpt.read(buf);
+                if (length == -1) {
+                    break;
+                }
+                baos.write(buf, 0, length);
+            }
+            for (final Text sql : new SplitText(baos.toString("UTF-8"), ";")) {
+                new Update(
                     session,
-                    new SimpleQuery(sql)
-                ).result(),
-                new SplitText(
-                    new JoinedText(
-                        new TextOf(" "),
-                        new Mapped<>(
-                            (Text line) -> new TrimmedText(line),
-                            new Filtered<>(
-                                line -> {
-                                    final String str = line.asString();
-                                    return !str.startsWith("--")
-                                        && !str.startsWith("//");
-                                },
-                                new SplitText(
-                                    new TextOf(this.input),
-                                    new TextOf("[\\r\\n]+")
-                                )
-                            )
-                        )
-                    ),
-                    new TextOf(";")
-                )
-            )
-        ).value();
+                    new SimpleQuery(new TrimmedText(sql))
+                ).result();
+            }
+        }
     }
 }
-

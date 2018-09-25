@@ -37,7 +37,7 @@ public final class DateTimeParam implements QueryParam {
     /**
      * Name.
      */
-    private final String name;
+    private final String id;
 
     /**
      * Value.
@@ -46,17 +46,17 @@ public final class DateTimeParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The data
      */
     public DateTimeParam(final String name, final LocalDateTime value) {
-        this.name = name;
+        this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.id;
     }
 
     @Override

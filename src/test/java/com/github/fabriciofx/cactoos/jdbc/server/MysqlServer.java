@@ -80,6 +80,7 @@ public final class MysqlServer implements Server {
      * @param scrpt SQL Script to initialize the database
      */
     public MysqlServer(final SqlScript scrpt) {
+        // @checkstyle MagicNumber (1 line)
         this("localhost", 3306, "root", "", scrpt);
     }
 

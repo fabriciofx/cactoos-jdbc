@@ -34,15 +34,10 @@ import java.sql.Types;
  * @since 0.2
  */
 public final class DecimalType implements DataType<BigDecimal> {
-    /**
-     * Ctor.
-     */
-    public DecimalType() {
-    }
-
     @Override
     public boolean match(final int type) {
-        return type == Types.DECIMAL || type == Types.NUMERIC;
+        return type == Types.DECIMAL
+            || type == Types.NUMERIC;
     }
 
     @Override

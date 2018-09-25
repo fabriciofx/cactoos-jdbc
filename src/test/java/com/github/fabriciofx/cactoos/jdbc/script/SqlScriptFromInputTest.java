@@ -27,6 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
 /**
@@ -35,30 +36,34 @@ import org.junit.Test;
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-public final class SqlScriptTest {
+public final class SqlScriptFromInputTest {
     @Test
-    public void h2() throws Exception {
-        final Server h2 = new H2Server(
-            new OldSqlScriptFromInput(
+    public void h2Server() throws Exception {
+        final Server server = new H2Server(
+            new SqlScriptFromInput(
                 new ResourceOf(
                     "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
                 )
             )
         );
-        h2.start();
-        h2.stop();
+        server.start();
+        server.stop();
     }
 
     @Test
-    public void mysql() throws Exception {
-        final Server mysql = new MysqlServer(
-            new OldSqlScriptFromInput(
+    public void mysqlServer() throws Exception {
+        final Server server = new MysqlServer(
+            new SqlScriptFromInput(
                 new ResourceOf(
-                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-mysql.sql"
+                    new JoinedText(
+                        "/",
+                        "com/github/fabriciofx/cactoos/jdbc/agenda",
+                        "agendadb-mysql.sql"
+                    )
                 )
             )
         );
-        mysql.start();
-        mysql.stop();
+        server.start();
+        server.stop();
     }
 }

@@ -36,7 +36,7 @@ public final class UuidParam implements QueryParam {
     /**
      * Name.
      */
-    private final String name;
+    private final String id;
 
     /**
      * Value.
@@ -45,17 +45,17 @@ public final class UuidParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The apply
      */
     public UuidParam(final String name, final UUID value) {
-        this.name = name;
+        this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.id;
     }
 
     @Override

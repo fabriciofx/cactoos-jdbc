@@ -59,6 +59,7 @@ public final class PsqlSource implements DataSource {
      * @param dbname Database name
      */
     public PsqlSource(final String hostname, final String dbname) {
+        // @checkstyle MagicNumber (1 line)
         this(hostname, 5432, dbname);
     }
 

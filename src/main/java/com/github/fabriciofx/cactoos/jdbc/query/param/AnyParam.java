@@ -35,7 +35,7 @@ public final class AnyParam implements QueryParam {
     /**
      * Name.
      */
-    private final String name;
+    private final String id;
 
     /**
      * Value.
@@ -44,17 +44,17 @@ public final class AnyParam implements QueryParam {
 
     /**
      * Ctor.
-     * @param name The name
+     * @param name The id
      * @param value The data
      */
     public AnyParam(final String name, final Object value) {
-        this.name = name;
+        this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.name;
+        return this.id;
     }
 
     @Override

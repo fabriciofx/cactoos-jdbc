@@ -42,6 +42,11 @@ import org.cactoos.text.JoinedText;
  *
  * @since 0.2
  */
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals"
+    }
+)
 public final class PsqlServer implements Server {
     /**
      * Database name.
@@ -80,6 +85,7 @@ public final class PsqlServer implements Server {
      * @param scrpt SQL Script to initialize the database
      */
     public PsqlServer(final SqlScript scrpt) {
+        // @checkstyle MagicNumber (1 line)
         this("localhost", 5432, "postgres", "postgres", scrpt);
     }
 

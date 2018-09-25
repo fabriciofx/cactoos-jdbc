@@ -43,6 +43,7 @@ public final class H2Server implements Server {
      * The Database name.
      */
     private final UncheckedScalar<String> dbname;
+
     /**
      * SQL Script to initialize the database.
      */
@@ -75,6 +76,7 @@ public final class H2Server implements Server {
 
     @Override
     public void stop() throws Exception {
+        // Intended empty.
     }
 
     @Override
@@ -86,5 +88,6 @@ public final class H2Server implements Server {
 
     @Override
     public void close() throws IOException {
+        // Intended empty.
     }
 }
