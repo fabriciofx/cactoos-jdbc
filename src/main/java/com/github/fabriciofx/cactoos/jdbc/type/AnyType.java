@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.DataType;
 import java.sql.ResultSet;
 
 /**
- * Any type.
+ * Plain type.
  *
  * @since 0.2
  */

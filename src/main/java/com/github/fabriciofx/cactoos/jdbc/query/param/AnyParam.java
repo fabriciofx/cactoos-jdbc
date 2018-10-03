@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.QueryParam;
 import java.sql.PreparedStatement;
 
 /**
- * Any param.
+ * Plain param.
  *
  * @since 0.2
  */

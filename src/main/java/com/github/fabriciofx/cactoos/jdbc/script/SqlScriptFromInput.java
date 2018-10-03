@@ -25,55 +25,66 @@ package com.github.fabriciofx.cactoos.jdbc.script;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.Reader;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 import org.cactoos.Input;
-import org.cactoos.Text;
-import org.cactoos.iterable.Filtered;
-import org.cactoos.iterable.Mapped;
-import org.cactoos.scalar.And;
-import org.cactoos.text.JoinedText;
-import org.cactoos.text.SplitText;
-import org.cactoos.text.TextOf;
-import org.cactoos.text.TrimmedText;
 
+/**
+ * Read and execute a SQL Script.
+ *
+ * @since 0.2
+ */
 public final class SqlScriptFromInput implements SqlScript {
+    /**
+     * Input.
+     */
     private final Input input;
 
+    /**
+     * Ctor.
+     * @param input The SQL Script file
+     */
     public SqlScriptFromInput(final Input input) {
         this.input = input;
     }
 
     @Override
     public void exec(final Session session) throws Exception {
-        new And(
-            new Mapped<>(
-                (Text sql) -> new Update(
-                    session,
-                    new SimpleQuery(sql)
-                ).result(),
-                new SplitText(
-                    new JoinedText(
-                        new TextOf(" "),
-                        new Mapped<>(
-                            (Text line) -> new TrimmedText(line),
-                            new Filtered<>(
-                                line -> {
-                                    final String str = line.asString();
-                                    return !str.startsWith("--")
-                                        && !str.startsWith("//");
-                                },
-                                new SplitText(
-                                    new TextOf(this.input),
-                                    new TextOf("[\\r\\n]+")
-                                )
-                            )
-                        )
-                    ),
-                    new TextOf(";")
-                )
-            )
-        ).value();
+        final List<String> lines = new ArrayList<>();
+        try (final Reader reader = new InputStreamReader(this.input.stream())) {
+            try (final LineNumberReader liner = new LineNumberReader(reader)) {
+                while (true) {
+                    final String line = liner.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    final String trimmed = line.trim();
+                    if (!trimmed.isEmpty()
+                        && !trimmed.startsWith("--")
+                        && !trimmed.startsWith("//")) {
+                        lines.add(trimmed);
+                    }
+                }
+            }
+        }
+        final StringJoiner joiner = new StringJoiner(" ");
+        for (final String line : lines) {
+            joiner.add(line);
+        }
+        final String[] cmds = joiner.toString().split(";");
+        try (final Connection conn = session.connection()) {
+            for (final String cmd : cmds) {
+                try (final java.sql.Statement stmt = conn.createStatement()) {
+                    final String sql = cmd.trim();
+                    stmt.execute(sql);
+                }
+            }
+        }
     }
 }
 
