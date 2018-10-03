@@ -37,9 +37,21 @@ import org.cactoos.text.SplitText;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.TrimmedText;
 
+/**
+ * Read and execute a SQL Script.
+ *
+ * @since 0.2
+ */
 public final class OoSqlScriptFromInput implements SqlScript {
+    /**
+     * Input.
+     */
     private final Input input;
 
+    /**
+     * Ctor.
+     * @param input The SQL Script file
+     */
     public OoSqlScriptFromInput(final Input input) {
         this.input = input;
     }
