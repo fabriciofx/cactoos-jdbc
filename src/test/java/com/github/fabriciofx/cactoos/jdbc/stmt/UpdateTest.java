@@ -42,10 +42,12 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  *
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings(
     {
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidInstantiatingObjectsInLoops"
     }
 )
 public final class UpdateTest {

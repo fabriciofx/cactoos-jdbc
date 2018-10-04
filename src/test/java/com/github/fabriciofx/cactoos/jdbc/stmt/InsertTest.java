@@ -48,7 +48,12 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidInstantiatingObjectsInLoops"
+    }
+)
 public final class InsertTest {
     @Test
     public void insert() throws Exception {
@@ -76,7 +81,11 @@ public final class InsertTest {
                         new Insert(
                             session,
                             new SimpleQuery(
-                                "INSERT INTO t01 (id, name) VALUES (:id, :name)",
+                                new JoinedText(
+                                    " ",
+                                    "INSERT INTO t01 (id, name)",
+                                    "VALUES (:id, :name)"
+                                ),
                                 new IntParam("id", 1),
                                 new TextParam("name", "Yegor Bugayenko")
                             )
@@ -89,6 +98,7 @@ public final class InsertTest {
     }
 
     @Test
+    // @checkstyle MethodNameCheck (1 line)
     public void insertWithKeysH2() throws Exception {
         try (final Server server = new H2Server()) {
             server.start();

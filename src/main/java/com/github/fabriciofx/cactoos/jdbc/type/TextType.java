@@ -31,6 +31,7 @@ import java.sql.Types;
  * String type.
  *
  * @since 0.2
+ * @checkstyle BooleanExpressionComplexityCheck (500 lines)
  */
 public final class TextType implements DataType<String> {
     @Override

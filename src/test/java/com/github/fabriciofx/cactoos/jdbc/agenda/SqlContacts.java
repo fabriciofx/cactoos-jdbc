@@ -50,7 +50,8 @@ import org.cactoos.text.JoinedText;
         "PMD.AvoidCatchingGenericException",
         "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidThrowingRawExceptionTypes"
+        "PMD.AvoidThrowingRawExceptionTypes",
+        "PMD.UseLocaleWithCaseConversions"
     }
 )
 public final class SqlContacts implements Contacts {

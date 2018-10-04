@@ -35,6 +35,7 @@ import org.junit.Test;
  *
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle MethodNameCheck (500 lines)
  */
 public final class SqlScriptFromInputTest {
     @Test

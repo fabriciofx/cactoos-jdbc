@@ -41,6 +41,7 @@ import org.cactoos.text.TrimmedText;
  * Read and execute a SQL Script.
  *
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class OoSqlScriptFromInput implements SqlScript {
     /**

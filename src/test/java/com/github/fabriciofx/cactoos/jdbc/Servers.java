@@ -34,6 +34,7 @@ import org.cactoos.list.ListOf;
  *
  * @since 0.2
  */
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class Servers implements Closeable {
     /**
      * All servers.
@@ -48,8 +49,13 @@ public final class Servers implements Closeable {
         this.all = new ListOf<>(srvs);
     }
 
+    /**
+     * Get a list of valid Sessions.
+     * @return A list of Sessions.
+     * @throws Exception if fails
+     */
     public Iterable<Session> sessions() throws Exception {
-        final List<Session> sessions = new ArrayList<>();
+        final List<Session> sessions = new ArrayList<>(0);
         for (final Server server : this.all) {
             server.start();
             sessions.add(server.session());
@@ -63,7 +69,8 @@ public final class Servers implements Closeable {
             for (final Server server : this.all) {
                 server.stop();
             }
-        } catch(final Exception ex) {
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Exception ex) {
             throw new IOException(ex);
         }
     }

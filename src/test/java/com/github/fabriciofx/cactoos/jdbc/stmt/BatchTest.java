@@ -73,7 +73,11 @@ public final class BatchTest {
                 new Batch(
                     session,
                     new BatchQuery(
-                        "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
+                        new JoinedText(
+                            " ",
+                            "INSERT INTO client (id, name, age)",
+                            "VALUES (:id, :name, :age)"
+                        ),
                         new SmartQueryParams(
                             new IntParam("id", 1),
                             new TextParam("name", "Jeff Bridges"),
@@ -87,9 +91,9 @@ public final class BatchTest {
                             new IntParam("age", 26)
                         ),
                         new SmartQueryParams(
+                            // @checkstyle MagicNumber (3 lines)
                             new IntParam("id", 3),
                             new TextParam("name", "Michal Douglas"),
-                            // @checkstyle MagicNumber (1 line)
                             new IntParam("age", 32)
                         )
                     )

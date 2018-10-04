@@ -64,10 +64,12 @@ public final class Uuid implements Scalar<UUID>, Text {
     }
 
     /**
+     * Small UUID string.
      * @return A small string ID
      * @throws Exception if fails
      */
     public String asSmallString() throws Exception {
+        // @checkstyle MagicNumberCheck (1 line)
         return this.asString().substring(0, 5);
     }
 }

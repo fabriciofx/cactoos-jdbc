@@ -43,6 +43,7 @@ import org.cactoos.list.ListOf;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class SmartDataTypes implements DataTypes {
     /**

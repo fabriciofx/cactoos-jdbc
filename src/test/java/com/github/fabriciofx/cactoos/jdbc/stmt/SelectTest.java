@@ -98,7 +98,7 @@ public final class SelectTest {
                         ),
                         new SmartQueryParams(
                             new IntParam("id", 1),
-                            new TextParam("name", "John Wick" ),
+                            new TextParam("name", "John Wick"),
                             new DateParam("birthday", "1980-08-15"),
                             new TextParam("address", "Boulevard Street, 34"),
                             new BoolParam("married", false),
@@ -130,14 +130,20 @@ public final class SelectTest {
                     XhtmlMatchers.hasXPaths(
                         "/employees/employee/id[text()='1']",
                         "/employees/employee/name[text()='John Wick']",
-//                        "/employees/employee/birthday[text()='1980-08-15']",
-                        "/employees/employee/address[text()='Boulevard Street, 34']",
+                        String.join(
+                            "",
+                            "/employees/employee/address[text()=",
+                            "'Boulevard Street, 34']"
+                        ),
                         "/employees/employee/married[text()='false']",
                         "/employees/employee/salary[text()='13456.00']",
                         "/employees/employee/id[text()='2']",
                         "/employees/employee/name[text()='Adam Park']",
-//                        "/employees/employee/birthday[text()='1985-07-09']",
-                        "/employees/employee/address[text()='Sunset Place, 14']",
+                        String.join(
+                            "",
+                            "/employees/employee/address[text()=",
+                            "'Sunset Place, 14']"
+                        ),
                         "/employees/employee/married[text()='true']",
                         "/employees/employee/salary[text()='12345.00']"
                     )

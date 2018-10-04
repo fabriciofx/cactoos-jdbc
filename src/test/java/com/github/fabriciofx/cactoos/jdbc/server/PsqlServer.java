@@ -41,10 +41,12 @@ import org.cactoos.text.JoinedText;
  * PostgreSQL server, for unit testing.
  *
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings(
     {
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidCatchingGenericException"
     }
 )
 public final class PsqlServer implements Server {
@@ -96,6 +98,7 @@ public final class PsqlServer implements Server {
      * @param srnm Username
      * @param psswrd User password
      * @param scrpt SQL Script to initialize the database
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public PsqlServer(
         final String hst,
@@ -181,6 +184,7 @@ public final class PsqlServer implements Server {
     public void close() throws IOException {
         try {
             this.stop();
+            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
             throw new IOException(ex);
         }

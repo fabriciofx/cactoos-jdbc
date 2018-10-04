@@ -43,7 +43,8 @@ import java.util.Map;
 @SuppressWarnings(
     {
         "PMD.ConstructorOnlyInitializesOrCallOtherConstructors",
-        "PMD.AvoidInstantiatingObjectsInLoops"
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.SingularField"
     }
 )
 public final class RowsAsResultSet implements Rows {
@@ -69,14 +70,14 @@ public final class RowsAsResultSet implements Rows {
     /**
      * Ctor.
      * @param rset A ResultSet
-     * @param values A DataValues that contains DataValue to convert data
+     * @param typs A DataValues that contains DataValue to convert data
      * @throws Exception If fails
      */
     public RowsAsResultSet(
         final ResultSet rset,
-        final DataTypes values
+        final DataTypes typs
     ) throws Exception {
-        this.types = values;
+        this.types = typs;
         this.rows = new LinkedList<>();
         final ResultSetMetaData rsmd = rset.getMetaData();
         final int cols = rsmd.getColumnCount();
