@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.ResultSet;
 import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
  * Result as XML.
@@ -34,11 +34,11 @@ import java.util.Map;
  * @since 0.1
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class ResultAsXml implements Result<String> {
+public final class ResultSetAsXml implements Scalar<String> {
     /**
-     * Statement that returns a Rows.
+     * Statement that returns a ResultSet.
      */
-    private final Statement<Rows> statement;
+    private final Statement<ResultSet> statement;
 
     /**
      * Root tag in the XML.
@@ -56,8 +56,8 @@ public final class ResultAsXml implements Result<String> {
      * @param root A root tag
      * @param child A child tag
      */
-    public ResultAsXml(
-        final Statement<Rows> stmt,
+    public ResultSetAsXml(
+        final Statement<ResultSet> stmt,
         final String root,
         final String child
     ) {
@@ -70,19 +70,21 @@ public final class ResultAsXml implements Result<String> {
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("<%s>", this.root));
-        for (final Map<String, Object> row : this.statement.result().value()) {
-            strb.append(String.format("<%s>", this.child));
-            for (final String key : row.keySet()) {
-                strb.append(
-                    String.format(
-                        "<%s>%s</%s>",
-                        key,
-                        row.get(key),
-                        key
-                    )
-                );
+        try (final ResultSet rset = this.statement.result()) {
+            for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
+                strb.append(String.format("<%s>", this.child));
+                for (final String key : row.keySet()) {
+                    strb.append(
+                        String.format(
+                            "<%s>%s</%s>",
+                            key,
+                            row.get(key),
+                            key
+                        )
+                    );
+                }
+                strb.append(String.format("</%s>", this.child));
             }
-            strb.append(String.format("</%s>", this.child));
         }
         strb.append(String.format("</%s>", this.root));
         return strb.toString();

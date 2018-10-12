@@ -21,44 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.ResultSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import org.cactoos.Scalar;
 
 /**
- * Result as values.
+ * Result as data.
  *
- * @param <T> Type of the result
+ * @param <T> Type of the rset
  * @since 0.1
  */
-public final class ResultAsValues<T> implements Result<List<T>> {
+public final class ResultSetAsValue<T> implements Scalar<T> {
     /**
-     * Statement that returns a Rows.
+     * Statement that returns a ResultSet.
      */
-    private final Statement<Rows> statement;
+    private final Statement<ResultSet> statement;
 
     /**
      * Ctor.
-     * @param stmt A statement that returns a Rows
+     * @param stmt A statement
      */
-    public ResultAsValues(final Statement<Rows> stmt) {
+    public ResultSetAsValue(final Statement<ResultSet> stmt) {
         this.statement = stmt;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<T> value() throws Exception {
-        final List<T> values = new LinkedList<>();
-        for (final Map<String, Object> row : this.statement.result().value()) {
-            for (final Object obj : row.values()) {
-                values.add((T) obj);
+    public T value() throws Exception {
+        try (final ResultSet rset = this.statement.result()) {
+            final Iterator<Map<String, Object>> iter = new ResultSetAsRows(rset)
+                .iterator();
+            if (iter.hasNext()) {
+                return (T) iter.next().values().toArray()[0];
+            } else {
+                throw new NoSuchElementException();
             }
         }
-        return values;
     }
 }

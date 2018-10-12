@@ -28,8 +28,8 @@ import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
@@ -103,7 +103,7 @@ public final class SqlPhones implements Phones {
     @Override
     public Iterator<Phone> iterator() {
         try {
-            final Scalar<List<Integer>> seqs = new ResultAsValues<>(
+            final Scalar<List<Integer>> seqs = new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(

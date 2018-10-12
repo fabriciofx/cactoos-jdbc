@@ -21,27 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.ResultSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import org.cactoos.Scalar;
 
 /**
- * Rows.
+ * Result as values.
  *
- * Represent a set of name and values retrieved from a database.
- *
- * <p>There is no thread-safety guarantee.
- *
+ * @param <T> Type of the rset
  * @since 0.1
  */
-public interface Rows extends Iterable<Map<String, Object>> {
+public final class ResultSetAsValues<T> implements Scalar<List<T>> {
     /**
-     * Get the data in row and column.
-     * @param row The row number
-     * @param column The column number
-     * @param <T> The data type
-     * @return The data
-     * @throws Exception if fails
+     * Statement that returns a ResultSet.
      */
-    <T> T data(int row, int column) throws Exception;
+    private final Statement<ResultSet> statement;
+
+    /**
+     * Ctor.
+     * @param stmt A statement that returns a Rows
+     */
+    public ResultSetAsValues(final Statement<ResultSet> stmt) {
+        this.statement = stmt;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> value() throws Exception {
+        final List<T> values = new LinkedList<>();
+        try (final ResultSet rset = this.statement.result()) {
+            for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
+                for (final Object obj : row.values()) {
+                    values.add((T) obj);
+                }
+            }
+        }
+        return values;
+    }
 }

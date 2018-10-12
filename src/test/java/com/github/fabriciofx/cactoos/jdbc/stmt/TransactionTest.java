@@ -25,7 +25,6 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
@@ -60,18 +59,16 @@ public final class TransactionTest {
         ).exec(transacted);
         MatcherAssert.assertThat(
             "Can't perform a transaction",
-            new ResultAsValue<>(
-                new Transaction<>(
-                    transacted,
-                    () -> {
-                        final Contact contact = new SqlContacts(transacted)
-                            .contact("Albert Einstein");
-                        contact.phones().phone("912232325", "TIM");
-                        contact.phones().phone("982231234", "Oi");
-                        return contact.asString();
-                    }
-                )
-            ).value(),
+            new Transaction<>(
+                transacted,
+                () -> {
+                    final Contact contact = new SqlContacts(transacted)
+                        .contact("Albert Einstein");
+                    contact.phones().phone("912232325", "TIM");
+                    contact.phones().phone("982231234", "Oi");
+                    return contact.asString();
+                }
+            ).result(),
             Matchers.containsString(
                 new JoinedText(
                     "\n",

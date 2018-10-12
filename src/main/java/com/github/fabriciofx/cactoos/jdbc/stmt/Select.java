@@ -24,21 +24,21 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.rows.RowsAsResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetFactory;
+import javax.sql.rowset.RowSetProvider;
 
 /**
  * Select.
  *
  * @since 0.1
  */
-public final class Select implements Statement<Rows> {
+public final class Select implements Statement<ResultSet> {
     /**
      * The session.
      */
@@ -60,14 +60,15 @@ public final class Select implements Statement<Rows> {
     }
 
     @Override
-    public Result<Rows> result() throws Exception {
+    public ResultSet result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
         try (final Connection conn = this.session.connection()) {
             try (final PreparedStatement stmt = this.query.prepared(conn)) {
-                stmt.execute();
-                try (final ResultSet rset = stmt.getResultSet()) {
-                    final Rows rows = new RowsAsResultSet(rset);
-                    return () -> rows;
+                try (final ResultSet rset = stmt.executeQuery()) {
+                    final RowSetFactory rsf = RowSetProvider.newFactory();
+                    final CachedRowSet crs = rsf.createCachedRowSet();
+                    crs.populate(rset);
+                    return crs;
                 }
             }
         }

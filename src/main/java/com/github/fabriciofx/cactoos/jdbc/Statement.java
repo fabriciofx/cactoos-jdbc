@@ -28,7 +28,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of the result
+ * @param <T> Type of the rset
  * @since 0.1
  */
 public interface Statement<T> {
@@ -37,5 +37,5 @@ public interface Statement<T> {
      * @return A Result of a type
      * @throws Exception If fails
      */
-    Result<T> result() throws Exception;
+    T result() throws Exception;
 }

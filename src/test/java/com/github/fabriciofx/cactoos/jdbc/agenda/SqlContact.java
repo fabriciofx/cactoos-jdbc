@@ -23,15 +23,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -64,7 +62,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public String name() throws Exception {
-        final Result<List<String>> names = new ResultAsValues<>(
+        return new ResultSetAsValue<String>(
             new Select(
                 this.session,
                 new SimpleQuery(
@@ -72,8 +70,7 @@ public final class SqlContact implements Contact {
                     new UuidParam("id", this.id)
                 )
             )
-        );
-        return names.value().get(0);
+        ).value();
     }
 
     @Override

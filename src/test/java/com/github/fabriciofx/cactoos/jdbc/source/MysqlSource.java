@@ -36,7 +36,7 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 
 /**
- * MySQL result source, for unit testing.
+ * MySQL rset source, for unit testing.
  *
  * @since 0.2
  */

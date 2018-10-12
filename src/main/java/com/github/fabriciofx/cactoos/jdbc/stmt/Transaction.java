@@ -23,7 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.Result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
@@ -33,7 +32,7 @@ import java.util.concurrent.Callable;
 /**
  * Transaction.
  *
- * @param <T> Type of the result
+ * @param <T> Type of the rset
  * @since 0.1
  */
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
@@ -59,12 +58,12 @@ public final class Transaction<T> implements Statement<T> {
     }
 
     @Override
-    public Result<T> result() throws Exception {
+    public T result() throws Exception {
         final Connection connection = this.session.connection();
         try {
-            final T ret = this.callable.call();
+            final T res = this.callable.call();
             connection.commit();
-            return () -> ret;
+            return res;
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
             connection.rollback();

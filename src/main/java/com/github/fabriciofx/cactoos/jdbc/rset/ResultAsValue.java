@@ -21,10 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.rset;
+
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import org.cactoos.Scalar;
 
 /**
- * Rows.
+ * Result as data.
  *
- * @since 0.1
+ * @param <T> Type of the rset
+ * @since 0.3
  */
-package com.github.fabriciofx.cactoos.jdbc.rows;
+public final class ResultAsValue<T> implements Scalar<T> {
+    /**
+     * Statement that returns a ResultSet.
+     */
+    private final Statement<?> statement;
+
+    /**
+     * Ctor.
+     * @param stmt A statement
+     */
+    public ResultAsValue(final Statement<?> stmt) {
+        this.statement = stmt;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T value() throws Exception {
+        return (T) this.statement.result();
+    }
+}

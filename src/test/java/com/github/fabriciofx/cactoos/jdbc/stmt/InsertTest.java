@@ -30,12 +30,13 @@ import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -160,6 +161,7 @@ public final class InsertTest {
         }
     }
 
+    @Ignore
     @Test
     public void insertWithKeysMysql() throws Exception {
         try (final Server server = new MysqlServer()) {
@@ -186,7 +188,7 @@ public final class InsertTest {
                         )
                     )
                 ),
-                new ScalarHasValue<>(1L)
+                new ScalarHasValue<>(1)
             );
         }
     }

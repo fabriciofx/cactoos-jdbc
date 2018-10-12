@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.List;
@@ -75,7 +75,7 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String number() throws Exception {
-        final Scalar<List<String>> numbers = new ResultAsValues<>(
+        final Scalar<List<String>> numbers = new ResultSetAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
@@ -94,7 +94,7 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String carrier() throws Exception {
-        final Scalar<List<String>> carriers = new ResultAsValues<>(
+        final Scalar<List<String>> carriers = new ResultSetAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(

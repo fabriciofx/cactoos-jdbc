@@ -33,19 +33,17 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsXml;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
-import java.util.List;
-import org.cactoos.Scalar;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
  * Select tests.
@@ -116,7 +114,7 @@ public final class SelectTest {
                 ).result();
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new ResultAsXml(
+                        new ResultSetAsXml(
                             new Select(
                                 session,
                                 new SimpleQuery(
@@ -202,18 +200,17 @@ public final class SelectTest {
                         )
                     )
                 ).result();
-                final Scalar<List<String>> names = new ResultAsValues<>(
-                    new Select(
-                        session,
-                        new SimpleQuery(
-                            "SELECT name FROM person"
-                        )
-                    )
-                );
                 MatcherAssert.assertThat(
                     "Can't select a person name",
-                    names.value().get(0),
-                    Matchers.equalTo("Rob Pike")
+                    new ResultSetAsValue<>(
+                        new Select(
+                            session,
+                            new SimpleQuery(
+                                "SELECT name FROM person"
+                            )
+                        )
+                    ),
+                    new ScalarHasValue<>("Rob Pike")
                 );
             }
         }

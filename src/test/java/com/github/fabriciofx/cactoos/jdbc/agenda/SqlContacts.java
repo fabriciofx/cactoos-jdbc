@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValues;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
@@ -84,7 +84,7 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public List<Contact> find(final String name) throws Exception {
-        final Scalar<List<UUID>> ids = new ResultAsValues<>(
+        final Scalar<List<UUID>> ids = new ResultSetAsValues<>(
             new Select(
                 this.session,
                 new SimpleQuery(
@@ -107,7 +107,7 @@ public final class SqlContacts implements Contacts {
     @Override
     public Iterator<Contact> iterator() {
         try {
-            final Scalar<List<UUID>> ids = new ResultAsValues<>(
+            final Scalar<List<UUID>> ids = new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(

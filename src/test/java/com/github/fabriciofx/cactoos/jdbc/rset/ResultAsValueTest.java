@@ -21,63 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
-import com.github.fabriciofx.cactoos.jdbc.Servers;
+import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
- * Update tests.
+ * ResultAsValue tests.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
+ * @since 0.3
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidInstantiatingObjectsInLoops"
-    }
-)
-public final class UpdateTest {
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+public final class ResultAsValueTest {
     @Test
-    public void createTable() throws Exception {
-        try (
-            final Servers servers = new Servers(
-                new H2Server(),
-                new MysqlServer(),
-                new PsqlServer()
+    public void insertWithKeys() throws Exception {
+        final Server server = new H2Server();
+        final Session session = server.session();
+        new Update(
+            session,
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
+                    "CREATE TABLE contact (",
+                    "id INT AUTO_INCREMENT,",
+                    "name VARCHAR(50) NOT NULL,",
+                    "CONSTRAINT pk_contact PRIMARY KEY(id))"
+                )
             )
-        ) {
-            for (final Session session : servers.sessions()) {
-                MatcherAssert.assertThat(
-                    "Can't create a table",
-                    new ResultAsValue<>(
-                        new Update(
-                            session,
-                            new SimpleQuery(
-                                new JoinedText(
-                                    " ",
-                                    "CREATE TABLE foo1 (id INT,",
-                                    "name VARCHAR(50), PRIMARY KEY (id))"
-                                )
-                            )
-                        )
-                    ),
-                    new ScalarHasValue<>(0)
-                );
-            }
-        }
+        ).result();
+        MatcherAssert.assertThat(
+            "Can't get a generated key value",
+            new ResultAsValue<>(
+                new InsertWithKeys<>(
+                    session,
+                    new KeyedQuery(
+                        () -> "INSERT INTO contact (name) VALUES (:name)",
+                        "id",
+                        new TextParam("name", "Leonardo da Vinci")
+                    )
+                )
+            ),
+            new ScalarHasValue<>(1)
+        );
     }
 }

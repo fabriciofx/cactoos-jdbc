@@ -21,33 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
-
-import com.github.fabriciofx.cactoos.jdbc.Result;
-import com.github.fabriciofx.cactoos.jdbc.Statement;
 
 /**
- * Result as data.
+ * Result.
  *
- * @param <T> Type of the result
  * @since 0.1
  */
-public final class ResultAsValue<T> implements Result<T> {
-    /**
-     * Statement.
-     */
-    private final Statement<T> statement;
-
-    /**
-     * Ctor.
-     * @param stmt A statement
-     */
-    public ResultAsValue(final Statement<T> stmt) {
-        this.statement = stmt;
-    }
-
-    @Override
-    public T value() throws Exception {
-        return this.statement.result().value();
-    }
-}
+package com.github.fabriciofx.cactoos.jdbc.rset;
