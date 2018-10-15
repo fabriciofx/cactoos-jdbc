@@ -31,7 +31,7 @@ SOFTWARE.
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
   <description>A true OO implementation of the JDBC API</description>
@@ -72,6 +72,7 @@ SOFTWARE.
       scm:git:git@github.com:fabriciofx/cactoos-jdbc.git
     </developerConnection>
     <url>https://github.com/fabriciofx/cactoos-jdbc</url>
+    <tag>cactoos-jdbc-0.2</tag>
   </scm>
   <ciManagement>
     <system>rultor</system>
