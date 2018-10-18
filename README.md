@@ -2,6 +2,11 @@
 [![We recommend IntelliJ IDEA](http://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 [![Java Profiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
 
+[![Build Status](https://travis-ci.org/fabriciofx/cactoos-jdbc.svg?branch=master)](https://travis-ci.org/fabriciofx/cactoos-jdbc)
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.fabriciofx/cactoos-jdbc.svg)](https://search.maven.org/artifact/com.github.fabriciofx/cactoos-jdbc/0.2.1/jar)
+[![Javadoc](http://www.javadoc.io/badge/com.github.fabriciofx/cactoos-jdbc.svg)](http://www.javadoc.io/doc/com.github.fabriciofx/cactoos-jdbc)
+
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/fabriciofx/cactoos-jdbc/blob/master/LICENSE.txt)
 
 
