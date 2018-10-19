@@ -58,7 +58,7 @@ behind Cactoos JDBC.
 
 ```xml
 <dependency>
-  <groupId>com.github.fabriciofx.cactoos-jdbc</groupId>
+  <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
 </dependency>
 ```
