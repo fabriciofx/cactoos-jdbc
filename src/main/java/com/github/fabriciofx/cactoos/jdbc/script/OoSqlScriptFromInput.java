@@ -58,7 +58,7 @@ public final class OoSqlScriptFromInput implements SqlScript {
     }
 
     @Override
-    public void exec(final Session session) throws Exception {
+    public void run(final Session session) throws Exception {
         new And(
             new Mapped<>(
                 (Text sql) -> new Update(

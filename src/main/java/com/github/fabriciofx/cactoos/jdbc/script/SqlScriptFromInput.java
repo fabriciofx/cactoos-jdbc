@@ -54,7 +54,7 @@ public final class SqlScriptFromInput implements SqlScript {
     }
 
     @Override
-    public void exec(final Session session) throws Exception {
+    public void run(final Session session) throws Exception {
         final List<String> lines = new ArrayList<>(0);
         try (final Reader reader = new InputStreamReader(this.input.stream())) {
             try (final LineNumberReader liner = new LineNumberReader(reader)) {

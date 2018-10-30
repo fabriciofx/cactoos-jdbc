@@ -56,7 +56,7 @@ public final class TransactionTest {
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
-        ).exec(transacted);
+        ).run(transacted);
         MatcherAssert.assertThat(
             "Can't perform a transaction",
             new Transaction<>(

@@ -39,5 +39,5 @@ public interface SqlScript {
      * @param session A Session
      * @throws Exception if fails.
      */
-    void exec(Session session) throws Exception;
+    void run(Session session) throws Exception;
 }

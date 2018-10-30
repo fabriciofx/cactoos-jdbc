@@ -137,7 +137,7 @@ public final class MysqlServer implements Server {
                 )
             )
         ).result();
-        this.script.exec(this.session());
+        this.script.run(this.session());
     }
 
     @Override

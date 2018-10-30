@@ -71,7 +71,7 @@ public final class H2Server implements Server {
 
     @Override
     public void start() throws Exception {
-        this.script.exec(this.session());
+        this.script.run(this.session());
     }
 
     @Override
