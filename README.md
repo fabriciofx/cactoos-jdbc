@@ -14,7 +14,7 @@
 
 **ATTENTION**: We're still in a very early alpha version, the API may and
 *will* change frequently. Please, use it at your own risk, until we release
-version 1.0 (Nov 2018).
+version 1.0 (~~Nov 2018~~ Jan 2019).
 
 **Cactoos JDBC** is a collection of object-oriented Java wrapper classes to
 [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity).
@@ -51,7 +51,7 @@ behind Cactoos JDBC.
 - Retrieve the data as JSON
 - Caching
 - Call Store Procedures
-- Tests on PostgreSQL and MySQL RDBMS
+- ~~Tests on PostgreSQL and MySQL RDBMS~~ (done)
 
 
 ## How to use
@@ -95,49 +95,46 @@ new Update(
 ### Insert
 Let's insert a new employee and return the id of inserted employee.
 ```java
-final int id = new ResultToValue<>(
+final int id = new ResultAsValue<Integer>(
     new InsertWithKeys(
         session,
         new KeyedQuery(
-            "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
+            () -> "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
+            "id",
             new TextValue("name", "Jeff Bridge"),
             new DoubleValue("salary", 12345.00)
         )
-    ),
-    Integer.class
+    )
 ).value();
 ```
 
 ### Select
 Let's retrieve the name of a employee:
 ```java
-final String name = new ResultToValue<>(
+final String name = new ResultAsValue<String>(
     new Select(
         session,
         new SimpleQuery(
             "SELECT name FROM employee WHERE id = :id",
-            new IntValue("id", 123)
+            new IntParam("id", 123)
         )
-    ),
-    String.class
+    )
 ).value();
 ```
 
 Let's retrieve all employee salaries:
 ```java
-final List<Double> salaries = new ResultToValues<>(
+final List<Double> salaries = new ResultAsValues<Double>(
     new Select(
         session,
         new SimpleQuery(
             "SELECT salary FROM employee"
         )
-    ),
-    Double.class
+    )
 ).value();
 ```
 
 ### Transaction
-
 To enable a transaction you will need to do two things:
 1. Decorates a `Session` object using a `TransactedSession` object, like here:
 ```java
