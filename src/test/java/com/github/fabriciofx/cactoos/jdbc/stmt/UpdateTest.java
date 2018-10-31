@@ -54,7 +54,7 @@ public final class UpdateTest {
     @Test
     public void createTable() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
                 new PsqlServer()

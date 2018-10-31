@@ -53,7 +53,7 @@ public final class AgendaTest {
     @Test
     public void addContact() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(
                     new SqlScriptFromInput(
                         new ResourceOf(
@@ -102,7 +102,7 @@ public final class AgendaTest {
     @Test
     public void findContact() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(
                     new SqlScriptFromInput(
                         new ResourceOf(
@@ -140,7 +140,7 @@ public final class AgendaTest {
     @Test
     public void renameContact() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(
                     new SqlScriptFromInput(
                         new ResourceOf(

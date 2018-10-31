@@ -28,9 +28,10 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import java.math.BigInteger;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -49,33 +50,35 @@ import org.llorllale.cactoos.matchers.ScalarHasValue;
 public final class ResultAsValueTest {
     @Test
     public void insertWithKeys() throws Exception {
-        final Server server = new H2Server();
-        final Session session = server.session();
-        new Update(
-            session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "CREATE TABLE contact (",
-                    "id INT AUTO_INCREMENT,",
-                    "name VARCHAR(50) NOT NULL,",
-                    "CONSTRAINT pk_contact PRIMARY KEY(id))"
-                )
-            )
-        ).result();
-        MatcherAssert.assertThat(
-            "Can't get a generated key value",
-            new ResultAsValue<>(
-                new InsertWithKeys<>(
-                    session,
-                    new KeyedQuery(
-                        () -> "INSERT INTO contact (name) VALUES (:name)",
-                        "id",
-                        new TextParam("name", "Leonardo da Vinci")
+        try (Server server = new MysqlServer()) {
+            server.start();
+            final Session session = server.session();
+            new Update(
+                session,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "CREATE TABLE contact (",
+                        "id INT AUTO_INCREMENT,",
+                        "name VARCHAR(50) NOT NULL,",
+                        "CONSTRAINT pk_contact PRIMARY KEY(id))"
                     )
                 )
-            ),
-            new ScalarHasValue<>(1)
-        );
+            ).result();
+            MatcherAssert.assertThat(
+                "Can't get a generated key value",
+                new ResultAsValue<>(
+                    new InsertWithKeys<>(
+                        session,
+                        new KeyedQuery(
+                            () -> "INSERT INTO contact (name) VALUES (:name)",
+                            "id",
+                            new TextParam("name", "Leonardo da Vinci")
+                        )
+                    )
+                ),
+                new ScalarHasValue<>(BigInteger.ONE)
+            );
+        }
     }
 }

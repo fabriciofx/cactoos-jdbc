@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
@@ -59,7 +60,7 @@ public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
                     final Map<String, Object> fields = new LinkedHashMap<>();
                     for (int idx = 1; idx <= cols; ++idx) {
                         final String name = rsmd.getColumnName(idx)
-                            .toLowerCase();
+                            .toLowerCase(Locale.ENGLISH);
                         final Object data = rst.getObject(idx);
                         fields.put(name, data);
                     }

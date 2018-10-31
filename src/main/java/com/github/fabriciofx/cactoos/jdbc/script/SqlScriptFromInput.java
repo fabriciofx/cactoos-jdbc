@@ -56,8 +56,8 @@ public final class SqlScriptFromInput implements SqlScript {
     @Override
     public void run(final Session session) throws Exception {
         final List<String> lines = new ArrayList<>(0);
-        try (final Reader reader = new InputStreamReader(this.input.stream())) {
-            try (final LineNumberReader liner = new LineNumberReader(reader)) {
+        try (Reader reader = new InputStreamReader(this.input.stream())) {
+            try (LineNumberReader liner = new LineNumberReader(reader)) {
                 while (true) {
                     final String line = liner.readLine();
                     if (line == null) {
@@ -77,9 +77,9 @@ public final class SqlScriptFromInput implements SqlScript {
             joiner.add(line);
         }
         final String[] cmds = joiner.toString().split(";");
-        try (final Connection conn = session.connection()) {
+        try (Connection conn = session.connection()) {
             for (final String cmd : cmds) {
-                try (final java.sql.Statement stmt = conn.createStatement()) {
+                try (java.sql.Statement stmt = conn.createStatement()) {
                     final String sql = cmd.trim();
                     stmt.execute(sql);
                 }

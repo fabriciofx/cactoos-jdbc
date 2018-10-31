@@ -54,22 +54,27 @@ public final class PsqlServer implements Server {
      * Database name.
      */
     private final UncheckedScalar<String> dbname;
+
     /**
      * Hostname.
      */
     private final String host;
+
     /**
      * Port.
      */
     private final int port;
+
     /**
      * Username.
      */
     private final String username;
+
     /**
      * User password.
      */
     private final String password;
+
     /**
      * SQL Script to initialize the database.
      */

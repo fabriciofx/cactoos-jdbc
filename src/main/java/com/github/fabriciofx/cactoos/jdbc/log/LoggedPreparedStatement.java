@@ -59,6 +59,7 @@ import org.cactoos.text.UncheckedText;
  * @checkstyle ParameterNameCheck (1500 lines)
  * @checkstyle ParameterNumberCheck (1500 lines)
  * @checkstyle LineLengthCheck (1500 lines)
+ * @checkstyle EmptyLineSeparatorCheck (1500 lines)
  */
 @SuppressWarnings(
     {
@@ -702,6 +703,7 @@ public final class LoggedPreparedStatement implements PreparedStatement {
     public int getMaxFieldSize() throws SQLException {
         return this.origin.getMaxFieldSize();
     }
+
     @Override
     public void setMaxFieldSize(final int max) throws SQLException {
         this.origin.setMaxFieldSize(max);

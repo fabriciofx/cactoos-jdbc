@@ -54,7 +54,7 @@ public final class ResultSetAsValues<T> implements Scalar<List<T>> {
     @Override
     public List<T> value() throws Exception {
         final List<T> values = new LinkedList<>();
-        try (final ResultSet rset = this.statement.result()) {
+        try (ResultSet rset = this.statement.result()) {
             for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
                 for (final Object obj : row.values()) {
                     values.add((T) obj);

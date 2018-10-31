@@ -70,7 +70,7 @@ public final class ResultSetAsXml implements Scalar<String> {
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         strb.append(String.format("<%s>", this.root));
-        try (final ResultSet rset = this.statement.result()) {
+        try (ResultSet rset = this.statement.result()) {
             for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
                 strb.append(String.format("<%s>", this.child));
                 for (final String key : row.keySet()) {

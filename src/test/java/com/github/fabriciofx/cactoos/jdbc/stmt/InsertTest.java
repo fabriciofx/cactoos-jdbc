@@ -34,9 +34,9 @@ import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import java.math.BigInteger;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.ScalarHasValue;
 
@@ -59,7 +59,7 @@ public final class InsertTest {
     @Test
     public void insert() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
                 new PsqlServer()
@@ -101,7 +101,7 @@ public final class InsertTest {
     @Test
     // @checkstyle MethodNameCheck (1 line)
     public void insertWithKeysH2() throws Exception {
-        try (final Server server = new H2Server()) {
+        try (Server server = new H2Server()) {
             server.start();
             final Session session = server.session();
             new Update(
@@ -132,7 +132,7 @@ public final class InsertTest {
 
     @Test
     public void insertWithKeysPsql() throws Exception {
-        try (final Server server = new PsqlServer()) {
+        try (Server server = new PsqlServer()) {
             server.start();
             final Session session = server.session();
             new Update(
@@ -161,10 +161,9 @@ public final class InsertTest {
         }
     }
 
-    @Ignore
     @Test
     public void insertWithKeysMysql() throws Exception {
-        try (final Server server = new MysqlServer()) {
+        try (Server server = new MysqlServer()) {
             server.start();
             final Session session = server.session();
             new Update(
@@ -183,12 +182,13 @@ public final class InsertTest {
                     new InsertWithKeys<>(
                         session,
                         new KeyedQuery(
-                            "INSERT INTO t02 (name) VALUES (:name)",
+                            () -> "INSERT INTO t02 (name) VALUES (:name)",
+                            "id",
                             new TextParam("name", "Jeff Malony")
                         )
                     )
                 ),
-                new ScalarHasValue<>(1)
+                new ScalarHasValue<>(BigInteger.ONE)
             );
         }
     }

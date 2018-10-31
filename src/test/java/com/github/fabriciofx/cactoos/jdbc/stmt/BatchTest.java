@@ -53,7 +53,7 @@ public final class BatchTest {
     @Test
     public void batch() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
                 new PsqlServer()

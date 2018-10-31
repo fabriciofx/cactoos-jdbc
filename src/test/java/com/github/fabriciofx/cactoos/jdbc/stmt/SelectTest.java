@@ -64,7 +64,7 @@ public final class SelectTest {
     @Test
     public void select() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
                 new PsqlServer()
@@ -153,7 +153,7 @@ public final class SelectTest {
     @Test
     public void any() throws Exception {
         try (
-            final Servers servers = new Servers(
+            Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
                 new PsqlServer()
