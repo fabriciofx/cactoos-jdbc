@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -44,12 +45,18 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.EmptyCatchBlock"
+    }
+)
 public final class TransactionTest {
     @Test
-    public void agenda() throws Exception {
+    public void commit() throws Exception {
         final TransactedSession transacted = new TransactedSession(
             new NoAuthSession(
-                new H2Source("testdb")
+                new H2Source("safedb")
             )
         );
         new SqlScriptFromInput(
@@ -58,7 +65,7 @@ public final class TransactionTest {
             )
         ).run(transacted);
         MatcherAssert.assertThat(
-            "Can't perform a transaction",
+            "Can't perform a transaction commit",
             new Transaction<>(
                 transacted,
                 () -> {
@@ -77,6 +84,38 @@ public final class TransactionTest {
                     "Phone: 982231234 (Oi)"
                 ).asString()
             )
+        );
+    }
+
+    @Test
+    public void rollback() throws Exception {
+        final TransactedSession transacted = new TransactedSession(
+            new NoAuthSession(
+                new H2Source("unsafedb")
+            )
+        );
+        new SqlScriptFromInput(
+            new ResourceOf(
+                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+            )
+        ).run(transacted);
+        final Contacts contacts = new SqlContacts(transacted);
+        final String name = "Frank Miller";
+        try {
+            new Transaction<>(
+                transacted,
+                () -> {
+                    final Contact contact = contacts.contact(name);
+                    contact.phones().phone("993458765", "VIVO");
+                    throw new IllegalStateException("");
+                }
+            ).result();
+        } catch (final IllegalStateException ex) {
+        }
+        MatcherAssert.assertThat(
+            "Can't perform a transaction rollback",
+            contacts.find(name).size(),
+            Matchers.equalTo(0)
         );
     }
 }
