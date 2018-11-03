@@ -183,6 +183,13 @@ SOFTWARE.
                 </goals>
               </execution>
               <execution>
+                <id>jacoco-site</id>
+                <phase>install</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+              <execution>
                 <id>jacoco-check</id>
                 <phase>test</phase>
                 <goals>
@@ -227,13 +234,6 @@ SOFTWARE.
                     </rule>
                   </rules>
                 </configuration>
-              </execution>
-              <execution>
-                <id>jacoco-site</id>
-                <phase>install</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
               </execution>
             </executions>
           </plugin>
