@@ -36,19 +36,18 @@ public final class ResultAsValue<T> implements Scalar<T> {
     /**
      * Statement that returns a ResultSet.
      */
-    private final Statement<?> statement;
+    private final Statement<T> statement;
 
     /**
      * Ctor.
      * @param stmt A statement
      */
-    public ResultAsValue(final Statement<?> stmt) {
+    public ResultAsValue(final Statement<T> stmt) {
         this.statement = stmt;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T value() throws Exception {
-        return (T) this.statement.result();
+        return this.statement.result();
     }
 }
