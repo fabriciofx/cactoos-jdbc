@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
@@ -35,6 +36,7 @@ import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
  * Transaction tests.
@@ -66,17 +68,19 @@ public final class TransactionTest {
         ).run(transacted);
         MatcherAssert.assertThat(
             "Can't perform a transaction commit",
-            new Transaction<>(
-                transacted,
-                () -> {
-                    final Contact contact = new SqlContacts(transacted)
-                        .contact("Albert Einstein");
-                    contact.phones().phone("912232325", "TIM");
-                    contact.phones().phone("982231234", "Oi");
-                    return contact.asString();
-                }
-            ).result(),
-            Matchers.containsString(
+            new ResultAsValue<>(
+                new Transaction<>(
+                    transacted,
+                    () -> {
+                        final Contact contact = new SqlContacts(transacted)
+                            .contact("Albert Einstein");
+                        contact.phones().phone("912232325", "TIM");
+                        contact.phones().phone("982231234", "Oi");
+                        return contact.asString();
+                    }
+                )
+            ),
+            new ScalarHasValue<>(
                 new JoinedText(
                     "\n",
                     "Name: Albert Einstein",

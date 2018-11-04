@@ -114,6 +114,7 @@ public final class SqlContact implements Contact {
                 )
             );
         }
+        strb.deleteCharAt(strb.length() - 1);
         return strb.toString();
     }
 }
