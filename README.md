@@ -170,6 +170,21 @@ final Session logging = new LoggingSession(session);
 $ mvn clean install -Pqulice
 ```
 
+## How use ANTLR4 + Maven + IntelliJ (for Contributors)
+
+1. Create a `antlr4` directory inside `src/main` directory (automatically
+jcabi-parent will detect this directory and run antlr properly)
+2. Mark the `antlr4` as Source Root (select the directory, mouse right button,
+`Mark Directory as`, `Sources Root`)
+3. Create the package folder properly (e.g 
+`com.github.fabriciofx.cactoos.jdbc.cache`)
+4. Put the `.g4` file inside the package folder create in (3)
+5. Generate the sources (On Project Folder, mouse right button, `Maven`, 
+`Generate Sources and Update Folders`)
+6. Reimport the Generate Sources (On Project Folder, mouse right button,
+`Maven`, `Reimport`)
+
+
 ## Contributions
 
 Contributions are welcome! Please, open an issue before submit any kind (ideas,
