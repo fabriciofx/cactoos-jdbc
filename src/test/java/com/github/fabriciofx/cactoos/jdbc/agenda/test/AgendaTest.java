@@ -21,10 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
+package com.github.fabriciofx.cactoos.jdbc.agenda.test;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
+import com.github.fabriciofx.cactoos.jdbc.agenda.sql.SqlAgenda;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;

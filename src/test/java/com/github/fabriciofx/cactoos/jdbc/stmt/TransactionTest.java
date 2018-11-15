@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.SqlAgenda;
+import com.github.fabriciofx.cactoos.jdbc.agenda.sql.SqlAgenda;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
