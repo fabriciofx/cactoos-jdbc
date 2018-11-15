@@ -29,6 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -37,6 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -94,6 +96,39 @@ public final class SqlPhones implements Phones {
                     new UuidParam("contact", this.contact),
                     new TextParam("number", number),
                     new TextParam("carrier", carrier)
+                )
+            )
+        );
+        return new SqlPhone(this.session, this.contact, seq.value());
+    }
+
+    @Override
+    public int count() throws Exception {
+        return new ResultSetAsValue<Integer>(
+            new Select(
+                this.session,
+                new SimpleQuery(
+                    "SELECT COUNT(number) FROM phone WHERE contact = :contact",
+                    new UuidParam("contact", this.contact)
+                )
+            )
+        ).value();
+    }
+
+    @Override
+    public Phone get(final int index) throws Exception {
+        final Scalar<Integer> seq = new ResultSetAsValue<>(
+            new Select(
+                this.session,
+                new SimpleQuery(
+                    new FormattedText(
+                        new JoinedText(
+                            " ",
+                            "SELECT seq FROM phone WHERE contact = :contact",
+                            "FETCH FIRST %d ROWS ONLY"
+                        ),
+                        index
+                    )
                 )
             )
         );

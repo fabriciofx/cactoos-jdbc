@@ -32,18 +32,17 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  */
 public interface Contacts extends Iterable<Contact> {
     /**
-     * Create a new Contact.
-     * @param name Contact's name
-     * @return A Contact
+     * Returns the quantity of contacts.
+     * @return The quantity
      * @throws Exception If fails
      */
-    Contact contact(String name) throws Exception;
+    int count() throws Exception;
 
     /**
-     * Search for a Contact.
-     * @param name Contact's name
-     * @return A list contains Contact or an empty list if not
+     * Returns the contact in the set.
+     * @param index The contact (element) position in the set
+     * @return The found contact
      * @throws Exception If fails
      */
-    Contacts filter(String name) throws Exception;
+    Contact get(int index) throws Exception;
 }

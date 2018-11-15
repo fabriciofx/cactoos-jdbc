@@ -23,35 +23,50 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
+import java.util.UUID;
+
 /**
- * Phones.
+ * Agenda for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
+ * @since 0.4
  */
-public interface Phones extends Iterable<Phone> {
+public final class SqlAgenda implements Agenda {
     /**
-     * Create a new contact's phone.
-     * @param number The contact's phone number
-     * @param carrier The contact's phone carrier
-     * @return The Phone
-     * @throws Exception If fails
+     * Session.
      */
-    Phone phone(String number, String carrier) throws Exception;
+    private final Session session;
 
     /**
-     * Returns the quantity of contact's phones.
-     * @return The quantity
-     * @throws Exception If fails
+     * Ctor.
+     * @param sssn The Session
      */
-    int count() throws Exception;
+    public SqlAgenda(final Session sssn) {
+        this.session = sssn;
+    }
 
-    /**
-     * Returns the phone in the set.
-     * @param index The phone (element) position in the set
-     * @return The found phone
-     * @throws Exception If fails
-     */
-    Phone get(int index) throws Exception;
+    @Override
+    public Contact contact(final String name) throws Exception {
+        final UUID id = UUID.randomUUID();
+        new Insert(
+            this.session,
+            new SimpleQuery(
+                "INSERT INTO contact (id, name) VALUES (:id, :name)",
+                new UuidParam("id", id),
+                new TextParam("name", name)
+            )
+        ).result();
+        return new SqlContact(this.session, id);
+    }
+
+    @Override
+    public Contacts filter(final String name) throws Exception {
+        return new FilteredSqlContacts(this.session, name);
+    }
 }

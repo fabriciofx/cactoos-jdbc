@@ -25,16 +25,15 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.text.FormattedText;
 
 /**
  * Contacts for SQL.
@@ -68,22 +67,29 @@ public final class SqlContacts implements Contacts {
     }
 
     @Override
-    public Contact contact(final String name) throws Exception {
-        final UUID id = UUID.randomUUID();
-        new Insert(
-            this.session,
-            new SimpleQuery(
-                "INSERT INTO contact (id, name) VALUES (:id, :name)",
-                new UuidParam("id", id),
-                new TextParam("name", name)
+    public int count() throws Exception {
+        return new ResultSetAsValue<Integer>(
+            new Select(
+                this.session,
+                new SimpleQuery("SELECT COUNT(name) FROM contact")
             )
-        ).result();
-        return new SqlContact(this.session, id);
+        ).value();
     }
 
     @Override
-    public Contacts filter(final String name) throws Exception {
-        return new FilteredSqlContacts(this.session, name);
+    public Contact get(final int index) throws Exception {
+        final Scalar<UUID> id = new ResultSetAsValue<>(
+            new Select(
+                this.session,
+                new SimpleQuery(
+                    new FormattedText(
+                        "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
+                        index
+                    )
+                )
+            )
+        );
+        return new SqlContact(this.session, id.value());
     }
 
     @Override

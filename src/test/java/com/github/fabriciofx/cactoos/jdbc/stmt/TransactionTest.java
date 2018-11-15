@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
+import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Contacts;
-import com.github.fabriciofx.cactoos.jdbc.agenda.SqlContacts;
+import com.github.fabriciofx.cactoos.jdbc.agenda.SqlAgenda;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -73,7 +73,7 @@ public final class TransactionTest {
                 new Transaction<>(
                     transacted,
                     () -> {
-                        final Contact contact = new SqlContacts(transacted)
+                        final Contact contact = new SqlAgenda(transacted)
                             .contact("Albert Einstein");
                         contact.phones().phone("912232325", "TIM");
                         contact.phones().phone("982231234", "Oi");
@@ -104,13 +104,13 @@ public final class TransactionTest {
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
         ).run(transacted);
-        final Contacts contacts = new SqlContacts(transacted);
+        final Agenda agenda = new SqlAgenda(transacted);
         final String name = "Frank Miller";
         try {
             new Transaction<>(
                 transacted,
                 () -> {
-                    final Contact contact = contacts.contact(name);
+                    final Contact contact = agenda.contact(name);
                     contact.phones().phone("993458765", "VIVO");
                     throw new IllegalStateException("");
                 }
@@ -120,7 +120,7 @@ public final class TransactionTest {
         MatcherAssert.assertThat(
             "Can't perform a transaction rollback",
             StreamSupport.stream(
-                contacts.filter(name).spliterator(),
+                agenda.filter(name).spliterator(),
                 false
             ).count(),
             Matchers.equalTo(0L)

@@ -79,13 +79,13 @@ public final class FilteredSqlContacts implements Contacts {
     }
 
     @Override
-    public Contact contact(final String name) throws Exception {
-        return new SqlContacts(this.session).contact(name);
+    public int count() throws Exception {
+        return this.ids.value().size();
     }
 
     @Override
-    public Contacts filter(final String name) throws Exception {
-        return this;
+    public Contact get(final int index) throws Exception {
+        return new SqlContact(this.session, this.ids.value().get(index));
     }
 
     @Override

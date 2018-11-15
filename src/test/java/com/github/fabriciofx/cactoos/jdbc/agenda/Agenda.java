@@ -24,34 +24,26 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 /**
- * Phones.
+ * Agenda.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
+ * @since 0.4
  */
-public interface Phones extends Iterable<Phone> {
+public interface Agenda {
     /**
-     * Create a new contact's phone.
-     * @param number The contact's phone number
-     * @param carrier The contact's phone carrier
-     * @return The Phone
+     * Create a new Contact.
+     * @param name Contact's name
+     * @return A Contact
      * @throws Exception If fails
      */
-    Phone phone(String number, String carrier) throws Exception;
+    Contact contact(String name) throws Exception;
 
     /**
-     * Returns the quantity of contact's phones.
-     * @return The quantity
+     * Search for a Contact.
+     * @param name Contact's name
+     * @return A list contains Contact or an empty list if not
      * @throws Exception If fails
      */
-    int count() throws Exception;
-
-    /**
-     * Returns the phone in the set.
-     * @param index The phone (element) position in the set
-     * @return The found phone
-     * @throws Exception If fails
-     */
-    Phone get(int index) throws Exception;
+    Contacts filter(String name) throws Exception;
 }
