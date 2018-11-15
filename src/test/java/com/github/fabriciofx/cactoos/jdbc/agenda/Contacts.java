@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import java.util.List;
-
 /**
  * Contacts.
  *
@@ -47,5 +45,5 @@ public interface Contacts extends Iterable<Contact> {
      * @return A list contains Contact or an empty list if not
      * @throws Exception If fails
      */
-    List<Contact> find(String name) throws Exception;
+    Contacts filter(String name) throws Exception;
 }

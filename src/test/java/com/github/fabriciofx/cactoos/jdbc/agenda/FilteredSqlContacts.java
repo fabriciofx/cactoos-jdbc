@@ -26,34 +26,31 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.text.JoinedText;
 
 /**
- * Contacts for SQL.
+ * Filtered Contacts for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
+ * @since 0.4
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidCatchingGenericException",
-        "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidThrowingRawExceptionTypes",
-        "PMD.UseLocaleWithCaseConversions"
-    }
-)
-public final class SqlContacts implements Contacts {
+public final class FilteredSqlContacts implements Contacts {
+    /**
+     * Ids.
+     */
+    private final Scalar<List<UUID>> ids;
+
     /**
      * Session.
      */
@@ -62,49 +59,41 @@ public final class SqlContacts implements Contacts {
     /**
      * Ctor.
      * @param sssn A Session.
+     * @param name Contact's name to be filtered.
      */
-    public SqlContacts(final Session sssn) {
+    public FilteredSqlContacts(final Session sssn, final String name) {
         this.session = sssn;
+        this.ids = new ResultSetAsValues<>(
+            new Select(
+                sssn,
+                new SimpleQuery(
+                    new JoinedText(
+                        " ",
+                        "SELECT id FROM contact WHERE LOWER(name) LIKE",
+                        "'%' || :name || '%'"
+                    ),
+                    new TextParam("name", name.toLowerCase(Locale.ENGLISH))
+                )
+            )
+        );
     }
 
     @Override
     public Contact contact(final String name) throws Exception {
-        final UUID id = UUID.randomUUID();
-        new Insert(
-            this.session,
-            new SimpleQuery(
-                "INSERT INTO contact (id, name) VALUES (:id, :name)",
-                new UuidParam("id", id),
-                new TextParam("name", name)
-            )
-        ).result();
-        return new SqlContact(this.session, id);
+        return new SqlContacts(this.session).contact(name);
     }
 
     @Override
     public Contacts filter(final String name) throws Exception {
-        return new FilteredSqlContacts(this.session, name);
+        return this;
     }
 
     @Override
     public Iterator<Contact> iterator() {
-        try {
-            final Scalar<List<UUID>> ids = new ResultSetAsValues<>(
-                new Select(
-                    this.session,
-                    new SimpleQuery(
-                        "SELECT id FROM contact"
-                    )
-                )
-            );
-            final List<Contact> list = new LinkedList<>();
-            for (final UUID id : ids.value()) {
-                list.add(new SqlContact(this.session, id));
-            }
-            return list.iterator();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Exception ex) {
-            throw new RuntimeException("Error in contacts iterator", ex);
+        final List<Contact> list = new LinkedList<>();
+        for (final UUID id : new UncheckedScalar<>(this.ids).value()) {
+            list.add(new SqlContact(this.session, id));
         }
+        return list.iterator();
     }
 }

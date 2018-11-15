@@ -31,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import java.util.stream.StreamSupport;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
@@ -118,8 +119,11 @@ public final class TransactionTest {
         }
         MatcherAssert.assertThat(
             "Can't perform a transaction rollback",
-            contacts.find(name).size(),
-            Matchers.equalTo(0)
+            StreamSupport.stream(
+                contacts.filter(name).spliterator(),
+                false
+            ).count(),
+            Matchers.equalTo(0L)
         );
     }
 }

@@ -129,8 +129,8 @@ public final class AgendaTest {
         ) {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
-                    "Can't find an agenda contact",
-                    new SqlContacts(session).find("maria").get(0),
+                    "Can't filter an agenda contact",
+                    new SqlContacts(session).filter("maria").iterator().next(),
                     new TextHasString("Name: Maria Souza")
                 );
             }
@@ -167,12 +167,13 @@ public final class AgendaTest {
         ) {
             for (final Session session : servers.sessions()) {
                 final Contact contact = new SqlContacts(session)
-                    .find("maria")
-                    .get(0);
+                    .filter("maria")
+                    .iterator()
+                    .next();
                 contact.rename("Maria Lima");
                 MatcherAssert.assertThat(
                     "Can't rename an agenda contact",
-                    new SqlContacts(session).find("maria").get(0),
+                    new SqlContacts(session).filter("maria").iterator().next(),
                     new TextHasString("Name: Maria Lima")
                 );
             }
