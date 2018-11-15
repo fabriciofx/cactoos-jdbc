@@ -52,10 +52,10 @@ public interface Phone {
     void delete() throws Exception;
 
     /**
-     * Change the contact's number and carrier.
+     * Update the contact's number and carrier.
      * @param number The new number
      * @param carrier The new carrier
      * @throws Exception If fails
      */
-    void change(String number, String carrier) throws Exception;
+    void update(String number, String carrier) throws Exception;
 }

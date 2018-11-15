@@ -124,7 +124,7 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public void change(
+    public void update(
         final String number,
         final String carrier
     ) throws Exception {
