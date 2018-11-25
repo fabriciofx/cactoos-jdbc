@@ -31,13 +31,14 @@ import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
 import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.StreamSupport;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.text.JoinedText;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.ScalarHasValue;
 
 /**
  * Transaction tests.
@@ -69,25 +70,40 @@ public final class TransactionTest {
         ).run(transacted);
         MatcherAssert.assertThat(
             "Can't perform a transaction commit",
-            new ResultAsValue<>(
-                new Transaction<>(
-                    transacted,
-                    () -> {
-                        final Contact contact = new SqlAgenda(transacted)
-                            .contact("Albert Einstein");
-                        contact.phones().phone("912232325", "TIM");
-                        contact.phones().phone("982231234", "Oi");
-                        return contact.asString();
-                    }
-                )
+            XhtmlMatchers.xhtml(
+                new ResultAsValue<>(
+                    new Transaction<>(
+                        transacted,
+                        () -> {
+                            final Agenda agenda = new SqlAgenda(transacted);
+                            final Contact contact = agenda.contact(
+                                new MapOf<String, String>(
+                                    new MapEntry<>("name", "Albert Einstein")
+                                )
+                            );
+                            contact.phone(
+                                new MapOf<String, String>(
+                                    new MapEntry<>("number", "99991234"),
+                                    new MapEntry<>("carrier", "TIM")
+                                )
+                            );
+                            contact.phone(
+                                new MapOf<String, String>(
+                                    new MapEntry<>("number", "98812564"),
+                                    new MapEntry<>("carrier", "Oi")
+                                )
+                            );
+                            return contact.about();
+                        }
+                    )
+                ).value()
             ),
-            new ScalarHasValue<>(
-                new JoinedText(
-                    "\n",
-                    "Name: Albert Einstein",
-                    "Phone: 912232325 (TIM)",
-                    "Phone: 982231234 (Oi)"
-                ).asString()
+            XhtmlMatchers.hasXPaths(
+                "/contact/name[text()='Albert Einstein']",
+                "/contact/phones/phone/number[text()='99991234']",
+                "/contact/phones/phone/carrier[text()='TIM']",
+                "/contact/phones/phone/number[text()='98812564']",
+                "/contact/phones/phone/carrier[text()='Oi']"
             )
         );
     }
@@ -110,9 +126,18 @@ public final class TransactionTest {
             new Transaction<>(
                 transacted,
                 () -> {
-                    final Contact contact = agenda.contact(name);
-                    contact.phones().phone("993458765", "VIVO");
-                    throw new IllegalStateException("");
+                    final Contact contact = agenda.contact(
+                        new MapOf<String, String>(
+                            new MapEntry<>("name", name)
+                        )
+                    );
+                    contact.phone(
+                        new MapOf<String, String>(
+                            new MapEntry<>("number", "99991234"),
+                            new MapEntry<>("carrier", "TIM")
+                        )
+                    );
+                    throw new IllegalStateException("Rollback");
                 }
             ).result();
         } catch (final IllegalStateException ex) {

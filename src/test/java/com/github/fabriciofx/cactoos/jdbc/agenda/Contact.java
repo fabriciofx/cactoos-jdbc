@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
-import org.cactoos.Text;
+import java.util.Map;
 
 /**
  * Contact.
@@ -32,13 +32,13 @@ import org.cactoos.Text;
  *
  * @since 0.1
  */
-public interface Contact extends Text {
+public interface Contact {
     /**
-     * Retrieve the Contact's name.
-     * @return Name
-     * @throws Exception I fails
+     * Retrieve the Contact's data.
+     * @return Contact's data
+     * @throws Exception If fails
      */
-    String name() throws Exception;
+    String about() throws Exception;
 
     /**
      * Retrieve the Contact's phones.
@@ -48,15 +48,22 @@ public interface Contact extends Text {
     Phones phones() throws Exception;
 
     /**
+     * Create a new contact's phones.
+     * @param properties The phone's properties
+     * @throws Exception If fails
+     */
+    void phone(Map<String, String> properties) throws Exception;
+
+    /**
      * Delete a Contact.
      * @throws Exception I fails
      */
     void delete() throws Exception;
 
     /**
-     * Rename a Contact.
-     * @param name New name
+     * Update a Contact.
+     * @param properties New properties
      * @throws Exception If fails
      */
-    void rename(String name) throws Exception;
+    void update(Map<String, String> properties) throws Exception;
 }

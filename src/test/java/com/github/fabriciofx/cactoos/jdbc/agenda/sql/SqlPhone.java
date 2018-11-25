@@ -29,12 +29,9 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import org.cactoos.Scalar;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -75,44 +72,6 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public String number() throws Exception {
-        final Scalar<List<String>> numbers = new ResultSetAsValues<>(
-            new Select(
-                this.session,
-                new SimpleQuery(
-                    new JoinedText(
-                        " ",
-                        "SELECT number FROM phone WHERE (contact = :contact)",
-                        "AND (seq = :seq)"
-                    ),
-                    new UuidParam("contact", this.contact),
-                    new IntParam("seq", this.seq)
-                )
-            )
-        );
-        return numbers.value().get(0);
-    }
-
-    @Override
-    public String carrier() throws Exception {
-        final Scalar<List<String>> carriers = new ResultSetAsValues<>(
-            new Select(
-                this.session,
-                new SimpleQuery(
-                    new JoinedText(
-                        " ",
-                        "SELECT carrier FROM phone WHERE (contact = :contact)",
-                        "AND (seq = :seq)"
-                    ),
-                    new UuidParam("contact", this.contact),
-                    new IntParam("seq", this.seq)
-                )
-            )
-        );
-        return carriers.value().get(0);
-    }
-
-    @Override
     public void delete() throws Exception {
         new Update(
             this.session,
@@ -125,10 +84,7 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public void update(
-        final String number,
-        final String carrier
-    ) throws Exception {
+    public void update(final Map<String, String> properties) throws Exception {
         new Update(
             this.session,
             new SimpleQuery(
@@ -137,8 +93,8 @@ public final class SqlPhone implements Phone {
                     "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact = :contact) AND (seq = :seq)"
                 ),
-                new TextParam("number", number),
-                new TextParam("carrier", carrier),
+                new TextParam("number", properties.get("number")),
+                new TextParam("carrier", properties.get("carrier")),
                 new UuidParam("contact", this.contact),
                 new IntParam("seq", this.seq)
             )

@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import java.util.Map;
+
 /**
  * Phone.
  *
@@ -32,30 +34,15 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  */
 public interface Phone {
     /**
-     * Retrieve contact's phone number.
-     * @return The number
-     * @throws Exception If fails
-     */
-    String number() throws Exception;
-
-    /**
-     * Retrieve contact's phone carrier.
-     * @return The carrier's name
-     * @throws Exception If fails
-     */
-    String carrier() throws Exception;
-
-    /**
      * Delete a contact's phone.
      * @throws Exception If fails
      */
     void delete() throws Exception;
 
     /**
-     * Update the contact's number and carrier.
-     * @param number The new number
-     * @param carrier The new carrier
+     * Update the phone contact's properties.
+     * @param properties The new properties
      * @throws Exception If fails
      */
-    void update(String number, String carrier) throws Exception;
+    void update(Map<String, String> properties) throws Exception;
 }

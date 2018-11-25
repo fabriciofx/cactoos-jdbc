@@ -32,15 +32,6 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
  */
 public interface Phones extends Iterable<Phone> {
     /**
-     * Create a new contact's phone.
-     * @param number The contact's phone number
-     * @param carrier The contact's phone carrier
-     * @return The Phone
-     * @throws Exception If fails
-     */
-    Phone phone(String number, String carrier) throws Exception;
-
-    /**
      * Returns the quantity of contact's phones.
      * @return The quantity
      * @throws Exception If fails

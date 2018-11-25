@@ -27,7 +27,6 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.QueryParams;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.List;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
 
@@ -45,7 +44,7 @@ public final class BatchQuery implements Query {
     /**
      * A list of SQL query parameters.
      */
-    private final List<QueryParams> params;
+    private final Iterable<QueryParams> params;
 
     /**
      * Ctor.
@@ -62,8 +61,17 @@ public final class BatchQuery implements Query {
      * @param prms A list of SQL query parameters
      */
     public BatchQuery(final Text sql, final QueryParams... prms) {
-        this.sql = new ParsedSql(sql, prms[0]);
-        this.params = new ListOf<>(prms);
+        this(sql, new ListOf<>(prms));
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param prms A list of SQL query parameters
+     */
+    public BatchQuery(final Text sql, final Iterable<QueryParams> prms) {
+        this.sql = new ParsedSql(sql, prms.iterator().next());
+        this.params = prms;
     }
 
     @Override

@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import java.util.Map;
+
 /**
  * Agenda.
  *
@@ -33,11 +35,11 @@ package com.github.fabriciofx.cactoos.jdbc.agenda;
 public interface Agenda {
     /**
      * Create a new Contact.
-     * @param name Contact's name
-     * @return A Contact
+     * @param properties Contact's properties
+     * @return A new Contact
      * @throws Exception If fails
      */
-    Contact contact(String name) throws Exception;
+    Contact contact(Map<String, String> properties) throws Exception;
 
     /**
      * Search for a Contact.

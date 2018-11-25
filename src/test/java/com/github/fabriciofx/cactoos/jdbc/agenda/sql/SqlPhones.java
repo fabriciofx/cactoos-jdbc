@@ -26,14 +26,10 @@ package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phone;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phones;
-import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.InsertWithKeys;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,30 +74,6 @@ public final class SqlPhones implements Phones {
     public SqlPhones(final Session sssn, final UUID contact) {
         this.session = sssn;
         this.contact = contact;
-    }
-
-    @Override
-    public Phone phone(
-        final String number,
-        final String carrier
-    ) throws Exception {
-        final Scalar<Integer> seq = new ResultAsValue<>(
-            new InsertWithKeys<>(
-                this.session,
-                new KeyedQuery(
-                    new JoinedText(
-                        " ",
-                        "INSERT INTO phone (contact, number, carrier)",
-                        "VALUES (:contact, :number, :carrier)"
-                    ),
-                    "seq",
-                    new UuidParam("contact", this.contact),
-                    new TextParam("number", number),
-                    new TextParam("carrier", carrier)
-                )
-            )
-        );
-        return new SqlPhone(this.session, this.contact, seq.value());
     }
 
     @Override

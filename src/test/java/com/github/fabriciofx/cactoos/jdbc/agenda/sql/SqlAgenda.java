@@ -31,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,6 +41,7 @@ import java.util.UUID;
  *
  * @since 0.4
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlAgenda implements Agenda {
     /**
      * Session.
@@ -55,14 +57,16 @@ public final class SqlAgenda implements Agenda {
     }
 
     @Override
-    public Contact contact(final String name) throws Exception {
+    public Contact contact(
+        final Map<String, String> properties
+    ) throws Exception {
         final UUID id = UUID.randomUUID();
         new Insert(
             this.session,
             new SimpleQuery(
                 "INSERT INTO contact (id, name) VALUES (:id, :name)",
                 new UuidParam("id", id),
-                new TextParam("name", name)
+                new TextParam("name", properties.get("name"))
             )
         ).result();
         return new SqlContact(this.session, id);
