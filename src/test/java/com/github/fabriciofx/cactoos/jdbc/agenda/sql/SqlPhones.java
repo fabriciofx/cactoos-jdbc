@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.JoinedText;
 
@@ -49,7 +50,6 @@ import org.cactoos.text.JoinedText;
  */
 @SuppressWarnings(
     {
-        "PMD.AvoidCatchingGenericException",
         "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.AvoidDuplicateLiterals",
         "PMD.AvoidThrowingRawExceptionTypes"
@@ -111,8 +111,8 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Iterator<Phone> iterator() {
-        try {
-            final Scalar<List<Integer>> seqs = new ResultSetAsValues<>(
+        final UncheckedScalar<List<Integer>> seqs = new UncheckedScalar<>(
+            new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
@@ -120,15 +120,12 @@ public final class SqlPhones implements Phones {
                         new UuidParam("contact", this.contact)
                     )
                 )
-            );
-            final List<Phone> list = new LinkedList<>();
-            for (final int seq : seqs.value()) {
-                list.add(new SqlPhone(this.session, this.contact, seq));
-            }
-            return list.iterator();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Exception ex) {
-            throw new RuntimeException(ex);
+            )
+        );
+        final List<Phone> list = new LinkedList<>();
+        for (final int seq : seqs.value()) {
+            list.add(new SqlPhone(this.session, this.contact, seq));
         }
+        return list.iterator();
     }
 }

@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
 
 /**
@@ -47,7 +48,6 @@ import org.cactoos.text.FormattedText;
  */
 @SuppressWarnings(
     {
-        "PMD.AvoidCatchingGenericException",
         "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.AvoidDuplicateLiterals",
         "PMD.AvoidThrowingRawExceptionTypes",
@@ -96,23 +96,20 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Iterator<Contact> iterator() {
-        try {
-            final Scalar<List<UUID>> ids = new ResultSetAsValues<>(
+        final UncheckedScalar<List<UUID>> ids = new UncheckedScalar<>(
+            new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
                         "SELECT id FROM contact"
                     )
                 )
-            );
-            final List<Contact> list = new LinkedList<>();
-            for (final UUID id : ids.value()) {
-                list.add(new SqlContact(this.session, id));
-            }
-            return list.iterator();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Exception ex) {
-            throw new RuntimeException("Error in contacts iterator", ex);
+            )
+        );
+        final List<Contact> list = new LinkedList<>();
+        for (final UUID id : ids.value()) {
+            list.add(new SqlContact(this.session, id));
         }
+        return list.iterator();
     }
 }

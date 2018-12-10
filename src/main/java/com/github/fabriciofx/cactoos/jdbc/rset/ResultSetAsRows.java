@@ -33,13 +33,13 @@ import java.util.Locale;
 import java.util.Map;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.UncheckedScalar;
 
 /**
  * Rows as ResultSet.
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
     /**
      * Rows.
@@ -73,11 +73,6 @@ public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
 
     @Override
     public Iterator<Map<String, Object>> iterator() {
-        try {
-            return this.rows.value().iterator();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Exception ex) {
-            throw new IllegalStateException(ex);
-        }
+        return new UncheckedScalar<>(this.rows).value().iterator();
     }
 }
