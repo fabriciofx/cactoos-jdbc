@@ -30,7 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXml;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXmlEach;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -80,7 +80,7 @@ public final class SqlContact implements Contact {
                 )
             )
         ).value();
-        final String phones = new ResultSetAsXml(
+        final String phones = new ResultSetAsXmlEach(
             new Select(
                 this.session,
                 new SimpleQuery(

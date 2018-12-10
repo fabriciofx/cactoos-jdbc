@@ -33,8 +33,8 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsManyXml;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
+import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
@@ -114,7 +114,7 @@ public final class SelectTest {
                 ).result();
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new ResultSetAsManyXml(
+                        new ResultSetAsXml(
                             new Select(
                                 session,
                                 new SimpleQuery(

@@ -31,7 +31,7 @@ import org.cactoos.Scalar;
 /**
  * Result as XML.
  *
- * @since 0.1
+ * @since 0.4
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class ResultSetAsXml implements Scalar<String> {
@@ -46,24 +46,33 @@ public final class ResultSetAsXml implements Scalar<String> {
     private final String root;
 
     /**
+     * Child tag in the XML.
+     */
+    private final String child;
+
+    /**
      * Ctor.
      * @param stmt A statement
      * @param root A root tag
+     * @param child A child tag
      */
     public ResultSetAsXml(
         final Statement<ResultSet> stmt,
-        final String root
+        final String root,
+        final String child
     ) {
         this.statement = stmt;
         this.root = root;
+        this.child = child;
     }
 
     @Override
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
+        strb.append(String.format("<%s>", this.root));
         try (ResultSet rset = this.statement.result()) {
             for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
-                strb.append(String.format("<%s>", this.root));
+                strb.append(String.format("<%s>", this.child));
                 for (final String key : row.keySet()) {
                     strb.append(
                         String.format(
@@ -74,9 +83,10 @@ public final class ResultSetAsXml implements Scalar<String> {
                         )
                     );
                 }
-                strb.append(String.format("</%s>", this.root));
+                strb.append(String.format("</%s>", this.child));
             }
         }
+        strb.append(String.format("</%s>", this.root));
         return strb.toString();
     }
 }
