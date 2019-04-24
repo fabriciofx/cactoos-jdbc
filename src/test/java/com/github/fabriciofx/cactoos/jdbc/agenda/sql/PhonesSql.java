@@ -27,13 +27,16 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phone;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phones;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
+import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.UncheckedScalar;
@@ -107,6 +110,23 @@ public final class PhonesSql implements Phones {
             )
         );
         return new PhoneSql(this.session, this.contact, seq.value());
+    }
+
+    @Override
+    public void add(final Map<String, String> properties) throws Exception {
+        new Insert(
+            this.session,
+            new SimpleQuery(
+                new JoinedText(
+                    " ",
+                    "INSERT INTO phone (contact, number, carrier)",
+                    "VALUES (:contact, :number, :carrier)"
+                ),
+                new UuidParam("contact", this.contact),
+                new TextParam("number", properties.get("number")),
+                new TextParam("carrier", properties.get("carrier"))
+            )
+        ).result();
     }
 
     @Override

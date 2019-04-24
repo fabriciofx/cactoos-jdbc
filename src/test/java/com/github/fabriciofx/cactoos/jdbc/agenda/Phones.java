@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
+import java.util.Map;
+
 /**
  * Phones.
  *
@@ -45,4 +47,11 @@ public interface Phones extends Iterable<Phone> {
      * @throws Exception If fails
      */
     Phone get(int index) throws Exception;
+
+    /**
+     * Add a new phone to contact's phones.
+     * @param properties The phone's properties
+     * @throws Exception If fails
+     */
+    void add(Map<String, String> properties) throws Exception;
 }

@@ -81,13 +81,13 @@ public final class TransactionTest {
                                     new MapEntry<>("name", "Albert Einstein")
                                 )
                             );
-                            contact.phone(
+                            contact.phones().add(
                                 new MapOf<String, String>(
                                     new MapEntry<>("number", "99991234"),
                                     new MapEntry<>("carrier", "TIM")
                                 )
                             );
-                            contact.phone(
+                            contact.phones().add(
                                 new MapOf<String, String>(
                                     new MapEntry<>("number", "98812564"),
                                     new MapEntry<>("carrier", "Oi")
@@ -131,7 +131,7 @@ public final class TransactionTest {
                             new MapEntry<>("name", name)
                         )
                     );
-                    contact.phone(
+                    contact.phones().add(
                         new MapOf<String, String>(
                             new MapEntry<>("number", "99991234"),
                             new MapEntry<>("carrier", "TIM")

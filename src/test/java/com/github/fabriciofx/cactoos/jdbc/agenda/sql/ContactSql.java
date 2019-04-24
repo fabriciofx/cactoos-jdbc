@@ -31,7 +31,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXmlEach;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Insert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.Map;
@@ -110,23 +109,6 @@ public final class ContactSql implements Contact {
     @Override
     public Phones phones() throws Exception {
         return new PhonesSql(this.session, this.id);
-    }
-
-    @Override
-    public void phone(final Map<String, String> properties) throws Exception {
-        new Insert(
-            this.session,
-            new SimpleQuery(
-                new JoinedText(
-                    " ",
-                    "INSERT INTO phone (contact, number, carrier)",
-                    "VALUES (:contact, :number, :carrier)"
-                ),
-                new UuidParam("contact", this.id),
-                new TextParam("number", properties.get("number")),
-                new TextParam("carrier", properties.get("carrier"))
-            )
-        ).result();
     }
 
     @Override

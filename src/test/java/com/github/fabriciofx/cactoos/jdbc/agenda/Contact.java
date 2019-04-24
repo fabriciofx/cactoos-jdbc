@@ -48,13 +48,6 @@ public interface Contact {
     Phones phones() throws Exception;
 
     /**
-     * Create a new contact's phones.
-     * @param properties The phone's properties
-     * @throws Exception If fails
-     */
-    void phone(Map<String, String> properties) throws Exception;
-
-    /**
      * Delete a Contact.
      * @throws Exception I fails
      */
