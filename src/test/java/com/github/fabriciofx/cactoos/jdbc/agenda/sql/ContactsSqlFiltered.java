@@ -47,7 +47,7 @@ import org.cactoos.text.JoinedText;
  * @since 0.4
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public final class FilteredSqlContacts implements Contacts {
+public final class ContactsSqlFiltered implements Contacts {
     /**
      * Ids.
      */
@@ -63,7 +63,7 @@ public final class FilteredSqlContacts implements Contacts {
      * @param sssn A Session.
      * @param name Contact's name to be filtered.
      */
-    public FilteredSqlContacts(final Session sssn, final String name) {
+    public ContactsSqlFiltered(final Session sssn, final String name) {
         this.session = sssn;
         this.ids = new ResultSetAsValues<>(
             new Select(
@@ -87,14 +87,14 @@ public final class FilteredSqlContacts implements Contacts {
 
     @Override
     public Contact get(final int index) throws Exception {
-        return new SqlContact(this.session, this.ids.value().get(index));
+        return new ContactSql(this.session, this.ids.value().get(index));
     }
 
     @Override
     public Iterator<Contact> iterator() {
         final List<Contact> list = new LinkedList<>();
         for (final UUID id : new UncheckedScalar<>(this.ids).value()) {
-            list.add(new SqlContact(this.session, id));
+            list.add(new ContactSql(this.session, id));
         }
         return list.iterator();
     }

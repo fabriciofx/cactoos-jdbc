@@ -48,7 +48,7 @@ import org.cactoos.text.JoinedText;
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class SqlContact implements Contact {
+public final class ContactSql implements Contact {
     /**
      * Session.
      */
@@ -64,7 +64,7 @@ public final class SqlContact implements Contact {
      * @param sssn A Session
      * @param id A Contact's ID
      */
-    public SqlContact(final Session sssn, final UUID id) {
+    public ContactSql(final Session sssn, final UUID id) {
         this.session = sssn;
         this.id = id;
     }
@@ -109,7 +109,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public Phones phones() throws Exception {
-        return new SqlPhones(this.session, this.id);
+        return new PhonesSql(this.session, this.id);
     }
 
     @Override

@@ -42,7 +42,7 @@ import java.util.UUID;
  * @since 0.4
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class SqlAgenda implements Agenda {
+public final class AgendaSql implements Agenda {
     /**
      * Session.
      */
@@ -52,7 +52,7 @@ public final class SqlAgenda implements Agenda {
      * Ctor.
      * @param sssn The Session
      */
-    public SqlAgenda(final Session sssn) {
+    public AgendaSql(final Session sssn) {
         this.session = sssn;
     }
 
@@ -69,11 +69,11 @@ public final class SqlAgenda implements Agenda {
                 new TextParam("name", properties.get("name"))
             )
         ).result();
-        return new SqlContact(this.session, id);
+        return new ContactSql(this.session, id);
     }
 
     @Override
     public Contacts filter(final String name) throws Exception {
-        return new FilteredSqlContacts(this.session, name);
+        return new ContactsSqlFiltered(this.session, name);
     }
 }

@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.sql.SqlAgenda;
+import com.github.fabriciofx.cactoos.jdbc.agenda.sql.AgendaSql;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
@@ -84,7 +84,7 @@ public final class AgendaTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Agenda agenda = new SqlAgenda(session);
+                final Agenda agenda = new AgendaSql(session);
                 final Contact contact = agenda.contact(
                     new MapOf<String, String>(
                         new MapEntry<>("name", "Donald Knuth")
@@ -149,7 +149,7 @@ public final class AgendaTest {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new SqlAgenda(session)
+                        new AgendaSql(session)
                             .filter("maria")
                             .iterator()
                             .next()
@@ -192,7 +192,7 @@ public final class AgendaTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Agenda agenda = new SqlAgenda(session);
+                final Agenda agenda = new AgendaSql(session);
                 final Contact contact = agenda.filter("maria").iterator()
                     .next();
                 contact.update(
@@ -202,7 +202,7 @@ public final class AgendaTest {
                 );
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new SqlAgenda(session)
+                        new AgendaSql(session)
                             .filter("maria")
                             .iterator()
                             .next()

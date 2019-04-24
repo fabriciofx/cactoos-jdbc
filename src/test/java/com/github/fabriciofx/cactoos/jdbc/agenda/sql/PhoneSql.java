@@ -43,7 +43,7 @@ import org.cactoos.text.JoinedText;
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class SqlPhone implements Phone {
+public final class PhoneSql implements Phone {
     /**
      * Session.
      */
@@ -65,7 +65,7 @@ public final class SqlPhone implements Phone {
      * @param contact Contact's ID
      * @param seq Sequential number
      */
-    public SqlPhone(final Session sssn, final UUID contact, final int seq) {
+    public PhoneSql(final Session sssn, final UUID contact, final int seq) {
         this.session = sssn;
         this.contact = contact;
         this.seq = seq;

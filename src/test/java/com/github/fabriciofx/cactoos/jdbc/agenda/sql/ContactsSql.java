@@ -24,10 +24,9 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Phone;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Phones;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
@@ -38,10 +37,9 @@ import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.JoinedText;
 
 /**
- * Phones for SQL.
+ * Contacts for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -52,28 +50,22 @@ import org.cactoos.text.JoinedText;
     {
         "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidThrowingRawExceptionTypes"
+        "PMD.AvoidThrowingRawExceptionTypes",
+        "PMD.UseLocaleWithCaseConversions"
     }
 )
-public final class SqlPhones implements Phones {
+public final class ContactsSql implements Contacts {
     /**
      * Session.
      */
     private final Session session;
 
     /**
-     * Contact's ID.
-     */
-    private final UUID contact;
-
-    /**
      * Ctor.
-     * @param sssn A Session
-     * @param contact A Contact's ID
+     * @param sssn A Session.
      */
-    public SqlPhones(final Session sssn, final UUID contact) {
+    public ContactsSql(final Session sssn) {
         this.session = sssn;
-        this.contact = contact;
     }
 
     @Override
@@ -81,50 +73,42 @@ public final class SqlPhones implements Phones {
         return new ResultSetAsValue<Integer>(
             new Select(
                 this.session,
-                new SimpleQuery(
-                    "SELECT COUNT(number) FROM phone WHERE contact = :contact",
-                    new UuidParam("contact", this.contact)
-                )
+                new SimpleQuery("SELECT COUNT(name) FROM contact")
             )
         ).value();
     }
 
     @Override
-    public Phone get(final int index) throws Exception {
-        final Scalar<Integer> seq = new ResultSetAsValue<>(
+    public Contact get(final int index) throws Exception {
+        final Scalar<UUID> id = new ResultSetAsValue<>(
             new Select(
                 this.session,
                 new SimpleQuery(
                     new FormattedText(
-                        new JoinedText(
-                            " ",
-                            "SELECT seq FROM phone WHERE contact = :contact",
-                            "FETCH FIRST %d ROWS ONLY"
-                        ),
+                        "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
                         index
                     )
                 )
             )
         );
-        return new SqlPhone(this.session, this.contact, seq.value());
+        return new ContactSql(this.session, id.value());
     }
 
     @Override
-    public Iterator<Phone> iterator() {
-        final UncheckedScalar<List<Integer>> seqs = new UncheckedScalar<>(
+    public Iterator<Contact> iterator() {
+        final UncheckedScalar<List<UUID>> ids = new UncheckedScalar<>(
             new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
-                        "SELECT seq FROM phone WHERE contact = :contact",
-                        new UuidParam("contact", this.contact)
+                        "SELECT id FROM contact"
                     )
                 )
             )
         );
-        final List<Phone> list = new LinkedList<>();
-        for (final int seq : seqs.value()) {
-            list.add(new SqlPhone(this.session, this.contact, seq));
+        final List<Contact> list = new LinkedList<>();
+        for (final UUID id : ids.value()) {
+            list.add(new ContactSql(this.session, id));
         }
         return list.iterator();
     }

@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.sql.SqlAgenda;
+import com.github.fabriciofx.cactoos.jdbc.agenda.sql.AgendaSql;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -75,7 +75,7 @@ public final class TransactionTest {
                     new Transaction<>(
                         transacted,
                         () -> {
-                            final Agenda agenda = new SqlAgenda(transacted);
+                            final Agenda agenda = new AgendaSql(transacted);
                             final Contact contact = agenda.contact(
                                 new MapOf<String, String>(
                                     new MapEntry<>("name", "Albert Einstein")
@@ -120,7 +120,7 @@ public final class TransactionTest {
                 "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
             )
         ).run(transacted);
-        final Agenda agenda = new SqlAgenda(transacted);
+        final Agenda agenda = new AgendaSql(transacted);
         final String name = "Frank Miller";
         try {
             new Transaction<>(
