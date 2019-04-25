@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phone;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phones;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
@@ -37,7 +38,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
@@ -65,18 +65,18 @@ public final class PhonesSql implements Phones {
     private final Session session;
 
     /**
-     * Contact's ID.
+     * Contact.
      */
-    private final UUID contact;
+    private final Contact contact;
 
     /**
      * Ctor.
      * @param sssn A Session
-     * @param contact A Contact's ID
+     * @param cntct A Contact
      */
-    public PhonesSql(final Session sssn, final UUID contact) {
+    public PhonesSql(final Session sssn, final Contact cntct) {
         this.session = sssn;
-        this.contact = contact;
+        this.contact = cntct;
     }
 
     @Override
@@ -85,8 +85,12 @@ public final class PhonesSql implements Phones {
             new Select(
                 this.session,
                 new SimpleQuery(
-                    "SELECT COUNT(number) FROM phone WHERE contact = :contact",
-                    new UuidParam("contact", this.contact)
+                    new JoinedText(
+                        " ",
+                        "SELECT COUNT(number) FROM phone WHERE",
+                        "contact_id = :contact_id"
+                    ),
+                    new UuidParam("contact_id", this.contact.id())
                 )
             )
         ).value();
@@ -101,7 +105,8 @@ public final class PhonesSql implements Phones {
                     new FormattedText(
                         new JoinedText(
                             " ",
-                            "SELECT seq FROM phone WHERE contact = :contact",
+                            "SELECT seq FROM phone WHERE",
+                            "contact_id = :contact_id",
                             "FETCH FIRST %d ROWS ONLY"
                         ),
                         index
@@ -119,10 +124,10 @@ public final class PhonesSql implements Phones {
             new SimpleQuery(
                 new JoinedText(
                     " ",
-                    "INSERT INTO phone (contact, number, carrier)",
-                    "VALUES (:contact, :number, :carrier)"
+                    "INSERT INTO phone (contact_id, number, carrier)",
+                    "VALUES (:contact_id, :number, :carrier)"
                 ),
-                new UuidParam("contact", this.contact),
+                new UuidParam("contact_id", this.contact.id()),
                 new TextParam("number", properties.get("number")),
                 new TextParam("carrier", properties.get("carrier"))
             )
@@ -136,8 +141,8 @@ public final class PhonesSql implements Phones {
                 new Select(
                     this.session,
                     new SimpleQuery(
-                        "SELECT seq FROM phone WHERE contact = :contact",
-                        new UuidParam("contact", this.contact)
+                        "SELECT seq FROM phone WHERE contact_id = :contact_id",
+                        new UuidParam("contact_id", this.contact.id())
                     )
                 )
             )

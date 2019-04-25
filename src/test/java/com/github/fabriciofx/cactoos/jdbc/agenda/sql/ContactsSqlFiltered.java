@@ -49,14 +49,14 @@ import org.cactoos.text.JoinedText;
  */
 public final class ContactsSqlFiltered implements Contacts {
     /**
-     * Ids.
-     */
-    private final Scalar<List<UUID>> ids;
-
-    /**
      * Session.
      */
     private final Session session;
+
+    /**
+     * Ids.
+     */
+    private final Scalar<List<UUID>> ids;
 
     /**
      * Ctor.

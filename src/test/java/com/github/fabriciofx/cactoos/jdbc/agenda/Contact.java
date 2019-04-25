@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Contact.
@@ -31,8 +32,17 @@ import java.util.Map;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
+ *
+ * @checkstyle MethodNameCheck (100 lines)
  */
+@SuppressWarnings("PMD.ShortMethodName")
 public interface Contact {
+    /**
+     * Retrieve the Contact's ID.
+     * @return Contact's ID
+     */
+    UUID id();
+
     /**
      * Retrieve the Contact's data.
      * @return Contact's data

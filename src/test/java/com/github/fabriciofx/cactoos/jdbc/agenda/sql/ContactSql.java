@@ -46,7 +46,7 @@ import org.cactoos.text.JoinedText;
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.ShortMethodName"})
 public final class ContactSql implements Contact {
     /**
      * Session.
@@ -56,7 +56,7 @@ public final class ContactSql implements Contact {
     /**
      * Contact's ID.
      */
-    private final UUID id;
+    private final UUID uuid;
 
     /**
      * Ctor.
@@ -65,7 +65,12 @@ public final class ContactSql implements Contact {
      */
     public ContactSql(final Session sssn, final UUID id) {
         this.session = sssn;
-        this.id = id;
+        this.uuid = id;
+    }
+
+    @Override
+    public UUID id() {
+        return this.uuid;
     }
 
     @Override
@@ -75,7 +80,7 @@ public final class ContactSql implements Contact {
                 this.session,
                 new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
-                    new UuidParam("id", this.id)
+                    new UuidParam("id", this.uuid)
                 )
             )
         ).value();
@@ -86,9 +91,9 @@ public final class ContactSql implements Contact {
                     new JoinedText(
                         " ",
                         "SELECT number, carrier FROM phone WHERE",
-                        "contact = :contact"
+                        "contact_id = :contact_id"
                     ),
-                    new UuidParam("contact", this.id)
+                    new UuidParam("contact_id", this.uuid)
                 )
             ),
             "phone"
@@ -108,7 +113,7 @@ public final class ContactSql implements Contact {
 
     @Override
     public Phones phones() throws Exception {
-        return new PhonesSql(this.session, this.id);
+        return new PhonesSql(this.session, this);
     }
 
     @Override
@@ -117,7 +122,7 @@ public final class ContactSql implements Contact {
             this.session,
             new SimpleQuery(
                 "DELETE FROM contact WHERE id = :id",
-                new UuidParam("id", this.id)
+                new UuidParam("id", this.uuid)
             )
         ).result();
     }
@@ -129,7 +134,7 @@ public final class ContactSql implements Contact {
             new SimpleQuery(
                 "UPDATE contact SET name = :name WHERE id = :id",
                 new TextParam("name", properties.get("name")),
-                new UuidParam("id", this.id)
+                new UuidParam("id", this.uuid)
             )
         ).result();
     }

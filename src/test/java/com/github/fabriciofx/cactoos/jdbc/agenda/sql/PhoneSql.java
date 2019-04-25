@@ -24,6 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
 import com.github.fabriciofx.cactoos.jdbc.agenda.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
@@ -31,7 +32,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.Map;
-import java.util.UUID;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -50,9 +50,9 @@ public final class PhoneSql implements Phone {
     private final Session session;
 
     /**
-     * Contact's ID.
+     * Contact.
      */
-    private final UUID contact;
+    private final Contact contact;
 
     /**
      * Sequential number.
@@ -62,12 +62,12 @@ public final class PhoneSql implements Phone {
     /**
      * Ctor.
      * @param sssn A Session
-     * @param contact Contact's ID
+     * @param cntct A Contact
      * @param seq Sequential number
      */
-    public PhoneSql(final Session sssn, final UUID contact, final int seq) {
+    public PhoneSql(final Session sssn, final Contact cntct, final int seq) {
         this.session = sssn;
-        this.contact = contact;
+        this.contact = cntct;
         this.seq = seq;
     }
 
@@ -76,8 +76,12 @@ public final class PhoneSql implements Phone {
         new Update(
             this.session,
             new SimpleQuery(
-                "DELETE FROM phone WHERE (contact = :contact) AND (seq = :seq)",
-                new UuidParam("contact", this.contact),
+                new JoinedText(
+                    " ",
+                    "DELETE FROM phone WHERE (contact_id = :contact_id)",
+                    "AND (seq = :seq)"
+                ),
+                new UuidParam("contact_id", this.contact.id()),
                 new IntParam("seq", this.seq)
             )
         ).result();
@@ -91,11 +95,11 @@ public final class PhoneSql implements Phone {
                 new JoinedText(
                     " ",
                     "UPDATE phone SET number = :number, carrier = :carrier",
-                    "WHERE (contact = :contact) AND (seq = :seq)"
+                    "WHERE (contact_id = :contact_id) AND (seq = :seq)"
                 ),
                 new TextParam("number", properties.get("number")),
                 new TextParam("carrier", properties.get("carrier")),
-                new UuidParam("contact", this.contact),
+                new UuidParam("contact_id", this.contact.id()),
                 new IntParam("seq", this.seq)
             )
         ).result();

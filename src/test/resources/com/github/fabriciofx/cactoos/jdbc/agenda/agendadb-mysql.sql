@@ -6,11 +6,11 @@ CREATE TABLE contact (
 
 CREATE TABLE phone (
   seq INT NOT NULL AUTO_INCREMENT,
-  contact BINARY(16) NOT NULL,
+  contact_id BINARY(16) NOT NULL,
   number VARCHAR(10) NOT NULL,
   carrier VARCHAR(10) NOT NULL,
-  CONSTRAINT fk_phone_contact FOREIGN KEY(contact) REFERENCES contact(id),
-  CONSTRAINT pk_phone PRIMARY KEY(seq, contact)
+  CONSTRAINT fk_phone_contact FOREIGN KEY(contact_id) REFERENCES contact(id),
+  CONSTRAINT pk_phone PRIMARY KEY(seq, contact_id)
 );
 
 INSERT INTO contact(id, name)
