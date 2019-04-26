@@ -34,7 +34,6 @@ import java.util.Map;
  *
  * @checkstyle MethodNameCheck (100 lines)
  */
-@SuppressWarnings("PMD.ShortMethodName")
 public interface Contact {
     /**
      * Retrieve the Contact's data.
