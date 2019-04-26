@@ -23,9 +23,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.sql.AgendaSql;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
@@ -65,7 +65,7 @@ public final class TransactionTest {
         );
         new SqlScriptFromInput(
             new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                "com/github/fabriciofx/cactoos/jdbc/phonebook/phonebook-h2.sql"
             )
         ).run(transacted);
         MatcherAssert.assertThat(
@@ -75,8 +75,10 @@ public final class TransactionTest {
                     new Transaction<>(
                         transacted,
                         () -> {
-                            final Agenda agenda = new AgendaSql(transacted);
-                            final Contact contact = agenda.contact(
+                            final Phonebook phonebook = new PhonebookSql(
+                                transacted
+                            );
+                            final Contact contact = phonebook.contact(
                                 new MapOf<String, String>(
                                     new MapEntry<>("name", "Albert Einstein")
                                 )
@@ -117,16 +119,16 @@ public final class TransactionTest {
         );
         new SqlScriptFromInput(
             new ResourceOf(
-                "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                "com/github/fabriciofx/cactoos/jdbc/phonebook/phonebook-h2.sql"
             )
         ).run(transacted);
-        final Agenda agenda = new AgendaSql(transacted);
+        final Phonebook phonebook = new PhonebookSql(transacted);
         final String name = "Frank Miller";
         try {
             new Transaction<>(
                 transacted,
                 () -> {
-                    final Contact contact = agenda.contact(
+                    final Contact contact = phonebook.contact(
                         new MapOf<String, String>(
                             new MapEntry<>("name", name)
                         )
@@ -145,7 +147,7 @@ public final class TransactionTest {
         MatcherAssert.assertThat(
             "Can't perform a transaction rollback",
             StreamSupport.stream(
-                agenda.filter(name).spliterator(),
+                phonebook.filter(name).spliterator(),
                 false
             ).count(),
             Matchers.equalTo(0L)

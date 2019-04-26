@@ -32,7 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import org.cactoos.text.JoinedText;
 import org.junit.Test;
 
@@ -56,7 +56,7 @@ public final class BatchTest {
             Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
-                new PsqlServer()
+                new PgsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {

@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda.test;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.test;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.sql.AgendaSql;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
@@ -40,7 +40,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Agenda tests.
+ * Phonebook tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -54,7 +54,7 @@ import org.junit.Test;
         "PMD.AvoidDuplicateLiterals"
     }
 )
-public final class AgendaTest {
+public final class PhonebookTest {
     @Test
     public void addContact() throws Exception {
         try (
@@ -64,19 +64,19 @@ public final class AgendaTest {
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-h2.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-h2.sql"
                             )
                         )
                     )
                 ),
-                new PsqlServer(
+                new PgsqlServer(
                     new SqlScriptFromInput(
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-psql.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-pgsql.sql"
                             )
                         )
                     )
@@ -84,8 +84,8 @@ public final class AgendaTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Agenda agenda = new AgendaSql(session);
-                final Contact contact = agenda.contact(
+                final Phonebook phonebook = new PhonebookSql(session);
+                final Contact contact = phonebook.contact(
                     new MapOf<String, String>(
                         new MapEntry<>("name", "Donald Knuth")
                     )
@@ -127,19 +127,19 @@ public final class AgendaTest {
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-h2.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-h2.sql"
                             )
                         )
                     )
                 ),
-                new PsqlServer(
+                new PgsqlServer(
                     new SqlScriptFromInput(
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-psql.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-pgsql.sql"
                             )
                         )
                     )
@@ -149,7 +149,7 @@ public final class AgendaTest {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new AgendaSql(session)
+                        new PhonebookSql(session)
                             .filter("maria")
                             .iterator()
                             .next()
@@ -172,19 +172,19 @@ public final class AgendaTest {
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-h2.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-h2.sql"
                             )
                         )
                     )
                 ),
-                new PsqlServer(
+                new PgsqlServer(
                     new SqlScriptFromInput(
                         new ResourceOf(
                             new JoinedText(
                                 "/",
-                                "com/github/fabriciofx/cactoos/jdbc/agenda",
-                                "agendadb-psql.sql"
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-pgsql.sql"
                             )
                         )
                     )
@@ -192,8 +192,8 @@ public final class AgendaTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Agenda agenda = new AgendaSql(session);
-                final Contact contact = agenda.filter("maria").iterator()
+                final Phonebook phonebook = new PhonebookSql(session);
+                final Contact contact = phonebook.filter("maria").iterator()
                     .next();
                 contact.update(
                     new MapOf<String, String>(
@@ -202,7 +202,7 @@ public final class AgendaTest {
                 );
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new AgendaSql(session)
+                        new PhonebookSql(session)
                             .filter("maria")
                             .iterator()
                             .next()

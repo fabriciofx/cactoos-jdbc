@@ -35,16 +35,16 @@ import org.junit.Test;
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-public final class PsqlServerTest {
+public final class PgsqlServerTest {
     @Test
     public void startAndStop() throws Exception {
-        final Server pgsql = new PsqlServer(
+        final Server pgsql = new PgsqlServer(
             new SqlScriptFromInput(
                 new ResourceOf(
                     new JoinedText(
                         "/",
-                        "com/github/fabriciofx/cactoos/jdbc/agenda",
-                        "agendadb-psql.sql"
+                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                        "phonebook-pgsql.sql"
                     )
                 )
             )

@@ -68,8 +68,8 @@ Java version required: 1.8+.
 
 ## Agenda application (demo)
 
-An agenda application has been developed to demonstrate and test the
-catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/agenda).
+An phonebook application has been developed to demonstrate and test the
+catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/phonebook).
 
 ## Usage
 Let's show how use the API. For all above examples, let's start creating a

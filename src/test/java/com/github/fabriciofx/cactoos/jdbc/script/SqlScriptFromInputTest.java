@@ -37,13 +37,18 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle MethodNameCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlScriptFromInputTest {
     @Test
     public void h2Server() throws Exception {
         final Server server = new H2Server(
             new SqlScriptFromInput(
                 new ResourceOf(
-                    "com/github/fabriciofx/cactoos/jdbc/agenda/agendadb-h2.sql"
+                    new JoinedText(
+                        "/",
+                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                        "phonebook-h2.sql"
+                    )
                 )
             )
         );
@@ -58,8 +63,8 @@ public final class SqlScriptFromInputTest {
                 new ResourceOf(
                     new JoinedText(
                         "/",
-                        "com/github/fabriciofx/cactoos/jdbc/agenda",
-                        "agendadb-mysql.sql"
+                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                        "phonebook-mysql.sql"
                     )
                 )
             )

@@ -21,28 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
-
-import java.util.Map;
+package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
 /**
- * Phone.
+ * Contacts.
  *
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
  */
-public interface Phone {
+public interface Contacts extends Iterable<Contact> {
     /**
-     * Delete a contact's phone.
+     * Returns the quantity of contacts.
+     * @return The quantity
      * @throws Exception If fails
      */
-    void delete() throws Exception;
+    int count() throws Exception;
 
     /**
-     * Update the phone contact's properties.
-     * @param properties The new properties
+     * Returns the contact in the set.
+     * @param index The contact (element) position in the set
+     * @return The found contact
      * @throws Exception If fails
      */
-    void update(Map<String, String> properties) throws Exception;
+    Contact get(int index) throws Exception;
 }

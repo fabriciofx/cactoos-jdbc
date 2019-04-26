@@ -21,10 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.phonebook;
+
+import java.util.Map;
 
 /**
- * Agenda demo test application.
+ * Phonebook.
  *
- * @since 0.1
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.4
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
+public interface Phonebook {
+    /**
+     * Create a new Contact.
+     * @param properties Contact's properties
+     * @return A new Contact
+     * @throws Exception If fails
+     */
+    Contact contact(Map<String, String> properties) throws Exception;
+
+    /**
+     * Search for a Contact.
+     * @param name Contact's name
+     * @return A list contains Contact or an empty list if not
+     * @throws Exception If fails
+     */
+    Contacts filter(String name) throws Exception;
+}

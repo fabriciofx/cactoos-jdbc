@@ -21,28 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
 
 /**
- * Contacts.
+ * SQL implementation for phonebook demo.
  *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
+ * @since 0.4
  */
-public interface Contacts extends Iterable<Contact> {
-    /**
-     * Returns the quantity of contacts.
-     * @return The quantity
-     * @throws Exception If fails
-     */
-    int count() throws Exception;
-
-    /**
-     * Returns the contact in the set.
-     * @param index The contact (element) position in the set
-     * @return The found contact
-     * @throws Exception If fails
-     */
-    Contact get(int index) throws Exception;
-}
+package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;

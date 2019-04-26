@@ -21,31 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
+package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
 import java.util.Map;
 
 /**
- * Agenda.
+ * Phones.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.4
+ * @since 0.1
  */
-public interface Agenda {
+public interface Phones extends Iterable<Phone> {
     /**
-     * Create a new Contact.
-     * @param properties Contact's properties
-     * @return A new Contact
+     * Returns the quantity of contact's phones.
+     * @return The quantity
      * @throws Exception If fails
      */
-    Contact contact(Map<String, String> properties) throws Exception;
+    int count() throws Exception;
 
     /**
-     * Search for a Contact.
-     * @param name Contact's name
-     * @return A list contains Contact or an empty list if not
+     * Returns the phone in the set.
+     * @param index The phone (element) position in the set
+     * @return The found phone
      * @throws Exception If fails
      */
-    Contacts filter(String name) throws Exception;
+    Phone get(int index) throws Exception;
+
+    /**
+     * Add a new phone to contact's phones.
+     * @param properties The phone's properties
+     * @throws Exception If fails
+     */
+    void add(Map<String, String> properties) throws Exception;
 }

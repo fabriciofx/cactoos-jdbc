@@ -37,7 +37,7 @@ import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import org.cactoos.text.JoinedText;
@@ -67,7 +67,7 @@ public final class SelectTest {
             Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
-                new PsqlServer()
+                new PgsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -156,7 +156,7 @@ public final class SelectTest {
             Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
-                new PsqlServer()
+                new PgsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {

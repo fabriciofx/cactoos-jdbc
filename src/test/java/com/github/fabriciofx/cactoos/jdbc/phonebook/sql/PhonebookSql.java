@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Agenda;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Contact;
-import com.github.fabriciofx.cactoos.jdbc.agenda.Contacts;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
@@ -35,14 +35,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Agenda for SQL.
+ * Phonebook for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.4
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class AgendaSql implements Agenda {
+public final class PhonebookSql implements Phonebook {
     /**
      * Session.
      */
@@ -52,7 +52,7 @@ public final class AgendaSql implements Agenda {
      * Ctor.
      * @param sssn The Session
      */
-    public AgendaSql(final Session sssn) {
+    public PhonebookSql(final Session sssn) {
         this.session = sssn;
     }
 

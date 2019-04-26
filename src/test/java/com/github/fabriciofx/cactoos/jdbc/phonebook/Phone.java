@@ -21,10 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.phonebook;
+
+import java.util.Map;
 
 /**
- * Agenda demo test.
+ * Phone.
  *
- * @since 0.4
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda.test;
+public interface Phone {
+    /**
+     * Delete a contact's phone.
+     * @throws Exception If fails
+     */
+    void delete() throws Exception;
+
+    /**
+     * Update the phone contact's properties.
+     * @param properties The new properties
+     * @throws Exception If fails
+     */
+    void update(Map<String, String> properties) throws Exception;
+}

@@ -21,37 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda;
-
-import java.util.Map;
 
 /**
- * Phones.
+ * Phonebook demo test.
  *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
+ * @since 0.4
  */
-public interface Phones extends Iterable<Phone> {
-    /**
-     * Returns the quantity of contact's phones.
-     * @return The quantity
-     * @throws Exception If fails
-     */
-    int count() throws Exception;
-
-    /**
-     * Returns the phone in the set.
-     * @param index The phone (element) position in the set
-     * @return The found phone
-     * @throws Exception If fails
-     */
-    Phone get(int index) throws Exception;
-
-    /**
-     * Add a new phone to contact's phones.
-     * @param properties The phone's properties
-     * @throws Exception If fails
-     */
-    void add(Map<String, String> properties) throws Exception;
-}
+package com.github.fabriciofx.cactoos.jdbc.phonebook.test;

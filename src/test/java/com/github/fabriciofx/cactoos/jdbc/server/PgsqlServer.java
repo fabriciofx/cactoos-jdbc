@@ -49,7 +49,7 @@ import org.cactoos.text.JoinedText;
         "PMD.AvoidCatchingGenericException"
     }
 )
-public final class PsqlServer implements Server {
+public final class PgsqlServer implements Server {
     /**
      * Database name.
      */
@@ -83,7 +83,7 @@ public final class PsqlServer implements Server {
     /**
      * Ctor.
      */
-    public PsqlServer() {
+    public PgsqlServer() {
         this(SqlScript.NOP);
     }
 
@@ -91,7 +91,7 @@ public final class PsqlServer implements Server {
      * Ctor.
      * @param scrpt SQL Script to initialize the database
      */
-    public PsqlServer(final SqlScript scrpt) {
+    public PgsqlServer(final SqlScript scrpt) {
         // @checkstyle MagicNumber (1 line)
         this("localhost", 5432, "postgres", "postgres", scrpt);
     }
@@ -105,7 +105,7 @@ public final class PsqlServer implements Server {
      * @param scrpt SQL Script to initialize the database
      * @checkstyle ParameterNumberCheck (10 lines)
      */
-    public PsqlServer(
+    public PgsqlServer(
         final String hst,
         final int prt,
         final String srnm,

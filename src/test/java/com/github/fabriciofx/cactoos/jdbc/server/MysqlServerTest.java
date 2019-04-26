@@ -43,8 +43,8 @@ public final class MysqlServerTest {
                 new ResourceOf(
                     new JoinedText(
                         "/",
-                        "com/github/fabriciofx/cactoos/jdbc/agenda",
-                        "agendadb-mysql.sql"
+                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                        "phonebook-mysql.sql"
                     )
                 )
             )

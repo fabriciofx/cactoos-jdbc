@@ -21,10 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.phonebook;
+
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * SQL implementation for agenda demo.
+ * Contact.
  *
- * @since 0.4
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.1
+ *
+ * @checkstyle MethodNameCheck (100 lines)
  */
-package com.github.fabriciofx.cactoos.jdbc.agenda.sql;
+@SuppressWarnings("PMD.ShortMethodName")
+public interface Contact {
+    /**
+     * Retrieve the Contact's ID.
+     * @return Contact's ID
+     */
+    UUID id();
+
+    /**
+     * Retrieve the Contact's data.
+     * @return Contact's data
+     * @throws Exception If fails
+     */
+    String about() throws Exception;
+
+    /**
+     * Retrieve the Contact's phones.
+     * @return Phones
+     * @throws Exception If fails
+     */
+    Phones phones() throws Exception;
+
+    /**
+     * Delete a Contact.
+     * @throws Exception I fails
+     */
+    void delete() throws Exception;
+
+    /**
+     * Update a Contact.
+     * @param properties New properties
+     * @throws Exception If fails
+     */
+    void update(Map<String, String> properties) throws Exception;
+}

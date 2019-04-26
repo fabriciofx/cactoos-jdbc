@@ -33,7 +33,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.server.PsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import java.math.BigInteger;
 import org.cactoos.text.JoinedText;
 import org.hamcrest.MatcherAssert;
@@ -62,7 +62,7 @@ public final class InsertTest {
             Servers servers = new Servers(
                 new H2Server(),
                 new MysqlServer(),
-                new PsqlServer()
+                new PgsqlServer()
             )
         ) {
             for (final Session session : servers.sessions()) {
@@ -132,7 +132,7 @@ public final class InsertTest {
 
     @Test
     public void insertWithKeysPsql() throws Exception {
-        try (Server server = new PsqlServer()) {
+        try (Server server = new PgsqlServer()) {
             server.start();
             final Session session = server.session();
             new Update(
