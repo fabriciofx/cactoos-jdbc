@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
@@ -32,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
 import java.util.Map;
+import java.util.UUID;
 import org.cactoos.text.JoinedText;
 
 /**
@@ -50,9 +50,9 @@ public final class PhoneSql implements Phone {
     private final Session session;
 
     /**
-     * Contact.
+     * Contact's ID.
      */
-    private final Contact contact;
+    private final UUID id;
 
     /**
      * Sequential number.
@@ -62,12 +62,12 @@ public final class PhoneSql implements Phone {
     /**
      * Ctor.
      * @param sssn A Session
-     * @param cntct A Contact
+     * @param id A Contact's ID
      * @param seq Sequential number
      */
-    public PhoneSql(final Session sssn, final Contact cntct, final int seq) {
+    public PhoneSql(final Session sssn, final UUID id, final int seq) {
         this.session = sssn;
-        this.contact = cntct;
+        this.id = id;
         this.seq = seq;
     }
 
@@ -81,7 +81,7 @@ public final class PhoneSql implements Phone {
                     "DELETE FROM phone WHERE (contact_id = :contact_id)",
                     "AND (seq = :seq)"
                 ),
-                new UuidParam("contact_id", this.contact.id()),
+                new UuidParam("contact_id", this.id),
                 new IntParam("seq", this.seq)
             )
         ).result();
@@ -99,7 +99,7 @@ public final class PhoneSql implements Phone {
                 ),
                 new TextParam("number", properties.get("number")),
                 new TextParam("carrier", properties.get("carrier")),
-                new UuidParam("contact_id", this.contact.id()),
+                new UuidParam("contact_id", this.id),
                 new IntParam("seq", this.seq)
             )
         ).result();

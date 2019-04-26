@@ -56,7 +56,7 @@ public final class ContactSql implements Contact {
     /**
      * Contact's ID.
      */
-    private final UUID uuid;
+    private final UUID id;
 
     /**
      * Ctor.
@@ -65,12 +65,7 @@ public final class ContactSql implements Contact {
      */
     public ContactSql(final Session sssn, final UUID id) {
         this.session = sssn;
-        this.uuid = id;
-    }
-
-    @Override
-    public UUID id() {
-        return this.uuid;
+        this.id = id;
     }
 
     @Override
@@ -80,7 +75,7 @@ public final class ContactSql implements Contact {
                 this.session,
                 new SimpleQuery(
                     "SELECT name FROM contact WHERE id = :id",
-                    new UuidParam("id", this.uuid)
+                    new UuidParam("id", this.id)
                 )
             )
         ).value();
@@ -93,7 +88,7 @@ public final class ContactSql implements Contact {
                         "SELECT number, carrier FROM phone WHERE",
                         "contact_id = :contact_id"
                     ),
-                    new UuidParam("contact_id", this.uuid)
+                    new UuidParam("contact_id", this.id)
                 )
             ),
             "phone"
@@ -113,7 +108,7 @@ public final class ContactSql implements Contact {
 
     @Override
     public Phones phones() throws Exception {
-        return new PhonesSql(this.session, this);
+        return new PhonesSql(this.session, this.id);
     }
 
     @Override
@@ -122,7 +117,7 @@ public final class ContactSql implements Contact {
             this.session,
             new SimpleQuery(
                 "DELETE FROM contact WHERE id = :id",
-                new UuidParam("id", this.uuid)
+                new UuidParam("id", this.id)
             )
         ).result();
     }
@@ -134,7 +129,7 @@ public final class ContactSql implements Contact {
             new SimpleQuery(
                 "UPDATE contact SET name = :name WHERE id = :id",
                 new TextParam("name", properties.get("name")),
-                new UuidParam("id", this.uuid)
+                new UuidParam("id", this.id)
             )
         ).result();
     }

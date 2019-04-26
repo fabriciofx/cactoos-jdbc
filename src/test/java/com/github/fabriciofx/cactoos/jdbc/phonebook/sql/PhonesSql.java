@@ -24,7 +24,6 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
@@ -38,6 +37,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.UncheckedScalar;
 import org.cactoos.text.FormattedText;
@@ -65,18 +65,18 @@ public final class PhonesSql implements Phones {
     private final Session session;
 
     /**
-     * Contact.
+     * Contact's ID.
      */
-    private final Contact contact;
+    private final UUID id;
 
     /**
      * Ctor.
      * @param sssn A Session
-     * @param cntct A Contact
+     * @param id A Contact's ID
      */
-    public PhonesSql(final Session sssn, final Contact cntct) {
+    public PhonesSql(final Session sssn, final UUID id) {
         this.session = sssn;
-        this.contact = cntct;
+        this.id = id;
     }
 
     @Override
@@ -90,7 +90,7 @@ public final class PhonesSql implements Phones {
                         "SELECT COUNT(number) FROM phone WHERE",
                         "contact_id = :contact_id"
                     ),
-                    new UuidParam("contact_id", this.contact.id())
+                    new UuidParam("contact_id", this.id)
                 )
             )
         ).value();
@@ -114,7 +114,7 @@ public final class PhonesSql implements Phones {
                 )
             )
         );
-        return new PhoneSql(this.session, this.contact, seq.value());
+        return new PhoneSql(this.session, this.id, seq.value());
     }
 
     @Override
@@ -127,7 +127,7 @@ public final class PhonesSql implements Phones {
                     "INSERT INTO phone (contact_id, number, carrier)",
                     "VALUES (:contact_id, :number, :carrier)"
                 ),
-                new UuidParam("contact_id", this.contact.id()),
+                new UuidParam("contact_id", this.id),
                 new TextParam("number", properties.get("number")),
                 new TextParam("carrier", properties.get("carrier"))
             )
@@ -142,14 +142,14 @@ public final class PhonesSql implements Phones {
                     this.session,
                     new SimpleQuery(
                         "SELECT seq FROM phone WHERE contact_id = :contact_id",
-                        new UuidParam("contact_id", this.contact.id())
+                        new UuidParam("contact_id", this.id)
                     )
                 )
             )
         );
         final List<Phone> list = new LinkedList<>();
         for (final int seq : seqs.value()) {
-            list.add(new PhoneSql(this.session, this.contact, seq));
+            list.add(new PhoneSql(this.session, this.id, seq));
         }
         return list.iterator();
     }
