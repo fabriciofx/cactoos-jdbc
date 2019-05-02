@@ -72,11 +72,11 @@ public final class PhonesSql implements Phones {
     /**
      * Ctor.
      * @param sssn A Session
-     * @param id A Contact's ID
+     * @param contact A Contact's ID
      */
-    public PhonesSql(final Session sssn, final UUID id) {
+    public PhonesSql(final Session sssn, final UUID contact) {
         this.session = sssn;
-        this.id = id;
+        this.id = contact;
     }
 
     @Override
@@ -98,14 +98,14 @@ public final class PhonesSql implements Phones {
 
     @Override
     public Phone get(final int index) throws Exception {
-        final Scalar<Integer> seq = new ResultSetAsValue<>(
+        final Scalar<String> number = new ResultSetAsValue<>(
             new Select(
                 this.session,
                 new SimpleQuery(
                     new FormattedText(
                         new JoinedText(
                             " ",
-                            "SELECT seq FROM phone WHERE",
+                            "SELECT number FROM phone WHERE",
                             "contact_id = :contact_id",
                             "FETCH FIRST %d ROWS ONLY"
                         ),
@@ -114,7 +114,7 @@ public final class PhonesSql implements Phones {
                 )
             )
         );
-        return new PhoneSql(this.session, this.id, seq.value());
+        return new PhoneSql(this.session, this.id, number.value());
     }
 
     @Override
@@ -136,20 +136,24 @@ public final class PhonesSql implements Phones {
 
     @Override
     public Iterator<Phone> iterator() {
-        final UncheckedScalar<List<Integer>> seqs = new UncheckedScalar<>(
+        final UncheckedScalar<List<String>> numbers = new UncheckedScalar<>(
             new ResultSetAsValues<>(
                 new Select(
                     this.session,
                     new SimpleQuery(
-                        "SELECT seq FROM phone WHERE contact_id = :contact_id",
+                        new JoinedText(
+                            " ",
+                            "SELECT number FROM phone WHERE",
+                            "contact_id = :contact_id"
+                        ),
                         new UuidParam("contact_id", this.id)
                     )
                 )
             )
         );
         final List<Phone> list = new LinkedList<>();
-        for (final int seq : seqs.value()) {
-            list.add(new PhoneSql(this.session, this.id, seq));
+        for (final String number : numbers.value()) {
+            list.add(new PhoneSql(this.session, this.id, number));
         }
         return list.iterator();
     }

@@ -5,12 +5,11 @@ CREATE TABLE contact (
 );
 
 CREATE TABLE phone (
-  seq INT NOT NULL AUTO_INCREMENT,
   contact_id BINARY(16) NOT NULL,
   number VARCHAR(10) NOT NULL,
   carrier VARCHAR(10) NOT NULL,
   CONSTRAINT fk_phone_contact FOREIGN KEY(contact_id) REFERENCES contact(id),
-  CONSTRAINT pk_phone PRIMARY KEY(seq, contact_id)
+  CONSTRAINT pk_phone PRIMARY KEY(contact_id, number)
 );
 
 INSERT INTO contact(id, name)

@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
@@ -55,20 +54,24 @@ public final class PhoneSql implements Phone {
     private final UUID id;
 
     /**
-     * Sequential number.
+     * Phone num.
      */
-    private final int seq;
+    private final String num;
 
     /**
      * Ctor.
      * @param sssn A Session
-     * @param id A Contact's ID
-     * @param seq Sequential number
+     * @param contact A Contact's ID
+     * @param number Phone number
      */
-    public PhoneSql(final Session sssn, final UUID id, final int seq) {
+    public PhoneSql(
+        final Session sssn,
+        final UUID contact,
+        final String number
+    ) {
         this.session = sssn;
-        this.id = id;
-        this.seq = seq;
+        this.id = contact;
+        this.num = number;
     }
 
     @Override
@@ -79,10 +82,10 @@ public final class PhoneSql implements Phone {
                 new JoinedText(
                     " ",
                     "DELETE FROM phone WHERE (contact_id = :contact_id)",
-                    "AND (seq = :seq)"
+                    "AND (number = :number)"
                 ),
                 new UuidParam("contact_id", this.id),
-                new IntParam("seq", this.seq)
+                new TextParam("number", this.num)
             )
         ).result();
     }
@@ -95,12 +98,12 @@ public final class PhoneSql implements Phone {
                 new JoinedText(
                     " ",
                     "UPDATE phone SET number = :number, carrier = :carrier",
-                    "WHERE (contact_id = :contact_id) AND (seq = :seq)"
+                    "WHERE (contact_id = :contact_id) AND (number = :number)"
                 ),
                 new TextParam("number", properties.get("number")),
                 new TextParam("carrier", properties.get("carrier")),
                 new UuidParam("contact_id", this.id),
-                new IntParam("seq", this.seq)
+                new TextParam("number", this.num)
             )
         ).result();
     }
