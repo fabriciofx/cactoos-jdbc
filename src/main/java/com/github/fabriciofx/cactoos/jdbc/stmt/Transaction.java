@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,7 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.stmt;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
+import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
@@ -52,7 +52,7 @@ public final class Transaction<T> implements Statement<T> {
      * @param sssn A session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final TransactedSession sssn, final Callable<T> call) {
+    public Transaction(final Transacted sssn, final Callable<T> call) {
         this.session = sssn;
         this.callable = call;
     }

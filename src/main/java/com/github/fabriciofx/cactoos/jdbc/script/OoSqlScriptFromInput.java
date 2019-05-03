@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,17 +25,17 @@ package com.github.fabriciofx.cactoos.jdbc.script;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
 import org.cactoos.Input;
 import org.cactoos.Text;
 import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Mapped;
 import org.cactoos.scalar.And;
-import org.cactoos.text.JoinedText;
-import org.cactoos.text.SplitText;
+import org.cactoos.text.Joined;
+import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
-import org.cactoos.text.TrimmedText;
+import org.cactoos.text.Trimmed;
 
 /**
  * Read and execute a SQL Script.
@@ -61,22 +61,22 @@ public final class OoSqlScriptFromInput implements SqlScript {
     public void run(final Session session) throws Exception {
         new And(
             new Mapped<>(
-                (Text sql) -> new Update(
+                (Text sql) -> new StatementUpdate(
                     session,
-                    new SimpleQuery(sql)
+                    new QuerySimple(sql)
                 ).result(),
-                new SplitText(
-                    new JoinedText(
+                new Split(
+                    new Joined(
                         new TextOf(" "),
                         new Mapped<>(
-                            (Text line) -> new TrimmedText(line),
+                            (Text line) -> new Trimmed(line),
                             new Filtered<>(
                                 line -> {
                                     final String str = line.asString();
                                     return !str.startsWith("--")
                                         && !str.startsWith("//");
                                 },
-                                new SplitText(
+                                new Split(
                                     new TextOf(this.input),
                                     new TextOf("[\\r\\n]+")
                                 )

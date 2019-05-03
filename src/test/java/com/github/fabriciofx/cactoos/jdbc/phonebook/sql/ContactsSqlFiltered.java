@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,20 +24,20 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.UncheckedScalar;
-import org.cactoos.text.JoinedText;
+import org.cactoos.scalar.Unchecked;
+import org.cactoos.text.Joined;
 
 /**
  * Filtered Contacts for SQL.
@@ -66,15 +66,15 @@ public final class ContactsSqlFiltered implements Contacts {
     public ContactsSqlFiltered(final Session sssn, final String name) {
         this.session = sssn;
         this.ids = new ResultSetAsValues<>(
-            new Select(
+            new StatementSelect(
                 sssn,
-                new SimpleQuery(
-                    new JoinedText(
+                new QuerySimple(
+                    new Joined(
                         " ",
                         "SELECT id FROM contact WHERE LOWER(name) LIKE",
                         "'%' || :name || '%'"
                     ),
-                    new TextParam("name", name.toLowerCase(Locale.ENGLISH))
+                    new ParamText("name", name.toLowerCase(Locale.ENGLISH))
                 )
             )
         );
@@ -93,7 +93,7 @@ public final class ContactsSqlFiltered implements Contacts {
     @Override
     public Iterator<Contact> iterator() {
         final List<Contact> list = new LinkedList<>();
-        for (final UUID id : new UncheckedScalar<>(this.ids).value()) {
+        for (final UUID id : new Unchecked<>(this.ids).value()) {
             list.add(new ContactSql(this.session, id));
         }
         return list.iterator();

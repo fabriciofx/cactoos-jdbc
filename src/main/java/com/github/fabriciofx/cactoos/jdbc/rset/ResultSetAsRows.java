@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.StickyScalar;
-import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Unchecked;
 
 /**
  * Rows as ResultSet.
@@ -51,7 +51,7 @@ public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
      * @param rst A ResultSet
      */
     public ResultSetAsRows(final ResultSet rst) {
-        this.rows = new StickyScalar<>(
+        this.rows = new Sticky<>(
             () -> {
                 final List<Map<String, Object>> rws = new LinkedList<>();
                 final ResultSetMetaData rsmd = rst.getMetaData();
@@ -73,6 +73,6 @@ public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
 
     @Override
     public Iterator<Map<String, Object>> iterator() {
-        return new UncheckedScalar<>(this.rows).value().iterator();
+        return new Unchecked<>(this.rows).value().iterator();
     }
 }

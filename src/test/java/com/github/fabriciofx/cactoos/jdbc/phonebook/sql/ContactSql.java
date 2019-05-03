@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,19 +24,19 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
+import com.github.fabriciofx.cactoos.jdbc.param.ParamUuid;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
+import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsXmlEach;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
 import java.util.Map;
 import java.util.UUID;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.JoinedText;
+import org.cactoos.text.Joined;
 
 /**
  * Contact for SQL.
@@ -71,24 +71,24 @@ public final class ContactSql implements Contact {
     @Override
     public String about() throws Exception {
         final String contact = new ResultSetAsValue<String>(
-            new Select(
+            new StatementSelect(
                 this.session,
-                new SimpleQuery(
+                new QuerySimple(
                     "SELECT name FROM contact WHERE id = :id",
-                    new UuidParam("id", this.id)
+                    new ParamUuid("id", this.id)
                 )
             )
         ).value();
         final String phones = new ResultSetAsXmlEach(
-            new Select(
+            new StatementSelect(
                 this.session,
-                new SimpleQuery(
-                    new JoinedText(
+                new QuerySimple(
+                    new Joined(
                         " ",
                         "SELECT number, carrier FROM phone WHERE",
                         "contact_id = :contact_id"
                     ),
-                    new UuidParam("contact_id", this.id)
+                    new ParamUuid("contact_id", this.id)
                 )
             ),
             "phone"
@@ -113,23 +113,23 @@ public final class ContactSql implements Contact {
 
     @Override
     public void delete() throws Exception {
-        new Update(
+        new StatementUpdate(
             this.session,
-            new SimpleQuery(
+            new QuerySimple(
                 "DELETE FROM contact WHERE id = :id",
-                new UuidParam("id", this.id)
+                new ParamUuid("id", this.id)
             )
         ).result();
     }
 
     @Override
     public void update(final Map<String, String> properties) throws Exception {
-        new Update(
+        new StatementUpdate(
             this.session,
-            new SimpleQuery(
+            new QuerySimple(
                 "UPDATE contact SET name = :name WHERE id = :id",
-                new TextParam("name", properties.get("name")),
-                new UuidParam("id", this.id)
+                new ParamText("name", properties.get("name")),
+                new ParamUuid("id", this.id)
             )
         ).result();
     }

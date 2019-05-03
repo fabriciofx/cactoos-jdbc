@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -26,16 +26,16 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
+import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Select;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 
 /**
@@ -71,9 +71,9 @@ public final class ContactsSql implements Contacts {
     @Override
     public int count() throws Exception {
         return new ResultSetAsValue<Integer>(
-            new Select(
+            new StatementSelect(
                 this.session,
-                new SimpleQuery("SELECT COUNT(name) FROM contact")
+                new QuerySimple("SELECT COUNT(name) FROM contact")
             )
         ).value();
     }
@@ -81,9 +81,9 @@ public final class ContactsSql implements Contacts {
     @Override
     public Contact get(final int index) throws Exception {
         final Scalar<UUID> id = new ResultSetAsValue<>(
-            new Select(
+            new StatementSelect(
                 this.session,
-                new SimpleQuery(
+                new QuerySimple(
                     new FormattedText(
                         "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
                         index
@@ -96,11 +96,11 @@ public final class ContactsSql implements Contacts {
 
     @Override
     public Iterator<Contact> iterator() {
-        final UncheckedScalar<List<UUID>> ids = new UncheckedScalar<>(
+        final Unchecked<List<UUID>> ids = new Unchecked<>(
             new ResultSetAsValues<>(
-                new Select(
+                new StatementSelect(
                     this.session,
-                    new SimpleQuery(
+                    new QuerySimple(
                         "SELECT id FROM contact"
                     )
                 )

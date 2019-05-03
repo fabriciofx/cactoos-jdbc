@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,14 +24,14 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
+import com.github.fabriciofx.cactoos.jdbc.param.ParamUuid;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
-import com.github.fabriciofx.cactoos.jdbc.query.SimpleQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.param.UuidParam;
-import com.github.fabriciofx.cactoos.jdbc.stmt.Update;
+import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
+import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
 import java.util.Map;
 import java.util.UUID;
-import org.cactoos.text.JoinedText;
+import org.cactoos.text.Joined;
 
 /**
  * Phone for SQL.
@@ -76,34 +76,34 @@ public final class PhoneSql implements Phone {
 
     @Override
     public void delete() throws Exception {
-        new Update(
+        new StatementUpdate(
             this.session,
-            new SimpleQuery(
-                new JoinedText(
+            new QuerySimple(
+                new Joined(
                     " ",
                     "DELETE FROM phone WHERE (contact_id = :contact_id)",
                     "AND (number = :number)"
                 ),
-                new UuidParam("contact_id", this.id),
-                new TextParam("number", this.num)
+                new ParamUuid("contact_id", this.id),
+                new ParamText("number", this.num)
             )
         ).result();
     }
 
     @Override
     public void update(final Map<String, String> properties) throws Exception {
-        new Update(
+        new StatementUpdate(
             this.session,
-            new SimpleQuery(
-                new JoinedText(
+            new QuerySimple(
+                new Joined(
                     " ",
                     "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact_id = :contact_id) AND (number = :number)"
                 ),
-                new TextParam("number", properties.get("number")),
-                new TextParam("carrier", properties.get("carrier")),
-                new UuidParam("contact_id", this.id),
-                new TextParam("number", this.num)
+                new ParamText("number", properties.get("number")),
+                new ParamText("carrier", properties.get("carrier")),
+                new ParamUuid("contact_id", this.id),
+                new ParamText("number", this.num)
             )
         ).result();
     }

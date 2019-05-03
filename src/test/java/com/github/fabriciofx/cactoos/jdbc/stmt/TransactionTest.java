@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2018 Fabrício Barros Cabral
+ * Copyright (c) 2018 Fabricio Barros Cabral
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,9 +28,9 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuthSession;
-import com.github.fabriciofx.cactoos.jdbc.session.TransactedSession;
-import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.session.SessionNoAuth;
+import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
+import com.github.fabriciofx.cactoos.jdbc.source.SourceH2;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.StreamSupport;
 import org.cactoos.io.ResourceOf;
@@ -58,9 +58,9 @@ import org.junit.Test;
 public final class TransactionTest {
     @Test
     public void commit() throws Exception {
-        final TransactedSession transacted = new TransactedSession(
-            new NoAuthSession(
-                new H2Source("safedb")
+        final Transacted transacted = new Transacted(
+            new SessionNoAuth(
+                new SourceH2("safedb")
             )
         );
         new SqlScriptFromInput(
@@ -112,9 +112,9 @@ public final class TransactionTest {
 
     @Test
     public void rollback() throws Exception {
-        final TransactedSession transacted = new TransactedSession(
-            new NoAuthSession(
-                new H2Source("unsafedb")
+        final Transacted transacted = new Transacted(
+            new SessionNoAuth(
+                new SourceH2("unsafedb")
             )
         );
         new SqlScriptFromInput(
