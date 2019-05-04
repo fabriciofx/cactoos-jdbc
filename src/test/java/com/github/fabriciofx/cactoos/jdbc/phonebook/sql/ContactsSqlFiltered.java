@@ -38,6 +38,7 @@ import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.Joined;
+import org.cactoos.text.Lowered;
 
 /**
  * Filtered Contacts for SQL.
@@ -74,7 +75,7 @@ public final class ContactsSqlFiltered implements Contacts {
                         "SELECT id FROM contact WHERE LOWER(name) LIKE",
                         "'%' || :name || '%'"
                     ),
-                    new ParamText("name", name.toLowerCase(Locale.ENGLISH))
+                    new ParamText("name", new Lowered(name))
                 )
             )
         );
