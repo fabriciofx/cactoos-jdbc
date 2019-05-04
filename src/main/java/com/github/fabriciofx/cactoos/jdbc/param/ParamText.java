@@ -47,6 +47,8 @@ public final class ParamText implements Param {
 
     /**
      * Ctor.
+     * @param name The id
+     * @param value The data
      */
     public ParamText(final String name, final String value) {
         this(new TextOf(name), new TextOf(value));
@@ -54,6 +56,8 @@ public final class ParamText implements Param {
 
     /**
      * Ctor.
+     * @param name The id
+     * @param value The data
      */
     public ParamText(final String name, final Text value) {
         this(new TextOf(name), value);
@@ -61,6 +65,8 @@ public final class ParamText implements Param {
 
     /**
      * Ctor.
+     * @param name The id
+     * @param value The data
      */
     public ParamText(final Text name, final String value) {
         this(name, new TextOf(value));
