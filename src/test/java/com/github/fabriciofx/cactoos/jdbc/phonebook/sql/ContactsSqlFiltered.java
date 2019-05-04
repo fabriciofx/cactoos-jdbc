@@ -33,7 +33,6 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.Unchecked;

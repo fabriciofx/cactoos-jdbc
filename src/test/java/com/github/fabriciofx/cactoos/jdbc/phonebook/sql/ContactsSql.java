@@ -31,10 +31,10 @@ import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 
@@ -106,10 +106,9 @@ public final class ContactsSql implements Contacts {
                 )
             )
         );
-        final List<Contact> list = new LinkedList<>();
-        for (final UUID id : ids.value()) {
-            list.add(new ContactSql(this.session, id));
-        }
-        return list.iterator();
+        return new Mapped<UUID, Contact>(
+            id -> new ContactSql(this.session, id),
+            ids.value()
+        ).iterator();
     }
 }
