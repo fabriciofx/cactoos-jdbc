@@ -34,11 +34,11 @@ import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.StatementInsert;
 import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.iterator.Mapped;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
@@ -151,10 +151,9 @@ public final class PhonesSql implements Phones {
                 )
             )
         );
-        final List<Phone> list = new LinkedList<>();
-        for (final String number : numbers.value()) {
-            list.add(new PhoneSql(this.session, this.id, number));
-        }
-        return list.iterator();
+        return new Mapped<>(
+            number -> new PhoneSql(this.session, this.id, number),
+            numbers.value().iterator()
+        );
     }
 }

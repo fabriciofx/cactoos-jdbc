@@ -31,10 +31,10 @@ import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import org.cactoos.Scalar;
+import org.cactoos.iterator.Mapped;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Lowered;
@@ -92,10 +92,9 @@ public final class ContactsSqlFiltered implements Contacts {
 
     @Override
     public Iterator<Contact> iterator() {
-        final List<Contact> list = new LinkedList<>();
-        for (final UUID id : new Unchecked<>(this.ids).value()) {
-            list.add(new ContactSql(this.session, id));
-        }
-        return list.iterator();
+        return new Mapped<>(
+            id -> new ContactSql(this.session, id),
+            new Unchecked<>(this.ids).value().iterator()
+        );
     }
 }

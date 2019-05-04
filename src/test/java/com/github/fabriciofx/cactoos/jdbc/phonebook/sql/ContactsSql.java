@@ -33,8 +33,7 @@ import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import org.cactoos.Scalar;
-import org.cactoos.iterable.Mapped;
+import org.cactoos.iterator.Mapped;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 
@@ -80,35 +79,34 @@ public final class ContactsSql implements Contacts {
 
     @Override
     public Contact get(final int index) throws Exception {
-        final Scalar<UUID> id = new ResultSetAsValue<>(
-            new StatementSelect(
-                this.session,
-                new QuerySimple(
-                    new FormattedText(
-                        "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
-                        index
+        return new ContactSql(
+            this.session,
+            new ResultSetAsValue<UUID>(
+                new StatementSelect(
+                    this.session,
+                    new QuerySimple(
+                        new FormattedText(
+                            "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
+                            index
+                        )
                     )
                 )
-            )
+            ).value()
         );
-        return new ContactSql(this.session, id.value());
     }
 
     @Override
     public Iterator<Contact> iterator() {
-        final Unchecked<List<UUID>> ids = new Unchecked<>(
-            new ResultSetAsValues<>(
-                new StatementSelect(
-                    this.session,
-                    new QuerySimple(
-                        "SELECT id FROM contact"
+        return new Mapped<>(
+            id -> new ContactSql(this.session, id),
+            new Unchecked<List<UUID>>(
+                new ResultSetAsValues<>(
+                    new StatementSelect(
+                        this.session,
+                        new QuerySimple("SELECT id FROM contact")
                     )
                 )
-            )
+            ).value().iterator()
         );
-        return new Mapped<UUID, Contact>(
-            id -> new ContactSql(this.session, id),
-            ids.value()
-        ).iterator();
     }
 }
