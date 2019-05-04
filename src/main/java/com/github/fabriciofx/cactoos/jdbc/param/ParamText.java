@@ -25,6 +25,9 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import org.cactoos.Text;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 
 /**
  * String param.
@@ -35,26 +38,47 @@ public final class ParamText implements Param {
     /**
      * Name.
      */
-    private final String id;
+    private final Text id;
 
     /**
      * Value.
      */
-    private final String value;
+    private final Text value;
+
+    /**
+     * Ctor.
+     */
+    public ParamText(final String name, final String value) {
+        this(new TextOf(name), new TextOf(value));
+    }
+
+    /**
+     * Ctor.
+     */
+    public ParamText(final String name, final Text value) {
+        this(new TextOf(name), value);
+    }
+
+    /**
+     * Ctor.
+     */
+    public ParamText(final Text name, final String value) {
+        this(name, new TextOf(value));
+    }
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public ParamText(final String name, final String value) {
+    public ParamText(final Text name, final Text value) {
         this.id = name;
         this.value = value;
     }
 
     @Override
     public String name() {
-        return this.id;
+        return new UncheckedText(this.id).asString();
     }
 
     @Override
@@ -62,11 +86,11 @@ public final class ParamText implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setString(index, this.value);
+        stmt.setString(index, this.value.asString());
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value;
+        return this.value.asString();
     }
 }
