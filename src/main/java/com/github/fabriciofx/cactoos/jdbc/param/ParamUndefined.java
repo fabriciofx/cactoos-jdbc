@@ -31,7 +31,7 @@ import java.sql.PreparedStatement;
  *
  * @since 0.2
  */
-public final class ParamAny implements Param {
+public final class ParamUndefined implements Param {
     /**
      * Name.
      */
@@ -47,7 +47,7 @@ public final class ParamAny implements Param {
      * @param name The id
      * @param value The data
      */
-    public ParamAny(final String name, final Object value) {
+    public ParamUndefined(final String name, final Object value) {
         this.id = name;
         this.value = value;
     }
