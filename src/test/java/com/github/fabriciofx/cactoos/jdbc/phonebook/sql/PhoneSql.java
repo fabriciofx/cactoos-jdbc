@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamUuid;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.util.Map;
 import java.util.UUID;
 import org.cactoos.text.Joined;

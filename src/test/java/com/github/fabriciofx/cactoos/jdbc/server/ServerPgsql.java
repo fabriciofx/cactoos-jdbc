@@ -30,7 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.session.SessionAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.SourcePgsql;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.io.IOException;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;

@@ -29,7 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValues;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementSelect;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementSelect;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;

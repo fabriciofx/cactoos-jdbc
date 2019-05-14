@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.session.Logged;
 import com.github.fabriciofx.cactoos.jdbc.session.SessionNoAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.SourceH2;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

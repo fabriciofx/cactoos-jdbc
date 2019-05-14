@@ -21,56 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetFactory;
-import javax.sql.rowset.RowSetProvider;
+import java.util.concurrent.Callable;
 
 /**
- * StatementSelect.
+ * Transaction.
  *
+ * @param <T> Type of the rset
  * @since 0.1
  */
-public final class StatementSelect implements Statement<ResultSet> {
+@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
+public final class Transaction<T> implements Statement<T> {
     /**
      * The session.
      */
     private final Session session;
 
     /**
-     * The SQL query.
+     * Callable to be executed in a transaction.
      */
-    private final Query query;
+    private final Callable<T> callable;
 
     /**
      * Ctor.
-     * @param sssn A Session
-     * @param qry A SQL query
+     * @param sssn A session
+     * @param call A Callable to be executed in a transaction
      */
-    public StatementSelect(final Session sssn, final Query qry) {
+    public Transaction(final Transacted sssn, final Callable<T> call) {
         this.session = sssn;
-        this.query = qry;
+        this.callable = call;
     }
 
     @Override
-    public ResultSet result() throws Exception {
-        // @checkstyle NestedTryDepthCheck (10 lines)
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
-                try (ResultSet rset = stmt.executeQuery()) {
-                    final RowSetFactory rsf = RowSetProvider.newFactory();
-                    final CachedRowSet crs = rsf.createCachedRowSet();
-                    crs.populate(rset);
-                    return crs;
-                }
-            }
+    public T result() throws Exception {
+        final Connection connection = this.session.connection();
+        try {
+            final T res = this.callable.call();
+            connection.commit();
+            return res;
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Exception ex) {
+            connection.rollback();
+            throw ex;
         }
     }
 }

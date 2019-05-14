@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
@@ -30,11 +30,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
- * StatementInsert.
+ * StatementBatch statements.
  *
  * @since 0.1
  */
-public final class StatementInsert implements Statement<Boolean> {
+public final class StatementBatch implements Statement<int[]> {
     /**
      * The session.
      */
@@ -50,16 +50,16 @@ public final class StatementInsert implements Statement<Boolean> {
      * @param sssn A Session
      * @param qry A SQL query
      */
-    public StatementInsert(final Session sssn, final Query qry) {
+    public StatementBatch(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;
     }
 
     @Override
-    public Boolean result() throws Exception {
+    public int[] result() throws Exception {
         try (Connection conn = this.session.connection()) {
             try (PreparedStatement stmt = this.query.prepared(conn)) {
-                return stmt.execute();
+                return stmt.executeBatch();
             }
         }
     }

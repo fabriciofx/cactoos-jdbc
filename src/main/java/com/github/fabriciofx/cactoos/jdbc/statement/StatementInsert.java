@@ -21,23 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultSetAsValue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
- * StatementInsert with keys.
+ * StatementInsert.
  *
- * @param <T> Type of the key
  * @since 0.1
  */
-public final class StatementInsertWithKeys<T> implements Statement<T> {
+public final class StatementInsert implements Statement<Boolean> {
     /**
      * The session.
      */
@@ -53,21 +50,16 @@ public final class StatementInsertWithKeys<T> implements Statement<T> {
      * @param sssn A Session
      * @param qry A SQL query
      */
-    public StatementInsertWithKeys(final Session sssn, final Query qry) {
+    public StatementInsert(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T result() throws Exception {
-        // @checkstyle NestedTryDepthCheck (10 lines)
+    public Boolean result() throws Exception {
         try (Connection conn = this.session.connection()) {
             try (PreparedStatement stmt = this.query.prepared(conn)) {
-                stmt.executeUpdate();
-                try (ResultSet rset = stmt.getGeneratedKeys()) {
-                    return new ResultSetAsValue<T>(() -> rset).value();
-                }
+                return stmt.execute();
             }
         }
     }

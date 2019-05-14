@@ -30,7 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementInsert;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementInsert;
 import java.util.Map;
 import java.util.UUID;
 

@@ -21,10 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.github.fabriciofx.cactoos.jdbc.statement;
+
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 /**
- * Statements tests.
+ * StatementUpdate.
  *
  * @since 0.1
  */
-package com.github.fabriciofx.cactoos.jdbc.stmt;
+public final class StatementUpdate implements Statement<Integer> {
+    /**
+     * The session.
+     */
+    private final Session session;
+
+    /**
+     * The SQL query.
+     */
+    private final Query query;
+
+    /**
+     * Ctor.
+     * @param sssn A Session
+     * @param qry A SQL query
+     */
+    public StatementUpdate(final Session sssn, final Query qry) {
+        this.session = sssn;
+        this.query = qry;
+    }
+
+    @Override
+    public Integer result() throws Exception {
+        try (Connection conn = this.session.connection()) {
+            try (PreparedStatement stmt = this.query.prepared(conn)) {
+                return stmt.executeUpdate();
+            }
+        }
+    }
+}

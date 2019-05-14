@@ -26,7 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
-import com.github.fabriciofx.cactoos.jdbc.stmt.StatementUpdate;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import org.cactoos.Input;
 import org.cactoos.Text;
 import org.cactoos.iterable.Filtered;
