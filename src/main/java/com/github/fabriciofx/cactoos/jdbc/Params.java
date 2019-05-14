@@ -24,22 +24,53 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
+import java.util.Iterator;
+import java.util.List;
+import org.cactoos.list.ListOf;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Unchecked;
 
 /**
- * A set of Data Values.
+ * Query Params.
  *
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.1
  */
-public interface Params extends Iterable<Param> {
+public final class Params implements Iterable<Param> {
     /**
-     * Set the PreparedStatement with all data values.
+     * Params.
+     */
+    private final Unchecked<List<Param>> prms;
+
+    /**
+     * Ctor.
+     * @param prms List of Param
+     */
+    public Params(final Param... prms) {
+        this.prms = new Unchecked<>(
+            new Sticky<>(
+                () -> new ListOf<>(prms)
+            )
+        );
+    }
+
+    /**
+     * Set the PreparedStatement with all query prms.
      * @param stmt The PreparedStatement
      * @return The setted PreparedStatement
      * @throws Exception If fails
      */
-    PreparedStatement prepare(PreparedStatement stmt) throws Exception;
+    public PreparedStatement prepare(
+        final PreparedStatement stmt
+    ) throws Exception {
+        int idx = 1;
+        for (final Param param : this.prms.value()) {
+            param.prepare(stmt, idx);
+            ++idx;
+        }
+        return stmt;
+    }
 
     /**
      * Check if Params contains a param at position.
@@ -47,5 +78,15 @@ public interface Params extends Iterable<Param> {
      * @param pos The position of the parameter
      * @return True if contains or false if don't
      */
-    boolean contains(String name, int pos);
+    public boolean contains(final String name, final int pos) {
+        return this.prms.value().get(pos).name().equals(name);
+    }
+
+    /**
+     * Return an iterator over Params.
+     * @return The iterator
+     */
+    public Iterator<Param> iterator() {
+        return this.prms.value().iterator();
+    }
 }

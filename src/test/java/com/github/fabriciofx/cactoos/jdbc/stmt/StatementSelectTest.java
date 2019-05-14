@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.stmt;
 
-import com.github.fabriciofx.cactoos.jdbc.ParamsSmart;
+import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamBool;
@@ -94,7 +94,7 @@ public final class StatementSelectTest {
                             "VALUES (:id, :name, :birthday, :address,",
                             ":married, :salary)"
                         ),
-                        new ParamsSmart(
+                        new Params(
                             new ParamInt("id", 1),
                             new ParamText("name", "John Wick"),
                             new ParamDate("birthday", "1980-08-15"),
@@ -102,7 +102,7 @@ public final class StatementSelectTest {
                             new ParamBool("married", false),
                             new ParamDecimal("salary", "13456.00")
                         ),
-                        new ParamsSmart(
+                        new Params(
                             new ParamInt("id", 2),
                             new ParamText("name", "Adam Park"),
                             new ParamDate("birthday", "1985-07-09"),
@@ -182,7 +182,7 @@ public final class StatementSelectTest {
                             "VALUES (:id, :name, :created_at, :city,",
                             ":working, :height)"
                         ),
-                        new ParamsSmart(
+                        new Params(
                             new ParamInt("id", 1),
                             new ParamText("name", "Rob Pike"),
                             new ParamDate("created_at", LocalDate.now()),
@@ -190,7 +190,7 @@ public final class StatementSelectTest {
                             new ParamBool("working", true),
                             new ParamDecimal("height", "1.86")
                         ),
-                        new ParamsSmart(
+                        new Params(
                             new ParamInt("id", 2),
                             new ParamText("name", "Ana Pivot"),
                             new ParamDate("created_at", LocalDate.now()),
