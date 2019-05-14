@@ -138,7 +138,7 @@ public final class Logged implements Session {
                 )
             ).asString()
         );
-        return new com.github.fabriciofx.cactoos.jdbc.cnnc.Logged(
+        return new com.github.fabriciofx.cactoos.jdbc.connection.Logged(
             connection,
             this.source,
             this.logger,

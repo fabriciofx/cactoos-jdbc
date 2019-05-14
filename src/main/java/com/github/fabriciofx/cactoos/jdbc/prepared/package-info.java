@@ -23,8 +23,8 @@
  */
 
 /**
- * Connection.
+ * PreparedStatement.
  *
  * @since 0.4
  */
-package com.github.fabriciofx.cactoos.jdbc.cnnc;
+package com.github.fabriciofx.cactoos.jdbc.prepared;

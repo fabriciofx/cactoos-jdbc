@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.ps;
+package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -90,7 +90,7 @@ public final class Logged implements PreparedStatement {
     private final Logger logger;
 
     /**
-     * The cnnc level.
+     * The connection level.
      */
     private final Level level;
 
@@ -104,7 +104,7 @@ public final class Logged implements PreparedStatement {
      * @param stmt Decorated PreparedStatement
      * @param src The name of source data
      * @param lggr The logger
-     * @param lvl The cnnc level
+     * @param lvl The connection level
      * @param id The PreparedStatement id
      */
     public Logged(

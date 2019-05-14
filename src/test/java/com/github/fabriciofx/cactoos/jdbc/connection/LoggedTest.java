@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.cnnc;
+package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
@@ -57,7 +57,7 @@ public final class LoggedTest {
         );
         new StatementUpdate(session, new QuerySimple(sql)).result();
         MatcherAssert.assertThat(
-            "Can't cnnc from cactoos-jdbc",
+            "Can't connection from cactoos-jdbc",
             logger.toString(),
             Matchers.allOf(
                 Matchers.containsString(

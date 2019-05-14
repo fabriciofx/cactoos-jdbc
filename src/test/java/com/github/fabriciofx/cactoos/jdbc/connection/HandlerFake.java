@@ -44,7 +44,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.cnnc;
+package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import java.util.LinkedList;
 import java.util.List;

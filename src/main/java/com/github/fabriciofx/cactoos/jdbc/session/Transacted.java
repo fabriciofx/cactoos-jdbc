@@ -51,7 +51,7 @@ public final class Transacted implements Session {
             () -> {
                 final Connection connection = session.connection();
                 connection.setAutoCommit(false);
-                return new com.github.fabriciofx.cactoos.jdbc.cnnc.Transacted(connection);
+                return new com.github.fabriciofx.cactoos.jdbc.connection.Transacted(connection);
             }
         );
     }

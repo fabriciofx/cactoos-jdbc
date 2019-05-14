@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.cnnc;
+package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -38,75 +38,179 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.UncheckedText;
 
 /**
- * Transacted connection.
+ * Logged Connection.
  *
  * @since 0.1
- * @checkstyle ParameterNameCheck (500 lines)
- * @checkstyle ParameterNumberCheck (500 lines)
- * @checkstyle TooManyMethods (500 lines)
+ * @checkstyle ParameterNameCheck (700 lines)
+ * @checkstyle ParameterNumberCheck (700 lines)
  */
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
         "PMD.LongVariable",
         "PMD.UseVarargs",
+        "PMD.LoggerIsNotStaticFinal",
         "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount"
+        "PMD.ExcessivePublicCount",
+        "PMD.AvoidDuplicateLiterals"
     }
 )
-public final class Transacted implements Connection {
+public final class Logged implements Connection {
     /**
      * The connection.
      */
     private final Connection origin;
 
     /**
-     * Number of created statements.
+     * The name of source data.
      */
-    private final AtomicInteger stmts;
+    private final String source;
+
+    /**
+     * The logger.
+     */
+    private final Logger logger;
+
+    /**
+     * The connection level.
+     */
+    private final Level level;
+
+    /**
+     * The connection id.
+     */
+    private final int num;
+
+    /**
+     * The statements id.
+     */
+    private final AtomicInteger statements;
 
     /**
      * Ctor.
-     * @param connection A Connection
+     *
+     * @param connection Decorated connection
+     * @param src The name of source data
+     * @param lggr The logger
+     * @param lvl The connection level
+     * @param num The connection id
+     * @param stmtsId The statement id
      */
-    public Transacted(final Connection connection) {
+    public Logged(
+        final Connection connection,
+        final String src,
+        final Logger lggr,
+        final Level lvl,
+        final int num,
+        final AtomicInteger stmtsId
+    ) {
         this.origin = connection;
-        this.stmts = new AtomicInteger(0);
+        this.source = src;
+        this.logger = lggr;
+        this.level = lvl;
+        this.num = num;
+        this.statements = stmtsId;
     }
 
     @Override
     public Statement createStatement() throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.createStatement();
+        final Statement stmt = this.origin.createStatement();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Statement[#%d] created.",
+                    this.source,
+                    this.statements.get()
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
     public PreparedStatement prepareStatement(final String sql) throws
         SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareStatement(sql);
+        final PreparedStatement stmt = this.origin.prepareStatement(sql);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] PreparedStatement[#%d] created using SQL '%s'.",
+                    this.source,
+                    this.statements.get(),
+                    sql
+                )
+            ).asString()
+        );
+        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
+            stmt,
+            this.source,
+            this.logger,
+            this.level,
+            this.statements.getAndIncrement()
+        );
     }
 
     @Override
     public CallableStatement prepareCall(final String sql) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareCall(sql);
+        final CallableStatement stmt = this.origin.prepareCall(sql);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] CallableStatement[#%d] created using SQL '%s'.",
+                    this.source,
+                    this.statements.get(),
+                    sql
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
     public String nativeSQL(final String sql) throws SQLException {
-        return this.origin.nativeSQL(sql);
+        final String nat = this.origin.nativeSQL(sql);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] SQL '%s' converted to '%s.",
+                    this.source,
+                    sql,
+                    nat
+                )
+            ).asString()
+        );
+        return nat;
     }
 
     @Override
     public void setAutoCommit(final boolean autoCommit) throws SQLException {
-        // Don't allow change the auto commit state
+        this.origin.setAutoCommit(autoCommit);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] changed to '%s'.",
+                    this.source,
+                    autoCommit
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -116,21 +220,53 @@ public final class Transacted implements Connection {
 
     @Override
     public void commit() throws SQLException {
+        final Instant start = Instant.now();
         this.origin.commit();
-        this.stmts.set(0);
+        final Instant end = Instant.now();
+        final long millis = Duration.between(start, end).toMillis();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] executed in %dms.",
+                    this.source,
+                    millis
+                )
+            ).asString()
+        );
     }
 
     @Override
     public void rollback() throws SQLException {
+        final Instant start = Instant.now();
         this.origin.rollback();
-        this.stmts.set(0);
+        final Instant end = Instant.now();
+        final long millis = Duration.between(start, end).toMillis();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] executed in %dms.",
+                    this.source,
+                    millis
+                )
+            ).asString()
+        );
     }
 
     @Override
     public void close() throws SQLException {
-        if (this.stmts.get() == 0) {
-            this.origin.close();
-        }
+        this.origin.close();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Connection[#%d] closed. ",
+                    this.source,
+                    this.num
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -146,6 +282,16 @@ public final class Transacted implements Connection {
     @Override
     public void setReadOnly(final boolean readOnly) throws SQLException {
         this.origin.setReadOnly(readOnly);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] changed to '%s'. ",
+                    this.source,
+                    readOnly
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -156,6 +302,16 @@ public final class Transacted implements Connection {
     @Override
     public void setCatalog(final String catalog) throws SQLException {
         this.origin.setCatalog(catalog);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] changed to '%s'. ",
+                    this.source,
+                    catalog
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -164,8 +320,18 @@ public final class Transacted implements Connection {
     }
 
     @Override
-    public void setTransactionIsolation(final int level) throws SQLException {
-        this.origin.setTransactionIsolation(level);
+    public void setTransactionIsolation(final int lvl) throws SQLException {
+        this.origin.setTransactionIsolation(lvl);
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] changed to level '%d'. ",
+                    this.source,
+                    lvl
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -175,12 +341,32 @@ public final class Transacted implements Connection {
 
     @Override
     public SQLWarning getWarnings() throws SQLException {
-        return this.origin.getWarnings();
+        final SQLWarning warning = this.origin.getWarnings();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] generated warning due '%s'. ",
+                    this.source,
+                    warning.getMessage()
+                )
+            ).asString()
+        );
+        return warning;
     }
 
     @Override
     public void clearWarnings() throws SQLException {
         this.origin.clearWarnings();
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] warnings cleaned. ",
+                    this.source
+                )
+            ).asString()
+        );
     }
 
     @Override
@@ -188,8 +374,24 @@ public final class Transacted implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.createStatement(resultSetType, resultSetConcurrency);
+        final Statement stmt = this.origin.createStatement(
+            resultSetType,
+            resultSetConcurrency
+        );
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] Statement[#%d] created with type '%d' and concurrency '%d'.",
+                    this.source,
+                    this.statements.get(),
+                    resultSetType,
+                    resultSetConcurrency
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
@@ -198,12 +400,26 @@ public final class Transacted implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareStatement(
+        final PreparedStatement stmt = this.origin.prepareStatement(
             sql,
             resultSetType,
             resultSetConcurrency
         );
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
+                    this.source,
+                    this.statements.get(),
+                    sql,
+                    resultSetType,
+                    resultSetConcurrency
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
@@ -212,12 +428,26 @@ public final class Transacted implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareCall(
+        final CallableStatement stmt = this.origin.prepareCall(
             sql,
             resultSetType,
             resultSetConcurrency
         );
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] CallableStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
+                    this.source,
+                    this.statements.get(),
+                    sql,
+                    resultSetType,
+                    resultSetConcurrency
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
@@ -226,8 +456,9 @@ public final class Transacted implements Connection {
     }
 
     @Override
-    public void setTypeMap(final Map<String, Class<?>> map) throws
-        SQLException {
+    public void setTypeMap(
+        final Map<String, Class<?>> map
+    ) throws SQLException {
         this.origin.setTypeMap(map);
     }
 
@@ -269,7 +500,6 @@ public final class Transacted implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
-        this.stmts.getAndIncrement();
         return this.origin.createStatement(
             resultSetType,
             resultSetConcurrency,
@@ -284,13 +514,28 @@ public final class Transacted implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareStatement(
+        final PreparedStatement stmt = this.origin.prepareStatement(
             sql,
             resultSetType,
             resultSetConcurrency,
             resultSetHoldability
         );
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d', concurrency '%d' and holdability '%d'.",
+                    this.source,
+                    this.statements.get(),
+                    sql,
+                    resultSetType,
+                    resultSetConcurrency,
+                    resultSetHoldability
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
@@ -300,7 +545,6 @@ public final class Transacted implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
-        this.stmts.getAndIncrement();
         return this.origin.prepareCall(
             sql,
             resultSetType,
@@ -314,8 +558,30 @@ public final class Transacted implements Connection {
         final String sql,
         final int autoGeneratedKeys
     ) throws SQLException {
-        this.stmts.getAndIncrement();
-        return this.origin.prepareStatement(sql, autoGeneratedKeys);
+        final PreparedStatement stmt = this.origin.prepareStatement(
+            sql,
+            autoGeneratedKeys
+        );
+        final String msg;
+        if (autoGeneratedKeys == Statement.RETURN_GENERATED_KEYS) {
+            msg = "returned generated keys";
+        } else {
+            msg = "no returned generated keys";
+        }
+        this.logger.log(
+            this.level,
+            new UncheckedText(
+                new FormattedText(
+                    // @checkstyle LineLengthCheck (1 line)
+                    "[%s] PreparedStatement[#%d] created using SQL '%s' and %s.",
+                    this.source,
+                    this.statements.get(),
+                    sql,
+                    msg
+                )
+            ).asString()
+        );
+        return stmt;
     }
 
     @Override
@@ -323,7 +589,6 @@ public final class Transacted implements Connection {
         final String sql,
         final int[] columnIndexes
     ) throws SQLException {
-        this.stmts.getAndIncrement();
         return this.origin.prepareStatement(sql, columnIndexes);
     }
 
@@ -332,7 +597,6 @@ public final class Transacted implements Connection {
         final String sql,
         final String[] columnNames
     ) throws SQLException {
-        this.stmts.getAndIncrement();
         return this.origin.prepareStatement(sql, columnNames);
     }
 

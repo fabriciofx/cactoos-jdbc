@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.cnnc;
+package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -38,179 +38,75 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.cactoos.text.FormattedText;
-import org.cactoos.text.UncheckedText;
 
 /**
- * Logged Connection.
+ * Transacted connection.
  *
  * @since 0.1
- * @checkstyle ParameterNameCheck (700 lines)
- * @checkstyle ParameterNumberCheck (700 lines)
+ * @checkstyle ParameterNameCheck (500 lines)
+ * @checkstyle ParameterNumberCheck (500 lines)
+ * @checkstyle TooManyMethods (500 lines)
  */
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
         "PMD.LongVariable",
         "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
         "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.ExcessivePublicCount"
     }
 )
-public final class Logged implements Connection {
+public final class Transacted implements Connection {
     /**
      * The connection.
      */
     private final Connection origin;
 
     /**
-     * The name of source data.
+     * Number of created statements.
      */
-    private final String source;
-
-    /**
-     * The logger.
-     */
-    private final Logger logger;
-
-    /**
-     * The cnnc level.
-     */
-    private final Level level;
-
-    /**
-     * The connection id.
-     */
-    private final int num;
-
-    /**
-     * The statements id.
-     */
-    private final AtomicInteger statements;
+    private final AtomicInteger stmts;
 
     /**
      * Ctor.
-     *
-     * @param connection Decorated connection
-     * @param src The name of source data
-     * @param lggr The logger
-     * @param lvl The cnnc level
-     * @param num The connection id
-     * @param stmtsId The statement id
+     * @param connection A Connection
      */
-    public Logged(
-        final Connection connection,
-        final String src,
-        final Logger lggr,
-        final Level lvl,
-        final int num,
-        final AtomicInteger stmtsId
-    ) {
+    public Transacted(final Connection connection) {
         this.origin = connection;
-        this.source = src;
-        this.logger = lggr;
-        this.level = lvl;
-        this.num = num;
-        this.statements = stmtsId;
+        this.stmts = new AtomicInteger(0);
     }
 
     @Override
     public Statement createStatement() throws SQLException {
-        final Statement stmt = this.origin.createStatement();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] Statement[#%d] created.",
-                    this.source,
-                    this.statements.get()
-                )
-            ).asString()
-        );
-        return stmt;
+        this.stmts.getAndIncrement();
+        return this.origin.createStatement();
     }
 
     @Override
     public PreparedStatement prepareStatement(final String sql) throws
         SQLException {
-        final PreparedStatement stmt = this.origin.prepareStatement(sql);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] PreparedStatement[#%d] created using SQL '%s'.",
-                    this.source,
-                    this.statements.get(),
-                    sql
-                )
-            ).asString()
-        );
-        return new com.github.fabriciofx.cactoos.jdbc.ps.Logged(
-            stmt,
-            this.source,
-            this.logger,
-            this.level,
-            this.statements.getAndIncrement()
-        );
+        this.stmts.getAndIncrement();
+        return this.origin.prepareStatement(sql);
     }
 
     @Override
     public CallableStatement prepareCall(final String sql) throws SQLException {
-        final CallableStatement stmt = this.origin.prepareCall(sql);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] CallableStatement[#%d] created using SQL '%s'.",
-                    this.source,
-                    this.statements.get(),
-                    sql
-                )
-            ).asString()
-        );
-        return stmt;
+        this.stmts.getAndIncrement();
+        return this.origin.prepareCall(sql);
     }
 
     @Override
     public String nativeSQL(final String sql) throws SQLException {
-        final String nat = this.origin.nativeSQL(sql);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] SQL '%s' converted to '%s.",
-                    this.source,
-                    sql,
-                    nat
-                )
-            ).asString()
-        );
-        return nat;
+        return this.origin.nativeSQL(sql);
     }
 
     @Override
     public void setAutoCommit(final boolean autoCommit) throws SQLException {
-        this.origin.setAutoCommit(autoCommit);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] changed to '%s'.",
-                    this.source,
-                    autoCommit
-                )
-            ).asString()
-        );
+        // Don't allow change the auto commit state
     }
 
     @Override
@@ -220,53 +116,21 @@ public final class Logged implements Connection {
 
     @Override
     public void commit() throws SQLException {
-        final Instant start = Instant.now();
         this.origin.commit();
-        final Instant end = Instant.now();
-        final long millis = Duration.between(start, end).toMillis();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] executed in %dms.",
-                    this.source,
-                    millis
-                )
-            ).asString()
-        );
+        this.stmts.set(0);
     }
 
     @Override
     public void rollback() throws SQLException {
-        final Instant start = Instant.now();
         this.origin.rollback();
-        final Instant end = Instant.now();
-        final long millis = Duration.between(start, end).toMillis();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] executed in %dms.",
-                    this.source,
-                    millis
-                )
-            ).asString()
-        );
+        this.stmts.set(0);
     }
 
     @Override
     public void close() throws SQLException {
-        this.origin.close();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] Connection[#%d] closed. ",
-                    this.source,
-                    this.num
-                )
-            ).asString()
-        );
+        if (this.stmts.get() == 0) {
+            this.origin.close();
+        }
     }
 
     @Override
@@ -282,16 +146,6 @@ public final class Logged implements Connection {
     @Override
     public void setReadOnly(final boolean readOnly) throws SQLException {
         this.origin.setReadOnly(readOnly);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] changed to '%s'. ",
-                    this.source,
-                    readOnly
-                )
-            ).asString()
-        );
     }
 
     @Override
@@ -302,16 +156,6 @@ public final class Logged implements Connection {
     @Override
     public void setCatalog(final String catalog) throws SQLException {
         this.origin.setCatalog(catalog);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] changed to '%s'. ",
-                    this.source,
-                    catalog
-                )
-            ).asString()
-        );
     }
 
     @Override
@@ -320,18 +164,8 @@ public final class Logged implements Connection {
     }
 
     @Override
-    public void setTransactionIsolation(final int lvl) throws SQLException {
-        this.origin.setTransactionIsolation(lvl);
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] changed to level '%d'. ",
-                    this.source,
-                    lvl
-                )
-            ).asString()
-        );
+    public void setTransactionIsolation(final int level) throws SQLException {
+        this.origin.setTransactionIsolation(level);
     }
 
     @Override
@@ -341,32 +175,12 @@ public final class Logged implements Connection {
 
     @Override
     public SQLWarning getWarnings() throws SQLException {
-        final SQLWarning warning = this.origin.getWarnings();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] generated warning due '%s'. ",
-                    this.source,
-                    warning.getMessage()
-                )
-            ).asString()
-        );
-        return warning;
+        return this.origin.getWarnings();
     }
 
     @Override
     public void clearWarnings() throws SQLException {
         this.origin.clearWarnings();
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] warnings cleaned. ",
-                    this.source
-                )
-            ).asString()
-        );
     }
 
     @Override
@@ -374,24 +188,8 @@ public final class Logged implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        final Statement stmt = this.origin.createStatement(
-            resultSetType,
-            resultSetConcurrency
-        );
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    // @checkstyle LineLengthCheck (1 line)
-                    "[%s] Statement[#%d] created with type '%d' and concurrency '%d'.",
-                    this.source,
-                    this.statements.get(),
-                    resultSetType,
-                    resultSetConcurrency
-                )
-            ).asString()
-        );
-        return stmt;
+        this.stmts.getAndIncrement();
+        return this.origin.createStatement(resultSetType, resultSetConcurrency);
     }
 
     @Override
@@ -400,26 +198,12 @@ public final class Logged implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        final PreparedStatement stmt = this.origin.prepareStatement(
+        this.stmts.getAndIncrement();
+        return this.origin.prepareStatement(
             sql,
             resultSetType,
             resultSetConcurrency
         );
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    // @checkstyle LineLengthCheck (1 line)
-                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
-                    this.source,
-                    this.statements.get(),
-                    sql,
-                    resultSetType,
-                    resultSetConcurrency
-                )
-            ).asString()
-        );
-        return stmt;
     }
 
     @Override
@@ -428,26 +212,12 @@ public final class Logged implements Connection {
         final int resultSetType,
         final int resultSetConcurrency
     ) throws SQLException {
-        final CallableStatement stmt = this.origin.prepareCall(
+        this.stmts.getAndIncrement();
+        return this.origin.prepareCall(
             sql,
             resultSetType,
             resultSetConcurrency
         );
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    // @checkstyle LineLengthCheck (1 line)
-                    "[%s] CallableStatement[#%d] created using SQL '%s', type '%d' and concurrency '%d'.",
-                    this.source,
-                    this.statements.get(),
-                    sql,
-                    resultSetType,
-                    resultSetConcurrency
-                )
-            ).asString()
-        );
-        return stmt;
     }
 
     @Override
@@ -456,9 +226,8 @@ public final class Logged implements Connection {
     }
 
     @Override
-    public void setTypeMap(
-        final Map<String, Class<?>> map
-    ) throws SQLException {
+    public void setTypeMap(final Map<String, Class<?>> map) throws
+        SQLException {
         this.origin.setTypeMap(map);
     }
 
@@ -500,6 +269,7 @@ public final class Logged implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
+        this.stmts.getAndIncrement();
         return this.origin.createStatement(
             resultSetType,
             resultSetConcurrency,
@@ -514,28 +284,13 @@ public final class Logged implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
-        final PreparedStatement stmt = this.origin.prepareStatement(
+        this.stmts.getAndIncrement();
+        return this.origin.prepareStatement(
             sql,
             resultSetType,
             resultSetConcurrency,
             resultSetHoldability
         );
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    // @checkstyle LineLengthCheck (1 line)
-                    "[%s] PreparedStatement[#%d] created using SQL '%s', type '%d', concurrency '%d' and holdability '%d'.",
-                    this.source,
-                    this.statements.get(),
-                    sql,
-                    resultSetType,
-                    resultSetConcurrency,
-                    resultSetHoldability
-                )
-            ).asString()
-        );
-        return stmt;
     }
 
     @Override
@@ -545,6 +300,7 @@ public final class Logged implements Connection {
         final int resultSetConcurrency,
         final int resultSetHoldability
     ) throws SQLException {
+        this.stmts.getAndIncrement();
         return this.origin.prepareCall(
             sql,
             resultSetType,
@@ -558,30 +314,8 @@ public final class Logged implements Connection {
         final String sql,
         final int autoGeneratedKeys
     ) throws SQLException {
-        final PreparedStatement stmt = this.origin.prepareStatement(
-            sql,
-            autoGeneratedKeys
-        );
-        final String msg;
-        if (autoGeneratedKeys == Statement.RETURN_GENERATED_KEYS) {
-            msg = "returned generated keys";
-        } else {
-            msg = "no returned generated keys";
-        }
-        this.logger.log(
-            this.level,
-            new UncheckedText(
-                new FormattedText(
-                    // @checkstyle LineLengthCheck (1 line)
-                    "[%s] PreparedStatement[#%d] created using SQL '%s' and %s.",
-                    this.source,
-                    this.statements.get(),
-                    sql,
-                    msg
-                )
-            ).asString()
-        );
-        return stmt;
+        this.stmts.getAndIncrement();
+        return this.origin.prepareStatement(sql, autoGeneratedKeys);
     }
 
     @Override
@@ -589,6 +323,7 @@ public final class Logged implements Connection {
         final String sql,
         final int[] columnIndexes
     ) throws SQLException {
+        this.stmts.getAndIncrement();
         return this.origin.prepareStatement(sql, columnIndexes);
     }
 
@@ -597,6 +332,7 @@ public final class Logged implements Connection {
         final String sql,
         final String[] columnNames
     ) throws SQLException {
+        this.stmts.getAndIncrement();
         return this.origin.prepareStatement(sql, columnNames);
     }
 
