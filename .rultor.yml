@@ -1,0 +1,14 @@
+docker:
+  image: yegor256/java8
+env:
+  MAVEN_OPTS: -Xmx1g
+  JAVA_OPTS: -Xmx1g
+install: |
+  sudo gem install --no-rdoc --no-ri pdd
+  sudo gem install --no-rdoc --no-ri xcop
+architect:
+- fabriciofx
+merge:
+  script: |
+    pdd --file=/dev/null
+    mvn clean install -Pqulice
