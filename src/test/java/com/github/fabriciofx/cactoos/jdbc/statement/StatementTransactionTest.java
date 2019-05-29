@@ -41,7 +41,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Transaction tests.
+ * StatementTransaction tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -55,7 +55,7 @@ import org.junit.Test;
         "PMD.EmptyCatchBlock"
     }
 )
-public final class TransactionTest {
+public final class StatementTransactionTest {
     @Test
     public void commit() throws Exception {
         final Transacted transacted = new Transacted(
@@ -72,7 +72,7 @@ public final class TransactionTest {
             "Can't perform a transaction commit",
             XhtmlMatchers.xhtml(
                 new ResultAsValue<>(
-                    new Transaction<>(
+                    new StatementTransaction<>(
                         transacted,
                         () -> {
                             final Phonebook phonebook = new PhonebookSql(
@@ -125,7 +125,7 @@ public final class TransactionTest {
         final Phonebook phonebook = new PhonebookSql(transacted);
         final String name = "Frank Miller";
         try {
-            new Transaction<>(
+            new StatementTransaction<>(
                 transacted,
                 () -> {
                     final Contact contact = phonebook.contact(

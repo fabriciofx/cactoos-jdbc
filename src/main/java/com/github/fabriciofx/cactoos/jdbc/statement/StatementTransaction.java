@@ -30,13 +30,13 @@ import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 /**
- * Transaction.
+ * StatementTransaction.
  *
  * @param <T> Type of the result
  * @since 0.1
  */
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
-public final class Transaction<T> implements Statement<T> {
+public final class StatementTransaction<T> implements Statement<T> {
     /**
      * The session.
      */
@@ -52,7 +52,7 @@ public final class Transaction<T> implements Statement<T> {
      * @param sssn A session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final Session sssn, final Callable<T> call) {
+    public StatementTransaction(final Session sssn, final Callable<T> call) {
         this(new Transacted(sssn), call);
     }
 
@@ -61,7 +61,7 @@ public final class Transaction<T> implements Statement<T> {
      * @param sssn A transacted session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final Transacted sssn, final Callable<T> call) {
+    public StatementTransaction(final Transacted sssn, final Callable<T> call) {
         this.session = sssn;
         this.callable = call;
     }
