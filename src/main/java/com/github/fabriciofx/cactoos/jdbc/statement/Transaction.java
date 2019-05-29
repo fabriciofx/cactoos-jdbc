@@ -32,7 +32,7 @@ import java.util.concurrent.Callable;
 /**
  * Transaction.
  *
- * @param <T> Type of the rset
+ * @param <T> Type of the result
  * @since 0.1
  */
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})

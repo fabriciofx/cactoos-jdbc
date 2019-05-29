@@ -37,7 +37,7 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
 
 /**
- * H2 rset source, for unit testing.
+ * H2 result source, for unit testing.
  *
  * @since 0.1
  */

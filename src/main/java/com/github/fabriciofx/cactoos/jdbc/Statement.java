@@ -28,7 +28,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of the rset
+ * @param <T> Type of the result
  * @since 0.1
  */
 public interface Statement<T> {

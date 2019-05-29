@@ -30,7 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.ParamInt;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryKeyed;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
-import com.github.fabriciofx.cactoos.jdbc.rset.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerMysql;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;

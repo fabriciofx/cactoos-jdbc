@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.rset;
+package com.github.fabriciofx.cactoos.jdbc.result;
 
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.ResultSet;
@@ -33,7 +33,7 @@ import org.cactoos.Scalar;
 /**
  * Result as data.
  *
- * @param <T> Type of the rset
+ * @param <T> Type of the result
  * @since 0.1
  */
 public final class ResultSetAsValue<T> implements Scalar<T> {

@@ -23,8 +23,8 @@
  */
 
 /**
- * Result.
+ * ResultSetAs tests.
  *
- * @since 0.1
+ * @since 0.3
  */
-package com.github.fabriciofx.cactoos.jdbc.rset;
+package com.github.fabriciofx.cactoos.jdbc.result;
