@@ -26,14 +26,13 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.sql.Connection;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.Sticky;
 
 /**
  * Session that holds always the same Connection.
  *
  * @since 0.4
  */
-public final class SessionStickied implements Session {
+public final class Sticky implements Session {
     /**
      * The Connection.
      */
@@ -43,8 +42,8 @@ public final class SessionStickied implements Session {
      * Ctor.
      * @param session Session
      */
-    public SessionStickied(final Session session) {
-        this.cnnctn = new Sticky<>(
+    public Sticky(final Session session) {
+        this.cnnctn = new org.cactoos.scalar.Sticky<>(
             () -> session.connection()
         );
     }
