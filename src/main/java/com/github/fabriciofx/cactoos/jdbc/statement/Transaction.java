@@ -52,6 +52,15 @@ public final class Transaction<T> implements Statement<T> {
      * @param sssn A session
      * @param call A Callable to be executed in a transaction
      */
+    public Transaction(final Session sssn, final Callable<T> call) {
+        this(new Transacted(sssn), call);
+    }
+
+    /**
+     * Ctor.
+     * @param sssn A transacted session
+     * @param call A Callable to be executed in a transaction
+     */
     public Transaction(final Transacted sssn, final Callable<T> call) {
         this.session = sssn;
         this.callable = call;
