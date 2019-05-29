@@ -14,7 +14,7 @@
 
 **ATTENTION**: We're still in a very early alpha version, the API may and
 *will* change frequently. Please, use it at your own risk, until we release
-version 1.0 (~~Nov 2018~~ Jan 2019).
+version 1.0 (~~Nov 2018~~ ~~Jan 2019~~ Sept 2019).
 
 **Cactoos JDBC** is a collection of object-oriented Java wrapper classes to
 [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity).
@@ -38,7 +38,8 @@ behind Cactoos JDBC.
 
 ## Features
 
-- Select, Insert, Update and Delete data from a [RDBMS](https://en.wikipedia.org/wiki/Relational_database_management_system)
+- Select, Insert, Update and Delete data from a 
+[RDBMS](https://en.wikipedia.org/wiki/Relational_database_management_system)
 - Named parameters statement
 - Retrieve the data as XML
 - Easy logging
@@ -48,10 +49,10 @@ behind Cactoos JDBC.
 
 
 ## Feature to be implemented
+- ~~Tests on PostgreSQL and MySQL RDBMS~~ (done)
 - Retrieve the data as JSON
 - Caching
 - Call Store Procedures
-- ~~Tests on PostgreSQL and MySQL RDBMS~~ (done)
 
 
 ## How to use
@@ -66,28 +67,26 @@ behind Cactoos JDBC.
 Java version required: 1.8+.
 
 
-## Agenda application (demo)
-
-An phonebook application has been developed to demonstrate and test the
-catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/phonebook).
-
-## Usage
+### Usage
 Let's show how use the API. For all above examples, let's start creating a
 `Session` object:
 ```java
-final Session session = new NoAuthSession(
-    new H2Source("testdb")
+final Session session = new SessionNoAuth(
+    new SourceH2("testdb")
 );
 ```
 
-### Update
-Now, let's create a table using a `Update` command:
+#### Update
+Now, let's create a table using a `StatementUpdate` command:
 ```java
-new Update(
+new StatementUpdate(
     session,
-    new SimpleQuery(
-        "CREATE TABLE employee (id INT AUTO_INCREMENT, " +
-        "name VARCHAR(50), salary DOUBLE)"
+    new QuerySimple(
+        new Joined(
+            " ",
+            "CREATE TABLE employee (id INT AUTO_INCREMENT,"
+            "name VARCHAR(50), salary DOUBLE)"
+        )
     )
 ).result()
 ```
@@ -96,13 +95,13 @@ new Update(
 Let's insert a new employee and return the id of inserted employee.
 ```java
 final int id = new ResultAsValue<Integer>(
-    new InsertWithKeys(
+    new StatementInsertKeyed(
         session,
-        new KeyedQuery(
+        new QueryKeyed(
             () -> "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
             "id",
-            new TextValue("name", "Jeff Bridge"),
-            new DoubleValue("salary", 12345.00)
+            new ParamText("name", "Jeff Bridge"),
+            new ParamDouble("salary", 12345.00)
         )
     )
 ).value();
@@ -112,11 +111,11 @@ final int id = new ResultAsValue<Integer>(
 Let's retrieve the name of a employee:
 ```java
 final String name = new ResultAsValue<String>(
-    new Select(
+    new StatementSelect(
         session,
-        new SimpleQuery(
+        new QuerySimple(
             "SELECT name FROM employee WHERE id = :id",
-            new IntParam("id", 123)
+            new ParamInt("id", 123)
         )
     )
 ).value();
@@ -125,27 +124,26 @@ final String name = new ResultAsValue<String>(
 Let's retrieve all employee salaries:
 ```java
 final List<Double> salaries = new ResultAsValues<Double>(
-    new Select(
+    new StatementSelect(
         session,
-        new SimpleQuery(
-            "SELECT salary FROM employee"
-        )
+        new QuerySimple("SELECT salary FROM employee")
     )
 ).value();
 ```
 
 ### Transaction
 To enable a transaction you will need to do two things:
-1. Decorates a `Session` object using a `TransactedSession` object, like here:
+1. Decorates a `Session` using a `Transacted` object, like here:
 ```java
-final TransactedSession transacted = new TransactedSession(session);
+final Session transacted = new Transacted(session);
 ```
-2. Use a `Transaction` object to perform all transacted operations, like here:
+2. Use a `StatatementTransaction` object to perform all transacted operations,
+like here:
 ```java
-new Transaction(
+new StatementTransaction(
   transacted,
   () -> {
-    final Contact contact = new SqlContacts(transacted)
+    final Contact contact = new ContactsSql(transacted)
         .contact("Albert Einstein");
     contact.phones().phone("912232325", "TIM");
     contact.phones().phone("982231234", "Oi");
@@ -156,21 +154,30 @@ new Transaction(
 
 To a complete example, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/blob/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/stmt/TransactionTest.java).
 
-
 ### Logging
 To enable logging just decorate a `Session` object:
 ```java
 final Session logging = new LoggingSession(session);
 ```
 
+## Phonebook application (demo)
 
-## How compile it?
+An phonebook application has been developed to demonstrate and test the
+catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/phonebook).
+
+
+## Contributions
+
+Contributions are welcome! Please, open an issue before submit any kind (ideas,
+documentation, code, ...) of contribution.
+
+### How compile it?
 
 ```
 $ mvn clean install -Pqulice
 ```
 
-## How use ANTLR4 + Maven + IntelliJ (for Contributors)
+### How use ANTLR4 + Maven + IntelliJ (for Contributors)
 
 1. Create a `antlr4` directory inside `src/main` directory (automatically
 jcabi-parent will detect this directory and run antlr properly)
@@ -183,12 +190,6 @@ jcabi-parent will detect this directory and run antlr properly)
 `Generate Sources and Update Folders`)
 6. Reimport the Generate Sources (On Project Folder, mouse right button,
 `Maven`, `Reimport`)
-
-
-## Contributions
-
-Contributions are welcome! Please, open an issue before submit any kind (ideas,
-documentation, code, ...) of contribution.
 
 
 ## License
@@ -222,8 +223,9 @@ David West ([Blog](http://davewest.us/)) for:
 - [Object Thinking](http://amzn.to/2BVeiNl) Book
 
 [@yegor256](https://github.com/yegor256) as Yegor Bugayenko ([Blog](https://wwww.yegor256.com)) for:
-- [Elegant Objects](https://www.yegor256.com/elegant-objects.html) [Vol. 1](http://amzn.to/2BXdZSs) and [Vol. 2](http://amzn.to/2BuFFP4) Books
+- [Elegant Objects](https://www.yegor256.com/elegant-objects.html) [Vol. 1](http://amzn.to/2BXdZSs) and [Vol. 2](http://amzn.to/2BuFFP4) books
 - [jcabi-jdbc](https://jdbc.jcabi.com/index.html) JDBC wrapper which Cactoos JDBC is based too
 
-[@mdbs99](https://github.com/mdbs99) as Marcos Douglas B. Santos ([Blog](https://wwww.objectpascalprogramming.com)) for:
+[@mdbs99](https://github.com/mdbs99) as Marcos Douglas B. Santos ([Blog](https://wwww.objectpascalprogramming.com))
+[@paulodamaso](https://github.com/paulodamaso) as Paulo Lobo for:
 - OOP suggestions and discussion
