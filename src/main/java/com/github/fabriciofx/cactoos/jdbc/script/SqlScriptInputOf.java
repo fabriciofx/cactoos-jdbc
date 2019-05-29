@@ -39,7 +39,7 @@ import org.cactoos.Input;
  *
  * @since 0.2
  */
-public final class SqlScriptFromInput implements SqlScript {
+public final class SqlScriptInputOf implements SqlScript {
     /**
      * Input.
      */
@@ -49,7 +49,7 @@ public final class SqlScriptFromInput implements SqlScript {
      * Ctor.
      * @param input The SQL Script file
      */
-    public SqlScriptFromInput(final Input input) {
+    public SqlScriptInputOf(final Input input) {
         this.input = input;
     }
 

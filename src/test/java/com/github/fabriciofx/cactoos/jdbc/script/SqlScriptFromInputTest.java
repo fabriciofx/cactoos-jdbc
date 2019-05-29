@@ -42,7 +42,7 @@ public final class SqlScriptFromInputTest {
     @Test
     public void h2Server() throws Exception {
         final Server server = new ServerH2(
-            new SqlScriptFromInput(
+            new SqlScriptInputOf(
                 new ResourceOf(
                     new Joined(
                         "/",
@@ -59,7 +59,7 @@ public final class SqlScriptFromInputTest {
     @Test
     public void mysqlServer() throws Exception {
         final Server server = new ServerMysql(
-            new SqlScriptFromInput(
+            new SqlScriptInputOf(
                 new ResourceOf(
                     new Joined(
                         "/",

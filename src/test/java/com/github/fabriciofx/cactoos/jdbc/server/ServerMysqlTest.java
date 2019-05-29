@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.Server;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptInputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public final class ServerMysqlTest {
     @Test
     public void startAndStop() throws Exception {
         final Server mysql = new ServerMysql(
-            new SqlScriptFromInput(
+            new SqlScriptInputOf(
                 new ResourceOf(
                     new Joined(
                         "/",

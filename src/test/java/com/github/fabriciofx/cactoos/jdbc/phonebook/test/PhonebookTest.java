@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptFromInput;
+import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptInputOf;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
 import com.jcabi.matchers.XhtmlMatchers;
@@ -60,7 +60,7 @@ public final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new ServerH2(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -71,7 +71,7 @@ public final class PhonebookTest {
                     )
                 ),
                 new ServerPgsql(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -123,7 +123,7 @@ public final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new ServerH2(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -134,7 +134,7 @@ public final class PhonebookTest {
                     )
                 ),
                 new ServerPgsql(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -168,7 +168,7 @@ public final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new ServerH2(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -179,7 +179,7 @@ public final class PhonebookTest {
                     )
                 ),
                 new ServerPgsql(
-                    new SqlScriptFromInput(
+                    new SqlScriptInputOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
