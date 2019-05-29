@@ -117,7 +117,7 @@ public final class StatementInsertTest {
             MatcherAssert.assertThat(
                 "Can't insert with an integer keys",
                 new ResultAsValue<>(
-                    new StatementInsertWithKeys<>(
+                    new StatementInsertKeyed<>(
                         session,
                         new QueryKeyed(
                             "INSERT INTO t02 (name) VALUES (:name)",
@@ -148,7 +148,7 @@ public final class StatementInsertTest {
             MatcherAssert.assertThat(
                 "Can't insert with an integer keys",
                 new ResultAsValue<>(
-                    new StatementInsertWithKeys<>(
+                    new StatementInsertKeyed<>(
                         session,
                         new QueryKeyed(
                             "INSERT INTO t02 (name) VALUES (:name)",
@@ -179,7 +179,7 @@ public final class StatementInsertTest {
             MatcherAssert.assertThat(
                 "Can't insert with an integer keys",
                 new ResultAsValue<>(
-                    new StatementInsertWithKeys<>(
+                    new StatementInsertKeyed<>(
                         session,
                         new QueryKeyed(
                             () -> "INSERT INTO t02 (name) VALUES (:name)",

@@ -29,7 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryKeyed;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerMysql;
-import com.github.fabriciofx.cactoos.jdbc.statement.StatementInsertWithKeys;
+import com.github.fabriciofx.cactoos.jdbc.statement.StatementInsertKeyed;
 import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.math.BigInteger;
 import org.cactoos.text.Joined;
@@ -68,7 +68,7 @@ public final class ResultAsValueTest {
             MatcherAssert.assertThat(
                 "Can't get a generated key value",
                 new ResultAsValue<>(
-                    new StatementInsertWithKeys<>(
+                    new StatementInsertKeyed<>(
                         session,
                         new QueryKeyed(
                             () -> "INSERT INTO contact (name) VALUES (:name)",

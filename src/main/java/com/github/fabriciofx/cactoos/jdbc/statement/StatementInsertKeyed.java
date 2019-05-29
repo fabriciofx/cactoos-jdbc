@@ -37,7 +37,7 @@ import java.sql.ResultSet;
  * @param <T> Type of the key
  * @since 0.1
  */
-public final class StatementInsertWithKeys<T> implements Statement<T> {
+public final class StatementInsertKeyed<T> implements Statement<T> {
     /**
      * The session.
      */
@@ -53,7 +53,7 @@ public final class StatementInsertWithKeys<T> implements Statement<T> {
      * @param sssn A Session
      * @param qry A SQL query
      */
-    public StatementInsertWithKeys(final Session sssn, final Query qry) {
+    public StatementInsertKeyed(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;
     }
