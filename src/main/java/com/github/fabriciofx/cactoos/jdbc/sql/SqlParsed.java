@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
+package com.github.fabriciofx.cactoos.jdbc.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;

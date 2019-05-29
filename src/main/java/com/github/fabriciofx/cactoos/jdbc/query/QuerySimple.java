@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.sql.SqlParsed;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
