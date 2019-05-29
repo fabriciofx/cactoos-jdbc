@@ -59,7 +59,6 @@ import java.util.Calendar;
         "PMD.TooManyMethods",
         "PMD.LongVariable",
         "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
         "PMD.BooleanGetMethodName",
         "PMD.ExcessivePublicCount",
         "PMD.AvoidDuplicateLiterals",
