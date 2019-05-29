@@ -31,7 +31,7 @@ import org.cactoos.text.Randomized;
  *
  * @since 0.2
  */
-public final class DatabaseNameRandom implements Text {
+public final class DatabaseName implements Text {
     /**
      * Database name.
      */
@@ -40,7 +40,7 @@ public final class DatabaseNameRandom implements Text {
     /**
      * Ctor.
      */
-    public DatabaseNameRandom() {
+    public DatabaseName() {
         this(
             new Randomized(
                 // @checkstyle MagicNumber (1 line)
@@ -55,7 +55,7 @@ public final class DatabaseNameRandom implements Text {
      * Ctor.
      * @param txt Database name
      */
-    public DatabaseNameRandom(final Text txt) {
+    public DatabaseName(final Text txt) {
         this.name = txt;
     }
 

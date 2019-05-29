@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.server;
 
-import com.github.fabriciofx.cactoos.jdbc.DatabaseNameRandom;
+import com.github.fabriciofx.cactoos.jdbc.DatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.SqlScript;
@@ -109,7 +109,7 @@ public final class ServerMysql implements Server {
     ) {
         this.dbname = new Unchecked<>(
             new Sticky<>(
-                () -> new DatabaseNameRandom().asString()
+                () -> new DatabaseName().asString()
             )
         );
         this.host = hst;
