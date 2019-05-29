@@ -38,7 +38,7 @@ import org.junit.Test;
  * @checkstyle MethodNameCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class SqlScriptFromInputTest {
+public final class SqlScriptInputOfTest {
     @Test
     public void h2Server() throws Exception {
         final Server server = new ServerH2(
