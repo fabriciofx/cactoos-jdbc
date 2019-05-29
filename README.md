@@ -76,7 +76,7 @@ final Session session = new SessionNoAuth(
 );
 ```
 
-#### Update
+### Update
 Now, let's create a table using a `StatementUpdate` command:
 ```java
 new StatementUpdate(
@@ -157,7 +157,7 @@ To a complete example, please take a look [here](https://github.com/fabriciofx/c
 ### Logging
 To enable logging just decorate a `Session` object:
 ```java
-final Session logging = new LoggingSession(session);
+final Session logged = new Logged(session);
 ```
 
 ## Phonebook application (demo)
@@ -177,7 +177,7 @@ documentation, code, ...) of contribution.
 $ mvn clean install -Pqulice
 ```
 
-### How use ANTLR4 + Maven + IntelliJ (for Contributors)
+### How use ANTLR4 + Maven + IntelliJ
 
 1. Create a `antlr4` directory inside `src/main` directory (automatically
 jcabi-parent will detect this directory and run antlr properly)
