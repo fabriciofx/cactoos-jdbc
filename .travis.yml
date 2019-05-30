@@ -1,11 +1,14 @@
 sudo: true
 language: java
+jdk:
+  - oraclejdk8
 cache:
   directories:
     - $HOME/.m2
 script:
   - set -e
   - pdd --file=/dev/null
+  - mvn clean site -Psite --errors --batch-mode
   - mvn clean install -Pqulice --errors --batch-mode
 install:
   - gem install pdd
@@ -32,5 +35,3 @@ before_install:
 before_script:
   - psql -U postgres -c "CREATE EXTENSION pgcrypto;" template1
   - psql -U postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-jdk:
-  - oraclejdk8

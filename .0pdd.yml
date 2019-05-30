@@ -1,0 +1,13 @@
+errors:
+  - fabriciofx@gmail.com
+
+# alerts:
+#   github:
+#     - fabriciofx
+
+tags:
+  - pdd
+  - bug
+
+tickets:
+  - inherit-milestone
