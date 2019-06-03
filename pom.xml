@@ -27,7 +27,7 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.49.4</version>
+    <version>0.49.5</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
