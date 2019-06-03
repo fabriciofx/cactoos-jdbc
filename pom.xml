@@ -120,7 +120,7 @@
     <dependency>
       <groupId>org.llorllale</groupId>
       <artifactId>cactoos-matchers</artifactId>
-      <version>0.15</version>
+      <version>0.16</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -144,7 +144,7 @@
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.21.4</version>
+      <version>0.21.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -162,7 +162,7 @@
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.18.17</version>
+            <version>0.18.19</version>
             <configuration>
               <excludes combine.children="append">
                 <exclude>checkstyle:/src/site/resources/.*</exclude>
@@ -173,7 +173,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.3</version>
+            <version>0.8.4</version>
             <configuration>
               <output>file</output>
             </configuration>
