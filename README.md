@@ -9,6 +9,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/fabriciofx/cactoos-jdbc/blob/master/LICENSE.txt)
 
+[![Hits-of-Code](https://hitsofcode.com/github/fabriciofx/cactoos-jdbc)](https://hitsofcode.com/view/github/fabriciofx/cactoos-jdbc)
 
 ## Introduction
 
