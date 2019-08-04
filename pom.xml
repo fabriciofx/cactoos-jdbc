@@ -38,7 +38,7 @@
   <url>https://github.com/fabriciofx/cactoos-jdbc</url>
   <inceptionYear>2018</inceptionYear>
   <organization>
-    <name>Cactoos JDBC</name>
+    <name>cactoos-jdbc</name>
     <url>https://github.com/fabriciofx/cactoos-jdbc</url>
   </organization>
   <licenses>
@@ -50,7 +50,7 @@
   </licenses>
   <developers>
     <developer>
-      <id>1</id>
+      <id>fabriciofx</id>
       <name>Fabrício Barros Cabral</name>
       <email>fabriciofx@gmail.com</email>
       <organization>fabriciofx</organization>
