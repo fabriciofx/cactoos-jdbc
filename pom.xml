@@ -115,12 +115,12 @@
     <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
-      <version>0.41</version>
+      <version>0.42</version>
     </dependency>
     <dependency>
       <groupId>org.llorllale</groupId>
       <artifactId>cactoos-matchers</artifactId>
-      <version>0.16</version>
+      <version>0.17</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -132,13 +132,13 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.16</version>
+      <version>8.0.17</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.5</version>
+      <version>42.2.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
