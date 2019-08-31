@@ -40,7 +40,7 @@ public final class ParamDouble implements Param {
     /**
      * Value.
      */
-    private final Double value;
+    private final Double num;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class ParamDouble implements Param {
      */
     public ParamDouble(final String name, final Double value) {
         this.id = name;
-        this.value = value;
+        this.num = value;
     }
 
     @Override
@@ -62,11 +62,11 @@ public final class ParamDouble implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDouble(index, this.value);
+        stmt.setDouble(index, this.num);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.num.toString();
     }
 }

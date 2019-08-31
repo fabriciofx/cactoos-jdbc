@@ -43,7 +43,7 @@ public final class ParamText implements Param {
     /**
      * Value.
      */
-    private final Text value;
+    private final Text text;
 
     /**
      * Ctor.
@@ -79,7 +79,7 @@ public final class ParamText implements Param {
      */
     public ParamText(final Text name, final Text value) {
         this.id = name;
-        this.value = value;
+        this.text = value;
     }
 
     @Override
@@ -92,11 +92,11 @@ public final class ParamText implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setString(index, this.value.asString());
+        stmt.setString(index, this.text.asString());
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.asString();
+        return this.text.asString();
     }
 }

@@ -42,7 +42,7 @@ public final class ParamUuidAsBytes implements Param {
     /**
      * Value.
      */
-    private final UUID value;
+    private final UUID uuid;
 
     /**
      * Ctor.
@@ -51,7 +51,7 @@ public final class ParamUuidAsBytes implements Param {
      */
     public ParamUuidAsBytes(final String name, final UUID value) {
         this.id = name;
-        this.value = value;
+        this.uuid = value;
     }
 
     @Override
@@ -65,14 +65,14 @@ public final class ParamUuidAsBytes implements Param {
         final int index
     ) throws Exception {
         // @checkstyle MagicNumber (1 line)
-        final ByteBuffer bbuf = ByteBuffer.wrap(new byte[16]);
-        bbuf.putLong(this.value.getMostSignificantBits());
-        bbuf.putLong(this.value.getLeastSignificantBits());
-        stmt.setBytes(index, bbuf.array());
+        final ByteBuffer bytes = ByteBuffer.wrap(new byte[16]);
+        bytes.putLong(this.uuid.getMostSignificantBits());
+        bytes.putLong(this.uuid.getLeastSignificantBits());
+        stmt.setBytes(index, bytes.array());
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.uuid.toString();
     }
 }

@@ -40,7 +40,7 @@ public final class ParamBool implements Param {
     /**
      * Value.
      */
-    private final Boolean value;
+    private final Boolean bool;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class ParamBool implements Param {
      */
     public ParamBool(final String name, final Boolean value) {
         this.id = name;
-        this.value = value;
+        this.bool = value;
     }
 
     @Override
@@ -62,11 +62,11 @@ public final class ParamBool implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBoolean(index, this.value);
+        stmt.setBoolean(index, this.bool);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.bool.toString();
     }
 }

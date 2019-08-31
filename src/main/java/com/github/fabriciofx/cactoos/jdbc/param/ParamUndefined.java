@@ -40,7 +40,7 @@ public final class ParamUndefined implements Param {
     /**
      * Value.
      */
-    private final Object value;
+    private final Object object;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class ParamUndefined implements Param {
      */
     public ParamUndefined(final String name, final Object value) {
         this.id = name;
-        this.value = value;
+        this.object = value;
     }
 
     @Override
@@ -62,11 +62,11 @@ public final class ParamUndefined implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.value);
+        stmt.setObject(index, this.object);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.object.toString();
     }
 }

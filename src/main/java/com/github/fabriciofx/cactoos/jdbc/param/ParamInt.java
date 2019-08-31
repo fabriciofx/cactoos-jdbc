@@ -40,7 +40,7 @@ public final class ParamInt implements Param {
     /**
      * Value.
      */
-    private final Integer value;
+    private final Integer integer;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class ParamInt implements Param {
      */
     public ParamInt(final String name, final Integer value) {
         this.id = name;
-        this.value = value;
+        this.integer = value;
     }
 
     @Override
@@ -62,11 +62,11 @@ public final class ParamInt implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setInt(index, this.value);
+        stmt.setInt(index, this.integer);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.integer.toString();
     }
 }

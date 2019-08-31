@@ -40,7 +40,7 @@ public final class ParamLong implements Param {
     /**
      * Value.
      */
-    private final Long value;
+    private final Long num;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class ParamLong implements Param {
      */
     public ParamLong(final String name, final Long value) {
         this.id = name;
-        this.value = value;
+        this.num = value;
     }
 
     @Override
@@ -62,11 +62,11 @@ public final class ParamLong implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setLong(index, this.value);
+        stmt.setLong(index, this.num);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.num.toString();
     }
 }

@@ -42,7 +42,7 @@ public final class ParamDate implements Param {
     /**
      * Value.
      */
-    private final LocalDate value;
+    private final LocalDate date;
 
     /**
      * Ctor.
@@ -60,7 +60,7 @@ public final class ParamDate implements Param {
      */
     public ParamDate(final String name, final LocalDate value) {
         this.id = name;
-        this.value = value;
+        this.date = value;
     }
 
     @Override
@@ -73,11 +73,11 @@ public final class ParamDate implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDate(index, java.sql.Date.valueOf(this.value));
+        stmt.setDate(index, java.sql.Date.valueOf(this.date));
     }
 
     @Override
     public String asString() throws IOException {
-        return this.value.toString();
+        return this.date.toString();
     }
 }

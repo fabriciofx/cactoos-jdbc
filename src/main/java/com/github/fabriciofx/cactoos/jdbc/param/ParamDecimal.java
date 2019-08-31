@@ -41,7 +41,7 @@ public final class ParamDecimal implements Param {
     /**
      * Value.
      */
-    private final BigDecimal value;
+    private final BigDecimal decimal;
 
     /**
      * Ctor.
@@ -59,7 +59,7 @@ public final class ParamDecimal implements Param {
      */
     public ParamDecimal(final String name, final BigDecimal value) {
         this.id = name;
-        this.value = value;
+        this.decimal = value;
     }
 
     @Override
@@ -72,11 +72,11 @@ public final class ParamDecimal implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBigDecimal(index, this.value);
+        stmt.setBigDecimal(index, this.decimal);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.decimal.toString();
     }
 }

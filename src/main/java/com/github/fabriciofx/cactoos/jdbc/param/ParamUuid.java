@@ -41,7 +41,7 @@ public final class ParamUuid implements Param {
     /**
      * Value.
      */
-    private final UUID value;
+    private final UUID uuid;
 
     /**
      * Ctor.
@@ -50,7 +50,7 @@ public final class ParamUuid implements Param {
      */
     public ParamUuid(final String name, final UUID value) {
         this.id = name;
-        this.value = value;
+        this.uuid = value;
     }
 
     @Override
@@ -63,11 +63,11 @@ public final class ParamUuid implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.value);
+        stmt.setObject(index, this.uuid);
     }
 
     @Override
     public String asString() throws Exception {
-        return this.value.toString();
+        return this.uuid.toString();
     }
 }
