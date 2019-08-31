@@ -26,7 +26,8 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 import com.github.fabriciofx.cactoos.jdbc.DatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SqlScript;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
 import com.github.fabriciofx.cactoos.jdbc.session.SessionNoAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.SourceH2;
 import java.io.IOException;
@@ -47,20 +48,20 @@ public final class ServerH2 implements Server {
     /**
      * SQL Script to initialize the database.
      */
-    private final SqlScript script;
+    private final ScriptSql script;
 
     /**
      * Ctor.
      */
     public ServerH2() {
-        this(SqlScript.NOP);
+        this(new ScriptSqlEmpty());
     }
 
     /**
      * Ctor.
      * @param scrpt SqlScript to initialize the database.
      */
-    public ServerH2(final SqlScript scrpt) {
+    public ServerH2(final ScriptSql scrpt) {
         this.dbname = new Unchecked<>(
             new Sticky<>(
                 () -> new DatabaseName().asString()

@@ -24,20 +24,18 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 /**
- * SQL Script.
+ * Script.
  *
+ * <p>There is no thread-safety guarantee.
+ *
+ * @param <T> Type of the context
  * @since 0.2
  */
-public interface SqlScript {
+public interface Script<T> {
     /**
-     * SQL Script that executes nothing.
+     * Execute this Script on the T context.
+     * @param context The context
+     * @throws Exception if fails
      */
-    SqlScript NOP = session -> { };
-
-    /**
-     * Execute a SQL Script in the Session.
-     * @param session A Session
-     * @throws Exception if fails.
-     */
-    void run(Session session) throws Exception;
+    void run(T context) throws Exception;
 }

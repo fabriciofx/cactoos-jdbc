@@ -38,11 +38,11 @@ import org.junit.Test;
  * @checkstyle MethodNameCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class SqlScriptInputOfTest {
+public final class ScriptSqlTest {
     @Test
     public void h2Server() throws Exception {
         final Server server = new ServerH2(
-            new SqlScriptInputOf(
+            new ScriptSql(
                 new ResourceOf(
                     new Joined(
                         "/",
@@ -59,7 +59,7 @@ public final class SqlScriptInputOfTest {
     @Test
     public void mysqlServer() throws Exception {
         final Server server = new ServerMysql(
-            new SqlScriptInputOf(
+            new ScriptSql(
                 new ResourceOf(
                     new Joined(
                         "/",

@@ -23,8 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
+import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
@@ -39,7 +39,7 @@ import org.cactoos.Input;
  *
  * @since 0.2
  */
-public final class SqlScriptInputOf implements SqlScript {
+public class ScriptSql implements Script<Session> {
     /**
      * Input.
      */
@@ -47,13 +47,17 @@ public final class SqlScriptInputOf implements SqlScript {
 
     /**
      * Ctor.
-     * @param input The SQL Script file
+     * @param npt The SQL Script file
      */
-    public SqlScriptInputOf(final Input input) {
-        this.input = input;
+    public ScriptSql(final Input npt) {
+        this.input = npt;
     }
 
-    @Override
+    /**
+     * Execute this Script on the Session context.
+     * @param session The context
+     * @throws Exception if fails
+     */
     public void run(final Session session) throws Exception {
         final List<String> lines = new ArrayList<>(0);
         try (Reader reader = new InputStreamReader(this.input.stream())) {

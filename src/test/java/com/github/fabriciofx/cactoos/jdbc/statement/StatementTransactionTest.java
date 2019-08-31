@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
-import com.github.fabriciofx.cactoos.jdbc.script.SqlScriptInputOf;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
 import com.github.fabriciofx.cactoos.jdbc.session.SessionNoAuth;
 import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import com.github.fabriciofx.cactoos.jdbc.source.SourceH2;
@@ -63,7 +63,7 @@ public final class StatementTransactionTest {
                 new SourceH2("safedb")
             )
         );
-        new SqlScriptInputOf(
+        new ScriptSql(
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/phonebook/phonebook-h2.sql"
             )
@@ -117,7 +117,7 @@ public final class StatementTransactionTest {
                 new SourceH2("unsafedb")
             )
         );
-        new SqlScriptInputOf(
+        new ScriptSql(
             new ResourceOf(
                 "com/github/fabriciofx/cactoos/jdbc/phonebook/phonebook-h2.sql"
             )

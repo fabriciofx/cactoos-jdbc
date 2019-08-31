@@ -26,8 +26,9 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 import com.github.fabriciofx.cactoos.jdbc.DatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.SqlScript;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
 import com.github.fabriciofx.cactoos.jdbc.session.SessionAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.SourcePgsql;
 import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
@@ -78,20 +79,20 @@ public final class ServerPgsql implements Server {
     /**
      * SQL Script to initialize the database.
      */
-    private final SqlScript script;
+    private final ScriptSql script;
 
     /**
      * Ctor.
      */
     public ServerPgsql() {
-        this(SqlScript.NOP);
+        this(new ScriptSqlEmpty());
     }
 
     /**
      * Ctor.
      * @param scrpt SQL Script to initialize the database
      */
-    public ServerPgsql(final SqlScript scrpt) {
+    public ServerPgsql(final ScriptSql scrpt) {
         // @checkstyle MagicNumber (1 line)
         this("localhost", 5432, "postgres", "postgres", scrpt);
     }
@@ -110,7 +111,7 @@ public final class ServerPgsql implements Server {
         final int prt,
         final String srnm,
         final String psswrd,
-        final SqlScript scrpt
+        final ScriptSql scrpt
     ) {
         this.dbname = new Unchecked<>(
             new Sticky<>(
