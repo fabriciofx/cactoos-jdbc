@@ -26,6 +26,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.params.ParamsNamed;
 import com.github.fabriciofx.cactoos.jdbc.sql.SqlParsed;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -83,7 +84,7 @@ public final class QueryKeyed implements Query {
     ) {
         this.sql = new SqlParsed(sql, prms);
         this.key = pknm;
-        this.params = new Params(prms);
+        this.params = new ParamsNamed(prms);
     }
 
     @Override

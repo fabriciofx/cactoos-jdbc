@@ -23,11 +23,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamInt;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
+import com.github.fabriciofx.cactoos.jdbc.params.ParamsNamed;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryBatch;
 import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
@@ -78,19 +78,19 @@ public final class StatementBatchTest {
                             "INSERT INTO client (id, name, age)",
                             "VALUES (:id, :name, :age)"
                         ),
-                        new Params(
+                        new ParamsNamed(
                             new ParamInt("id", 1),
                             new ParamText("name", "Jeff Bridges"),
                             // @checkstyle MagicNumber (1 line)
                             new ParamInt("age", 34)
                         ),
-                        new Params(
+                        new ParamsNamed(
                             new ParamInt("id", 2),
                             new ParamText("name", "Anna Miller"),
                             // @checkstyle MagicNumber (1 line)
                             new ParamInt("age", 26)
                         ),
-                        new Params(
+                        new ParamsNamed(
                             // @checkstyle MagicNumber (3 lines)
                             new ParamInt("id", 3),
                             new ParamText("name", "Michal Douglas"),

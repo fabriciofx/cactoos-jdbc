@@ -21,30 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
-
-import java.sql.PreparedStatement;
-import org.cactoos.Text;
 
 /**
- * A named data.
+ * Query params.
  *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
+ * @since 0.4
  */
-public interface Param extends Text {
-    /**
-     * Get the data data name.
-     * @return The name
-     */
-    String name();
-
-    /**
-     * Set the PreparedStatement with data data.
-     * @param stmt The PreparedStatement
-     * @param index The position of the parameter in the PreparedStatement
-     * @throws Exception If fails
-     */
-    void prepare(PreparedStatement stmt, int index) throws Exception;
-}
+package com.github.fabriciofx.cactoos.jdbc.params;
