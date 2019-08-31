@@ -42,7 +42,7 @@ public final class ParamDateTime implements Param {
     /**
      * Value.
      */
-    private final LocalDateTime dateTime;
+    private final LocalDateTime datetime;
 
     /**
      * Ctor.
@@ -51,7 +51,7 @@ public final class ParamDateTime implements Param {
      */
     public ParamDateTime(final String name, final LocalDateTime value) {
         this.id = name;
-        this.dateTime = value;
+        this.datetime = value;
     }
 
     @Override
@@ -64,11 +64,11 @@ public final class ParamDateTime implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setTimestamp(index, Timestamp.valueOf(this.dateTime));
+        stmt.setTimestamp(index, Timestamp.valueOf(this.datetime));
     }
 
     @Override
     public String asString() throws Exception {
-        return this.dateTime.toString();
+        return this.datetime.toString();
     }
 }
