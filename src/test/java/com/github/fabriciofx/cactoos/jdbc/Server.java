@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.io.Closeable;
-
 /**
  * Server.
  *
@@ -32,7 +30,7 @@ import java.io.Closeable;
  *
  * @since 0.2
  */
-public interface Server extends Closeable {
+public interface Server extends AutoCloseable {
     /**
      * Start the server.
      * @throws Exception If fails

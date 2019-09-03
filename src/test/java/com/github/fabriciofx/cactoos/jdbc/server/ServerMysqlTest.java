@@ -38,18 +38,20 @@ import org.junit.Test;
 public final class ServerMysqlTest {
     @Test
     public void startAndStop() throws Exception {
-        final Server mysql = new ServerMysql(
-            new ScriptSql(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-mysql.sql"
+        try (
+            Server mysql = new ServerMysql(
+                new ScriptSql(
+                    new ResourceOf(
+                        new Joined(
+                            "/",
+                            "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                            "phonebook-mysql.sql"
+                        )
                     )
                 )
             )
-        );
-        mysql.start();
-        mysql.stop();
+        ) {
+            mysql.start();
+        }
     }
 }

@@ -38,18 +38,20 @@ import org.junit.Test;
 public final class ServerPgsqlTest {
     @Test
     public void startAndStop() throws Exception {
-        final Server pgsql = new ServerPgsql(
-            new ScriptSql(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-pgsql.sql"
+        try (
+            Server pgsql = new ServerPgsql(
+                new ScriptSql(
+                    new ResourceOf(
+                        new Joined(
+                            "/",
+                            "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                            "phonebook-pgsql.sql"
+                        )
                     )
                 )
             )
-        );
-        pgsql.start();
-        pgsql.stop();
+        ) {
+            pgsql.start();
+        }
     }
 }
