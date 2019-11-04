@@ -1,3 +1,6 @@
+<a href="https://www.yegor256.com/2018/09/30/award-2019.html">
+  <img src="//www.yegor256.com/images/award/2019/winner-fabriciofx.png" style="height:45px;" alt="winner"/>
+</a>
 [![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
 [![We recommend IntelliJ IDEA](http://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 [![Java Profiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
@@ -37,7 +40,7 @@ behind Cactoos JDBC.
 
 ## Features
 
-- Select, Insert, Update and Delete data from a 
+- Select, Insert, Update and Delete data from a
 [RDBMS](https://en.wikipedia.org/wiki/Relational_database_management_system)
 - Named parameters statement
 - Retrieve the data as XML
@@ -182,10 +185,10 @@ $ mvn clean install -Pqulice
 jcabi-parent will detect this directory and run antlr properly)
 2. Mark the `antlr4` as Source Root (select the directory, mouse right button,
 `Mark Directory as`, `Sources Root`)
-3. Create the package folder properly (e.g 
+3. Create the package folder properly (e.g
 `com.github.fabriciofx.cactoos.jdbc.cache`)
 4. Put the `.g4` file inside the package folder create in (3)
-5. Generate the sources (On Project Folder, mouse right button, `Maven`, 
+5. Generate the sources (On Project Folder, mouse right button, `Maven`,
 `Generate Sources and Update Folders`)
 6. Reimport the Generate Sources (On Project Folder, mouse right button,
 `Maven`, `Reimport`)
