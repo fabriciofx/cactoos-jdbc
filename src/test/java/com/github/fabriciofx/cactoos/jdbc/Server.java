@@ -53,5 +53,6 @@ public interface Server extends AutoCloseable {
 
     @Override
     default void close() throws IOException {
+        // A temporary work-around for the JDK bug reported in #26
     }
 }
