@@ -23,6 +23,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import java.io.IOException;
+
 /**
  * Server.
  *
@@ -48,4 +50,8 @@ public interface Server extends AutoCloseable {
      * @return A Session
      */
     Session session();
+
+    @Override
+    default void close() throws IOException {
+    }
 }
