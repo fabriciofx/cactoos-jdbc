@@ -27,7 +27,7 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.49.5</version>
+    <version>0.51.2</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
@@ -170,6 +170,11 @@
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.30</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
