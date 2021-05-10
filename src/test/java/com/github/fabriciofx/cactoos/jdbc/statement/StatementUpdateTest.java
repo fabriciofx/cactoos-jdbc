@@ -33,7 +33,7 @@ import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.ScalarHasValue;
+import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * StatementUpdate tests.
@@ -75,7 +75,7 @@ public final class StatementUpdateTest {
                             )
                         )
                     ),
-                    new ScalarHasValue<>(0)
+                    new HasValue<>(0)
                 );
             }
         }

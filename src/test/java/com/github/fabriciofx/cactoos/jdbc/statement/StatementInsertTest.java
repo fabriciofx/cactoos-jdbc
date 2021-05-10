@@ -38,7 +38,7 @@ import java.math.BigInteger;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.ScalarHasValue;
+import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * StatementInsert tests.
@@ -92,7 +92,7 @@ public final class StatementInsertTest {
                             )
                         )
                     ),
-                    new ScalarHasValue<>(false)
+                    new HasValue<>(false)
                 );
             }
         }
@@ -125,7 +125,7 @@ public final class StatementInsertTest {
                         )
                     )
                 ),
-                new ScalarHasValue<>(1)
+                new HasValue<>(1)
             );
         }
     }
@@ -156,7 +156,7 @@ public final class StatementInsertTest {
                         )
                     )
                 ),
-                new ScalarHasValue<>(1)
+                new HasValue<>(1)
             );
         }
     }
@@ -188,7 +188,7 @@ public final class StatementInsertTest {
                         )
                     )
                 ),
-                new ScalarHasValue<>(BigInteger.ONE)
+                new HasValue<>(BigInteger.ONE)
             );
         }
     }
