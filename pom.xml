@@ -126,25 +126,25 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.4.199</version>
+      <version>1.4.200</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.17</version>
+      <version>8.0.18</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.6</version>
+      <version>42.2.8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.21.5</version>
+      <version>0.22.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -245,7 +245,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.4</version>
+            <version>0.8.5</version>
             <configuration>
               <output>file</output>
             </configuration>
