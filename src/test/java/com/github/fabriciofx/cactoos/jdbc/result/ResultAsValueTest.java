@@ -35,7 +35,7 @@ import java.math.BigInteger;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.ScalarHasValue;
+import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * ResultAsValue tests.
@@ -77,7 +77,7 @@ public final class ResultAsValueTest {
                         )
                     )
                 ),
-                new ScalarHasValue<>(BigInteger.ONE)
+                new HasValue<>(BigInteger.ONE)
             );
         }
     }

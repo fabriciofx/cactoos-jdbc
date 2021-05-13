@@ -30,7 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.TextHasString;
+import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * QuerySimple tests.
@@ -47,7 +47,7 @@ public final class QuerySimpleTest {
         MatcherAssert.assertThat(
             "Can't build a named query without values",
             new QuerySimple("SELECT * FROM employee"),
-            new TextHasString("SELECT * FROM employee")
+            new IsText("SELECT * FROM employee")
         );
     }
 
@@ -59,7 +59,7 @@ public final class QuerySimpleTest {
                 "INSERT INTO foo2 (name) VALUES (:name)",
                 new ParamText("name", "Yegor Bugayenko")
             ),
-            new TextHasString("INSERT INTO foo2 (name) VALUES (?)")
+            new IsText("INSERT INTO foo2 (name) VALUES (?)")
         );
     }
 
@@ -88,7 +88,7 @@ public final class QuerySimpleTest {
                 new ParamBool("married", false),
                 new ParamDecimal("salary", "13456.00")
             ),
-            new TextHasString(
+            new IsText(
                 new Joined(
                     " ",
                     "INSERT INTO employee",

@@ -56,4 +56,7 @@ public interface Server extends AutoCloseable {
      * @return A Session
      */
     Session session();
+
+    @Override
+    void close() throws IOException;
 }
