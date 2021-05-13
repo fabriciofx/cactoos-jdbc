@@ -56,4 +56,9 @@ public interface Server extends AutoCloseable {
      * @return A Session
      */
     Session session();
+
+    @Override
+    default void close() throws IOException {
+        // A temporary work-around for the JDK bug reported in #26
+    }
 }
