@@ -21,44 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.server;
+package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.ServerEnvelope;
-import com.github.fabriciofx.cactoos.jdbc.ServerInContainer;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.utility.DockerImageName;
+import java.io.IOException;
 
 /**
- * MySQL server, for unit testing.
+ * Enveloper for {@link Server}.
  *
  * @since 0.2
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public final class ServerMysql extends ServerEnvelope {
+public abstract class ServerEnvelope implements Server {
     /**
-     * Ctor.
+     * Original server.
      */
-    public ServerMysql() {
-        this(new ScriptSqlEmpty());
-    }
+    private final Server server;
 
     /**
      * Ctor.
-     * @param scrpt SQL Script to initialize the database
+     * @param server Original server.
      */
-    public ServerMysql(final ScriptSql scrpt) {
-        super(
-            new ServerInContainer(
-                new MySQLContainer<>(
-                    DockerImageName
-                        .parse("mysql/mysql-server:latest")
-                        .asCompatibleSubstituteFor("mysql")
-                ),
-                scrpt
-            )
-        );
+    protected ServerEnvelope(final Server server) {
+        this.server = server;
     }
 
+    @Override
+    public final void start() throws Exception {
+        this.server.start();
+    }
+
+    @Override
+    public final void stop() throws Exception {
+        this.server.stop();
+    }
+
+    @Override
+    public final Session session() {
+        return this.server.session();
+    }
+
+    @Override
+    public final void close() throws IOException {
+        this.server.close();
+    }
 }

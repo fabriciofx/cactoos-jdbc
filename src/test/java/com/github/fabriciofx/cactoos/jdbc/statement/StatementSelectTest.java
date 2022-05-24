@@ -43,7 +43,7 @@ import java.time.LocalDate;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.llorllale.cactoos.matchers.ScalarHasValue;
+import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * StatementSelect tests.
@@ -210,7 +210,7 @@ public final class StatementSelectTest {
                             )
                         )
                     ),
-                    new ScalarHasValue<>("Rob Pike")
+                    new HasValue<>("Rob Pike")
                 );
             }
         }

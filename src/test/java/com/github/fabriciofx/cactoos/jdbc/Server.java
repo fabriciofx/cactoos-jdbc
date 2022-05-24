@@ -46,14 +46,11 @@ public interface Server extends AutoCloseable {
     void stop() throws Exception;
 
     /**
-     * Close the server. Is the same of stop() method.
-     * @throws IOException If fails
-     */
-    void close() throws IOException;
-
-    /**
      * Return a Session from server.
      * @return A Session
      */
     Session session();
+
+    @Override
+    void close() throws IOException;
 }
