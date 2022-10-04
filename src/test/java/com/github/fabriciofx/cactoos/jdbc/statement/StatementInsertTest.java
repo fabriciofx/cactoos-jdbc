@@ -37,7 +37,7 @@ import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
 import java.math.BigInteger;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
@@ -52,12 +52,13 @@ import org.llorllale.cactoos.matchers.HasValue;
 @SuppressWarnings(
     {
         "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidInstantiatingObjectsInLoops"
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class StatementInsertTest {
+final class StatementInsertTest {
     @Test
-    public void insert() throws Exception {
+    void insert() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(),
@@ -100,7 +101,7 @@ public final class StatementInsertTest {
 
     @Test
     // @checkstyle MethodNameCheck (1 line)
-    public void insertWithKeysH2() throws Exception {
+    void insertWithKeysH2() throws Exception {
         try (Server server = new ServerH2()) {
             server.start();
             final Session session = server.session();
@@ -131,7 +132,7 @@ public final class StatementInsertTest {
     }
 
     @Test
-    public void insertWithKeysPsql() throws Exception {
+    void insertWithKeysPsql() throws Exception {
         try (Server server = new ServerPgsql()) {
             server.start();
             final Session session = server.session();
@@ -162,7 +163,7 @@ public final class StatementInsertTest {
     }
 
     @Test
-    public void insertWithKeysMysql() throws Exception {
+    void insertWithKeysMysql() throws Exception {
         try (Server server = new ServerMysql()) {
             server.start();
             final Session session = server.session();

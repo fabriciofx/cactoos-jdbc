@@ -32,7 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.server.ServerMysql;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
@@ -47,12 +47,13 @@ import org.llorllale.cactoos.matchers.HasValue;
 @SuppressWarnings(
     {
         "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidInstantiatingObjectsInLoops"
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class StatementUpdateTest {
+final class StatementUpdateTest {
     @Test
-    public void createTable() throws Exception {
+    void createTable() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(),

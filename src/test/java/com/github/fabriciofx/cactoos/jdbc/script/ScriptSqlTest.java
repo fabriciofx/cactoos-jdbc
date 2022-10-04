@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerMysql;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * SqlScript tests.
@@ -37,10 +37,15 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle MethodNameCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class ScriptSqlTest {
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases"
+    }
+)
+final class ScriptSqlTest {
     @Test
-    public void h2Server() throws Exception {
+    void h2Server() throws Exception {
         final Server server = new ServerH2(
             new ScriptSql(
                 new ResourceOf(
@@ -57,7 +62,7 @@ public final class ScriptSqlTest {
     }
 
     @Test
-    public void mysqlServer() throws Exception {
+    void mysqlServer() throws Exception {
         final Server server = new ServerMysql(
             new ScriptSql(
                 new ResourceOf(

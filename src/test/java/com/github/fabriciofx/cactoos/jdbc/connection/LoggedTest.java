@@ -32,7 +32,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * StatementInsert tests.
@@ -42,9 +42,10 @@ import org.junit.Test;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-public final class LoggedTest {
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
+final class LoggedTest {
     @Test
-    public void loggedUpdate() throws Exception {
+    void loggedUpdate() throws Exception {
         final Logger logger = new LoggerFake();
         final String sql =
             "CREATE TABLE t012 (id INT AUTO_INCREMENT, name VARCHAR(50))";

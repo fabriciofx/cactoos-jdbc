@@ -37,7 +37,7 @@ import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Phonebook tests.
@@ -51,12 +51,13 @@ import org.junit.Test;
 @SuppressWarnings(
     {
         "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class PhonebookTest {
+final class PhonebookTest {
     @Test
-    public void addContact() throws Exception {
+    void addContact() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(
@@ -119,7 +120,7 @@ public final class PhonebookTest {
     }
 
     @Test
-    public void findContact() throws Exception {
+    void findContact() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(
@@ -164,7 +165,7 @@ public final class PhonebookTest {
     }
 
     @Test
-    public void renameContact() throws Exception {
+    void renameContact() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(

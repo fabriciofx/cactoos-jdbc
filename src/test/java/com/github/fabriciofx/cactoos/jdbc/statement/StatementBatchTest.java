@@ -34,7 +34,7 @@ import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerMysql;
 import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
 import org.cactoos.text.Joined;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * StatementBatch tests.
@@ -46,12 +46,13 @@ import org.junit.Test;
 @SuppressWarnings(
     {
         "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class StatementBatchTest {
+final class StatementBatchTest {
     @Test
-    public void batch() throws Exception {
+    void batch() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(),

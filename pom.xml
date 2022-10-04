@@ -27,11 +27,11 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.58.0</version>
+    <version>0.62.0</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
-  <version>0.4.0</version>
+  <version>0.6.0</version>
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
   <description>A true OO implementation of the JDBC API</description>
@@ -72,7 +72,7 @@
       scm:git:git@github.com:fabriciofx/cactoos-jdbc.git
     </developerConnection>
     <url>https://github.com/fabriciofx/cactoos-jdbc</url>
-    <tag>cactoos-jdbc-0.4.0</tag>
+    <tag>cactoos-jdbc-0.6.0</tag>
   </scm>
   <ciManagement>
     <system>rultor</system>
@@ -99,6 +99,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M7</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <systemPropertyVariables>
@@ -111,7 +112,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.3.0</version>
           <configuration>
             <propertiesEncoding>UTF-8</propertiesEncoding>
           </configuration>
@@ -123,7 +124,7 @@
     <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
-      <version>0.50.1</version>
+      <version>0.54.0</version>
     </dependency>
     <dependency>
       <groupId>org.llorllale</groupId>
@@ -140,88 +141,80 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.29</version>
+      <version>8.0.30</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.4.0</version>
+      <version>42.5.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.23.2</version>
+      <version>0.25.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
-      <version>1.5.3</version>
+      <version>1.6.0</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hamcrest</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
+      <version>1.17.4</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hamcrest</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>mysql</artifactId>
+      <version>1.17.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>jdbc</artifactId>
+      <version>1.17.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>postgresql</artifactId>
+      <version>1.17.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>2.0.0-alpha7</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hamcrest</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.9.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.9.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
-      <version>5.9.0-RC1</version>
+      <version>5.9.1</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hamcrest</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
   <dependencyManagement>
@@ -229,7 +222,7 @@
       <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
-        <version>1.17.3</version>
+        <version>1.17.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -243,7 +236,7 @@
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.19.4</version>
+            <version>0.22.0</version>
             <configuration>
               <excludes combine.children="append">
                 <exclude>checkstyle:/src/site/resources/.*</exclude>
@@ -286,32 +279,32 @@
                         <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.24</minimum>
+                          <minimum>0.08</minimum>
                         </limit>
                         <limit>
                           <counter>LINE</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.27</minimum>
+                          <minimum>0.08</minimum>
                         </limit>
                         <limit>
                           <counter>BRANCH</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.37</minimum>
+                          <minimum>0.12</minimum>
                         </limit>
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.18</minimum>
+                          <minimum>0.04</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.16</minimum>
+                          <minimum>0.04</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
                           <value>MISSEDCOUNT</value>
-                          <maximum>21</maximum>
+                          <maximum>35</maximum>
                         </limit>
                       </limits>
                     </rule>

@@ -38,7 +38,7 @@ import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * StatementTransaction tests.
@@ -52,12 +52,13 @@ import org.junit.Test;
 @SuppressWarnings(
     {
         "PMD.AvoidDuplicateLiterals",
-        "PMD.EmptyCatchBlock"
+        "PMD.EmptyCatchBlock",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class StatementTransactionTest {
+final class StatementTransactionTest {
     @Test
-    public void commit() throws Exception {
+    void commit() throws Exception {
         final Transacted transacted = new Transacted(
             new SessionNoAuth(
                 new SourceH2("safedb")
@@ -111,7 +112,7 @@ public final class StatementTransactionTest {
     }
 
     @Test
-    public void rollback() throws Exception {
+    void rollback() throws Exception {
         final Transacted transacted = new Transacted(
             new SessionNoAuth(
                 new SourceH2("unsafedb")

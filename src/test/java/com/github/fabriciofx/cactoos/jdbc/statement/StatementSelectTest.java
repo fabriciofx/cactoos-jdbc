@@ -42,7 +42,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
@@ -57,12 +57,13 @@ import org.llorllale.cactoos.matchers.HasValue;
 @SuppressWarnings(
     {
         "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases"
     }
 )
-public final class StatementSelectTest {
+final class StatementSelectTest {
     @Test
-    public void select() throws Exception {
+    void select() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(),
@@ -151,7 +152,7 @@ public final class StatementSelectTest {
     }
 
     @Test
-    public void any() throws Exception {
+    void any() throws Exception {
         try (
             Servers servers = new Servers(
                 new ServerH2(),

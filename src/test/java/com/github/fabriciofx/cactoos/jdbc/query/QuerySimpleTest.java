@@ -29,7 +29,8 @@ import com.github.fabriciofx.cactoos.jdbc.param.ParamDecimal;
 import com.github.fabriciofx.cactoos.jdbc.param.ParamText;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.Assert;
+import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
@@ -40,10 +41,16 @@ import org.llorllale.cactoos.matchers.IsText;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class QuerySimpleTest {
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases",
+        "PMD.ProhibitPlainJunitAssertionsRule"
+    }
+)
+final class QuerySimpleTest {
     @Test
-    public void withoutValues() throws Exception {
+    void withoutValues() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a named query without values",
             new QuerySimple("SELECT * FROM employee"),
@@ -52,7 +59,7 @@ public final class QuerySimpleTest {
     }
 
     @Test
-    public void valid() throws Exception {
+    void valid() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a simple named query",
             new QuerySimple(
@@ -63,16 +70,21 @@ public final class QuerySimpleTest {
         );
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void invalid() throws Exception {
-        new QuerySimple(
-            "INSERT INTO foo2 (name) VALUES (:name)",
-            new ParamText("address", "Sunset Boulevard")
-        ).asString();
+    @Test
+    void invalid() throws Exception {
+        Assert.assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+                new QuerySimple(
+                    "INSERT INTO foo2 (name) VALUES (:name)",
+                    new ParamText("address", "Sunset Boulevard")
+                ).asString();
+            }
+        );
     }
 
     @Test
-    public void manyValues() throws Exception {
+    void manyValues() throws Exception {
         MatcherAssert.assertThat(
             "Can't build a named query with many values",
             new QuerySimple(
@@ -99,20 +111,25 @@ public final class QuerySimpleTest {
         );
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void outOfOrder() throws Exception {
-        new QuerySimple(
-            new Joined(
-                " ",
-                "INSERT INTO employee",
-                "(name, birthday, address, married, salary)",
-                "VALUES (:name, :birthday, :address, :married, :salary)"
-            ),
-            new ParamText("name", "John Wick"),
-            new ParamDate("address", "1980-08-16"),
-            new ParamText("birthday", "Boulevard Street, 34"),
-            new ParamBool("married", false),
-            new ParamDecimal("salary", "13456.00")
-        ).asString();
+    @Test
+    void outOfOrder() throws Exception {
+        Assert.assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+                new QuerySimple(
+                    new Joined(
+                        " ",
+                        "INSERT INTO employee",
+                        "(name, birthday, address, married, salary)",
+                        "VALUES (:name, :birthday, :address, :married, :salary)"
+                    ),
+                    new ParamText("name", "John Wick"),
+                    new ParamDate("address", "1980-08-16"),
+                    new ParamText("birthday", "Boulevard Street, 34"),
+                    new ParamBool("married", false),
+                    new ParamDecimal("salary", "13456.00")
+                ).asString();
+            }
+        );
     }
 }

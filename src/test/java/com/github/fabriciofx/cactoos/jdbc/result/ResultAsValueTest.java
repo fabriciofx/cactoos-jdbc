@@ -34,7 +34,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
 import java.math.BigInteger;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
@@ -46,10 +46,15 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class ResultAsValueTest {
+@SuppressWarnings(
+    {
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.TestClassWithoutTestCases"
+    }
+)
+final class ResultAsValueTest {
     @Test
-    public void insertWithKeys() throws Exception {
+    void insertWithKeys() throws Exception {
         try (Server server = new ServerMysql()) {
             server.start();
             final Session session = server.session();

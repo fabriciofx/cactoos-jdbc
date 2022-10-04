@@ -27,7 +27,7 @@ import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * MySQL Server test.
@@ -35,9 +35,10 @@ import org.junit.Test;
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-public final class ServerMysqlTest {
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
+final class ServerMysqlTest {
     @Test
-    public void startAndStop() throws Exception {
+    void startAndStop() throws Exception {
         try (
             Server mysql = new ServerMysql(
                 new ScriptSql(
