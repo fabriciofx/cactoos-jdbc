@@ -27,14 +27,15 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.62.0</version>
+    <version>0.63.2</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
-  <description>A true OO implementation of the JDBC API</description>
+  <description>A true object-oriented implementation of the JDBC API
+  </description>
   <url>https://github.com/fabriciofx/cactoos-jdbc</url>
   <inceptionYear>2018</inceptionYear>
   <organization>
