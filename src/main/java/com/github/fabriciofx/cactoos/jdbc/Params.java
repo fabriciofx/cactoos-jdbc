@@ -34,7 +34,7 @@ import java.sql.PreparedStatement;
  */
 public interface Params extends Iterable<Param> {
     /**
-     * Set the PreparedStatement with all query prms.
+     * Set the PreparedStatement with all query parameters.
      * @param stmt The PreparedStatement
      * @return The setted PreparedStatement
      * @throws Exception If fails

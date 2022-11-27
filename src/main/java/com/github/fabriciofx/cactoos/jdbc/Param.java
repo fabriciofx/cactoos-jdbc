@@ -35,13 +35,13 @@ import org.cactoos.Text;
  */
 public interface Param extends Text {
     /**
-     * Get the data data name.
+     * Get the data name.
      * @return The name
      */
     String name();
 
     /**
-     * Set the PreparedStatement with data data.
+     * Set the PreparedStatement with data.
      * @param stmt The PreparedStatement
      * @param index The position of the parameter in the PreparedStatement
      * @throws Exception If fails
