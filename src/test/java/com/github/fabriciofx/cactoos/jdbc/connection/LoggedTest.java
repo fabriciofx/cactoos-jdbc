@@ -24,11 +24,11 @@
 package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.QuerySimple;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.Logged;
-import com.github.fabriciofx.cactoos.jdbc.session.SessionNoAuth;
-import com.github.fabriciofx.cactoos.jdbc.source.SourceH2;
-import com.github.fabriciofx.cactoos.jdbc.statement.StatementUpdate;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.util.logging.Logger;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -46,17 +46,17 @@ import org.junit.jupiter.api.Test;
 final class LoggedTest {
     @Test
     void loggedUpdate() throws Exception {
-        final Logger logger = new LoggerFake();
+        final Logger logger = new FakeLogger();
         final String sql =
             "CREATE TABLE t012 (id INT AUTO_INCREMENT, name VARCHAR(50))";
         final Session session = new Logged(
-            new SessionNoAuth(
-                new SourceH2("testdb")
+            new NoAuth(
+                new H2Source("testdb")
             ),
             "cactoos-jdbc",
             logger
         );
-        new StatementUpdate(session, new QuerySimple(sql)).result();
+        new Update(session, new QueryOf(sql)).result();
         MatcherAssert.assertThat(
             "Can't connection from cactoos-jdbc",
             logger.toString(),

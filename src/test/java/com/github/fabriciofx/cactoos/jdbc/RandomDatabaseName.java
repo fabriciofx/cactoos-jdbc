@@ -23,62 +23,44 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.session.Driver;
-import java.io.IOException;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.cactoos.Text;
+import org.cactoos.text.Randomized;
 
 /**
- * Server inside container for integration testing.
+ * Random database name for tests.
  *
  * @since 0.2
  */
-public final class ServerInContainer implements Server {
+public final class RandomDatabaseName implements Text {
     /**
-     * The container.
+     * Database name.
      */
-    private final JdbcDatabaseContainer<?> container;
-
-    /**
-     * SQL Script to initialize the database.
-     */
-    private final ScriptSql script;
+    private final Text name;
 
     /**
      * Ctor.
-     * @param container The container.
-     * @param script Initialization script.
      */
-    public ServerInContainer(
-        final JdbcDatabaseContainer<?> container,
-        final ScriptSql script
-    ) {
-        this.container = container;
-        this.script = script;
-    }
-
-    @Override
-    public void start() throws Exception {
-        this.container.start();
-        this.script.run(this.session());
-    }
-
-    @Override
-    public void stop() throws Exception {
-        this.container.stop();
-    }
-
-    @Override
-    public Session session() {
-        return new Driver(
-            this.container.getJdbcUrl(),
-            this.container.getUsername(),
-            this.container.getPassword()
+    public RandomDatabaseName() {
+        this(
+            new Randomized(
+                // @checkstyle MagicNumber (1 line)
+                5,
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            )
         );
     }
 
+    /**
+     * Ctor.
+     * @param txt Database name
+     */
+    public RandomDatabaseName(final Text txt) {
+        this.name = txt;
+    }
+
     @Override
-    public void close() throws IOException {
-        this.container.close();
+    public String asString() throws Exception {
+        return this.name.asString();
     }
 }

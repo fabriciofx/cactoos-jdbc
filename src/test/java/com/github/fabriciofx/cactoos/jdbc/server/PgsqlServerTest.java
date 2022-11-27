@@ -21,60 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.script;
+package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.Server;
-import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 
 /**
- * SqlScript tests.
+ * PostgreSQL Server test.
  *
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
- * @checkstyle MethodNameCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases"
-    }
-)
-final class ScriptSqlTest {
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
+final class PgsqlServerTest {
     @Test
-    void h2Server() throws Exception {
-        final Server server = new H2Server(
-            new ScriptSql(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-h2.sql"
+    void startAndStop() throws Exception {
+        try (
+            Server pgsql = new PgsqlServer(
+                new ScriptSql(
+                    new ResourceOf(
+                        new Joined(
+                            "/",
+                            "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                            "phonebook-pgsql.sql"
+                        )
                     )
                 )
             )
-        );
-        server.start();
-        server.stop();
-    }
-
-    @Test
-    void mysqlServer() throws Exception {
-        final Server server = new MysqlServer(
-            new ScriptSql(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-mysql.sql"
-                    )
-                )
-            )
-        );
-        server.start();
-        server.stop();
+        ) {
+            pgsql.start();
+        }
     }
 }

@@ -27,10 +27,10 @@ import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.PhonebookSql;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.server.ServerH2;
-import com.github.fabriciofx.cactoos.jdbc.server.ServerPgsql;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
@@ -60,7 +60,7 @@ final class PhonebookTest {
     void addContact() throws Exception {
         try (
             Servers servers = new Servers(
-                new ServerH2(
+                new H2Server(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -71,7 +71,7 @@ final class PhonebookTest {
                         )
                     )
                 ),
-                new ServerPgsql(
+                new PgsqlServer(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -85,7 +85,7 @@ final class PhonebookTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Phonebook phonebook = new PhonebookSql(session);
+                final Phonebook phonebook = new SqlPhonebook(session);
                 final Contact contact = phonebook.contact(
                     new MapOf<String, String>(
                         new MapEntry<>("name", "Donald Knuth")
@@ -123,7 +123,7 @@ final class PhonebookTest {
     void findContact() throws Exception {
         try (
             Servers servers = new Servers(
-                new ServerH2(
+                new H2Server(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -134,7 +134,7 @@ final class PhonebookTest {
                         )
                     )
                 ),
-                new ServerPgsql(
+                new PgsqlServer(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -150,7 +150,7 @@ final class PhonebookTest {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new PhonebookSql(session)
+                        new SqlPhonebook(session)
                             .filter("maria")
                             .iterator()
                             .next()
@@ -168,7 +168,7 @@ final class PhonebookTest {
     void renameContact() throws Exception {
         try (
             Servers servers = new Servers(
-                new ServerH2(
+                new H2Server(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -179,7 +179,7 @@ final class PhonebookTest {
                         )
                     )
                 ),
-                new ServerPgsql(
+                new PgsqlServer(
                     new ScriptSql(
                         new ResourceOf(
                             new Joined(
@@ -193,7 +193,7 @@ final class PhonebookTest {
             )
         ) {
             for (final Session session : servers.sessions()) {
-                final Phonebook phonebook = new PhonebookSql(session);
+                final Phonebook phonebook = new SqlPhonebook(session);
                 final Contact contact = phonebook.filter("maria").iterator()
                     .next();
                 contact.update(
@@ -203,7 +203,7 @@ final class PhonebookTest {
                 );
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
-                        new PhonebookSql(session)
+                        new SqlPhonebook(session)
                             .filter("maria")
                             .iterator()
                             .next()

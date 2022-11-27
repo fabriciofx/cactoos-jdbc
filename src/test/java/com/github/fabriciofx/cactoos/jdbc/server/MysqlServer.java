@@ -21,64 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.server;
 
+import com.github.fabriciofx.cactoos.jdbc.ServerEnvelope;
+import com.github.fabriciofx.cactoos.jdbc.ServerInContainer;
 import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.session.Driver;
-import java.io.IOException;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 /**
- * Server inside container for integration testing.
+ * MySQL server, for unit testing.
  *
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public final class ServerInContainer implements Server {
+public final class MysqlServer extends ServerEnvelope {
     /**
-     * The container.
+     * Ctor.
      */
-    private final JdbcDatabaseContainer<?> container;
-
-    /**
-     * SQL Script to initialize the database.
-     */
-    private final ScriptSql script;
+    public MysqlServer() {
+        this(new ScriptSqlEmpty());
+    }
 
     /**
      * Ctor.
-     * @param container The container.
-     * @param script Initialization script.
+     * @param scrpt SQL Script to initialize the database
      */
-    public ServerInContainer(
-        final JdbcDatabaseContainer<?> container,
-        final ScriptSql script
-    ) {
-        this.container = container;
-        this.script = script;
-    }
-
-    @Override
-    public void start() throws Exception {
-        this.container.start();
-        this.script.run(this.session());
-    }
-
-    @Override
-    public void stop() throws Exception {
-        this.container.stop();
-    }
-
-    @Override
-    public Session session() {
-        return new Driver(
-            this.container.getJdbcUrl(),
-            this.container.getUsername(),
-            this.container.getPassword()
+    public MysqlServer(final ScriptSql scrpt) {
+        super(
+            new ServerInContainer(
+                new MySQLContainer<>(
+                    DockerImageName
+                        .parse("mysql/mysql-server:latest")
+                        .asCompatibleSubstituteFor("mysql")
+                ),
+                scrpt
+            )
         );
     }
 
-    @Override
-    public void close() throws IOException {
-        this.container.close();
-    }
 }

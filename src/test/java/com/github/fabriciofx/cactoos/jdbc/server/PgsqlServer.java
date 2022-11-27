@@ -21,64 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.server;
 
+import com.github.fabriciofx.cactoos.jdbc.ServerEnvelope;
+import com.github.fabriciofx.cactoos.jdbc.ServerInContainer;
 import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.session.Driver;
-import java.io.IOException;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
- * Server inside container for integration testing.
+ * PostgreSQL server, for unit testing.
  *
  * @since 0.2
  */
-public final class ServerInContainer implements Server {
-    /**
-     * The container.
-     */
-    private final JdbcDatabaseContainer<?> container;
-
-    /**
-     * SQL Script to initialize the database.
-     */
-    private final ScriptSql script;
+public final class PgsqlServer extends ServerEnvelope {
 
     /**
      * Ctor.
-     * @param container The container.
-     * @param script Initialization script.
      */
-    public ServerInContainer(
-        final JdbcDatabaseContainer<?> container,
-        final ScriptSql script
-    ) {
-        this.container = container;
-        this.script = script;
+    public PgsqlServer() {
+        this(new ScriptSqlEmpty());
     }
 
-    @Override
-    public void start() throws Exception {
-        this.container.start();
-        this.script.run(this.session());
-    }
-
-    @Override
-    public void stop() throws Exception {
-        this.container.stop();
-    }
-
-    @Override
-    public Session session() {
-        return new Driver(
-            this.container.getJdbcUrl(),
-            this.container.getUsername(),
-            this.container.getPassword()
+    /**
+     * Ctor.
+     * @param scrpt SQL Script to initialize the database
+     */
+    public PgsqlServer(final ScriptSql scrpt) {
+        super(
+            new ServerInContainer(
+                new PostgreSQLContainer<>("postgres:latest"),
+                scrpt
+            )
         );
-    }
-
-    @Override
-    public void close() throws IOException {
-        this.container.close();
     }
 }

@@ -21,64 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
+package com.github.fabriciofx.cactoos.jdbc.param;
 
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.session.Driver;
+import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.io.IOException;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import java.sql.PreparedStatement;
+import java.time.LocalDate;
 
 /**
- * Server inside container for integration testing.
+ * Date param.
  *
  * @since 0.2
  */
-public final class ServerInContainer implements Server {
+public final class DateOf implements Param {
     /**
-     * The container.
+     * Name.
      */
-    private final JdbcDatabaseContainer<?> container;
+    private final String id;
 
     /**
-     * SQL Script to initialize the database.
+     * Value.
      */
-    private final ScriptSql script;
+    private final LocalDate date;
 
     /**
      * Ctor.
-     * @param container The container.
-     * @param script Initialization script.
+     * @param name The id
+     * @param value The data
      */
-    public ServerInContainer(
-        final JdbcDatabaseContainer<?> container,
-        final ScriptSql script
-    ) {
-        this.container = container;
-        this.script = script;
+    public DateOf(final String name, final String value) {
+        this(name, LocalDate.parse(value));
+    }
+
+    /**
+     * Ctor.
+     * @param name The id
+     * @param value The data
+     */
+    public DateOf(final String name, final LocalDate value) {
+        this.id = name;
+        this.date = value;
     }
 
     @Override
-    public void start() throws Exception {
-        this.container.start();
-        this.script.run(this.session());
+    public String name() {
+        return this.id;
     }
 
     @Override
-    public void stop() throws Exception {
-        this.container.stop();
+    public void prepare(
+        final PreparedStatement stmt,
+        final int index
+    ) throws Exception {
+        stmt.setDate(index, java.sql.Date.valueOf(this.date));
     }
 
     @Override
-    public Session session() {
-        return new Driver(
-            this.container.getJdbcUrl(),
-            this.container.getUsername(),
-            this.container.getPassword()
-        );
-    }
-
-    @Override
-    public void close() throws IOException {
-        this.container.close();
+    public String asString() throws IOException {
+        return this.date.toString();
     }
 }

@@ -21,69 +21,64 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Server;
+import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.query.WithKey;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
+import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.statement.InsertWithKey;
-import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import java.math.BigInteger;
+import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * ResultAsValue tests.
+ * StatementUpdate tests.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.3
+ * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings(
     {
         "PMD.AvoidDuplicateLiterals",
+        "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.TestClassWithoutTestCases"
     }
 )
-final class ResultAsValueTest {
+final class UpdateTest {
     @Test
-    void insertWithKeys() throws Exception {
-        try (Server server = new MysqlServer()) {
-            server.start();
-            final Session session = server.session();
-            new Update(
-                session,
-                new QueryOf(
-                    new Joined(
-                        " ",
-                        "CREATE TABLE contact (",
-                        "id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50) NOT NULL,",
-                        "CONSTRAINT pk_contact PRIMARY KEY(id))"
-                    )
-                )
-            ).result();
-            MatcherAssert.assertThat(
-                "Can't get a generated key value",
-                new ResultAsValue<>(
-                    new InsertWithKey<>(
-                        session,
-                        new WithKey(
-                            () -> "INSERT INTO contact (name) VALUES (:name)",
-                            "id",
-                            new TextOf("name", "Leonardo da Vinci")
+    void createTable() throws Exception {
+        try (
+            Servers servers = new Servers(
+                new H2Server(),
+                new MysqlServer(),
+                new PgsqlServer()
+            )
+        ) {
+            for (final Session session : servers.sessions()) {
+                MatcherAssert.assertThat(
+                    "Can't create a table",
+                    new ResultAsValue<>(
+                        new Update(
+                            session,
+                            new QueryOf(
+                                new Joined(
+                                    " ",
+                                    "CREATE TABLE foo1 (id INT,",
+                                    "name VARCHAR(50), PRIMARY KEY (id))"
+                                )
+                            )
                         )
-                    )
-                ),
-                new HasValue<>(BigInteger.ONE)
-            );
+                    ),
+                    new HasValue<>(0)
+                );
+            }
         }
     }
 }
