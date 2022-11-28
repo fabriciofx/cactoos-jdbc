@@ -25,8 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.ServerEnvelope;
 import com.github.fabriciofx.cactoos.jdbc.ServerInContainer;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
+import com.github.fabriciofx.cactoos.jdbc.script.EmptyScript;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
@@ -40,14 +40,14 @@ public final class PgsqlServer extends ServerEnvelope {
      * Ctor.
      */
     public PgsqlServer() {
-        this(new ScriptSqlEmpty());
+        this(new EmptyScript());
     }
 
     /**
      * Ctor.
      * @param scrpt SQL Script to initialize the database
      */
-    public PgsqlServer(final ScriptSql scrpt) {
+    public PgsqlServer(final ScriptOf scrpt) {
         super(
             new ServerInContainer(
                 new PostgreSQLContainer<>("postgres:latest"),

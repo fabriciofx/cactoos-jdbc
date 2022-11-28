@@ -23,7 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import com.github.fabriciofx.cactoos.jdbc.session.Driver;
 import java.io.IOException;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -42,7 +42,7 @@ public final class ServerInContainer implements Server {
     /**
      * SQL Script to initialize the database.
      */
-    private final ScriptSql script;
+    private final ScriptOf script;
 
     /**
      * Ctor.
@@ -51,7 +51,7 @@ public final class ServerInContainer implements Server {
      */
     public ServerInContainer(
         final JdbcDatabaseContainer<?> container,
-        final ScriptSql script
+        final ScriptOf script
     ) {
         this.container = container;
         this.script = script;

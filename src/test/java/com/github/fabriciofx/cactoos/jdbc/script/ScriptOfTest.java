@@ -43,11 +43,11 @@ import org.junit.jupiter.api.Test;
         "PMD.TestClassWithoutTestCases"
     }
 )
-final class ScriptSqlTest {
+final class ScriptOfTest {
     @Test
     void h2Server() throws Exception {
         final Server server = new H2Server(
-            new ScriptSql(
+            new ScriptOf(
                 new ResourceOf(
                     new Joined(
                         "/",
@@ -64,7 +64,7 @@ final class ScriptSqlTest {
     @Test
     void mysqlServer() throws Exception {
         final Server server = new MysqlServer(
-            new ScriptSql(
+            new ScriptOf(
                 new ResourceOf(
                     new Joined(
                         "/",

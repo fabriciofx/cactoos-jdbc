@@ -26,8 +26,8 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 import com.github.fabriciofx.cactoos.jdbc.RandomDatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
+import com.github.fabriciofx.cactoos.jdbc.script.EmptyScript;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
 import java.io.IOException;
@@ -48,20 +48,20 @@ public final class H2Server implements Server {
     /**
      * SQL Script to initialize the database.
      */
-    private final ScriptSql script;
+    private final ScriptOf script;
 
     /**
      * Ctor.
      */
     public H2Server() {
-        this(new ScriptSqlEmpty());
+        this(new EmptyScript());
     }
 
     /**
      * Ctor.
      * @param scrpt SqlScript to initialize the database.
      */
-    public H2Server(final ScriptSql scrpt) {
+    public H2Server(final ScriptOf scrpt) {
         this.dbname = new Unchecked<>(
             new Sticky<>(
                 () -> new RandomDatabaseName().asString()

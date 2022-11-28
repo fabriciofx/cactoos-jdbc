@@ -28,7 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
@@ -61,7 +61,7 @@ final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new H2Server(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -72,7 +72,7 @@ final class PhonebookTest {
                     )
                 ),
                 new PgsqlServer(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -124,7 +124,7 @@ final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new H2Server(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -135,7 +135,7 @@ final class PhonebookTest {
                     )
                 ),
                 new PgsqlServer(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -169,7 +169,7 @@ final class PhonebookTest {
         try (
             Servers servers = new Servers(
                 new H2Server(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",
@@ -180,7 +180,7 @@ final class PhonebookTest {
                     )
                 ),
                 new PgsqlServer(
-                    new ScriptSql(
+                    new ScriptOf(
                         new ResourceOf(
                             new Joined(
                                 "/",

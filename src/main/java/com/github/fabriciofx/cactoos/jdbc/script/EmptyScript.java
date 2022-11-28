@@ -31,11 +31,11 @@ import org.cactoos.io.DeadInput;
  *
  * @since 0.4
  */
-public final class ScriptSqlEmpty extends ScriptSql {
+public final class EmptyScript extends ScriptOf {
     /**
      * Ctor.
      */
-    public ScriptSqlEmpty() {
+    public EmptyScript() {
         super(new DeadInput());
     }
 

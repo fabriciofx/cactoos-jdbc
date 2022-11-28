@@ -28,14 +28,13 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of the context
  * @since 0.2
  */
-public interface Script<T> {
+public interface Script {
     /**
-     * Execute this Script on the T context.
-     * @param context The context
+     * Execute this Script on the session.
+     * @param session The session
      * @throws Exception if fails
      */
-    void run(T context) throws Exception;
+    void run(Session session) throws Exception;
 }

@@ -25,8 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 
 import com.github.fabriciofx.cactoos.jdbc.ServerEnvelope;
 import com.github.fabriciofx.cactoos.jdbc.ServerInContainer;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSql;
-import com.github.fabriciofx.cactoos.jdbc.script.ScriptSqlEmpty;
+import com.github.fabriciofx.cactoos.jdbc.script.EmptyScript;
+import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -41,14 +41,14 @@ public final class MysqlServer extends ServerEnvelope {
      * Ctor.
      */
     public MysqlServer() {
-        this(new ScriptSqlEmpty());
+        this(new EmptyScript());
     }
 
     /**
      * Ctor.
      * @param scrpt SQL Script to initialize the database
      */
-    public MysqlServer(final ScriptSql scrpt) {
+    public MysqlServer(final ScriptOf scrpt) {
         super(
             new ServerInContainer(
                 new MySQLContainer<>(

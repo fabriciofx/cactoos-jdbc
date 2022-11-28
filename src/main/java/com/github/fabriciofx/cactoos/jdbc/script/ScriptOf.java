@@ -39,7 +39,7 @@ import org.cactoos.Input;
  *
  * @since 0.2
  */
-public class ScriptSql implements Script<Session> {
+public class ScriptOf implements Script {
     /**
      * Input.
      */
@@ -49,7 +49,7 @@ public class ScriptSql implements Script<Session> {
      * Ctor.
      * @param npt The SQL Script file
      */
-    public ScriptSql(final Input npt) {
+    public ScriptOf(final Input npt) {
         this.input = npt;
     }
 
