@@ -57,8 +57,8 @@ public final class Insert implements Statement<Boolean> {
 
     @Override
     public Boolean result() throws Exception {
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
+        try (final Connection conn = this.session.connection()) {
+            try (final PreparedStatement stmt = this.query.prepared(conn)) {
                 return stmt.execute();
             }
         }

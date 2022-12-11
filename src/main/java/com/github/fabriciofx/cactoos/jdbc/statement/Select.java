@@ -62,9 +62,9 @@ public final class Select implements Statement<ResultSet> {
     @Override
     public ResultSet result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
-                try (ResultSet rset = stmt.executeQuery()) {
+        try (final Connection conn = this.session.connection()) {
+            try (final PreparedStatement stmt = this.query.prepared(conn)) {
+                try (final ResultSet rset = stmt.executeQuery()) {
                     final RowSetFactory rsf = RowSetProvider.newFactory();
                     final CachedRowSet crs = rsf.createCachedRowSet();
                     crs.populate(rset);
