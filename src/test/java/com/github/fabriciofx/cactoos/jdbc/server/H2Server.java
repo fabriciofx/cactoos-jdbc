@@ -26,10 +26,12 @@ package com.github.fabriciofx.cactoos.jdbc.server;
 import com.github.fabriciofx.cactoos.jdbc.RandomDatabaseName;
 import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.script.EmptyScript;
 import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
+import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import java.io.IOException;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
@@ -38,7 +40,9 @@ import org.cactoos.scalar.Unchecked;
  * MySQL server, for unit testing.
  *
  * @since 0.2
+ * @checkstyle IllegalCatchCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class H2Server implements Server {
     /**
      * The Database name.
@@ -77,7 +81,7 @@ public final class H2Server implements Server {
 
     @Override
     public void stop() throws Exception {
-        // Intended empty.
+        new Insert(this.session(), new QueryOf("SHUTDOWN")).result();
     }
 
     @Override
@@ -89,6 +93,10 @@ public final class H2Server implements Server {
 
     @Override
     public void close() throws IOException {
-        // Intended empty.
+        try {
+            this.stop();
+        } catch (final Exception ex) {
+            throw new IOException(ex);
+        }
     }
 }
