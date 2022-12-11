@@ -62,10 +62,10 @@ public final class InsertWithKey<T> implements Statement<T> {
     @Override
     public T result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
-        try (final Connection conn = this.session.connection()) {
-            try (final PreparedStatement stmt = this.query.prepared(conn)) {
+        try (Connection conn = this.session.connection()) {
+            try (PreparedStatement stmt = this.query.prepared(conn)) {
                 stmt.executeUpdate();
-                try (final ResultSet rset = stmt.getGeneratedKeys()) {
+                try (ResultSet rset = stmt.getGeneratedKeys()) {
                     return new ResultSetAsValue<T>(() -> rset).value();
                 }
             }
