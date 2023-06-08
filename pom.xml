@@ -85,6 +85,9 @@
       <url>https://github.com/fabriciofx/cactoos-jdbc</url>
     </site>
   </distributionManagement>
+  <properties>
+    <maven.plugin.validation>VERBOSE</maven.plugin.validation>
+  </properties>
   <build>
     <pluginManagement>
       <plugins>
