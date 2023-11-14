@@ -35,7 +35,6 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.iterator.Mapped;
@@ -118,7 +117,10 @@ public final class SqlPhones implements Phones {
     }
 
     @Override
-    public void add(final Map<String, String> properties) throws Exception {
+    public void add(
+        final String number,
+        final String carrier
+    ) throws Exception {
         new Insert(
             this.session,
             new QueryOf(
@@ -128,8 +130,8 @@ public final class SqlPhones implements Phones {
                     "VALUES (:contact_id, :number, :carrier)"
                 ),
                 new UuidOf("contact_id", this.id),
-                new TextOf("number", properties.get("number")),
-                new TextOf("carrier", properties.get("carrier"))
+                new TextOf("number", number),
+                new TextOf("carrier", carrier)
             )
         ).result();
     }

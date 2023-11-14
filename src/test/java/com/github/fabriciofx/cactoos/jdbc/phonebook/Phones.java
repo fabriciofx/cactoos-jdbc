@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import java.util.Map;
-
 /**
  * Phones.
  *
@@ -50,8 +48,9 @@ public interface Phones extends Iterable<Phone> {
 
     /**
      * Add a new phone to contact's phones.
-     * @param properties The phone's properties
+     * @param number The phone's number
+     * @param carrier The phone's carrier
      * @throws Exception If fails
      */
-    void add(Map<String, String> properties) throws Exception;
+    void add(String number, String carrier) throws Exception;
 }

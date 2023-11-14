@@ -87,18 +87,8 @@ final class PhonebookTest {
             for (final Session session : servers.sessions()) {
                 final Phonebook phonebook = new SqlPhonebook(session);
                 final Contact contact = phonebook.contact("Donald Knuth");
-                contact.phones().add(
-                    new MapOf<String, String>(
-                        new MapEntry<>("number", "99991234"),
-                        new MapEntry<>("carrier", "TIM")
-                    )
-                );
-                contact.phones().add(
-                    new MapOf<String, String>(
-                        new MapEntry<>("number", "98812564"),
-                        new MapEntry<>("carrier", "Oi")
-                    )
-                );
+                contact.phones().add("99991234", "TIM");
+                contact.phones().add("98812564", "Oi");
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
                         contact.about()

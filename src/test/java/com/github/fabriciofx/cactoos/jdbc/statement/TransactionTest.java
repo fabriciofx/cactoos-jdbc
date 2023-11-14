@@ -34,8 +34,6 @@ import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.StreamSupport;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -82,18 +80,8 @@ final class TransactionTest {
                             final Contact contact = phonebook.contact(
                                 "Albert Einstein"
                             );
-                            contact.phones().add(
-                                new MapOf<String, String>(
-                                    new MapEntry<>("number", "99991234"),
-                                    new MapEntry<>("carrier", "TIM")
-                                )
-                            );
-                            contact.phones().add(
-                                new MapOf<String, String>(
-                                    new MapEntry<>("number", "98812564"),
-                                    new MapEntry<>("carrier", "Oi")
-                                )
-                            );
+                            contact.phones().add("99991234", "TIM");
+                            contact.phones().add("98812564", "Oi");
                             return contact.about();
                         }
                     )
@@ -128,12 +116,7 @@ final class TransactionTest {
                 transacted,
                 () -> {
                     final Contact contact = phonebook.contact(name);
-                    contact.phones().add(
-                        new MapOf<String, String>(
-                            new MapEntry<>("number", "99991234"),
-                            new MapEntry<>("carrier", "TIM")
-                        )
-                    );
+                    contact.phones().add("99991234", "TIM");
                     throw new IllegalStateException("Rollback");
                 }
             ).result();
