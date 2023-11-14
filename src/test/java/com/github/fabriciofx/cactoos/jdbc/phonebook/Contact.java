@@ -56,7 +56,7 @@ public interface Contact {
     void delete() throws Exception;
 
     /**
-     * StatementUpdate a Contact.
+     * Update a Contact.
      * @param properties New properties
      * @throws Exception If fails
      */

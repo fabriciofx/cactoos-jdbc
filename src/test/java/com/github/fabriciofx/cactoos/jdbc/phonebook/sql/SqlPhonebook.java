@@ -31,7 +31,6 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -57,16 +56,14 @@ public final class SqlPhonebook implements Phonebook {
     }
 
     @Override
-    public Contact contact(
-        final Map<String, String> properties
-    ) throws Exception {
+    public Contact contact(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
         new Insert(
             this.session,
             new QueryOf(
                 "INSERT INTO contact (id, name) VALUES (:id, :name)",
                 new UuidOf("id", id),
-                new TextOf("name", properties.get("name"))
+                new TextOf("name", name)
             )
         ).result();
         return new SqlContact(this.session, id);

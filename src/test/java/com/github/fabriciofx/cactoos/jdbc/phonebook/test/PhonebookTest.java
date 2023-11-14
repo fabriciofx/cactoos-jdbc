@@ -86,11 +86,7 @@ final class PhonebookTest {
         ) {
             for (final Session session : servers.sessions()) {
                 final Phonebook phonebook = new SqlPhonebook(session);
-                final Contact contact = phonebook.contact(
-                    new MapOf<String, String>(
-                        new MapEntry<>("name", "Donald Knuth")
-                    )
-                );
+                final Contact contact = phonebook.contact("Donald Knuth");
                 contact.phones().add(
                     new MapOf<String, String>(
                         new MapEntry<>("number", "99991234"),

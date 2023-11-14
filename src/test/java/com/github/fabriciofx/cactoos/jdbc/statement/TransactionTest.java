@@ -80,9 +80,7 @@ final class TransactionTest {
                                 transacted
                             );
                             final Contact contact = phonebook.contact(
-                                new MapOf<String, String>(
-                                    new MapEntry<>("name", "Albert Einstein")
-                                )
+                                "Albert Einstein"
                             );
                             contact.phones().add(
                                 new MapOf<String, String>(
@@ -129,11 +127,7 @@ final class TransactionTest {
             new Transaction<>(
                 transacted,
                 () -> {
-                    final Contact contact = phonebook.contact(
-                        new MapOf<String, String>(
-                            new MapEntry<>("name", name)
-                        )
-                    );
+                    final Contact contact = phonebook.contact(name);
                     contact.phones().add(
                         new MapOf<String, String>(
                             new MapEntry<>("number", "99991234"),
