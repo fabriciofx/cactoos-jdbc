@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import java.util.Map;
-
 /**
  * Phone.
  *
@@ -40,9 +38,10 @@ public interface Phone {
     void delete() throws Exception;
 
     /**
-     * StatementUpdate the phone contact's properties.
-     * @param properties The new properties
+     * Update the contact's phone number and carrier.
+     * @param number The phone number
+     * @param carrier The phone carrier
      * @throws Exception If fails
      */
-    void update(Map<String, String> properties) throws Exception;
+    void update(String number, String carrier) throws Exception;
 }

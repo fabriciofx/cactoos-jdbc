@@ -29,7 +29,6 @@ import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import java.util.Map;
 import java.util.UUID;
 import org.cactoos.text.Joined;
 
@@ -91,7 +90,10 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public void update(final Map<String, String> properties) throws Exception {
+    public void update(
+        final String number,
+        final String carrier
+    ) throws Exception {
         new Update(
             this.session,
             new QueryOf(
@@ -100,8 +102,8 @@ public final class SqlPhone implements Phone {
                     "UPDATE phone SET number = :number, carrier = :carrier",
                     "WHERE (contact_id = :contact_id) AND (number = :number)"
                 ),
-                new TextOf("number", properties.get("number")),
-                new TextOf("carrier", properties.get("carrier")),
+                new TextOf("number", number),
+                new TextOf("carrier", carrier),
                 new UuidOf("contact_id", this.id),
                 new TextOf("number", this.num)
             )
