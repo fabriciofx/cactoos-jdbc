@@ -33,7 +33,6 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXmlEach;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import java.util.Map;
 import java.util.UUID;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
@@ -123,12 +122,12 @@ public final class SqlContact implements Contact {
     }
 
     @Override
-    public void update(final Map<String, String> properties) throws Exception {
+    public void update(final String name) throws Exception {
         new Update(
             this.session,
             new QueryOf(
                 "UPDATE contact SET name = :name WHERE id = :id",
-                new TextOf("name", properties.get("name")),
+                new TextOf("name", name),
                 new UuidOf("id", this.id)
             )
         ).result();

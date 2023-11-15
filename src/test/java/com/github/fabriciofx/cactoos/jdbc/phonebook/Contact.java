@@ -23,8 +23,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import java.util.Map;
-
 /**
  * Contact.
  *
@@ -57,8 +55,8 @@ public interface Contact {
 
     /**
      * Update a Contact.
-     * @param properties New properties
+     * @param name New contact's name
      * @throws Exception If fails
      */
-    void update(Map<String, String> properties) throws Exception;
+    void update(String name) throws Exception;
 }

@@ -33,8 +33,6 @@ import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapOf;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -182,11 +180,7 @@ final class PhonebookTest {
                 final Phonebook phonebook = new SqlPhonebook(session);
                 final Contact contact = phonebook.filter("maria").iterator()
                     .next();
-                contact.update(
-                    new MapOf<String, String>(
-                        new MapEntry<>("name", "Maria Lima")
-                    )
-                );
+                contact.update("Maria Lima");
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
                         new SqlPhonebook(session)
