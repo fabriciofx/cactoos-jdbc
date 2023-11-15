@@ -131,6 +131,18 @@
       <version>0.55.0</version>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.9</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-reload4j</artifactId>
+      <version>2.0.9</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.llorllale</groupId>
       <artifactId>cactoos-matchers</artifactId>
       <version>0.25</version>
