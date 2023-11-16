@@ -21,37 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import org.cactoos.Text;
 
 /**
- * Query.
+ * Pagination tests.
  *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
+ * @since 0.8.0
  */
-public interface Query extends Text {
-    /**
-     * Create a PreparedStatement.
-     * @param connection A connection to the DataSource
-     * @return A PreparedStatement
-     * @throws Exception If fails
-     */
-    PreparedStatement prepared(Connection connection) throws Exception;
-
-    /**
-     * Return the Query params.
-     * @return The query parameters
-     */
-    Params params();
-
-    /**
-     * Return a named query string.
-     * @return A named query string
-     */
-    String named();
-}
+package com.github.fabriciofx.cactoos.jdbc.pagination;

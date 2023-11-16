@@ -40,7 +40,7 @@ import org.cactoos.text.FormattedText;
  *
  * @since 0.1
  */
-public final class SqlParsed implements Text  {
+public final class SqlParsed implements Text {
     /**
      * SQL query.
      */

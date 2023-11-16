@@ -23,6 +23,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
+import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -60,6 +61,16 @@ public final class Timeout implements Query {
         final PreparedStatement stmt = this.origin.prepared(connection);
         stmt.setQueryTimeout(this.time);
         return stmt;
+    }
+
+    @Override
+    public Params params() {
+        return this.origin.params();
+    }
+
+    @Override
+    public String named() {
+        return this.origin.named();
     }
 
     @Override

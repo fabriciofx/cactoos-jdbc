@@ -30,6 +30,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.UncheckedText;
 
 /**
  * StatementBatch query.
@@ -38,6 +39,11 @@ import org.cactoos.list.ListOf;
  */
 public final class BatchOf implements Query {
     /**
+     * Named SQL query.
+     */
+    private final Text nmd;
+
+    /**
      * SQL query.
      */
     private final Text sql;
@@ -45,7 +51,7 @@ public final class BatchOf implements Query {
     /**
      * A list of SQL query parameters.
      */
-    private final Iterable<Params> params;
+    private final Iterable<Params> parameters;
 
     /**
      * Ctor.
@@ -71,8 +77,9 @@ public final class BatchOf implements Query {
      * @param prms A list of SQL query parameters
      */
     public BatchOf(final Text sql, final Iterable<Params> prms) {
+        this.nmd = sql;
         this.sql = new SqlParsed(sql, prms.iterator().next());
-        this.params = prms;
+        this.parameters = prms;
     }
 
     @Override
@@ -82,11 +89,21 @@ public final class BatchOf implements Query {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString()
         );
-        for (final Params prms : this.params) {
+        for (final Params prms : this.parameters) {
             prms.prepare(stmt);
             stmt.addBatch();
         }
         return stmt;
+    }
+
+    @Override
+    public Params params() {
+        return null;
+    }
+
+    @Override
+    public String named() {
+        return new UncheckedText(this.nmd).asString();
     }
 
     @Override

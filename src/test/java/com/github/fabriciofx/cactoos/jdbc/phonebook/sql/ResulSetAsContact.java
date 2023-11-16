@@ -21,60 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Params;
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import java.sql.ResultSet;
+import java.util.UUID;
 
 /**
- * Max rows per query.
+ * ResultSetAsContact.
  *
- * @since 0.1
+ * <p>There is no thread-safety guarantee.
+ *
+ * @since 0.8.0
+ * @checkstyle ParameterNumberCheck (1500 lines)
+ * @checkstyle IllegalCatchCheck (1500 lines)
  */
-public final class MaxRows implements Query {
+@SuppressWarnings(
+    {
+        "PMD.AvoidCatchingGenericException",
+        "PMD.AvoidThrowingRawExceptionTypes"
+    }
+)
+public final class ResulSetAsContact implements Adapter<Contact> {
     /**
-     * The query to be decorated.
+     * The session.
      */
-    private final Query origin;
-
-    /**
-     * Number of rows per query.
-     */
-    private final int rows;
+    private final Session session;
 
     /**
      * Ctor.
-     * @param query The SQL query
-     * @param max The max number of rows
+     * @param sssn A session
      */
-    public MaxRows(final Query query, final int max) {
-        this.origin = query;
-        this.rows = max;
+    public ResulSetAsContact(final Session sssn) {
+        this.session = sssn;
     }
 
     @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(connection);
-        stmt.setMaxRows(this.rows);
-        return stmt;
-    }
-
-    @Override
-    public Params params() {
-        return this.origin.params();
-    }
-
-    @Override
-    public String named() {
-        return this.origin.named();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.origin.asString();
+    public Contact adapt(final ResultSet rset) {
+        try {
+            return new SqlContact(this.session, (UUID) rset.getObject(1));
+        } catch (final Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

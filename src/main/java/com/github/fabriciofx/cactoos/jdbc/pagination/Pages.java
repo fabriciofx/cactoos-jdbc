@@ -21,60 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
-
-import com.github.fabriciofx.cactoos.jdbc.Params;
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+package com.github.fabriciofx.cactoos.jdbc.pagination;
 
 /**
- * Max rows per query.
+ * Pages.
  *
- * @since 0.1
+ * <p>There is no thread-safety guarantee.
+ *
+ * @param <T> Type of the pages' content
+ * @since 0.8.0
  */
-public final class MaxRows implements Query {
+public interface Pages<T> {
     /**
-     * The query to be decorated.
+     * Get the number of pages.
+     * @return The number of pages
      */
-    private final Query origin;
-
-    /**
-     * Number of rows per query.
-     */
-    private final int rows;
+    int count();
 
     /**
-     * Ctor.
-     * @param query The SQL query
-     * @param max The max number of rows
+     * Get a page by the number.
+     * @param number The page number
+     * @return A page
      */
-    public MaxRows(final Query query, final int max) {
-        this.origin = query;
-        this.rows = max;
-    }
-
-    @Override
-    public PreparedStatement prepared(
-        final Connection connection
-    ) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(connection);
-        stmt.setMaxRows(this.rows);
-        return stmt;
-    }
-
-    @Override
-    public Params params() {
-        return this.origin.params();
-    }
-
-    @Override
-    public String named() {
-        return this.origin.named();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.origin.asString();
-    }
+    Page<T> page(int number);
 }
