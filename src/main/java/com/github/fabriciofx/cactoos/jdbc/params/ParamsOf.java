@@ -28,6 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import java.sql.PreparedStatement;
 import java.util.Iterator;
 import java.util.List;
+import org.cactoos.list.Joined;
 import org.cactoos.list.ListOf;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
@@ -47,12 +48,34 @@ public final class ParamsOf implements Params {
 
     /**
      * Ctor.
-     * @param prms List of Param
+     * @param params Params
+     * @param prms Array of Param
+     */
+    public ParamsOf(final Params params, final Param... prms) {
+        this(
+            new Joined<Param>(
+                new ListOf<>(params.iterator()),
+                new ListOf<>(prms)
+            )
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param prms Array of Param
      */
     public ParamsOf(final Param... prms) {
+        this(new ListOf<>(prms));
+    }
+
+    /**
+     * Ctor.
+     * @param prms List of Param
+     */
+    public ParamsOf(final List<Param> prms) {
         this.prms = new Unchecked<>(
             new Sticky<>(
-                () -> new ListOf<>(prms)
+                () -> prms
             )
         );
     }

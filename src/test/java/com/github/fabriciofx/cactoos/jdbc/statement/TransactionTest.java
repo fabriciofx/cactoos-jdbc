@@ -125,7 +125,7 @@ final class TransactionTest {
         MatcherAssert.assertThat(
             "Can't perform a transaction rollback",
             StreamSupport.stream(
-                phonebook.filter(name).spliterator(),
+                phonebook.search(name).page(0).content().spliterator(),
                 false
             ).count(),
             Matchers.equalTo(0L)

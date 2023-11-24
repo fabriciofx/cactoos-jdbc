@@ -31,6 +31,7 @@ import com.github.fabriciofx.cactoos.jdbc.sql.SqlParsed;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
+import org.cactoos.text.UncheckedText;
 
 /**
  * Keyed query.
@@ -38,6 +39,11 @@ import org.cactoos.Text;
  * @since 0.1
  */
 public final class WithKey implements Query {
+    /**
+     * Named SQL query.
+     */
+    private final Text nmd;
+
     /**
      * SQL query.
      */
@@ -51,7 +57,7 @@ public final class WithKey implements Query {
     /**
      * SQL query parameters.
      */
-    private final Params params;
+    private final Params parameters;
 
     /**
      * Ctor.
@@ -82,9 +88,10 @@ public final class WithKey implements Query {
         final String pknm,
         final Param... prms
     ) {
+        this.nmd = sql;
         this.sql = new SqlParsed(sql, prms);
         this.key = pknm;
-        this.params = new ParamsOf(prms);
+        this.parameters = new ParamsOf(prms);
     }
 
     @Override
@@ -98,8 +105,18 @@ public final class WithKey implements Query {
             this.sql.asString(),
             names
         );
-        this.params.prepare(stmt);
+        this.parameters.prepare(stmt);
         return stmt;
+    }
+
+    @Override
+    public Params params() {
+        return this.parameters;
+    }
+
+    @Override
+    public String named() {
+        return new UncheckedText(this.nmd).asString();
     }
 
     @Override

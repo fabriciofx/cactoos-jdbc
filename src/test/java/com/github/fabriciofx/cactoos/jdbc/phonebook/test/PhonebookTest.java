@@ -25,6 +25,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.test;
 
 import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
@@ -36,6 +37,7 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 
 /**
  * Phonebook tests.
@@ -135,9 +137,10 @@ final class PhonebookTest {
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
                         new SqlPhonebook(session)
-                            .filter("maria")
-                            .iterator()
-                            .next()
+                            .search("maria")
+                            .page(0)
+                            .content()
+                            .get(0)
                             .about()
                     ),
                     XhtmlMatchers.hasXPaths(
@@ -178,15 +181,18 @@ final class PhonebookTest {
         ) {
             for (final Session session : servers.sessions()) {
                 final Phonebook phonebook = new SqlPhonebook(session);
-                final Contact contact = phonebook.filter("maria").iterator()
-                    .next();
+                final Contact contact = phonebook.search("maria")
+                    .page(0)
+                    .content()
+                    .get(0);
                 contact.update("Maria Lima");
                 MatcherAssert.assertThat(
                     XhtmlMatchers.xhtml(
                         new SqlPhonebook(session)
-                            .filter("maria")
-                            .iterator()
-                            .next()
+                            .search("maria")
+                            .page(0)
+                            .content()
+                            .get(0)
                             .about()
                     ),
                     XhtmlMatchers.hasXPaths(
@@ -196,4 +202,67 @@ final class PhonebookTest {
             }
         }
     }
+
+    @Test
+    void contacts() throws Exception {
+        try (
+            Servers servers = new Servers(
+                new H2Server(
+                    new ScriptOf(
+                        new ResourceOf(
+                            new Joined(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-h2.sql"
+                            )
+                        )
+                    )
+                ),
+                new PgsqlServer(
+                    new ScriptOf(
+                        new ResourceOf(
+                            new Joined(
+                                "/",
+                                "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                                "phonebook-pgsql.sql"
+                            )
+                        )
+                    )
+                )
+            )
+        ) {
+            for (final Session session : servers.sessions()) {
+                final Pages<Contact> pages = new SqlPhonebook(session)
+                    .contacts(1);
+                new Assertion<>(
+                    "Must match all phonebook's contacts",
+                    XhtmlMatchers.xhtml(
+                        pages.page(0).content().get(0).about()
+                    ),
+                    XhtmlMatchers.hasXPaths(
+                        "/contact/name[text()='Joseph Klimber']"
+                    )
+                ).affirm();
+                new Assertion<>(
+                    "Must match all phonebook's contacts",
+                    XhtmlMatchers.xhtml(
+                        pages.page(1).content().get(0).about()
+                    ),
+                    XhtmlMatchers.hasXPaths(
+                        "/contact/name[text()='Maria Souza']"
+                    )
+                ).affirm();
+                new Assertion<>(
+                    "Must match all phonebook's contacts",
+                    XhtmlMatchers.xhtml(
+                        pages.page(2).content().get(0).about()
+                    ),
+                    XhtmlMatchers.hasXPaths(
+                        "/contact/name[text()='Jeff Duham']"
+                    )
+                ).affirm();
+            }
+        }
+    }
+
 }

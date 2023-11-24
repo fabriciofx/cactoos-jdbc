@@ -24,14 +24,16 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
+import com.github.fabriciofx.cactoos.jdbc.pagination.SqlPages;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import java.util.UUID;
+import org.cactoos.text.Lowered;
 
 /**
  * Phonebook for SQL.
@@ -70,7 +72,30 @@ public final class SqlPhonebook implements Phonebook {
     }
 
     @Override
-    public Contacts filter(final String name) throws Exception {
-        return new FilteredSqlContacts(this.session, name);
+    public Pages<Contact> search(final String name) throws Exception {
+        return new SqlPages<>(
+            this.session,
+            new QueryOf(
+                "SELECT COUNT(*) FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
+                new TextOf("name", new Lowered(name))
+            ),
+            new QueryOf(
+                "SELECT * FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
+                new TextOf("name", new Lowered(name))
+            ),
+            new ResulSetAsContact(this.session),
+            1
+        );
+    }
+
+    @Override
+    public Pages<Contact> contacts(final int max) throws Exception {
+        return new SqlPages<>(
+            this.session,
+            new QueryOf("SELECT COUNT(*) FROM contact"),
+            new QueryOf("SELECT * FROM contact"),
+            new ResulSetAsContact(this.session),
+            max
+        );
     }
 }
