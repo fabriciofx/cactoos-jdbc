@@ -2,22 +2,18 @@
   <img src="https://www.yegor256.com/images/award/2019/winner-fabriciofx.png"
   style="height:45px;" alt='winner'/></a>
 
-[![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
-[![We recommend IntelliJ IDEA](http://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
+[![EO principles respected here](https://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
+[![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 [![Java Profiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
 
-[![Build Status](https://travis-ci.org/fabriciofx/cactoos-jdbc.svg?branch=master)](https://travis-ci.org/fabriciofx/cactoos-jdbc)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.fabriciofx/cactoos-jdbc.svg)](https://search.maven.org/artifact/com.github.fabriciofx/cactoos-jdbc/0.2.1/jar)
-[![Javadoc](http://www.javadoc.io/badge/com.github.fabriciofx/cactoos-jdbc.svg)](http://www.javadoc.io/doc/com.github.fabriciofx/cactoos-jdbc)
+[![Javadoc](https://www.javadoc.io/badge/com.github.fabriciofx/cactoos-jdbc.svg)](http://www.javadoc.io/doc/com.github.fabriciofx/cactoos-jdbc)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/fabriciofx/cactoos-jdbc/blob/master/LICENSE.txt)
 
 [![Hits-of-Code](https://hitsofcode.com/github/fabriciofx/cactoos-jdbc)](https://hitsofcode.com/view/github/fabriciofx/cactoos-jdbc)
 
-## Introduction
 
-**ATTENTION**: We're still in a very early alpha version, the API may and
-*will* change frequently. Please, use it at your own risk, until we release
-version 1.0 (~~Nov 2018~~ ~~Jan 2019~~ Sept 2019).
+## Introduction
 
 **Cactoos JDBC** is a collection of object-oriented Java wrapper classes to
 [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity).
@@ -49,9 +45,11 @@ behind Cactoos JDBC.
 - SQL Script execution
 - Batch
 - Transactions
+- Pagination
 
 
 ## Feature to be implemented
+
 - ~~Tests on PostgreSQL and MySQL RDBMS~~ (done)
 - Retrieve the data as JSON
 - Caching
@@ -71,20 +69,23 @@ Java version required: 1.8+.
 
 
 ### Usage
+
 Let's show how use the API. For all above examples, let's start creating a
 `Session` object:
 ```java
-final Session session = new SessionNoAuth(
-    new SourceH2("testdb")
+final Session session = new NoAuth(
+    new H2Source("testdb")
 );
 ```
 
+
 ### Update
-Now, let's create a table using a `StatementUpdate` command:
+
+Now, let's create a table using a `Update` command:
 ```java
-new StatementUpdate(
+new Update(
     session,
-    new QuerySimple(
+    new QueryOf(
         new Joined(
             " ",
             "CREATE TABLE employee (id INT AUTO_INCREMENT,"
@@ -94,31 +95,35 @@ new StatementUpdate(
 ).result()
 ```
 
+
 ### Insert
+
 Let's insert a new employee and return the id of inserted employee.
 ```java
 final int id = new ResultAsValue<Integer>(
-    new StatementInsertKeyed(
+    new InsertWithKey(
         session,
-        new QueryKeyed(
+        new QueryWithKey(
             () -> "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
             "id",
-            new ParamText("name", "Jeff Bridge"),
-            new ParamDouble("salary", 12345.00)
+            new TextOf("name", "Jeff Bridge"),
+            new DoubleOf("salary", 12345.00)
         )
     )
 ).value();
 ```
 
+
 ### Select
+
 Let's retrieve the name of a employee:
 ```java
 final String name = new ResultAsValue<String>(
-    new StatementSelect(
+    new Select(
         session,
-        new QuerySimple(
+        new QueryOf(
             "SELECT name FROM employee WHERE id = :id",
-            new ParamInt("id", 123)
+            new IntOf("id", 123)
         )
     )
 ).value();
@@ -127,23 +132,25 @@ final String name = new ResultAsValue<String>(
 Let's retrieve all employee salaries:
 ```java
 final List<Double> salaries = new ResultAsValues<Double>(
-    new StatementSelect(
+    new Select(
         session,
-        new QuerySimple("SELECT salary FROM employee")
+        new QueryOf("SELECT salary FROM employee")
     )
 ).value();
 ```
 
+
 ### Transaction
+
 To enable a transaction you will need to do two things:
 1. Decorates a `Session` using a `Transacted` object, like here:
 ```java
 final Session transacted = new Transacted(session);
 ```
-2. Use a `StatatementTransaction` object to perform all transacted operations,
+2. Use a `Transaction` object to perform all transacted operations,
 like here:
 ```java
-new StatementTransaction(
+new Transaction(
   transacted,
   () -> {
     final Contact contact = new ContactsSql(transacted)
@@ -155,17 +162,20 @@ new StatementTransaction(
 ).result();
 ```
 
-To a complete example, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/blob/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/stmt/TransactionTest.java).
+To a complete example, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/blob/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/statement/TransactionTest.java).
+
 
 ### Logging
+
 To enable logging just decorate a `Session` object:
 ```java
 final Session logged = new Logged(session);
 ```
 
+
 ## Phonebook application (demo)
 
-An phonebook application has been developed to demonstrate and test the
+A phonebook application has been developed to demonstrate and test the
 catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/phonebook).
 
 
@@ -174,32 +184,19 @@ catoos-jdbc API. To see it, please look [here](https://github.com/fabriciofx/cac
 Contributions are welcome! Please, open an issue before submit any kind (ideas,
 documentation, code, ...) of contribution.
 
+
 ### How compile it?
 
 ```
 $ mvn clean install -Pqulice
 ```
 
-### How use ANTLR4 + Maven + IntelliJ
-
-1. Create a `antlr4` directory inside `src/main` directory (automatically
-jcabi-parent will detect this directory and run antlr properly)
-2. Mark the `antlr4` as Source Root (select the directory, mouse right button,
-`Mark Directory as`, `Sources Root`)
-3. Create the package folder properly (e.g
-`com.github.fabriciofx.cactoos.jdbc.cache`)
-4. Put the `.g4` file inside the package folder create in (3)
-5. Generate the sources (On Project Folder, mouse right button, `Maven`,
-`Generate Sources and Update Folders`)
-6. Reimport the Generate Sources (On Project Folder, mouse right button,
-`Maven`, `Reimport`)
-
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (C) 2018 Fabrício Barros Cabral
+Copyright (C) 2018-2023 Fabrício Barros Cabral
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
