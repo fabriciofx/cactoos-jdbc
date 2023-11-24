@@ -165,6 +165,46 @@ new Transaction(
 To a complete example, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/blob/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/statement/TransactionTest.java).
 
 
+### Pagination
+
+To enable pagination, you need define a method which should return `Pages<>` of
+ah object, like this:
+
+```java
+public interface Phonebook {
+    ...
+    Pages<Contact> contacts(int max) throws Exception;
+}
+```
+
+And in this method, we need create a `SqlPages<>` object, that must contains
+three objects:
+1) A `QueryOf` that must return the amount of registers;
+2) A `QueryOf` that must return all registers (don't worry: pagination will not
+   retrieve all registers. They will be paginated);
+3) An `Adapter` that will transform a `ResulSet` in an object.
+
+We can see an example bellow:
+
+```java
+public final class SqlPhonebook implements Phonebook {
+    ...
+    @Override
+    public Pages<Contact> contacts(final int max) throws Exception {
+        return new SqlPages<>(
+            this.session,
+            new QueryOf("SELECT COUNT(*) FROM contact"),
+            new QueryOf("SELECT * FROM contact"),
+            new ResulSetAsContact(this.session),
+            max
+        );
+    }
+}
+```
+
+To see more details, please take a look [here](https://github.com/fabriciofx/cactoos-jdbc/tree/master/src/test/java/com/github/fabriciofx/cactoos/jdbc/phonebook).
+
+
 ### Logging
 
 To enable logging just decorate a `Session` object:
