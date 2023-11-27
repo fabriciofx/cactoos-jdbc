@@ -38,6 +38,7 @@ public final class NoCloseConnection extends ConnectionEnvelope implements
      * The Connection.
      */
     private final Connection origin;
+
     /**
      * Ctor.
      *
@@ -50,6 +51,7 @@ public final class NoCloseConnection extends ConnectionEnvelope implements
 
     @Override
     public void close() throws SQLException {
+        // No close connection. This method is empty on purpose
     }
 
     @Override

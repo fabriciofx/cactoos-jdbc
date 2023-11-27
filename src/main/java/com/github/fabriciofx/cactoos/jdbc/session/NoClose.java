@@ -25,6 +25,8 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.connection.NoCloseConnection;
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +36,13 @@ import java.util.List;
  *
  * @since 0.8.1
  */
-public final class NoClose implements Session, AutoCloseable {
+@SuppressWarnings(
+    {
+        "PMD.AvoidCatchingGenericException",
+        "PMD.CloseResource"
+    }
+)
+public final class NoClose implements Session, Closeable {
     /**
      * The Session.
      */
@@ -78,12 +86,17 @@ public final class NoClose implements Session, AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
-        for (final NoCloseConnection connection : this.connections) {
-            final Connection real = connection.value();
-            if (!real.isClosed()) {
-                real.close();
+    public void close() throws IOException {
+        try {
+            for (final NoCloseConnection connection : this.connections) {
+                final Connection real = connection.value();
+                if (!real.isClosed()) {
+                    real.close();
+                }
             }
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Exception ex) {
+            throw new IOException(ex);
         }
     }
 }
