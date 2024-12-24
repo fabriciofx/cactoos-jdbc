@@ -169,7 +169,7 @@
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.33.2</version>
+      <version>0.33.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
