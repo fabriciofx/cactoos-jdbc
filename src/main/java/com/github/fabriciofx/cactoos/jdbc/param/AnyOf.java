@@ -27,11 +27,11 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 
 /**
- * Plain param.
+ * Any param.
  *
- * @since 0.2
+ * @since 0.8.1
  */
-public final class UndefinedOf implements Param {
+public final class AnyOf implements Param {
     /**
      * Name.
      */
@@ -47,7 +47,7 @@ public final class UndefinedOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public UndefinedOf(final String name, final Object value) {
+    public AnyOf(final String name, final Object value) {
         this.id = name;
         this.object = value;
     }
