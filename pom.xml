@@ -27,7 +27,7 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.68.0</version>
+    <version>0.69.3</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>cactoos-jdbc</artifactId>
@@ -103,7 +103,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.2</version>
+          <version>3.5.3</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <systemPropertyVariables>
@@ -128,7 +128,7 @@
     <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
-      <version>0.56.1</version>
+      <version>0.57.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -157,7 +157,7 @@
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
-      <version>9.2.0</version>
+      <version>9.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -169,7 +169,7 @@
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.33.5</version>
+      <version>0.35.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -181,25 +181,25 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
-      <version>1.20.5</version>
+      <version>1.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>mysql</artifactId>
-      <version>1.20.5</version>
+      <version>1.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>jdbc</artifactId>
-      <version>1.20.5</version>
+      <version>1.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>postgresql</artifactId>
-      <version>1.20.5</version>
+      <version>1.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -211,13 +211,13 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.12.0</version>
+      <version>5.12.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.12.0</version>
+      <version>5.12.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -226,14 +226,14 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.12.0</version>
+        <version>5.12.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
-        <version>1.20.5</version>
+        <version>1.21.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -258,7 +258,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.12</version>
+            <version>0.8.13</version>
             <configuration>
               <output>file</output>
             </configuration>
