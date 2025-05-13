@@ -1,6 +1,7 @@
 # Cactoos-JDBC
 
 [![Winner](https://www.yegor256.com/images/award/2019/winner-fabriciofx.png)](https://www.yegor256.com/2018/09/30/award-2019.html)
+
 [![EO principles respected
 here](https://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
 [![We recommend IntelliJ
