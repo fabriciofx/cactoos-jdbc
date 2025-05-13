@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install maven in Linux
+      - name: Install Maven
         run: |
           sudo apt update
           sudo apt install -y maven
@@ -51,19 +51,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - name: Configure maven cache
+      - name: Configure Maven cache
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           # yamllint disable-line rule:line-length
           key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
-      - name: Check java version
-        run: java -version
-      - name: Check maven version
-        run: mvn -version
-      - name: Build project in Unix/macOS
-        if: runner.os != 'Windows'
+      - name: Build project
         run: |
           if [ -x "mvnw" ]; then
             MVN="./mvnw"
@@ -75,23 +70,3 @@ jobs:
           else
             $MVN --errors --batch-mode clean install
           fi
-      - name: Build project in Windows
-        if: runner.os == 'Windows'
-        # yamllint disable rule:line-length
-        run: |
-          for /f "delims=" %%i in ('findstr "<id>qulice</id>" pom.xml') do set qulice=1
-          if exist "mvnw.cmd" (
-            if defined qulice (
-              mvnw.cmd --errors --batch-mode clean install -Pqulice
-            ) else (
-              mvnw.cmd --errors --batch-mode clean install
-            )
-          ) else (
-            if defined qulice (
-              mvn --errors --batch-mode clean install -Pqulice
-            ) else (
-              mvn --errors --batch-mode clean install
-            )
-          )
-        # yamllint enable rule:line-length
-        shell: cmd
