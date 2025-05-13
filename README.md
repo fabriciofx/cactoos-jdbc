@@ -182,7 +182,7 @@ three objects:
 1) A `QueryOf` that must return the amount of registers;
 2) A `QueryOf` that must return all registers (don't worry: pagination will not
    retrieve all registers. They will be paginated);
-3) An `Adapter` that will transform a `ResulSet` in an object.
+3) An `Adapter` that will transform a `ResultSet` in an object.
 
 We can see an example bellow:
 
@@ -195,7 +195,7 @@ public final class SqlPhonebook implements Phonebook {
             this.session,
             new QueryOf("SELECT COUNT(*) FROM contact"),
             new QueryOf("SELECT * FROM contact"),
-            new ResulSetAsContact(this.session),
+            new ResultSetAsContact(this.session),
             max
         );
     }

@@ -63,15 +63,15 @@ public final class H2Server implements Server {
 
     /**
      * Ctor.
-     * @param scrpt SqlScript to initialize the database.
+     * @param text SqlScript to initialize the database.
      */
-    public H2Server(final ScriptOf scrpt) {
+    public H2Server(final ScriptOf text) {
         this.dbname = new Unchecked<>(
             new Sticky<>(
                 () -> new RandomDatabaseName().asString()
             )
         );
-        this.script = scrpt;
+        this.script = text;
     }
 
     @Override

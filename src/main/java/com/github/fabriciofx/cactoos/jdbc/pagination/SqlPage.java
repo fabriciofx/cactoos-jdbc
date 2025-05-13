@@ -53,7 +53,7 @@ public final class SqlPage<T> implements Page<T> {
     /**
      * The page's elements.
      */
-    private final Unchecked<List<T>> itens;
+    private final Unchecked<List<T>> items;
 
     /**
      * The session.
@@ -76,7 +76,7 @@ public final class SqlPage<T> implements Page<T> {
     private final int size;
 
     /**
-     * Amount of elements by page.
+     * Number of elements by page.
      */
     private final int limit;
 
@@ -89,9 +89,9 @@ public final class SqlPage<T> implements Page<T> {
      * Ctor.
      * @param session A session
      * @param adapter An adapter
-     * @param all A query tha retrieve all elements
-     * @param size Amount of elements in this page
-     * @param limit The maximum amount of elements per page
+     * @param all A query that retrieves all elements
+     * @param size Number of elements in this page
+     * @param limit The maximum number of elements per page
      * @param number The page number
      */
     public SqlPage(
@@ -102,7 +102,7 @@ public final class SqlPage<T> implements Page<T> {
         final int limit,
         final int number
     ) {
-        this.itens = new Unchecked<>(
+        this.items = new Unchecked<>(
             () -> {
                 try (
                     ResultSet rset = new Select(
@@ -130,7 +130,7 @@ public final class SqlPage<T> implements Page<T> {
 
     @Override
     public List<T> content() {
-        return this.itens.value();
+        return this.items.value();
     }
 
     @Override

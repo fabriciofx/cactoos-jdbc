@@ -38,7 +38,7 @@ import org.cactoos.scalar.Sticky;
  */
 public final class Transacted implements Session {
     /**
-     * Holded connection.
+     * Held connection.
      */
     private final Scalar<Connection> scalar;
 

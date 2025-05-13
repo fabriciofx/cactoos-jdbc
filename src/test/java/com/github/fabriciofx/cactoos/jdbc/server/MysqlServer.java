@@ -46,9 +46,9 @@ public final class MysqlServer extends ServerEnvelope {
 
     /**
      * Ctor.
-     * @param scrpt SQL Script to initialize the database
+     * @param text SQL Script to initialize the database
      */
-    public MysqlServer(final ScriptOf scrpt) {
+    public MysqlServer(final ScriptOf text) {
         super(
             new ServerInContainer(
                 new MySQLContainer<>(
@@ -56,7 +56,7 @@ public final class MysqlServer extends ServerEnvelope {
                         .parse("mysql/mysql-server:latest")
                         .asCompatibleSubstituteFor("mysql")
                 ),
-                scrpt
+                text
             )
         );
     }

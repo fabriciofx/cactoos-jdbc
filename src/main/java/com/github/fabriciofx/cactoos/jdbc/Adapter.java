@@ -35,7 +35,7 @@ import java.sql.ResultSet;
  */
 public interface Adapter<T> {
     /**
-     * Transform the ResultSet in an objet.
+     * Transform the ResultSet in an object.
      * @param rset The ResultSet
      * @return The adapted object
      */

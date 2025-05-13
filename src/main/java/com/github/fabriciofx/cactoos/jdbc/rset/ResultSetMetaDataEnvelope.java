@@ -27,7 +27,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- * ResultSetMetada Envelope.
+ * ResultSetMetadata Envelope.
  *
  * @since 0.4
  * @checkstyle DesignForExtensionCheck (1500 lines)

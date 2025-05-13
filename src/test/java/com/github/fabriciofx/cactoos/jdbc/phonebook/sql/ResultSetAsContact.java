@@ -44,7 +44,7 @@ import java.util.UUID;
         "PMD.AvoidThrowingRawExceptionTypes"
     }
 )
-public final class ResulSetAsContact implements Adapter<Contact> {
+public final class ResultSetAsContact implements Adapter<Contact> {
     /**
      * The session.
      */
@@ -54,7 +54,7 @@ public final class ResulSetAsContact implements Adapter<Contact> {
      * Ctor.
      * @param sssn A session
      */
-    public ResulSetAsContact(final Session sssn) {
+    public ResultSetAsContact(final Session sssn) {
         this.session = sssn;
     }
 

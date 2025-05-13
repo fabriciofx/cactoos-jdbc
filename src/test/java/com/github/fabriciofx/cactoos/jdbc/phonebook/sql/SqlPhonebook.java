@@ -83,7 +83,7 @@ public final class SqlPhonebook implements Phonebook {
                 "SELECT * FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
                 new TextOf("name", new Lowered(name))
             ),
-            new ResulSetAsContact(this.session),
+            new ResultSetAsContact(this.session),
             1
         );
     }
@@ -94,7 +94,7 @@ public final class SqlPhonebook implements Phonebook {
             this.session,
             new QueryOf("SELECT COUNT(*) FROM contact"),
             new QueryOf("SELECT * FROM contact"),
-            new ResulSetAsContact(this.session),
+            new ResultSetAsContact(this.session),
             max
         );
     }

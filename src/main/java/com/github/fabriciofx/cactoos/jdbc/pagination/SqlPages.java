@@ -49,7 +49,7 @@ import org.cactoos.scalar.Unchecked;
 )
 public final class SqlPages<T> implements Pages<T> {
     /**
-     * Amount of elements in all pages.
+     * Number of elements in all pages.
      */
     private final Unchecked<Integer> size;
 
@@ -64,22 +64,22 @@ public final class SqlPages<T> implements Pages<T> {
     private final Session session;
 
     /**
-     * Query tha retrieve all elements.
+     * Query that retrieve all elements.
      */
     private final Query query;
 
     /**
-     * The maximum amount of elements per page.
+     * The maximum number of elements per page.
      */
     private final int limit;
 
     /**
      * Ctor.
      * @param session A Session
-     * @param count A query that retrieve the total count of elements.
-     * @param all A query tha retrieve all elements.
+     * @param count A query that retrieves the total count of elements.
+     * @param all A query that retrieves all elements.
      * @param adapter An adapter
-     * @param limit The maximum amount of elements per page.
+     * @param limit The maximum number of elements per page.
      */
     public SqlPages(
         final Session session,

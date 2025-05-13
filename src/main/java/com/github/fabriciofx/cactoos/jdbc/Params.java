@@ -36,7 +36,7 @@ public interface Params extends Iterable<Param> {
     /**
      * Set the PreparedStatement with all query parameters.
      * @param stmt The PreparedStatement
-     * @return The setted PreparedStatement
+     * @return The set PreparedStatement
      * @throws Exception If fails
      */
     PreparedStatement prepare(PreparedStatement stmt) throws Exception;

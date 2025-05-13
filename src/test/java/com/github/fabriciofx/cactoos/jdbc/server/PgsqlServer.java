@@ -45,13 +45,13 @@ public final class PgsqlServer extends ServerEnvelope {
 
     /**
      * Ctor.
-     * @param scrpt SQL Script to initialize the database
+     * @param text SQL Script to initialize the database
      */
-    public PgsqlServer(final ScriptOf scrpt) {
+    public PgsqlServer(final ScriptOf text) {
         super(
             new ServerInContainer(
                 new PostgreSQLContainer<>("postgres:latest"),
-                scrpt
+                text
             )
         );
     }
