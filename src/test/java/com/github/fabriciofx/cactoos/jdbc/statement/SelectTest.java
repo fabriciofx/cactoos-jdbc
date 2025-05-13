@@ -114,6 +114,7 @@ final class SelectTest {
                     )
                 ).result();
                 MatcherAssert.assertThat(
+                    "Must insert employees records",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(

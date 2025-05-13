@@ -90,6 +90,7 @@ final class PhonebookTest {
                 contact.phones().add("99991234", "TIM");
                 contact.phones().add("98812564", "Oi");
                 MatcherAssert.assertThat(
+                    "Must contacts should contain correct phone number",
                     XhtmlMatchers.xhtml(
                         contact.about()
                     ),
@@ -135,6 +136,7 @@ final class PhonebookTest {
         ) {
             for (final Session session : servers.sessions()) {
                 MatcherAssert.assertThat(
+                    "Must have contact name",
                     XhtmlMatchers.xhtml(
                         new SqlPhonebook(session)
                             .search("maria")
@@ -187,6 +189,7 @@ final class PhonebookTest {
                     .get(0);
                 contact.update("Maria Lima");
                 MatcherAssert.assertThat(
+                    "Must update contact name",
                     XhtmlMatchers.xhtml(
                         new SqlPhonebook(session)
                             .search("maria")

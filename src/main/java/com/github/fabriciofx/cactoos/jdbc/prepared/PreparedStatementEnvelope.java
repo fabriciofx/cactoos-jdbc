@@ -47,7 +47,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
- * Logged PreparedStatement Envelope.
+ * PreparedStatement Envelope.
  *
  * @since 0.4
  * @checkstyle ParameterNameCheck (1000 lines)
@@ -212,11 +212,11 @@ public abstract class PreparedStatementEnvelope implements PreparedStatement {
 
     /**
      * Set a stream to Unicode.
-     * @deprecated It not should be used
      * @param parameterIndex Parameter parameterIndex
      * @param x InputStream
      * @param length Data length
      * @throws SQLException If fails
+     * @deprecated It not should be used
      */
     @Deprecated
     public void setUnicodeStream(

@@ -501,11 +501,11 @@ public final class Logged extends PreparedStatementEnvelope {
 
     /**
      * Set a stream to Unicode.
-     * @deprecated It not should be used
      * @param index Parameter index
      * @param stream InputStream
      * @param length Data length
      * @throws SQLException If fails
+     * @deprecated It not should be used
      */
     @Deprecated
     public void setUnicodeStream(

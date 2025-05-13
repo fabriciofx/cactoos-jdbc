@@ -40,9 +40,9 @@ import org.junit.jupiter.api.Test;
  *
  * <p>There is no thread-safety guarantee.
  *
+ * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @since 0.1
  */
 @SuppressWarnings(
     {
@@ -81,6 +81,7 @@ final class ResultSetAsXmlTest {
                 ).result()
             ) {
                 MatcherAssert.assertThat(
+                    "Must convert a contact into a XML",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             "contacts",
