@@ -37,13 +37,12 @@ jobs:
         options: --privileged
     strategy:
       matrix:
-        os: [ubuntu-24.04, windows-2022]
+        os: [ubuntu-24.04]
         java: [11, 17, 21]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install maven in Linux
-        if: runner.os == 'Linux'
         run: |
           sudo apt update
           sudo apt install -y maven
