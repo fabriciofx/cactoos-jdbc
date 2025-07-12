@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     services:
       docker:
-        image: docker:28.3.1
+        image: docker:28.3.2
         options: --privileged
     strategy:
       matrix:
