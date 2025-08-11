@@ -41,7 +41,7 @@ jobs:
         java: [11, 17, 21]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install Maven
         run: |
           sudo apt update
