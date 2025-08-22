@@ -38,7 +38,7 @@ jobs:
       - name: Install xcop
         run: sudo gem install xcop
       - name: Setup Java SDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '11'
