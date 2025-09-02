@@ -36,4 +36,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       - name: Check files for typos
-        uses: crate-ci/typos@v1.35.7
+        uses: crate-ci/typos@v1.35.8
