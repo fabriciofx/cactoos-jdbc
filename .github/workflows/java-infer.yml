@@ -1,19 +1,15 @@
 # SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
-name: action-lint
+name: java-infer
 'on':
   push:
-    branches:
-      - main
-      - master
-  pull_request:
     branches:
       - main
       - master
 permissions:
   contents: read
 jobs:
-  action-lint:
+  java-infer:
     # yamllint disable-line rule:line-length
-    uses: fabriciofx/github-workflows/.github/workflows/action-lint-template.yml@main
+    uses: fabriciofx/github-workflows/.github/workflows/java-infer-template.yml@main

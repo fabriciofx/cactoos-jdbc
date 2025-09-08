@@ -1,89 +1,19 @@
-# The MIT License (MIT)
-#
-# Copyright (C) 2018-2025 Fabrício Barros Cabral
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
+# SPDX-License-Identifier: MIT
 ---
 name: java-release
 'on':
   push:
     tags:
-      - '*'
+      - '[0-9]*.[0-9]*.[0-9]*'
+permissions:
+  contents: read
 jobs:
   java-release:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-      - name: Install maven
-        run: |
-          sudo apt update
-          sudo apt install -y maven
-      - name: Install xcop
-        run: sudo gem install xcop
-      - name: Setup Java SDK
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          server-id: oss.sonatype.org
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_PASSWORD }}
-      - name: Configure maven cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ubuntu-jdk-11-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ubuntu-jdk-11-maven-
-      - name: Setup maven settings.xml
-        run: |
-          mkdir -p ~/.m2
-          cat > ~/.m2/settings.xml <<EOF
-          <settings>
-            <profiles>
-              <profile>
-                <id>app</id>
-                <properties>
-                  <gpg.keyname>${{ secrets.GPG_KEYNAME }}</gpg.keyname>
-                  <gpg.passphrase>${{ secrets.GPG_PASSPHRASE }}</gpg.passphrase>
-                </properties>
-              </profile>
-            </profiles>
-            <servers>
-              <server>
-                <id>oss.sonatype.org</id>
-                <username>${{ secrets.OSSRH_USERNAME }}</username>
-                <password>${{ secrets.OSSRH_PASSWORD }}</password>
-              </server>
-            </servers>
-          </settings>
-          EOF
-      - name: Release to Sonatype (Maven Central)
-        run: |
-          mvn clean deploy -Pqulice -Psonatype -Papp -DskipTests=true \
-            --errors --batch-mode
-        env:
-          GPG_TTY: $(tty)
-          JDK_JAVA_OPTIONS: >
-            --add-opens java.base/java.lang=ALL-UNNAMED
-            --add-opens java.base/java.io=ALL-UNNAMED
-            --add-opens java.base/java.util=ALL-UNNAMED
-            --add-opens java.base/java.util.concurrent=ALL-UNNAMED
+    # yamllint disable-line rule:line-length
+    uses: fabriciofx/github-workflows/.github/workflows/java-release-template.yml@main
+    secrets:
+      RELEASE_KEYNAME: ${{ secrets.GPG_KEYNAME }}
+      RELEASE_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      RELEASE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      RELEASE_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}

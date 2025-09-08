@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
-name: action-lint
+name: action-security
 'on':
   push:
     branches:
@@ -12,8 +12,12 @@ name: action-lint
       - main
       - master
 permissions:
+  actions: read
   contents: read
+  security-events: write
 jobs:
-  action-lint:
+  action-security:
     # yamllint disable-line rule:line-length
-    uses: fabriciofx/github-workflows/.github/workflows/action-lint-template.yml@main
+    uses: fabriciofx/github-workflows/.github/workflows/action-security-template.yml@main
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

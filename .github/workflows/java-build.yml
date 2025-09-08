@@ -1,72 +1,19 @@
-# The MIT License (MIT)
-#
-# Copyright (C) 2018-2025 Fabrício Barros Cabral
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
+# SPDX-License-Identifier: MIT
 ---
 name: java-build
 'on':
   push:
     branches:
       - main
+      - master
   pull_request:
     branches:
       - main
+      - master
+permissions:
+  contents: read
 jobs:
   java-build:
-    runs-on: ${{ matrix.os }}
-    services:
-      docker:
-        image: docker:28.3.3
-        options: --privileged
-    strategy:
-      matrix:
-        os: [ubuntu-24.04]
-        java: [11, 17, 21]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-      - name: Install Maven
-        run: |
-          sudo apt update
-          sudo apt install -y maven
-      - name: Setup Java SDK
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-      - name: Configure Maven cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          # yamllint disable-line rule:line-length
-          key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
-      - name: Build project
-        run: |
-          if [ -x "mvnw" ]; then
-            MVN="./mvnw"
-          else
-            MVN=mvn
-          fi
-          if grep -q "<id>qulice</id>" pom.xml; then
-            $MVN --errors --batch-mode clean install -Pqulice
-          else
-            $MVN --errors --batch-mode clean install
-          fi
+    # yamllint disable-line rule:line-length
+    uses: fabriciofx/github-workflows/.github/workflows/java-build-template.yml@main

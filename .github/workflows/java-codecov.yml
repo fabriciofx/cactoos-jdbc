@@ -1,19 +1,17 @@
 # SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
-name: action-lint
+name: java-codecov
 'on':
   push:
-    branches:
-      - main
-      - master
-  pull_request:
     branches:
       - main
       - master
 permissions:
   contents: read
 jobs:
-  action-lint:
+  java-codecov:
     # yamllint disable-line rule:line-length
-    uses: fabriciofx/github-workflows/.github/workflows/action-lint-template.yml@main
+    uses: fabriciofx/github-workflows/.github/workflows/java-codecov-template.yml@main
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

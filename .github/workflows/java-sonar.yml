@@ -1,19 +1,18 @@
 # SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
-name: action-lint
+name: java-sonar
 'on':
   push:
-    branches:
-      - main
-      - master
-  pull_request:
     branches:
       - main
       - master
 permissions:
   contents: read
 jobs:
-  action-lint:
+  java-sonar:
     # yamllint disable-line rule:line-length
-    uses: fabriciofx/github-workflows/.github/workflows/action-lint-template.yml@main
+    uses: fabriciofx/github-workflows/.github/workflows/java-sonar-template.yml@main
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SN_TOKEN: ${{ secrets.SONAR_TOKEN }}
