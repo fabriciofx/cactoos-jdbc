@@ -62,15 +62,15 @@ public final class ResultSetAsXmlEach implements Scalar<String> {
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
         try (ResultSet rset = this.statement.result()) {
-            for (final Map<String, Object> row : new ResultSetAsRows(rset)) {
+            for (final Map<String, Object> rows : new ResultSetAsRows(rset)) {
                 strb.append(String.format("<%s>", this.root));
-                for (final String key : row.keySet()) {
+                for (final Map.Entry<String, Object> row : rows.entrySet()) {
                     strb.append(
                         String.format(
                             "<%s>%s</%s>",
-                            key,
-                            row.get(key),
-                            key
+                            row.getKey(),
+                            row.getValue(),
+                            row.getKey()
                         )
                     );
                 }
