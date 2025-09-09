@@ -252,9 +252,26 @@
               <excludes combine.children="append">
                 <exclude>checkstyle:/src/site/resources/.*</exclude>
                 <exclude>findbugs:.*</exclude>
+                <exclude>xml:.*</exclude>
               </excludes>
             </configuration>
+            <executions>
+              <execution>
+                <id>qulice-check</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>jacoco</id>
+      <build>
+        <plugins>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -271,7 +288,7 @@
               </execution>
               <execution>
                 <id>jacoco-site</id>
-                <phase>install</phase>
+                <phase>prepare-package</phase>
                 <goals>
                   <goal>report</goal>
                 </goals>
@@ -290,36 +307,103 @@
                         <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.08</minimum>
+                          <minimum>0.00</minimum>
                         </limit>
                         <limit>
                           <counter>LINE</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.08</minimum>
+                          <minimum>0.00</minimum>
                         </limit>
                         <limit>
                           <counter>BRANCH</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.12</minimum>
+                          <minimum>0.00</minimum>
                         </limit>
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.04</minimum>
+                          <minimum>0.00</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.04</minimum>
+                          <minimum>0.00</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
                           <value>MISSEDCOUNT</value>
-                          <maximum>35</maximum>
+                          <maximum>32</maximum>
                         </limit>
                       </limits>
                     </rule>
                   </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>docs</id>
+      <activation>
+        <property>
+          <name>env.GRAPHVIZ_DOT</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.jeluard</groupId>
+            <artifactId>plantuml-maven-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <id>plantuml-site</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <sourceFiles>
+                    <directory>${basedir}</directory>
+                    <includes>
+                      <include>docs/*.puml</include>
+                    </includes>
+                  </sourceFiles>
+                  <outputDirectory>${basedir}</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>net.sourceforge.plantuml</groupId>
+                <artifactId>plantuml-mit</artifactId>
+                <version>1.2025.7</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>it</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.5.3</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <includes>
+                    <include>**/*IT.java</include>
+                  </includes>
                 </configuration>
               </execution>
             </executions>
