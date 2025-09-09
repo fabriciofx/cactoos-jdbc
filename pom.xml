@@ -356,7 +356,7 @@
           <plugin>
             <groupId>com.github.jeluard</groupId>
             <artifactId>plantuml-maven-plugin</artifactId>
-            <version>1.2</version>
+            <version>7954</version>
             <executions>
               <execution>
                 <id>plantuml-site</id>
