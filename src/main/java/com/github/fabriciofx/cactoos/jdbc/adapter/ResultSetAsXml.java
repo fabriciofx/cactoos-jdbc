@@ -28,6 +28,7 @@ import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Locale;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -73,8 +74,11 @@ public final class ResultSetAsXml implements Adapter<String> {
     @Override
     public String adapt(final ResultSet rset) {
         try {
-            final DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder();
+            final DocumentBuilderFactory factory = DocumentBuilderFactory
+                .newInstance();
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            factory.setExpandEntityReferences(false);
+            final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document doc = builder.newDocument();
             final Element entries = doc.createElement(this.root);
             doc.appendChild(entries);
