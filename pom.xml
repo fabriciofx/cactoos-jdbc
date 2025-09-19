@@ -103,7 +103,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.3</version>
+          <version>3.5.4</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <systemPropertyVariables>
@@ -163,7 +163,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.7.7</version>
+      <version>42.7.8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -247,7 +247,7 @@
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.24.0</version>
+            <version>0.24.2</version>
             <configuration>
               <excludes combine.children="append">
                 <exclude>checkstyle:/src/site/resources/.*</exclude>
@@ -393,7 +393,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <executions>
               <execution>
                 <goals>
