@@ -50,15 +50,15 @@ public final class InsertWithKey<T> implements Statement<T> {
 
     /**
      * Ctor.
+     * 
      * @param sssn A Session
-     * @param qry A SQL query
+     * @param qry  A SQL query
      */
     public InsertWithKey(final Session sssn, final Query qry) {
         this.session = sssn;
         this.query = qry;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T result() throws Exception {
         // @checkstyle NestedTryDepthCheck (10 lines)
