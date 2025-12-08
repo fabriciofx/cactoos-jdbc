@@ -33,9 +33,9 @@ import org.junit.jupiter.api.Test;
 /**
  * SqlScript tests.
  *
- * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle MethodNameCheck (500 lines)
+ * @since 0.2
  */
 @SuppressWarnings(
     {
@@ -46,35 +46,39 @@ import org.junit.jupiter.api.Test;
 final class ScriptOfTest {
     @Test
     void h2Server() throws Exception {
-        final Server server = new H2Server(
-            new ScriptOf(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-h2.sql"
+        try (
+            Server server = new H2Server(
+                new ScriptOf(
+                    new ResourceOf(
+                        new Joined(
+                            "/",
+                            "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                            "phonebook-h2.sql"
+                        )
                     )
                 )
             )
-        );
-        server.start();
-        server.stop();
+        ) {
+            server.start();
+        }
     }
 
     @Test
     void mysqlServer() throws Exception {
-        final Server server = new MysqlServer(
-            new ScriptOf(
-                new ResourceOf(
-                    new Joined(
-                        "/",
-                        "com/github/fabriciofx/cactoos/jdbc/phonebook",
-                        "phonebook-mysql.sql"
+        try (
+            Server server = new MysqlServer(
+                new ScriptOf(
+                    new ResourceOf(
+                        new Joined(
+                            "/",
+                            "com/github/fabriciofx/cactoos/jdbc/phonebook",
+                            "phonebook-mysql.sql"
+                        )
                     )
                 )
             )
-        );
-        server.start();
-        server.stop();
+        ) {
+            server.start();
+        }
     }
 }
