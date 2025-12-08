@@ -29,7 +29,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.IsText;
 
@@ -72,7 +72,7 @@ final class QueryOfTest {
 
     @Test
     void invalid() throws Exception {
-        Assert.assertThrows(
+        Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> {
                 new QueryOf(
@@ -113,7 +113,7 @@ final class QueryOfTest {
 
     @Test
     void outOfOrder() throws Exception {
-        Assert.assertThrows(
+        Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> {
                 new QueryOf(

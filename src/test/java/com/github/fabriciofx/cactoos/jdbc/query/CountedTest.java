@@ -24,7 +24,7 @@
 package com.github.fabriciofx.cactoos.jdbc.query;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.IsText;
 
@@ -64,7 +64,7 @@ final class CountedTest {
 
     @Test
     void withoutCount() {
-        Assert.assertThrows(
+        Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> {
                 new Counted(new QueryOf("SELECT * FROM employee")).asString();
