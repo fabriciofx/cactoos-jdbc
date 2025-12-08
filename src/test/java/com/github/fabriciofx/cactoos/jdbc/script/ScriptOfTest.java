@@ -33,9 +33,9 @@ import org.junit.jupiter.api.Test;
 /**
  * SqlScript tests.
  *
+ * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle MethodNameCheck (500 lines)
- * @since 0.2
  */
 @SuppressWarnings(
     {

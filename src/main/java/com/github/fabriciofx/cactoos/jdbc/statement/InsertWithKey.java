@@ -50,7 +50,7 @@ public final class InsertWithKey<T> implements Statement<T> {
 
     /**
      * Ctor.
-     * 
+     *
      * @param sssn A Session
      * @param qry  A SQL query
      */
