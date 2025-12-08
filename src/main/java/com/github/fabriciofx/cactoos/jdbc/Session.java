@@ -27,7 +27,6 @@ import java.sql.Connection;
 
 /**
  * Session.
- *
  * Create a {@link java.sql.Connection}.
  *
  * <p>There is no thread-safety guarantee.
