@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+# SPDX-License-Identifier: MIT
+version = 1
+[[annotations]]
+path = [
+    ".DS_Store",
+    ".pdd",
+    ".gitmodules",
+    ".latexmkrc",
+    ".texqc",
+    ".texsc",
+    "**.jpg",
+    "**.json",
+    "**.md",
+    "**.pdf",
+    "**.png",
+    "**.svg",
+    "**.txt",
+    "**.vm",
+    "**/.DS_Store",
+    "**/.gitignore",
+    "**/.gitattributes",
+    "**/.pdd",
+    "**/.gitmodules",
+    "**/.latexmkrc",
+    "**/.texqc",
+    "**/.texsc",
+    "**/*.csv",
+    "**/*.jpg",
+    "**/*.json",
+    "**/*.md",
+    "**/*.pdf",
+    "**/*.png",
+    "**/*.svg",
+    "**/*.txt",
+    "**/*.vm",
+    "**/*.puml",
+    "**/aspell.en.pws",
+    "**/DEPENDS.txt",
+    "**/*.properties",
+    "aspell.en.pws",
+    "**/CNAME",
+    "DEPENDS.txt",
+    "CNAME",
+    "renovate.json",
+    "rc",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (c) 2018-2025 Fabrício Barros Cabral"
+SPDX-License-Identifier = "MIT"

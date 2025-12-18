@@ -1,3 +1,5 @@
+-- SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+-- SPDX-License-Identifier: MIT
 CREATE TABLE contact (
   id BINARY(16) NOT NULL,
   name VARCHAR(50) NOT NULL,
