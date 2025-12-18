@@ -27,7 +27,6 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -61,13 +60,12 @@ public final class InsertWithKey<T> implements Statement<T> {
 
     @Override
     public T result() throws Exception {
-        // @checkstyle NestedTryDepthCheck (10 lines)
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
-                stmt.executeUpdate();
-                try (ResultSet rset = stmt.getGeneratedKeys()) {
-                    return new ResultSetAsValue<T>(() -> rset).value();
-                }
+        try (
+            PreparedStatement stmt = this.query.prepared(this.session.connection())
+        ) {
+            stmt.executeUpdate();
+            try (ResultSet rset = stmt.getGeneratedKeys()) {
+                return new ResultSetAsValue<T>(() -> rset).value();
             }
         }
     }

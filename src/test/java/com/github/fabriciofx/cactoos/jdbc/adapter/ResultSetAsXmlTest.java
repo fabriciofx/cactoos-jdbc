@@ -44,13 +44,7 @@ import org.junit.jupiter.api.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases"
-    }
-)
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 final class ResultSetAsXmlTest {
     @Test
     void xml() throws Exception {

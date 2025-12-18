@@ -49,13 +49,6 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.TestClassWithoutTestCases"
-    }
-)
 final class InsertTest {
     @Test
     void insert() throws Exception {

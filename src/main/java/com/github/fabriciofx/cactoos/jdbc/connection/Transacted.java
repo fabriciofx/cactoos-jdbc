@@ -41,10 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
-        "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount"
+        "PMD.LongVariable"
     }
 )
 public final class Transacted extends ConnectionEnvelope {

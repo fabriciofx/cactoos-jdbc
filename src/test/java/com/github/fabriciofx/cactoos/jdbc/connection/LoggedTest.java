@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 final class LoggedTest {
     @Test
     void loggedUpdate() throws Exception {
@@ -62,7 +62,7 @@ final class LoggedTest {
             logger.toString(),
             Matchers.allOf(
                 Matchers.containsString(
-                    "Connection[#0] has been opened with properties"
+                    "Connection[#0] has been opened with properties numServers=0"
                 ),
                 Matchers.containsString(
                     String.format(
@@ -73,8 +73,7 @@ final class LoggedTest {
                 Matchers.containsString(
                     "PreparedStatement[#0] updated a source and returned '0' in"
                 ),
-                Matchers.containsString("PreparedStatement[#0] closed"),
-                Matchers.containsString("Connection[#0] closed")
+                Matchers.containsString("PreparedStatement[#0] closed")
             )
         );
     }

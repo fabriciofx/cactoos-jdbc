@@ -98,12 +98,9 @@ public final class WithKey implements Query {
     public PreparedStatement prepared(
         final Connection connection
     ) throws Exception {
-        final String[] names = {
-            this.key,
-        };
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.asString(),
-            names
+            new String[]{this.key}
         );
         this.parameters.prepare(stmt);
         return stmt;

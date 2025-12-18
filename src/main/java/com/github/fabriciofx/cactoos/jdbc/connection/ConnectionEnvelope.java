@@ -54,11 +54,7 @@ import java.util.concurrent.Executor;
     {
         "PMD.TooManyMethods",
         "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
-        "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.ExcessivePublicCount"
     }
 )
 public abstract class ConnectionEnvelope implements Connection {

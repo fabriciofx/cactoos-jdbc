@@ -33,6 +33,7 @@ import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
  * @param <T> Type of the page's content
  * @since 0.8.0
  */
+@FunctionalInterface
 public interface Pagination<T> {
     /**
      * Get the pages of data.

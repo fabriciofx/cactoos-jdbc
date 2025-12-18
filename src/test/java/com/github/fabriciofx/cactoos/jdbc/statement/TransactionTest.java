@@ -32,7 +32,6 @@ import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import com.github.fabriciofx.cactoos.jdbc.source.H2Source;
 import com.jcabi.matchers.XhtmlMatchers;
-import java.util.stream.StreamSupport;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -47,13 +46,7 @@ import org.junit.jupiter.api.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.EmptyCatchBlock",
-        "PMD.TestClassWithoutTestCases"
-    }
-)
+@SuppressWarnings({"PMD.UnnecessaryLocalRule", "PMD.EmptyCatchBlock"})
 final class TransactionTest {
     @Test
     void commit() throws Exception {
@@ -124,10 +117,7 @@ final class TransactionTest {
         }
         MatcherAssert.assertThat(
             "Can't perform a transaction rollback",
-            StreamSupport.stream(
-                phonebook.search(name).page(0).content().spliterator(),
-                false
-            ).count(),
+            phonebook.search(name).page(0).content().stream().count(),
             Matchers.equalTo(0L)
         );
     }

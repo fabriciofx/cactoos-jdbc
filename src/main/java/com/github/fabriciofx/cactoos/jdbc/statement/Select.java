@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.sql.rowset.CachedRowSet;
@@ -38,6 +37,7 @@ import javax.sql.rowset.RowSetProvider;
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Select implements Statement<ResultSet> {
     /**
      * The session.
@@ -61,15 +61,14 @@ public final class Select implements Statement<ResultSet> {
 
     @Override
     public ResultSet result() throws Exception {
-        // @checkstyle NestedTryDepthCheck (10 lines)
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
-                try (ResultSet rset = stmt.executeQuery()) {
-                    final RowSetFactory rsf = RowSetProvider.newFactory();
-                    final CachedRowSet crs = rsf.createCachedRowSet();
-                    crs.populate(rset);
-                    return crs;
-                }
+        try (
+            PreparedStatement stmt = this.query.prepared(this.session.connection())
+        ) {
+            try (ResultSet rset = stmt.executeQuery()) {
+                final RowSetFactory rsf = RowSetProvider.newFactory();
+                final CachedRowSet crs = rsf.createCachedRowSet();
+                crs.populate(rset);
+                return crs;
             }
         }
     }

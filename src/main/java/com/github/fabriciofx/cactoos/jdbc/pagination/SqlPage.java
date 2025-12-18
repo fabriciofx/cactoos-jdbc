@@ -46,7 +46,8 @@ import org.cactoos.scalar.Unchecked;
 @SuppressWarnings(
     {
         "PMD.AvoidCatchingGenericException",
-        "PMD.AvoidThrowingRawExceptionTypes"
+        "PMD.AvoidThrowingRawExceptionTypes",
+        "PMD.UnnecessaryLocalRule"
     }
 )
 public final class SqlPage<T> implements Page<T> {

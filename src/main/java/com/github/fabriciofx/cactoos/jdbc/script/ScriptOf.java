@@ -28,6 +28,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import org.cactoos.Input;
  *
  * @since 0.2
  */
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public class ScriptOf implements Script {
     /**
      * Input.
@@ -60,7 +62,12 @@ public class ScriptOf implements Script {
      */
     public void run(final Session session) throws Exception {
         final List<String> lines = new ArrayList<>(0);
-        try (Reader reader = new InputStreamReader(this.input.stream())) {
+        try (
+            Reader reader = new InputStreamReader(
+                this.input.stream(),
+                StandardCharsets.UTF_8
+            )
+        ) {
             try (LineNumberReader liner = new LineNumberReader(reader)) {
                 while (true) {
                     final String line = liner.readLine();
@@ -91,4 +98,3 @@ public class ScriptOf implements Script {
         }
     }
 }
-

@@ -49,13 +49,9 @@ import org.cactoos.text.UncheckedText;
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
-        "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
-        "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount",
         "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidUsingShortType"
+        "PMD.UnnecessaryLocalRule",
+        "PMD.ReplaceJavaUtilDate"
     }
 )
 public final class Logged extends PreparedStatementEnvelope {

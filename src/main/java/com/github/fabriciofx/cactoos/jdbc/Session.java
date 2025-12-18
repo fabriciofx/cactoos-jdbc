@@ -33,6 +33,7 @@ import java.sql.Connection;
  *
  * @since 0.1
  */
+@FunctionalInterface
 public interface Session {
     /**
      * Create a {@link java.sql.Connection}.

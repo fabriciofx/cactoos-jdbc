@@ -31,7 +31,6 @@ import com.github.fabriciofx.cactoos.jdbc.script.ScriptOf;
 import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.ResultSet;
-import java.util.UUID;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
 import org.cactoos.text.TextOf;
@@ -48,6 +47,7 @@ import org.llorllale.cactoos.matchers.IsText;
  * @since 0.8.0
  * @checkstyle JavadocMethodCheck (500 lines)
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginationTest {
     @Test
     void paginated() throws Exception {
@@ -72,10 +72,9 @@ final class PaginationTest {
                 ).result()
             ) {
                 if (rset.next()) {
-                    final UUID id = (UUID) rset.getObject(1);
                     new Assertion<>(
                         "Must retrieve the contact's id",
-                        new TextOf(id.toString()),
+                        new TextOf(rset.getObject(1).toString()),
                         new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
                     ).affirm();
                 }

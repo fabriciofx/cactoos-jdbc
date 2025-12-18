@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  * @since 0.2
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class MysqlServerTest {
     @Test
     void startAndStop() throws Exception {

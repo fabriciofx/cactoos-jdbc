@@ -30,6 +30,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * @since 0.2
  */
+@FunctionalInterface
 public interface Script {
     /**
      * Execute this Script on the session.

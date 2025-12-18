@@ -57,12 +57,10 @@ import java.util.Calendar;
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
-        "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.BooleanGetMethodName",
         "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidUsingShortType"
+        "PMD.CouplingBetweenObjects",
+        "PMD.ReplaceJavaUtilDate",
+        "PMD.ReplaceJavaUtilCalendar"
     }
 )
 public abstract class PreparedStatementEnvelope implements PreparedStatement {
@@ -210,15 +208,8 @@ public abstract class PreparedStatementEnvelope implements PreparedStatement {
         this.origin.setAsciiStream(parameterIndex, x, length);
     }
 
-    /**
-     * Set a stream to Unicode.
-     * @param parameterIndex Parameter parameterIndex
-     * @param x InputStream
-     * @param length Data length
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public void setUnicodeStream(
         final int parameterIndex,
         final InputStream x,

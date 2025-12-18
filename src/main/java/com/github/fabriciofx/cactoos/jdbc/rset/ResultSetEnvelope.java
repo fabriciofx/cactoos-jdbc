@@ -58,14 +58,10 @@ import java.util.Map;
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
-        "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
-        "PMD.BooleanGetMethodName",
         "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidUsingShortType",
-        "PMD.ExcessiveClassLength"
+        "PMD.ReplaceJavaUtilDate",
+        "PMD.ReplaceJavaUtilCalendar",
+        "PMD.CouplingBetweenObjects"
     }
 )
 public abstract class ResultSetEnvelope implements ResultSet {
@@ -138,16 +134,8 @@ public abstract class ResultSetEnvelope implements ResultSet {
         return this.origin.getDouble(index);
     }
 
-    /**
-     * Get a BigDecimal.
-     *
-     * @param index Column index
-     * @param scale Scale
-     * @return A BigDecimal number
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public BigDecimal getBigDecimal(final int index, final int scale)
         throws SQLException {
         return this.origin.getBigDecimal(index, scale);
@@ -178,15 +166,8 @@ public abstract class ResultSetEnvelope implements ResultSet {
         return this.origin.getAsciiStream(index);
     }
 
-    /**
-     * Get a stream in Unicode.
-     *
-     * @param index Column index
-     * @return An InputStream number
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public InputStream getUnicodeStream(final int index) throws SQLException {
         return this.origin.getUnicodeStream(index);
     }
@@ -236,16 +217,8 @@ public abstract class ResultSetEnvelope implements ResultSet {
         return this.origin.getDouble(label);
     }
 
-    /**
-     * Get a BigDecimal.
-     *
-     * @param label Column label
-     * @param scale Scale
-     * @return A BigDecimal number
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public BigDecimal getBigDecimal(final String label, final int scale)
         throws SQLException {
         return this.origin.getBigDecimal(label, scale);
@@ -276,15 +249,8 @@ public abstract class ResultSetEnvelope implements ResultSet {
         return this.origin.getAsciiStream(label);
     }
 
-    /**
-     * Get a stream in Unicode.
-     *
-     * @param label Column label
-     * @return An InputStream data
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public InputStream getUnicodeStream(final String label)
         throws SQLException {
         return this.origin.getUnicodeStream(label);

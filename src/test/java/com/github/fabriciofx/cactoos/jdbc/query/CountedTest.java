@@ -36,13 +36,6 @@ import org.llorllale.cactoos.matchers.IsText;
  * @since 0.8.0
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases",
-        "PMD.ProhibitPlainJunitAssertionsRule"
-    }
-)
 final class CountedTest {
     @Test
     void withCountForAllColumns() throws Exception {

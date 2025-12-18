@@ -33,6 +33,7 @@ import java.sql.ResultSet;
  * @param <T> The adapted object.
  * @since 0.8.0
  */
+@FunctionalInterface
 public interface Adapter<T> {
     /**
      * Transform the ResultSet in an object.

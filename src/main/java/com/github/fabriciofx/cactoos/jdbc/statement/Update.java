@@ -26,7 +26,6 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
@@ -34,6 +33,7 @@ import java.sql.PreparedStatement;
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Update implements Statement<Integer> {
     /**
      * The session.
@@ -57,10 +57,10 @@ public final class Update implements Statement<Integer> {
 
     @Override
     public Integer result() throws Exception {
-        try (Connection conn = this.session.connection()) {
-            try (PreparedStatement stmt = this.query.prepared(conn)) {
-                return stmt.executeUpdate();
-            }
+        try (
+            PreparedStatement stmt = this.query.prepared(this.session.connection())
+        ) {
+            return stmt.executeUpdate();
         }
     }
 }

@@ -41,13 +41,6 @@ import org.llorllale.cactoos.matchers.IsText;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases",
-        "PMD.ProhibitPlainJunitAssertionsRule"
-    }
-)
 final class QueryOfTest {
     @Test
     void withoutValues() throws Exception {

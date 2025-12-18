@@ -48,11 +48,7 @@ import org.cactoos.text.UncheckedText;
     {
         "PMD.TooManyMethods",
         "PMD.LongVariable",
-        "PMD.UseVarargs",
-        "PMD.LoggerIsNotStaticFinal",
-        "PMD.BooleanGetMethodName",
-        "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.UnnecessaryLocalRule"
     }
 )
 public final class Logged extends ConnectionEnvelope {

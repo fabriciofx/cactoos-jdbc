@@ -45,7 +45,7 @@ import org.cactoos.text.Joined;
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.ShortMethodName"})
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
     /**
      * Session.

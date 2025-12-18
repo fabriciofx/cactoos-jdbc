@@ -47,7 +47,8 @@ import org.w3c.dom.Element;
 @SuppressWarnings(
     {
         "PMD.AvoidCatchingGenericException",
-        "PMD.AvoidThrowingRawExceptionTypes"
+        "PMD.AvoidThrowingRawExceptionTypes",
+        "PMD.UnnecessaryLocalRule"
     }
 )
 public final class ResultSetAsXml implements Adapter<String> {

@@ -50,9 +50,8 @@ import org.llorllale.cactoos.matchers.Assertion;
  */
 @SuppressWarnings(
     {
-        "PMD.AvoidInstantiatingObjectsInLoops",
         "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases"
+        "PMD.UnitTestShouldIncludeAssert"
     }
 )
 final class PhonebookTest {

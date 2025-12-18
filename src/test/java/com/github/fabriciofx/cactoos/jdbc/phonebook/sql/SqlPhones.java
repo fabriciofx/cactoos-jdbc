@@ -50,13 +50,7 @@ import org.cactoos.text.Joined;
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidInstantiatingObjectsInLoops",
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.AvoidThrowingRawExceptionTypes"
-    }
-)
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlPhones implements Phones {
     /**
      * Session.

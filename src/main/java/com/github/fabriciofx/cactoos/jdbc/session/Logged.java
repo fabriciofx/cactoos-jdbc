@@ -39,7 +39,6 @@ import org.cactoos.text.UncheckedText;
  *
  * @since 0.1
  */
-@SuppressWarnings({"PMD.LoggerIsNotStaticFinal", "PMD.MoreThanOneLogger"})
 public final class Logged implements Session {
     /**
      * The session.

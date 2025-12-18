@@ -42,7 +42,6 @@ import org.cactoos.text.Lowered;
  *
  * @since 0.4
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class SqlPhonebook implements Phonebook {
     /**
      * Session.

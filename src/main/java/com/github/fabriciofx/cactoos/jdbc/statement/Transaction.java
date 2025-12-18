@@ -35,7 +35,13 @@ import java.util.concurrent.Callable;
  * @param <T> Type of the result
  * @since 0.1
  */
-@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
+@SuppressWarnings(
+    {
+        "PMD.AvoidCatchingGenericException",
+        "PMD.UnnecessaryLocalRule",
+        "PMD.CloseResource"
+    }
+)
 public final class Transaction<T> implements Statement<T> {
     /**
      * The session.
@@ -49,6 +55,7 @@ public final class Transaction<T> implements Statement<T> {
 
     /**
      * Ctor.
+     *
      * @param sssn A session
      * @param call A Callable to be executed in a transaction
      */
@@ -58,6 +65,7 @@ public final class Transaction<T> implements Statement<T> {
 
     /**
      * Ctor.
+     *
      * @param sssn A transacted session
      * @param call A Callable to be executed in a transaction
      */

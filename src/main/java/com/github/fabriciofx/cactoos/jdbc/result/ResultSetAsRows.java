@@ -40,6 +40,7 @@ import org.cactoos.scalar.Unchecked;
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class ResultSetAsRows implements Iterable<Map<String, Object>> {
     /**
      * Rows.

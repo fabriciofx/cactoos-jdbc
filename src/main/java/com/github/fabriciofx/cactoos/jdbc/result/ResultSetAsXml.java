@@ -33,7 +33,7 @@ import org.cactoos.Scalar;
  *
  * @since 0.4
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class ResultSetAsXml implements Scalar<String> {
     /**
      * Statement that returns a ResultSet.

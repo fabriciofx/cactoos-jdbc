@@ -37,12 +37,7 @@ import org.junit.jupiter.api.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle MethodNameCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.TestClassWithoutTestCases"
-    }
-)
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class ScriptOfTest {
     @Test
     void h2Server() throws Exception {

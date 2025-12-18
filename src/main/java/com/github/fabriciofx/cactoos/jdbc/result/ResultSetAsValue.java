@@ -36,6 +36,7 @@ import org.cactoos.Scalar;
  * @param <T> Type of the result
  * @since 0.1
  */
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class ResultSetAsValue<T> implements Scalar<T> {
     /**
      * Statement that returns a ResultSet.
@@ -56,11 +57,10 @@ public final class ResultSetAsValue<T> implements Scalar<T> {
         try (ResultSet rset = this.statement.result()) {
             final Iterator<Map<String, Object>> iter = new ResultSetAsRows(rset)
                 .iterator();
-            if (iter.hasNext()) {
-                return (T) iter.next().values().toArray()[0];
-            } else {
+            if (!iter.hasNext()) {
                 throw new NoSuchElementException();
             }
+            return (T) iter.next().values().toArray()[0];
         }
     }
 }
