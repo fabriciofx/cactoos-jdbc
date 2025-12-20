@@ -30,7 +30,6 @@ import java.util.Map;
  * ResultSet Envelope.
  *
  * @since 0.4
- * @checkstyle FileLengthCheck (1500 lines)
  * @checkstyle ParameterNameCheck (1500 lines)
  * @checkstyle MethodCountCheck (1500 lines)
  * @checkstyle DesignForExtensionCheck (1500 lines)
@@ -45,6 +44,7 @@ import java.util.Map;
         "PMD.CouplingBetweenObjects"
     }
 )
+// @checkstyle FileLengthCheck (1500 lines)
 public abstract class ResultSetEnvelope implements ResultSet {
     /**
      * ResultSet to be decorated.

@@ -4,15 +4,17 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Server;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.query.WithKey;
-import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.statement.InsertWithKey;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
+import com.github.fabriciofx.fake.server.Server;
+import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import java.math.BigInteger;
+import javax.sql.DataSource;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -30,9 +32,9 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class ResultAsValueTest {
     @Test
     void insertWithKeys() throws Exception {
-        try (Server server = new MysqlServer()) {
+        try (Server<DataSource> server = new MysqlServer()) {
             server.start();
-            final Session session = server.session();
+            final Session session = new NoAuth(server.resource());
             new Update(
                 session,
                 new QueryOf(

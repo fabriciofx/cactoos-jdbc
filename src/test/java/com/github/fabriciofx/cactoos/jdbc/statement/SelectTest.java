@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Servers;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
@@ -16,11 +15,14 @@ import com.github.fabriciofx.cactoos.jdbc.query.BatchOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXml;
-import com.github.fabriciofx.cactoos.jdbc.server.H2Server;
-import com.github.fabriciofx.cactoos.jdbc.server.MysqlServer;
-import com.github.fabriciofx.cactoos.jdbc.server.PgsqlServer;
+import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.fake.server.Servers;
+import com.github.fabriciofx.fake.server.db.server.H2Server;
+import com.github.fabriciofx.fake.server.db.server.MysqlServer;
+import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
+import javax.sql.DataSource;
 import org.cactoos.text.Joined;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -39,13 +41,14 @@ final class SelectTest {
     @Test
     void select() throws Exception {
         try (
-            Servers servers = new Servers(
+            Servers<DataSource> servers = new Servers<>(
                 new H2Server(),
                 new MysqlServer(),
                 new PgsqlServer()
             )
         ) {
-            for (final Session session : servers.sessions()) {
+            for (final DataSource source : servers.resources()) {
+                final Session session = new NoAuth(source);
                 new Update(
                     session,
                     new QueryOf(
@@ -129,13 +132,14 @@ final class SelectTest {
     @Test
     void any() throws Exception {
         try (
-            Servers servers = new Servers(
+            Servers<DataSource> servers = new Servers<>(
                 new H2Server(),
                 new MysqlServer(),
                 new PgsqlServer()
             )
         ) {
-            for (final Session session : servers.sessions()) {
+            for (final DataSource source : servers.resources()) {
+                final Session session = new NoAuth(source);
                 new Update(
                     session,
                     new QueryOf(
