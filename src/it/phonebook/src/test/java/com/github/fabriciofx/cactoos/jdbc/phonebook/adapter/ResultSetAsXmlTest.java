@@ -16,11 +16,11 @@ import java.sql.ResultSet;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Joined;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 
 /**
- * StatementSelect tests.
+ * ResultSetAsXml tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -54,8 +54,8 @@ final class ResultSetAsXmlTest {
                     )
                 ).result()
             ) {
-                MatcherAssert.assertThat(
-                    "Must convert a contact into a XML",
+                new Assertion<>(
+                    "must convert a contact into a XML",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             "contacts",

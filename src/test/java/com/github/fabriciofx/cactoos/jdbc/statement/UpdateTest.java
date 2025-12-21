@@ -14,12 +14,12 @@ import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import javax.sql.DataSource;
 import org.cactoos.text.Joined;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * StatementUpdate tests.
+ * Update tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -39,8 +39,8 @@ final class UpdateTest {
         ) {
             for (final DataSource source : servers.resources()) {
                 final Session session = new NoAuth(source);
-                MatcherAssert.assertThat(
-                    "Can't create a table",
+                new Assertion<>(
+                    "must create a table",
                     new ResultAsValue<>(
                         new Update(
                             session,
@@ -54,7 +54,7 @@ final class UpdateTest {
                         )
                     ),
                     new HasValue<>(0)
-                );
+                ).affirm();
             }
         }
     }

@@ -20,7 +20,7 @@ import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 
 /**
- * StatementBatch tests.
+ * Batch tests.
  *
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)

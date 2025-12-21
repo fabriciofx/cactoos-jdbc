@@ -54,7 +54,7 @@
       scm:git:git@github.com:fabriciofx/cactoos-jdbc.git
     </developerConnection>
     <url>https://github.com/fabriciofx/cactoos-jdbc</url>
-    <tag>cactoos-jdbc-0.8.0</tag>
+    <tag>${project.version}</tag>
   </scm>
   <ciManagement>
     <system>rultor</system>
@@ -114,12 +114,6 @@
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
       <version>1.8.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

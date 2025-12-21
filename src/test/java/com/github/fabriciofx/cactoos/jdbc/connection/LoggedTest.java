@@ -12,12 +12,16 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.util.logging.Logger;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.cactoos.Text;
+import org.cactoos.text.Joined;
+import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
+import org.llorllale.cactoos.matchers.Matches;
+import org.llorllale.cactoos.matchers.MatchesRegex;
 
 /**
- * StatementInsert tests.
+ * Logged tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -39,24 +43,17 @@ final class LoggedTest {
             logger
         );
         new Update(session, new QueryOf(sql)).result();
-        MatcherAssert.assertThat(
-            "Can't connection from cactoos-jdbc",
-            logger.toString(),
-            Matchers.allOf(
-                Matchers.containsString(
-                    "Connection[#0] has been opened with properties numServers=0"
-                ),
-                Matchers.containsString(
-                    String.format(
-                        "PreparedStatement[#0] created using SQL '%s'",
-                        sql
-                    )
-                ),
-                Matchers.containsString(
-                    "PreparedStatement[#0] updated a source and returned '0' in"
-                ),
-                Matchers.containsString("PreparedStatement[#0] closed")
-            )
+        final Text regex = new Joined(
+            "\n",
+            "(?m)^\\[cactoos-jdbc\\] Connection\\[#0\\] has been opened with properties numServers=0,\\s*",
+            "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] created using SQL 'CREATE TABLE .*?'\\.\\s*",
+            "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] updated a source and returned '\\d+' in \\d+ms\\.\\s*",
+            "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] closed\\.\n$"
         );
+        new Assertion<>(
+            "must log a cactoos-jdbc update statement",
+            new MatchesRegex(regex),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
     }
 }

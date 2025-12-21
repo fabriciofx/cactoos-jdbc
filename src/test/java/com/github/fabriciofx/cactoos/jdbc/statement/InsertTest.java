@@ -19,12 +19,12 @@ import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import java.math.BigInteger;
 import javax.sql.DataSource;
 import org.cactoos.text.Joined;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * StatementInsert tests.
+ * Insert tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -54,8 +54,8 @@ final class InsertTest {
                         )
                     )
                 ).result();
-                MatcherAssert.assertThat(
-                    "Can't insert into table",
+                new Assertion<>(
+                    "must insert into table",
                     new ResultAsValue<>(
                         new Insert(
                             session,
@@ -71,7 +71,7 @@ final class InsertTest {
                         )
                     ),
                     new HasValue<>(false)
-                );
+                ).affirm();
             }
         }
     }
@@ -92,8 +92,8 @@ final class InsertTest {
                     )
                 )
             ).result();
-            MatcherAssert.assertThat(
-                "Can't insert with an integer keys",
+            new Assertion<>(
+                "must insert with an integer keys in H2",
                 new ResultAsValue<>(
                     new InsertWithKey<>(
                         session,
@@ -104,7 +104,7 @@ final class InsertTest {
                     )
                 ),
                 new HasValue<>(1)
-            );
+            ).affirm();
         }
     }
 
@@ -123,8 +123,8 @@ final class InsertTest {
                     )
                 )
             ).result();
-            MatcherAssert.assertThat(
-                "Can't insert with an integer keys",
+            new Assertion<>(
+                "must insert with an integer keys in PostgreSQL",
                 new ResultAsValue<>(
                     new InsertWithKey<>(
                         session,
@@ -135,7 +135,7 @@ final class InsertTest {
                     )
                 ),
                 new HasValue<>(1)
-            );
+            ).affirm();
         }
     }
 
@@ -154,8 +154,8 @@ final class InsertTest {
                     )
                 )
             ).result();
-            MatcherAssert.assertThat(
-                "Can't insert with an integer keys",
+            new Assertion<>(
+                "must insert with an integer keys in MySQL",
                 new ResultAsValue<>(
                     new InsertWithKey<>(
                         session,
@@ -167,7 +167,7 @@ final class InsertTest {
                     )
                 ),
                 new HasValue<>(BigInteger.ONE)
-            );
+            ).affirm();
         }
     }
 }

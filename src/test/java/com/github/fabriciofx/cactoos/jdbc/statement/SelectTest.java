@@ -24,12 +24,12 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import javax.sql.DataSource;
 import org.cactoos.text.Joined;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * StatementSelect tests.
+ * Select tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -90,8 +90,8 @@ final class SelectTest {
                         )
                     )
                 ).result();
-                MatcherAssert.assertThat(
-                    "Must insert employees records",
+                new Assertion<>(
+                    "must insert employees records",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(
@@ -107,24 +107,16 @@ final class SelectTest {
                     XhtmlMatchers.hasXPaths(
                         "/employees/employee/id[text()='1']",
                         "/employees/employee/name[text()='John Wick']",
-                        String.join(
-                            "",
-                            "/employees/employee/address[text()=",
-                            "'Boulevard Street, 34']"
-                        ),
+                        "/employees/employee/address[text()='Boulevard Street, 34']",
                         "/employees/employee/married[text()='false']",
                         "/employees/employee/salary[text()='13456.00']",
                         "/employees/employee/id[text()='2']",
                         "/employees/employee/name[text()='Adam Park']",
-                        String.join(
-                            "",
-                            "/employees/employee/address[text()=",
-                            "'Sunset Place, 14']"
-                        ),
+                        "/employees/employee/address[text()='Sunset Place, 14']",
                         "/employees/employee/married[text()='true']",
                         "/employees/employee/salary[text()='12345.00']"
                     )
-                );
+                ).affirm();
             }
         }
     }
@@ -180,8 +172,8 @@ final class SelectTest {
                         )
                     )
                 ).result();
-                MatcherAssert.assertThat(
-                    "Can't select a person name",
+                new  Assertion<>(
+                    "must select a person name",
                     new ResultSetAsValue<>(
                         new Select(
                             session,
@@ -191,7 +183,7 @@ final class SelectTest {
                         )
                     ),
                     new HasValue<>("Rob Pike")
-                );
+                ).affirm();
             }
         }
     }

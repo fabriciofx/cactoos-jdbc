@@ -15,12 +15,12 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Transaction;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
+import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * StatementTransaction tests.
+ * Transaction tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -42,8 +42,8 @@ final class TransactionTest {
                 "phonebook/phonebook-h2.sql"
             )
         ).run(transacted);
-        MatcherAssert.assertThat(
-            "Can't perform a transaction commit",
+        new Assertion<>(
+            "must perform a transaction commit",
             XhtmlMatchers.xhtml(
                 new ResultAsValue<>(
                     new Transaction<>(
@@ -69,7 +69,7 @@ final class TransactionTest {
                 "/contact/phones/phone/number[text()='98812564']",
                 "/contact/phones/phone/carrier[text()='Oi']"
             )
-        );
+        ).affirm();
     }
 
     @Test
@@ -97,10 +97,10 @@ final class TransactionTest {
             ).result();
         } catch (final IllegalStateException ex) {
         }
-        MatcherAssert.assertThat(
-            "Can't perform a transaction rollback",
-            phonebook.search(name).page(0).content().stream().count(),
-            Matchers.equalTo(0L)
-        );
+        new Assertion<>(
+            "must perform a transaction rollback",
+            () -> phonebook.search(name).page(0).content().size(),
+            new HasValue<>(0)
+        ).affirm();
     }
 }

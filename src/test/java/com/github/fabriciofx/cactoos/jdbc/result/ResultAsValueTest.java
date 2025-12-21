@@ -16,8 +16,8 @@ import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import java.math.BigInteger;
 import javax.sql.DataSource;
 import org.cactoos.text.Joined;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
@@ -47,8 +47,8 @@ final class ResultAsValueTest {
                     )
                 )
             ).result();
-            MatcherAssert.assertThat(
-                "Can't get a generated key value",
+            new Assertion<>(
+                "must generated key value",
                 new ResultAsValue<>(
                     new InsertWithKey<>(
                         session,
@@ -60,7 +60,7 @@ final class ResultAsValueTest {
                     )
                 ),
                 new HasValue<>(BigInteger.ONE)
-            );
+            ).affirm();
         }
     }
 }

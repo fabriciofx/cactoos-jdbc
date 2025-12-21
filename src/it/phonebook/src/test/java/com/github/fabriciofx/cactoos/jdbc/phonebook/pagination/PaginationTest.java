@@ -51,7 +51,7 @@ final class PaginationTest {
             ) {
                 if (rset.next()) {
                     new Assertion<>(
-                        "Must retrieve the contact's id",
+                        "must retrieve the contact's id",
                         new TextOf(rset.getObject(1).toString()),
                         new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
                     ).affirm();
@@ -73,7 +73,7 @@ final class PaginationTest {
         ) {
             server.start();
             new Assertion<>(
-                "Must have at least one page",
+                "must have at least one page",
                 new SqlPhonebook(new NoAuth(server.resource())).search("maria")
                     .count(),
                 new IsNumber(1)
