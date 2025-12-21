@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Fabrício Barros Cabral
+# SPDX-License-Identifier: MIT
+[files]
+extend-exclude = [
+  ".venv/**",
+  "venv/**",
+  ".git/**",
+  "__pycache__/**",
+  "*.pyc",
+  "dist/**",
+  "build/**",
+  "target/**",
+  "*.svg",
+]
+
+[default.extend-words]
+qury = "qury"
