@@ -24,9 +24,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
+ * @since 0.3
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @since 0.3
  */
 final class ResultAsValueTest {
     @Test

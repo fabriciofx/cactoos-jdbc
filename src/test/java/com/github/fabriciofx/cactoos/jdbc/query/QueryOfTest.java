@@ -20,8 +20,8 @@ import org.llorllale.cactoos.matchers.Throws;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @checkstyle JavadocMethodCheck (500 lines)
  * @since 0.1
+ * @checkstyle JavadocMethodCheck (500 lines)
  */
 final class QueryOfTest {
     @Test
@@ -74,8 +74,8 @@ final class QueryOfTest {
                 new BoolOf("married", false),
                 new DecimalOf("salary", "13456.00")
             ),
-            new IsText(
-                "INSERT INTO employee (name, birthday, address, married, salary) VALUES (?, ?, ?, ?, ?)")
+            // @checkstyle LineLengthCheck (1 line)
+            new IsText("INSERT INTO employee (name, birthday, address, married, salary) VALUES (?, ?, ?, ?, ?)")
         ).affirm();
     }
 

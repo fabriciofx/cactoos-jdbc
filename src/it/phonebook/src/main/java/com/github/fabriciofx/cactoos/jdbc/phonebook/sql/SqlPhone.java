@@ -17,8 +17,8 @@ import java.util.UUID;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class SqlPhone implements Phone {
     /**

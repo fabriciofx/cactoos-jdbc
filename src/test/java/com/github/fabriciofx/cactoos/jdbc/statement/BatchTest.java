@@ -21,9 +21,9 @@ import org.junit.jupiter.api.Test;
 /**
  * Batch tests.
  *
+ * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @since 0.1
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class BatchTest {

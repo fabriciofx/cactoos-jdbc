@@ -27,9 +27,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
+ * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @since 0.1
  */
 final class InsertTest {
     @Test
@@ -68,7 +68,7 @@ final class InsertTest {
     }
 
     @Test
-        // @checkstyle MethodNameCheck (1 line)
+    // @checkstyle MethodNameCheck (1 line)
     void insertWithKeysH2() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();

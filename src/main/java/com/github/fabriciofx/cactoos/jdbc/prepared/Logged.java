@@ -22,9 +22,9 @@ import org.cactoos.text.UncheckedText;
 /**
  * Logged PreparedStatement.
  *
+ * @since 0.1
  * @checkstyle ParameterNameCheck (1500 lines)
  * @checkstyle ParameterNumberCheck (1500 lines)
- * @since 0.1
  */
 @SuppressWarnings(
     {
