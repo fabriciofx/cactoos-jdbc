@@ -18,7 +18,6 @@ import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import java.math.BigInteger;
 import javax.sql.DataSource;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -28,9 +27,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 final class InsertTest {
     @Test
@@ -47,11 +46,7 @@ final class InsertTest {
                 new Update(
                     session,
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "CREATE TABLE t01 (id INT, name VARCHAR(50),",
-                            "PRIMARY KEY (id))"
-                        )
+                        "CREATE TABLE t01 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                     )
                 ).result();
                 new Assertion<>(
@@ -60,11 +55,7 @@ final class InsertTest {
                         new Insert(
                             session,
                             new QueryOf(
-                                new Joined(
-                                    " ",
-                                    "INSERT INTO t01 (id, name)",
-                                    "VALUES (:id, :name)"
-                                ),
+                                "INSERT INTO t01 (id, name) VALUES (:id, :name)",
                                 new IntOf("id", 1),
                                 new TextOf("name", "Yegor Bugayenko")
                             )
@@ -77,7 +68,7 @@ final class InsertTest {
     }
 
     @Test
-    // @checkstyle MethodNameCheck (1 line)
+        // @checkstyle MethodNameCheck (1 line)
     void insertWithKeysH2() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
@@ -85,11 +76,7 @@ final class InsertTest {
             new Update(
                 session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50), PRIMARY KEY (id))"
-                    )
+                    "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id))"
                 )
             ).result();
             new Assertion<>(
@@ -116,11 +103,7 @@ final class InsertTest {
             new Update(
                 session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "CREATE TABLE t02 (id SERIAL,",
-                        "name VARCHAR(50), PRIMARY KEY (id))"
-                    )
+                    "CREATE TABLE t02 (id SERIAL, name VARCHAR(50), PRIMARY KEY (id))"
                 )
             ).result();
             new Assertion<>(
@@ -147,11 +130,7 @@ final class InsertTest {
             new Update(
                 session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "CREATE TABLE t02 (id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50), PRIMARY KEY (id))"
-                    )
+                    "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id))"
                 )
             ).result();
             new Assertion<>(

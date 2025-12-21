@@ -13,7 +13,6 @@ import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import javax.sql.DataSource;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -23,9 +22,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 final class UpdateTest {
     @Test
@@ -45,11 +44,7 @@ final class UpdateTest {
                         new Update(
                             session,
                             new QueryOf(
-                                new Joined(
-                                    " ",
-                                    "CREATE TABLE foo1 (id INT,",
-                                    "name VARCHAR(50), PRIMARY KEY (id))"
-                                )
+                                "CREATE TABLE foo1 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                             )
                         )
                     ),

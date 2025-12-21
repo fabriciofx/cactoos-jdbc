@@ -15,7 +15,6 @@ import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import java.math.BigInteger;
 import javax.sql.DataSource;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -25,9 +24,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.3
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.3
  */
 final class ResultAsValueTest {
     @Test
@@ -38,13 +37,7 @@ final class ResultAsValueTest {
             new Update(
                 session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "CREATE TABLE contact (",
-                        "id INT AUTO_INCREMENT,",
-                        "name VARCHAR(50) NOT NULL,",
-                        "CONSTRAINT pk_contact PRIMARY KEY(id))"
-                    )
+                    "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                 )
             ).result();
             new Assertion<>(

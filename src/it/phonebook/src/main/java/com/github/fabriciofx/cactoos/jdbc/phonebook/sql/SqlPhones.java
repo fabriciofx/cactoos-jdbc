@@ -21,15 +21,14 @@ import org.cactoos.Scalar;
 import org.cactoos.iterator.Mapped;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.Joined;
 
 /**
  * Phones for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlPhones implements Phones {
@@ -45,6 +44,7 @@ public final class SqlPhones implements Phones {
 
     /**
      * Ctor.
+     *
      * @param sssn A Session
      * @param contact A Contact's ID
      */
@@ -59,11 +59,7 @@ public final class SqlPhones implements Phones {
             new Select(
                 this.session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "SELECT COUNT(number) FROM phone WHERE",
-                        "contact_id = :contact_id"
-                    ),
+                    "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
                     new UuidOf("contact_id", this.id)
                 )
             )
@@ -77,12 +73,7 @@ public final class SqlPhones implements Phones {
                 this.session,
                 new QueryOf(
                     new FormattedText(
-                        new Joined(
-                            " ",
-                            "SELECT number FROM phone WHERE",
-                            "contact_id = :contact_id",
-                            "FETCH FIRST %d ROWS ONLY"
-                        ),
+                        "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
                         index
                     )
                 )
@@ -99,11 +90,7 @@ public final class SqlPhones implements Phones {
         new Insert(
             this.session,
             new QueryOf(
-                new Joined(
-                    " ",
-                    "INSERT INTO phone (contact_id, number, carrier)",
-                    "VALUES (:contact_id, :number, :carrier)"
-                ),
+                "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
                 new UuidOf("contact_id", this.id),
                 new TextOf("number", number),
                 new TextOf("carrier", carrier)
@@ -118,11 +105,7 @@ public final class SqlPhones implements Phones {
                 new Select(
                     this.session,
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "SELECT number FROM phone WHERE",
-                            "contact_id = :contact_id"
-                        ),
+                        "SELECT number FROM phone WHERE contact_id = :contact_id",
                         new UuidOf("contact_id", this.id)
                     )
                 )

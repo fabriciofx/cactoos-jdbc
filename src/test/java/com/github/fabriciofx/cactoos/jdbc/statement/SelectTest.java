@@ -23,7 +23,6 @@ import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.LocalDate;
 import javax.sql.DataSource;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -33,9 +32,9 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 final class SelectTest {
     @Test
@@ -52,26 +51,13 @@ final class SelectTest {
                 new Update(
                     session,
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "CREATE TABLE employee (id INT,",
-                            "name VARCHAR(50), birthday DATE,",
-                            "address VARCHAR(100),",
-                            "married BOOLEAN, salary DECIMAL(20,2),",
-                            "PRIMARY KEY (id))"
-                        )
+                        "CREATE TABLE employee (id INT, name VARCHAR(50), birthday DATE, address VARCHAR(100), married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).result();
                 new Batch(
                     session,
                     new BatchOf(
-                        new Joined(
-                            " ",
-                            "INSERT INTO employee",
-                            "(id, name, birthday, address, married, salary)",
-                            "VALUES (:id, :name, :birthday, :address,",
-                            ":married, :salary)"
-                        ),
+                        "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
                         new ParamsOf(
                             new IntOf("id", 1),
                             new TextOf("name", "John Wick"),
@@ -135,25 +121,13 @@ final class SelectTest {
                 new Update(
                     session,
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "CREATE TABLE person (id INT, name VARCHAR(30),",
-                            "created_at DATE, city VARCHAR(20),",
-                            "working BOOLEAN, height DECIMAL(20,2),",
-                            "PRIMARY KEY (id))"
-                        )
+                        "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).result();
                 new Batch(
                     session,
                     new BatchOf(
-                        new Joined(
-                            " ",
-                            "INSERT INTO person",
-                            "(id, name, created_at, city, working, height)",
-                            "VALUES (:id, :name, :created_at, :city,",
-                            ":working, :height)"
-                        ),
+                        "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
                             new IntOf("id", 1),
                             new TextOf("name", "Rob Pike"),
@@ -172,7 +146,7 @@ final class SelectTest {
                         )
                     )
                 ).result();
-                new  Assertion<>(
+                new Assertion<>(
                     "must select a person name",
                     new ResultSetAsValue<>(
                         new Select(

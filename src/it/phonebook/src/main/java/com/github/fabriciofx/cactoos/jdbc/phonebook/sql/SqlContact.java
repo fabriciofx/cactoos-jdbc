@@ -16,15 +16,14 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.util.UUID;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.Joined;
 
 /**
  * Contact for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
@@ -40,6 +39,7 @@ public final class SqlContact implements Contact {
 
     /**
      * Ctor.
+     *
      * @param sssn A Session
      * @param id A Contact's ID
      */
@@ -63,11 +63,7 @@ public final class SqlContact implements Contact {
             new Select(
                 this.session,
                 new QueryOf(
-                    new Joined(
-                        " ",
-                        "SELECT number, carrier FROM phone WHERE",
-                        "contact_id = :contact_id"
-                    ),
+                    "SELECT number, carrier FROM phone WHERE contact_id = :contact_id",
                     new UuidOf("contact_id", this.id)
                 )
             ),

@@ -9,7 +9,6 @@ import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import org.cactoos.scalar.ScalarOf;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
@@ -21,8 +20,8 @@ import org.llorllale.cactoos.matchers.Throws;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @since 0.1
  */
 final class QueryOfTest {
     @Test
@@ -68,12 +67,7 @@ final class QueryOfTest {
         new Assertion<>(
             "must build a query with many values",
             new QueryOf(
-                new Joined(
-                    " ",
-                    "INSERT INTO employee",
-                    "(name, birthday, address, married, salary)",
-                    "VALUES (:name, :birthday, :address, :married, :salary)"
-                ),
+                "INSERT INTO employee (name, birthday, address, married, salary) VALUES (:name, :birthday, :address, :married, :salary)",
                 new TextOf("name", "John Wick"),
                 new DateOf("birthday", "1980-08-16"),
                 new TextOf("address", "Boulevard Street, 34"),
@@ -81,13 +75,7 @@ final class QueryOfTest {
                 new DecimalOf("salary", "13456.00")
             ),
             new IsText(
-                new Joined(
-                    " ",
-                    "INSERT INTO employee",
-                    "(name, birthday, address, married, salary)",
-                    "VALUES (?, ?, ?, ?, ?)"
-                )
-            )
+                "INSERT INTO employee (name, birthday, address, married, salary) VALUES (?, ?, ?, ?, ?)")
         ).affirm();
     }
 
@@ -99,12 +87,7 @@ final class QueryOfTest {
             new Matches<>(
                 new ScalarOf<>(
                     () -> new QueryOf(
-                        new Joined(
-                            " ",
-                            "INSERT INTO employee",
-                            "(name, birthday, address, married, salary)",
-                            "VALUES (:name, :birthday, :address, :married, :salary)"
-                        ),
+                        "INSERT INTO employee (name, birthday, address, married, salary) VALUES (:name, :birthday, :address, :married, :salary)",
                         new TextOf("name", "John Wick"),
                         new DateOf("address", "1980-08-16"),
                         new TextOf("birthday", "Boulevard Street, 34"),

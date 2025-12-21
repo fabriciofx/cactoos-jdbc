@@ -11,15 +11,14 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.util.UUID;
-import org.cactoos.text.Joined;
 
 /**
  * Phone for SQL.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 public final class SqlPhone implements Phone {
     /**
@@ -39,6 +38,7 @@ public final class SqlPhone implements Phone {
 
     /**
      * Ctor.
+     *
      * @param sssn A Session
      * @param contact A Contact's ID
      * @param number Phone number
@@ -58,11 +58,7 @@ public final class SqlPhone implements Phone {
         new Update(
             this.session,
             new QueryOf(
-                new Joined(
-                    " ",
-                    "DELETE FROM phone WHERE (contact_id = :contact_id)",
-                    "AND (number = :number)"
-                ),
+                "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
                 new UuidOf("contact_id", this.id),
                 new TextOf("number", this.num)
             )
@@ -77,11 +73,7 @@ public final class SqlPhone implements Phone {
         new Update(
             this.session,
             new QueryOf(
-                new Joined(
-                    " ",
-                    "UPDATE phone SET number = :number, carrier = :carrier",
-                    "WHERE (contact_id = :contact_id) AND (number = :number)"
-                ),
+                "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
                 new TextOf("number", number),
                 new TextOf("carrier", carrier),
                 new UuidOf("contact_id", this.id),

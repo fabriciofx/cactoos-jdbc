@@ -16,15 +16,14 @@ import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import javax.sql.DataSource;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 
 /**
  * Batch tests.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class BatchTest {
@@ -42,21 +41,13 @@ final class BatchTest {
                 new Update(
                     session,
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "CREATE TABLE client (id INT,",
-                            "name VARCHAR(50), age INT, PRIMARY KEY (id))"
-                        )
+                        "CREATE TABLE client (id INT, name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     )
                 ).result();
                 new Batch(
                     session,
                     new BatchOf(
-                        new Joined(
-                            " ",
-                            "INSERT INTO client (id, name, age)",
-                            "VALUES (:id, :name, :age)"
-                        ),
+                        "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new ParamsOf(
                             new IntOf("id", 1),
                             new TextOf("name", "Jeff Bridges"),

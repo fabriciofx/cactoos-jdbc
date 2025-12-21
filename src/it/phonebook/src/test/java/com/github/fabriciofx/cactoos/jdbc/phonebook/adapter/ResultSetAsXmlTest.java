@@ -15,7 +15,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.sql.ResultSet;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.text.Joined;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 
@@ -24,9 +23,9 @@ import org.llorllale.cactoos.matchers.Assertion;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 final class ResultSetAsXmlTest {
@@ -46,11 +45,7 @@ final class ResultSetAsXmlTest {
                 ResultSet rset = new Select(
                     new NoAuth(server.resource()),
                     new QueryOf(
-                        new Joined(
-                            " ",
-                            "SELECT name, number, carrier FROM contact",
-                            "JOIN phone ON contact.id = phone.contact_id"
-                        )
+                        "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
                     )
                 ).result()
             ) {

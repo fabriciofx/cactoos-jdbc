@@ -17,15 +17,14 @@ import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.Joined;
 import org.cactoos.text.UncheckedText;
 
 /**
  * Logged PreparedStatement.
  *
- * @since 0.1
  * @checkstyle ParameterNameCheck (1500 lines)
  * @checkstyle ParameterNumberCheck (1500 lines)
+ * @since 0.1
  */
 @SuppressWarnings(
     {
@@ -63,6 +62,7 @@ public final class Logged extends PreparedStatementEnvelope {
 
     /**
      * Ctor.
+     *
      * @param stmt Decorated PreparedStatement
      * @param src The name of source data
      * @param lggr The logger
@@ -94,11 +94,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] retrieved a",
-                        "ResultSet in %dms."
-                    ),
+                    "[%s] PreparedStatement[#%d] retrieved a ResultSet in %dms.",
                     this.source,
                     this.id,
                     millis
@@ -118,11 +114,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] updated a source and",
-                        "returned '%d' in %dms."
-                    ),
+                    "[%s] PreparedStatement[#%d] updated a source and returned '%d' in %dms.",
                     this.source,
                     this.id,
                     updated,
@@ -140,11 +132,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' value.",
                     this.source,
                     this.id,
                     index,
@@ -164,11 +152,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -185,11 +169,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' value.",
                     this.source,
                     this.id,
                     index,
@@ -209,11 +189,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' value.",
                     this.source,
                     this.id,
                     index,
@@ -230,11 +206,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' value.",
                     this.source,
                     this.id,
                     index,
@@ -251,11 +223,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' value.",
                     this.source,
                     this.id,
                     index,
@@ -275,11 +243,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%f' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%f' value.",
                     this.source,
                     this.id,
                     index,
@@ -299,11 +263,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%f' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%f' value.",
                     this.source,
                     this.id,
                     index,
@@ -323,11 +283,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -347,11 +303,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -371,11 +323,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' bytes."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' bytes.",
                     this.source,
                     this.id,
                     index,
@@ -392,11 +340,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -413,11 +357,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -437,11 +377,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -462,11 +398,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' bytes."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' bytes.",
                     this.source,
                     this.id,
                     index,
@@ -478,6 +410,7 @@ public final class Logged extends PreparedStatementEnvelope {
 
     /**
      * Set a stream to Unicode.
+     *
      * @param index Parameter index
      * @param stream InputStream
      * @param length Data length
@@ -495,11 +428,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' bytes."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' bytes.",
                     this.source,
                     this.id,
                     index,
@@ -520,11 +449,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%d' bytes."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%d' bytes.",
                     this.source,
                     this.id,
                     index,
@@ -560,11 +485,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' data and '%d' type."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' data and '%d' type.",
                     this.source,
                     this.id,
                     index,
@@ -585,11 +506,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed at",
-                        "parameter[#%d] with '%s' value."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed at parameter[#%d] with '%s' value.",
                     this.source,
                     this.id,
                     index,
@@ -700,11 +617,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed",
-                        "max field size to '%d' bytes."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed max field size to '%d' bytes.",
                     this.source,
                     this.id,
                     max
@@ -736,11 +649,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] changed",
-                        "timeout to '%d' seconds."
-                    ),
+                    "[%s] PreparedStatement[#%d] changed timeout to '%d' seconds.",
                     this.source,
                     this.id,
                     seconds
@@ -848,11 +757,7 @@ public final class Logged extends PreparedStatementEnvelope {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    new Joined(
-                        " ",
-                        "[%s] PreparedStatement[#%d] returned",
-                        "a ResultSet keys in %dms."
-                    ),
+                    "[%s] PreparedStatement[#%d] returned a ResultSet keys in %dms.",
                     this.source,
                     this.id,
                     millis
