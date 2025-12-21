@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
+import com.github.fabriciofx.cactoos.jdbc.Sql;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,24 +16,31 @@ import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.text.FormattedText;
+import org.cactoos.text.UncheckedText;
 
 /**
  * Parse named parameters in the SQL.
  *
  * @since 0.1
  */
-public final class ParsedSql implements Text {
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+public final class PositionedSql implements Sql {
     /**
-     * SQL query.
+     * Named SQL.
      */
-    private final Scalar<String> sql;
+    private final Text named;
+
+    /**
+     * Positioned SQL.
+     */
+    private final Scalar<String> positioned;
 
     /**
      * Ctor.
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public ParsedSql(final String sql, final Param... params) {
+    public PositionedSql(final String sql, final Param... params) {
         this(() -> sql, new ParamsOf(params));
     }
 
@@ -41,7 +49,16 @@ public final class ParsedSql implements Text {
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public ParsedSql(final Text sql, final Param... params) {
+    public PositionedSql(final String sql, final Params params) {
+        this(() -> sql, params);
+    }
+
+    /**
+     * Ctor.
+     * @param sql SQL query
+     * @param params SQL query parameters
+     */
+    public PositionedSql(final Text sql, final Param... params) {
         this(sql, new ParamsOf(params));
     }
 
@@ -50,8 +67,9 @@ public final class ParsedSql implements Text {
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public ParsedSql(final Text sql, final Params params) {
-        this.sql = new Sticky<>(
+    public PositionedSql(final Text sql, final Params params) {
+        this.named = sql;
+        this.positioned = new Sticky<>(
             () -> {
                 final String str = sql.asString();
                 final List<String> names = new LinkedList<>();
@@ -76,7 +94,12 @@ public final class ParsedSql implements Text {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.sql.value();
+    public String named() {
+        return new UncheckedText(this.named).asString();
+    }
+
+    @Override
+    public String parse() throws Exception {
+        return this.positioned.value();
     }
 }

@@ -7,28 +7,24 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Sql;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.ParsedSql;
+import com.github.fabriciofx.cactoos.jdbc.sql.PositionedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
-import org.cactoos.text.UncheckedText;
 
 /**
- * Simple parameters query.
+ * Simple parametrized query.
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class QueryOf implements Query {
-    /**
-     * Named SQL query.
-     */
-    private final Text nmd;
-
     /**
      * SQL query.
      */
-    private final Text sql;
+    private final Sql sql;
 
     /**
      * SQL query parameters.
@@ -37,31 +33,39 @@ public final class QueryOf implements Query {
 
     /**
      * Ctor.
-     * @param sql The SQL query
-     * @param prms SQL query parameters
+     * @param sql The SQL query code
+     * @param params SQL query parameters
      */
-    public QueryOf(final String sql, final Param... prms) {
-        this(() -> sql, prms);
+    public QueryOf(final String sql, final Param... params) {
+        this(() -> sql, params);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query code
+     * @param params An array of SQL query parameters
+     */
+    public QueryOf(final Text sql, final Param... params) {
+        this(sql, new ParamsOf(params));
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query code
+     * @param params SQL query parameters
+     */
+    public QueryOf(final Text sql, final Params params) {
+        this(new PositionedSql(sql, params), params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms An array of SQL query parameters
+     * @param params SQL query parameters
      */
-    public QueryOf(final Text sql, final Param... prms) {
-        this(sql, new ParamsOf(prms));
-    }
-
-    /**
-     * Ctor.
-     * @param sql The SQL query
-     * @param prms SQL query parameters
-     */
-    public QueryOf(final Text sql, final Params prms) {
-        this.nmd = sql;
-        this.sql = new ParsedSql(sql, prms);
-        this.parameters = prms;
+    public QueryOf(final Sql sql, final Params params) {
+        this.sql = sql;
+        this.parameters = params;
     }
 
     @Override
@@ -69,7 +73,7 @@ public final class QueryOf implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.asString()
+            this.sql.parse()
         );
         this.parameters.prepare(stmt);
         return stmt;
@@ -81,12 +85,12 @@ public final class QueryOf implements Query {
     }
 
     @Override
-    public String named() {
-        return new UncheckedText(this.nmd).asString();
+    public Sql sql() {
+        return this.sql;
     }
 
     @Override
     public String asString() throws Exception {
-        return this.sql.asString();
+        return this.sql.parse();
     }
 }

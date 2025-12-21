@@ -31,8 +31,8 @@ public interface Query extends Text {
     Params params();
 
     /**
-     * Return a named query string.
-     * @return A named query string
+     * Return the SQL query.
+     * @return The SQL query
      */
-    String named();
+    Sql sql();
 }

@@ -7,28 +7,24 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Sql;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.ParsedSql;
+import com.github.fabriciofx.cactoos.jdbc.sql.PositionedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
-import org.cactoos.text.UncheckedText;
 
 /**
  * Keyed query.
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class WithKey implements Query {
-    /**
-     * Named SQL query.
-     */
-    private final Text nmd;
-
     /**
      * SQL query.
      */
-    private final Text sql;
+    private final Sql sql;
 
     /**
      * Primary key's name.
@@ -43,36 +39,49 @@ public final class WithKey implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms SQL query parameters
+     * @param params SQL query parameters
      */
-    public WithKey(final String sql, final Param... prms) {
-        this(() -> sql, prms);
+    public WithKey(final String sql, final Param... params) {
+        this(() -> sql, params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms SQL query parameters
+     * @param params SQL query parameters
      */
-    public WithKey(final Text sql, final Param... prms) {
-        this(sql, "id", prms);
+    public WithKey(final Text sql, final Param... params) {
+        this(sql, "id", params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param pknm The primary key name
-     * @param prms SQL query parameters
+     * @param pkname The primary key name
+     * @param params SQL query parameters
      */
     public WithKey(
         final Text sql,
-        final String pknm,
-        final Param... prms
+        final String pkname,
+        final Param... params
     ) {
-        this.nmd = sql;
-        this.sql = new ParsedSql(sql, prms);
-        this.key = pknm;
-        this.parameters = new ParamsOf(prms);
+        this(new PositionedSql(sql, params), pkname, params);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param pkname The primary key name
+     * @param params SQL query parameters
+     */
+    public WithKey(
+        final Sql sql,
+        final String pkname,
+        final Param... params
+    ) {
+        this.sql = sql;
+        this.key = pkname;
+        this.parameters = new ParamsOf(params);
     }
 
     @Override
@@ -80,7 +89,7 @@ public final class WithKey implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.asString(),
+            this.sql.parse(),
             new String[]{this.key}
         );
         this.parameters.prepare(stmt);
@@ -93,12 +102,12 @@ public final class WithKey implements Query {
     }
 
     @Override
-    public String named() {
-        return new UncheckedText(this.nmd).asString();
+    public Sql sql() {
+        return this.sql;
     }
 
     @Override
     public String asString() throws Exception {
-        return this.sql.asString();
+        return this.sql.parse();
     }
 }

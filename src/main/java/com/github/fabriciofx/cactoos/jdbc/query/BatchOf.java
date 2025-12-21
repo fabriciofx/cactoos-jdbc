@@ -6,28 +6,24 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.ParsedSql;
+import com.github.fabriciofx.cactoos.jdbc.Sql;
+import com.github.fabriciofx.cactoos.jdbc.sql.PositionedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
-import org.cactoos.text.UncheckedText;
 
 /**
- * StatementBatch query.
+ * Batch query.
  *
  * @since 0.1
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class BatchOf implements Query {
-    /**
-     * Named SQL query.
-     */
-    private final Text nmd;
-
     /**
      * SQL query.
      */
-    private final Text sql;
+    private final Sql sql;
 
     /**
      * A list of SQL query parameters.
@@ -37,30 +33,38 @@ public final class BatchOf implements Query {
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms A list of SQL query parameters
+     * @param params A list of SQL query parameters
      */
-    public BatchOf(final String sql, final Params... prms) {
-        this(() -> sql, prms);
+    public BatchOf(final String sql, final Params... params) {
+        this(() -> sql, params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms A list of SQL query parameters
+     * @param params A list of SQL query parameters
      */
-    public BatchOf(final Text sql, final Params... prms) {
-        this(sql, new ListOf<>(prms));
+    public BatchOf(final Text sql, final Params... params) {
+        this(sql, new ListOf<>(params));
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param prms A list of SQL query parameters
+     * @param params A list of SQL query parameters
      */
-    public BatchOf(final Text sql, final Iterable<Params> prms) {
-        this.nmd = sql;
-        this.sql = new ParsedSql(sql, prms.iterator().next());
-        this.parameters = prms;
+    public BatchOf(final Text sql, final Iterable<Params> params) {
+        this(new PositionedSql(sql, params.iterator().next()), params);
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query
+     * @param params A list of SQL query parameters
+     */
+    public BatchOf(final Sql sql, final Iterable<Params> params) {
+        this.sql = sql;
+        this.parameters = params;
     }
 
     @Override
@@ -68,10 +72,10 @@ public final class BatchOf implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.asString()
+            this.sql.parse()
         );
-        for (final Params prms : this.parameters) {
-            prms.prepare(stmt);
+        for (final Params params : this.parameters) {
+            params.prepare(stmt);
             stmt.addBatch();
         }
         return stmt;
@@ -83,12 +87,12 @@ public final class BatchOf implements Query {
     }
 
     @Override
-    public String named() {
-        return new UncheckedText(this.nmd).asString();
+    public Sql sql() {
+        return this.sql;
     }
 
     @Override
     public String asString() throws Exception {
-        return this.sql.asString();
+        return this.sql.parse();
     }
 }
