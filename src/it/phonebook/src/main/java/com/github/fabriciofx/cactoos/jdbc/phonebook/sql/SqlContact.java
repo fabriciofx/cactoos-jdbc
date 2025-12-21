@@ -95,7 +95,7 @@ public final class SqlContact implements Contact {
                 "DELETE FROM contact WHERE id = :id",
                 new UuidOf("id", this.id)
             )
-        ).result();
+        ).execute();
     }
 
     @Override
@@ -107,6 +107,6 @@ public final class SqlContact implements Contact {
                 new TextOf("name", name),
                 new UuidOf("id", this.id)
             )
-        ).result();
+        ).execute();
     }
 }

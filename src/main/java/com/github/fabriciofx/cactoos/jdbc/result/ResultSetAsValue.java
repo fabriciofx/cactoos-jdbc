@@ -35,7 +35,7 @@ public final class ResultSetAsValue<T> implements Scalar<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T value() throws Exception {
-        try (ResultSet rset = this.statement.result()) {
+        try (ResultSet rset = this.statement.execute()) {
             final Iterator<Map<String, Object>> iter = new ResultSetAsRows(rset)
                 .iterator();
             if (!iter.hasNext()) {

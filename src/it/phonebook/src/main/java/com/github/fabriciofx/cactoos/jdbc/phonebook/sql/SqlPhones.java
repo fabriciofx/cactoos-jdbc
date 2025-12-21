@@ -95,7 +95,7 @@ public final class SqlPhones implements Phones {
                 new TextOf("number", number),
                 new TextOf("carrier", carrier)
             )
-        ).result();
+        ).execute();
     }
 
     @Override

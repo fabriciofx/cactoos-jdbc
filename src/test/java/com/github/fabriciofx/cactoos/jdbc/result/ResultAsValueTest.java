@@ -39,7 +39,7 @@ final class ResultAsValueTest {
                 new QueryOf(
                     "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                 )
-            ).result();
+            ).execute();
             new Assertion<>(
                 "must generated key value",
                 new ResultAsValue<>(

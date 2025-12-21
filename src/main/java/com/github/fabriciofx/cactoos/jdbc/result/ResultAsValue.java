@@ -29,6 +29,6 @@ public final class ResultAsValue<T> implements Scalar<T> {
 
     @Override
     public T value() throws Exception {
-        return this.statement.result();
+        return this.statement.execute();
     }
 }

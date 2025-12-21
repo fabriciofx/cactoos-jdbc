@@ -94,7 +94,7 @@ final class TransactionTest {
                     contact.phones().add("99991234", "TIM");
                     throw new IllegalStateException("Rollback");
                 }
-            ).result();
+            ).execute();
         } catch (final IllegalStateException ex) {
         }
         new Assertion<>(

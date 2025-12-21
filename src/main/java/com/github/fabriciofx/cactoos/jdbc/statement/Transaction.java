@@ -56,7 +56,7 @@ public final class Transaction<T> implements Statement<T> {
     }
 
     @Override
-    public T result() throws Exception {
+    public T execute() throws Exception {
         final Connection connection = this.session.connection();
         try {
             final T res = this.callable.call();

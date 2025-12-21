@@ -90,7 +90,7 @@ public final class SqlPage<T> implements Page<T> {
                     ResultSet rset = new Select(
                         session,
                         new Paginated(all, limit, number)
-                    ).result()
+                    ).execute()
                 ) {
                     final List<T> elements = new LinkedList<>();
                     while (rset.next()) {

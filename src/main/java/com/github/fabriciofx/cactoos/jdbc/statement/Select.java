@@ -41,7 +41,7 @@ public final class Select implements Statement<ResultSet> {
     }
 
     @Override
-    public ResultSet result() throws Exception {
+    public ResultSet execute() throws Exception {
         try (
             PreparedStatement stmt = this.query.prepared(this.session.connection())
         ) {

@@ -42,7 +42,7 @@ public final class ResultSetAsXmlEach implements Scalar<String> {
     @Override
     public String value() throws Exception {
         final StringBuilder strb = new StringBuilder();
-        try (ResultSet rset = this.statement.result()) {
+        try (ResultSet rset = this.statement.execute()) {
             for (final Map<String, Object> rows : new ResultSetAsRows(rset)) {
                 strb.append(String.format("<%s>", this.root));
                 for (final Map.Entry<String, Object> row : rows.entrySet()) {

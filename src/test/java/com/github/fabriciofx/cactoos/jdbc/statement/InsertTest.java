@@ -48,7 +48,7 @@ final class InsertTest {
                     new QueryOf(
                         "CREATE TABLE t01 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                     )
-                ).result();
+                ).execute();
                 new Assertion<>(
                     "must insert into table",
                     new ResultAsValue<>(
@@ -78,7 +78,7 @@ final class InsertTest {
                 new QueryOf(
                     "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id))"
                 )
-            ).result();
+            ).execute();
             new Assertion<>(
                 "must insert with an integer keys in H2",
                 new ResultAsValue<>(
@@ -105,7 +105,7 @@ final class InsertTest {
                 new QueryOf(
                     "CREATE TABLE t02 (id SERIAL, name VARCHAR(50), PRIMARY KEY (id))"
                 )
-            ).result();
+            ).execute();
             new Assertion<>(
                 "must insert with an integer keys in PostgreSQL",
                 new ResultAsValue<>(
@@ -132,7 +132,7 @@ final class InsertTest {
                 new QueryOf(
                     "CREATE TABLE t02 (id INT AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id))"
                 )
-            ).result();
+            ).execute();
             new Assertion<>(
                 "must insert with an integer keys in MySQL",
                 new ResultAsValue<>(

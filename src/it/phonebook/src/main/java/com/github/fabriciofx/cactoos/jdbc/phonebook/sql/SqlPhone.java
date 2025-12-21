@@ -62,7 +62,7 @@ public final class SqlPhone implements Phone {
                 new UuidOf("contact_id", this.id),
                 new TextOf("number", this.num)
             )
-        ).result();
+        ).execute();
     }
 
     @Override
@@ -79,6 +79,6 @@ public final class SqlPhone implements Phone {
                 new UuidOf("contact_id", this.id),
                 new TextOf("number", this.num)
             )
-        ).result();
+        ).execute();
     }
 }

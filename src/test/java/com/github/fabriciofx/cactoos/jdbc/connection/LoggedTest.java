@@ -42,7 +42,7 @@ final class LoggedTest {
             "cactoos-jdbc",
             logger
         );
-        new Update(session, new QueryOf(sql)).result();
+        new Update(session, new QueryOf(sql)).execute();
         final Text regex = new Joined(
             "\n",
             "(?m)^\\[cactoos-jdbc\\] Connection\\[#0\\] has been opened with properties numServers=0,\\s*",

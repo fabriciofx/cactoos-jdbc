@@ -47,7 +47,7 @@ final class PaginationTest {
                 ResultSet rset = new Select(
                     new NoAuth(server.resource()),
                     new Paginated(new QueryOf("SELECT * FROM contact"), 1, 0)
-                ).result()
+                ).execute()
             ) {
                 if (rset.next()) {
                     new Assertion<>(

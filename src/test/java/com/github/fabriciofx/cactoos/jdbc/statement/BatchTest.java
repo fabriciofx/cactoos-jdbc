@@ -43,7 +43,7 @@ final class BatchTest {
                     new QueryOf(
                         "CREATE TABLE client (id INT, name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     )
-                ).result();
+                ).execute();
                 new Batch(
                     session,
                     new BatchOf(
@@ -67,7 +67,7 @@ final class BatchTest {
                             new IntOf("age", 32)
                         )
                     )
-                ).result();
+                ).execute();
             }
         }
     }

@@ -40,7 +40,7 @@ public final class InsertWithKey<T> implements Statement<T> {
     }
 
     @Override
-    public T result() throws Exception {
+    public T execute() throws Exception {
         try (
             PreparedStatement stmt = this.query.prepared(this.session.connection())
         ) {

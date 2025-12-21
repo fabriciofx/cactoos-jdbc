@@ -77,7 +77,7 @@ public final class SqlPages<T> implements Pages<T> {
                     ResultSet rset = new Select(
                         session,
                         new Counted(count)
-                    ).result()
+                    ).execute()
                 ) {
                     if (rset.next()) {
                         result = rset.getInt(1);

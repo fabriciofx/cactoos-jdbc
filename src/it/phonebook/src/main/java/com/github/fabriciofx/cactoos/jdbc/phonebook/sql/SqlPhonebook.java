@@ -47,7 +47,7 @@ public final class SqlPhonebook implements Phonebook {
                 new UuidOf("id", id),
                 new TextOf("name", name)
             )
-        ).result();
+        ).execute();
         return new SqlContact(this.session, id);
     }
 

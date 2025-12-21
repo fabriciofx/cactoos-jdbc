@@ -47,7 +47,7 @@ final class ResultSetAsXmlTest {
                     new QueryOf(
                         "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
                     )
-                ).result()
+                ).execute()
             ) {
                 new Assertion<>(
                     "must convert a contact into a XML",

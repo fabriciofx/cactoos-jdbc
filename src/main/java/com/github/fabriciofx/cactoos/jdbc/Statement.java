@@ -10,14 +10,14 @@ package com.github.fabriciofx.cactoos.jdbc;
  * <p>There is no thread-safety guarantee.
  *
  * @param <T> Type of the result
- * @since 0.1
+ * @since 0.9.0
  */
 @FunctionalInterface
 public interface Statement<T> {
     /**
-     * Execute it and returns a single or set of data(s).
-     * @return A Result of a type
+     * Execute it and returns a single or set of data.
+     * @return The result of statement execution
      * @throws Exception If fails
      */
-    T result() throws Exception;
+    T execute() throws Exception;
 }

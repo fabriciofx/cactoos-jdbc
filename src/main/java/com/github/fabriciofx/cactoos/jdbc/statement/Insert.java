@@ -37,7 +37,7 @@ public final class Insert implements Statement<Boolean> {
     }
 
     @Override
-    public Boolean result() throws Exception {
+    public Boolean execute() throws Exception {
         try (
             PreparedStatement stmt = this.query.prepared(this.session.connection())
         ) {

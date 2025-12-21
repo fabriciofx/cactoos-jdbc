@@ -53,7 +53,7 @@ final class SelectTest {
                     new QueryOf(
                         "CREATE TABLE employee (id INT, name VARCHAR(50), birthday DATE, address VARCHAR(100), married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
                     )
-                ).result();
+                ).execute();
                 new Batch(
                     session,
                     new BatchOf(
@@ -75,7 +75,7 @@ final class SelectTest {
                             new DecimalOf("salary", "12345.00")
                         )
                     )
-                ).result();
+                ).execute();
                 new Assertion<>(
                     "must insert employees records",
                     XhtmlMatchers.xhtml(
@@ -123,7 +123,7 @@ final class SelectTest {
                     new QueryOf(
                         "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
-                ).result();
+                ).execute();
                 new Batch(
                     session,
                     new BatchOf(
@@ -145,7 +145,7 @@ final class SelectTest {
                             new DecimalOf("height", "1.62")
                         )
                     )
-                ).result();
+                ).execute();
                 new Assertion<>(
                     "must select a person name",
                     new ResultSetAsValue<>(
