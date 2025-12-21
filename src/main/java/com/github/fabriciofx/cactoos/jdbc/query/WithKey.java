@@ -8,7 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.SqlParsed;
+import com.github.fabriciofx.cactoos.jdbc.sql.ParsedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
@@ -70,7 +70,7 @@ public final class WithKey implements Query {
         final Param... prms
     ) {
         this.nmd = sql;
-        this.sql = new SqlParsed(sql, prms);
+        this.sql = new ParsedSql(sql, prms);
         this.key = pknm;
         this.parameters = new ParamsOf(prms);
     }

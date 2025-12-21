@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.SqlParsed;
+import com.github.fabriciofx.cactoos.jdbc.sql.ParsedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
@@ -59,7 +59,7 @@ public final class BatchOf implements Query {
      */
     public BatchOf(final Text sql, final Iterable<Params> prms) {
         this.nmd = sql;
-        this.sql = new SqlParsed(sql, prms.iterator().next());
+        this.sql = new ParsedSql(sql, prms.iterator().next());
         this.parameters = prms;
     }
 

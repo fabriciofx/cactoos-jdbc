@@ -21,7 +21,7 @@ import org.cactoos.text.FormattedText;
  *
  * @since 0.1
  */
-public final class SqlParsed implements Text {
+public final class ParsedSql implements Text {
     /**
      * SQL query.
      */
@@ -32,7 +32,7 @@ public final class SqlParsed implements Text {
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public SqlParsed(final String sql, final Param... params) {
+    public ParsedSql(final String sql, final Param... params) {
         this(() -> sql, new ParamsOf(params));
     }
 
@@ -41,7 +41,7 @@ public final class SqlParsed implements Text {
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public SqlParsed(final Text sql, final Param... params) {
+    public ParsedSql(final Text sql, final Param... params) {
         this(sql, new ParamsOf(params));
     }
 
@@ -50,7 +50,7 @@ public final class SqlParsed implements Text {
      * @param sql SQL query
      * @param params SQL query parameters
      */
-    public SqlParsed(final Text sql, final Params params) {
+    public ParsedSql(final Text sql, final Params params) {
         this.sql = new Sticky<>(
             () -> {
                 final String str = sql.asString();
