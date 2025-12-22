@@ -22,7 +22,7 @@ public final class Auth implements Session {
     /**
      * User name.
      */
-    private final String user;
+    private final String username;
 
     /**
      * User password.
@@ -32,21 +32,21 @@ public final class Auth implements Session {
     /**
      * Ctor.
      * @param source DataSource
-     * @param user User name
+     * @param username User name
      * @param password User password
      */
     public Auth(
         final DataSource source,
-        final String user,
+        final String username,
         final String password
     ) {
         this.source = source;
-        this.user = user;
+        this.username = username;
         this.password = password;
     }
 
     @Override
     public Connection connection() throws Exception {
-        return this.source.getConnection(this.user, this.password);
+        return this.source.getConnection(this.username, this.password);
     }
 }
