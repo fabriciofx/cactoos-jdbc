@@ -17,20 +17,18 @@ public final class Sticky implements Session {
     /**
      * The Connection.
      */
-    private final Scalar<Connection> cnnctn;
+    private final Scalar<Connection> connexio;
 
     /**
      * Ctor.
      * @param session Session
      */
     public Sticky(final Session session) {
-        this.cnnctn = new org.cactoos.scalar.Sticky<>(
-            () -> session.connection()
-        );
+        this.connexio = new org.cactoos.scalar.Sticky<>(session::connection);
     }
 
     @Override
     public Connection connection() throws Exception {
-        return this.cnnctn.value();
+        return this.connexio.value();
     }
 }
