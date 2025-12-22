@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.sql.rowset.CachedRowSet;
@@ -21,9 +21,9 @@ import javax.sql.rowset.RowSetProvider;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Select implements Statement<ResultSet> {
     /**
-     * The session.
+     * The connection.
      */
-    private final Session sssn;
+    private final Connection connexio;
 
     /**
      * The SQL query.
@@ -32,19 +32,17 @@ public final class Select implements Statement<ResultSet> {
 
     /**
      * Ctor.
-     * @param session A Session
+     * @param connection A Session
      * @param query A SQL query
      */
-    public Select(final Session session, final Query query) {
-        this.sssn = session;
+    public Select(final Connection connection, final Query query) {
+        this.connexio = connection;
         this.qry = query;
     }
 
     @Override
     public ResultSet execute() throws Exception {
-        try (
-            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
-        ) {
+        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
                 final CachedRowSet crs = rsf.createCachedRowSet();
@@ -55,8 +53,8 @@ public final class Select implements Statement<ResultSet> {
     }
 
     @Override
-    public Session session() {
-        return this.sssn;
+    public Connection connection() {
+        return this.connexio;
     }
 
     @Override

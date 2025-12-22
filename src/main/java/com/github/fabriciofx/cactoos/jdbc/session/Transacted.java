@@ -21,24 +21,24 @@ public final class Transacted implements Session {
     /**
      * Hold connection.
      */
-    private final Scalar<Connection> cnnctn;
+    private final Scalar<Connection> connexio;
 
     /**
      * Ctor.
      * @param session Session
      */
     public Transacted(final Session session) {
-        this.cnnctn = new Sticky<>(
+        this.connexio = new Sticky<>(
             () -> {
                 final Connection connection = session.connection();
                 connection.setAutoCommit(false);
-                return new com.github.fabriciofx.cactoos.jdbc.connection.Transacted(connection);
+                return connection;
             }
         );
     }
 
     @Override
     public Connection connection() throws Exception {
-        return this.cnnctn.value();
+        return this.connexio.value();
     }
 }

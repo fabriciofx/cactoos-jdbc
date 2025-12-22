@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
@@ -14,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -33,9 +33,9 @@ import org.cactoos.text.FormattedText;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlPhones implements Phones {
     /**
-     * Session.
+     * Connection.
      */
-    private final Session session;
+    private final Connection connection;
 
     /**
      * Contact's ID.
@@ -45,11 +45,11 @@ public final class SqlPhones implements Phones {
     /**
      * Ctor.
      *
-     * @param sssn A Session
+     * @param connection A Connection
      * @param contact A Contact's ID
      */
-    public SqlPhones(final Session sssn, final UUID contact) {
-        this.session = sssn;
+    public SqlPhones(final Connection connection, final UUID contact) {
+        this.connection = connection;
         this.id = contact;
     }
 
@@ -57,7 +57,7 @@ public final class SqlPhones implements Phones {
     public int count() throws Exception {
         return new ResultSetAsValue<Integer>(
             new Select(
-                this.session,
+                this.connection,
                 new QueryOf(
                     "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
                     new UuidOf("contact_id", this.id)
@@ -70,7 +70,7 @@ public final class SqlPhones implements Phones {
     public Phone get(final int index) throws Exception {
         final Scalar<String> number = new ResultSetAsValue<>(
             new Select(
-                this.session,
+                this.connection,
                 new QueryOf(
                     new FormattedText(
                         "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
@@ -79,7 +79,7 @@ public final class SqlPhones implements Phones {
                 )
             )
         );
-        return new SqlPhone(this.session, this.id, number.value());
+        return new SqlPhone(this.connection, this.id, number.value());
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class SqlPhones implements Phones {
         final String carrier
     ) throws Exception {
         new Insert(
-            this.session,
+            this.connection,
             new QueryOf(
                 "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
                 new UuidOf("contact_id", this.id),
@@ -103,7 +103,7 @@ public final class SqlPhones implements Phones {
         final Unchecked<List<String>> numbers = new Unchecked<>(
             new ResultSetAsValues<>(
                 new Select(
-                    this.session,
+                    this.connection,
                     new QueryOf(
                         "SELECT number FROM phone WHERE contact_id = :contact_id",
                         new UuidOf("contact_id", this.id)
@@ -112,7 +112,7 @@ public final class SqlPhones implements Phones {
             )
         );
         return new Mapped<>(
-            number -> new SqlPhone(this.session, this.id, number),
+            number -> new SqlPhone(this.connection, this.id, number),
             numbers.value().iterator()
         );
     }

@@ -5,9 +5,9 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsRows;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Iterator;
@@ -22,9 +22,9 @@ import java.util.NoSuchElementException;
  */
 public final class InsertWithKey<T> implements Statement<T> {
     /**
-     * The session.
+     * The connection.
      */
-    private final Session sssn;
+    private final Connection connexio;
 
     /**
      * The SQL query.
@@ -34,20 +34,18 @@ public final class InsertWithKey<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param session A Session
+     * @param connection A Session
      * @param query  A SQL query
      */
-    public InsertWithKey(final Session session, final Query query) {
-        this.sssn = session;
+    public InsertWithKey(final Connection connection, final Query query) {
+        this.connexio = connection;
         this.qry = query;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
-        try (
-            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
-        ) {
+        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
                 final Iterator<Map<String, Object>> iter = new ResultSetAsRows(
@@ -62,8 +60,8 @@ public final class InsertWithKey<T> implements Statement<T> {
     }
 
     @Override
-    public Session session() {
-        return this.sssn;
+    public Connection connection() {
+        return this.connexio;
     }
 
     @Override

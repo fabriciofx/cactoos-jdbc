@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.query.WithKey;
@@ -14,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.MysqlServer;
 import java.math.BigInteger;
+import java.sql.Connection;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -33,27 +33,28 @@ final class ResultAsValueTest {
     void insertWithKeys() throws Exception {
         try (Server<DataSource> server = new MysqlServer()) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            new Update(
-                session,
-                new QueryOf(
-                    "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
-                )
-            ).execute();
-            new Assertion<>(
-                "must generated key value",
-                new ResultAsValue<>(
-                    new InsertWithKey<>(
-                        session,
-                        new WithKey(
-                            () -> "INSERT INTO contact (name) VALUES (:name)",
-                            "id",
-                            new TextOf("name", "Leonardo da Vinci")
-                        )
+            try (Connection connection = new NoAuth(server.resource()).connection()) {
+                new Update(
+                    connection,
+                    new QueryOf(
+                        "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                     )
-                ),
-                new HasValue<>(BigInteger.ONE)
-            ).affirm();
+                ).execute();
+                new Assertion<>(
+                    "must generated key value",
+                    new ResultAsValue<>(
+                        new InsertWithKey<>(
+                            connection,
+                            new WithKey(
+                                () -> "INSERT INTO contact (name) VALUES (:name)",
+                                "id",
+                                new TextOf("name", "Leonardo da Vinci")
+                            )
+                        )
+                    ),
+                    new HasValue<>(BigInteger.ONE)
+                ).affirm();
+            }
         }
     }
 }

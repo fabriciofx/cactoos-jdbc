@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -16,11 +15,10 @@ import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.fake.server.Servers;
+import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import com.github.fabriciofx.fake.server.db.server.MysqlServer;
-import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
 import com.jcabi.matchers.XhtmlMatchers;
+import java.sql.Connection;
 import java.time.LocalDate;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
@@ -39,23 +37,16 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class SelectTest {
     @Test
     void select() throws Exception {
-        try (
-            Servers<DataSource> servers = new Servers<>(
-                new H2Server(),
-                new MysqlServer(),
-                new PgsqlServer()
-            )
-        ) {
-            for (final DataSource source : servers.resources()) {
-                final Session session = new NoAuth(source);
+        try (Server<DataSource> server = new H2Server()) {
+            try (Connection connection = new NoAuth(server.resource()).connection()) {
                 new Update(
-                    session,
+                    connection,
                     new QueryOf(
                         "CREATE TABLE employee (id INT, name VARCHAR(50), birthday DATE, address VARCHAR(100), married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    session,
+                    connection,
                     new BatchOf(
                         "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
                         new ParamsOf(
@@ -81,7 +72,7 @@ final class SelectTest {
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(
-                                session,
+                                connection,
                                 new QueryOf(
                                     "SELECT * FROM employee"
                                 )
@@ -109,23 +100,19 @@ final class SelectTest {
 
     @Test
     void any() throws Exception {
-        try (
-            Servers<DataSource> servers = new Servers<>(
-                new H2Server(),
-                new MysqlServer(),
-                new PgsqlServer()
-            )
-        ) {
-            for (final DataSource source : servers.resources()) {
-                final Session session = new NoAuth(source);
+        try (Server<DataSource> server = new H2Server()) {
+            server.start();
+            try (
+                Connection connection = new NoAuth(server.resource()).connection()
+            ) {
                 new Update(
-                    session,
+                    connection,
                     new QueryOf(
                         "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    session,
+                    connection,
                     new BatchOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
@@ -150,7 +137,7 @@ final class SelectTest {
                     "must select a person name",
                     new ResultSetAsValue<>(
                         new Select(
-                            session,
+                            connection,
                             new QueryOf(
                                 "SELECT name FROM person"
                             )

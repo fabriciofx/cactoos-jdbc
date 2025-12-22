@@ -12,6 +12,7 @@ import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.jcabi.matchers.XhtmlMatchers;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
@@ -26,6 +27,7 @@ import org.llorllale.cactoos.matchers.Assertion;
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @checkstyle NestedTryDepthCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 final class ResultSetAsXmlTest {
@@ -41,30 +43,32 @@ final class ResultSetAsXmlTest {
             )
         ) {
             server.start();
-            try (
-                ResultSet rset = new Select(
-                    new NoAuth(server.resource()),
-                    new QueryOf(
-                        "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
-                    )
-                ).execute()
-            ) {
-                new Assertion<>(
-                    "must convert a contact into a XML",
-                    XhtmlMatchers.xhtml(
-                        new ResultSetAsXml(
-                            "contacts",
-                            "contact"
-                        ).adapt(rset)
-                    ),
-                    XhtmlMatchers.hasXPaths(
-                        "/contacts/contact/name[text()='Joseph Klimber']",
-                        "/contacts/contact/number[text()='(87)99991-1234']",
-                        "/contacts/contact/carrier[text()='TIM']",
-                        "/contacts/contact/number[text()='(87)89234-9876']",
-                        "/contacts/contact/carrier[text()='Oi']"
-                    )
-                );
+            try (Connection connection = new NoAuth(server.resource()).connection()) {
+                try (
+                    ResultSet rset = new Select(
+                        connection,
+                        new QueryOf(
+                            "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
+                        )
+                    ).execute()
+                ) {
+                    new Assertion<>(
+                        "must convert a contact into a XML",
+                        XhtmlMatchers.xhtml(
+                            new ResultSetAsXml(
+                                "contacts",
+                                "contact"
+                            ).adapt(rset)
+                        ),
+                        XhtmlMatchers.hasXPaths(
+                            "/contacts/contact/name[text()='Joseph Klimber']",
+                            "/contacts/contact/number[text()='(87)99991-1234']",
+                            "/contacts/contact/carrier[text()='TIM']",
+                            "/contacts/contact/number[text()='(87)89234-9876']",
+                            "/contacts/contact/carrier[text()='Oi']"
+                        )
+                    );
+                }
             }
         }
     }

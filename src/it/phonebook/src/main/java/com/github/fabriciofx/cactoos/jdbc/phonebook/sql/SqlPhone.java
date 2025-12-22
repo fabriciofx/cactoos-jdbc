@@ -4,12 +4,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
+import java.sql.Connection;
 import java.util.UUID;
 
 /**
@@ -22,9 +22,9 @@ import java.util.UUID;
  */
 public final class SqlPhone implements Phone {
     /**
-     * Session.
+     * Connection.
      */
-    private final Session session;
+    private final Connection connection;
 
     /**
      * Contact's ID.
@@ -39,16 +39,16 @@ public final class SqlPhone implements Phone {
     /**
      * Ctor.
      *
-     * @param sssn A Session
+     * @param connection A Session
      * @param contact A Contact's ID
      * @param number Phone number
      */
     public SqlPhone(
-        final Session sssn,
+        final Connection connection,
         final UUID contact,
         final String number
     ) {
-        this.session = sssn;
+        this.connection = connection;
         this.id = contact;
         this.num = number;
     }
@@ -56,7 +56,7 @@ public final class SqlPhone implements Phone {
     @Override
     public void delete() throws Exception {
         new Update(
-            this.session,
+            this.connection,
             new QueryOf(
                 "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
                 new UuidOf("contact_id", this.id),
@@ -71,7 +71,7 @@ public final class SqlPhone implements Phone {
         final String carrier
     ) throws Exception {
         new Update(
-            this.session,
+            this.connection,
             new QueryOf(
                 "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
                 new TextOf("number", number),

@@ -4,14 +4,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.fake.server.Servers;
+import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import com.github.fabriciofx.fake.server.db.server.MysqlServer;
-import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
+import java.sql.Connection;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -29,20 +27,17 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class UpdateTest {
     @Test
     void createTable() throws Exception {
-        try (
-            Servers<DataSource> servers = new Servers<>(
-                new H2Server(),
-                new MysqlServer(),
-                new PgsqlServer()
-            )
-        ) {
-            for (final DataSource source : servers.resources()) {
-                final Session session = new NoAuth(source);
+        try (Server<DataSource> server = new H2Server()) {
+            server.start();
+            try (
+                Connection connection = new NoAuth(server.resource())
+                    .connection()
+            ) {
                 new Assertion<>(
                     "must create a table",
                     new ResultAsValue<>(
                         new Update(
-                            session,
+                            connection,
                             new QueryOf(
                                 "CREATE TABLE foo1 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                             )

@@ -4,17 +4,15 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.fake.server.Servers;
+import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import com.github.fabriciofx.fake.server.db.server.MysqlServer;
-import com.github.fabriciofx.fake.server.db.server.PgsqlServer;
+import java.sql.Connection;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 
@@ -29,23 +27,19 @@ import org.junit.jupiter.api.Test;
 final class BatchTest {
     @Test
     void batch() throws Exception {
-        try (
-            Servers<DataSource> servers = new Servers<>(
-                new H2Server(),
-                new MysqlServer(),
-                new PgsqlServer()
-            )
-        ) {
-            for (final DataSource source : servers.resources()) {
-                final Session session = new NoAuth(source);
+        try (Server<DataSource> server = new H2Server()) {
+            server.start();
+            try (
+                Connection connection = new NoAuth(server.resource()).connection()
+            ) {
                 new Update(
-                    session,
+                    connection,
                     new QueryOf(
                         "CREATE TABLE client (id INT, name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    session,
+                    connection,
                     new BatchOf(
                         "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new ParamsOf(

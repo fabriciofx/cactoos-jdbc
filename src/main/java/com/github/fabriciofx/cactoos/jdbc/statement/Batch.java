@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
@@ -17,9 +17,9 @@ import java.sql.PreparedStatement;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Batch implements Statement<int[]> {
     /**
-     * The session.
+     * The connection.
      */
-    private final Session sssn;
+    private final Connection connexio;
 
     /**
      * The SQL query.
@@ -28,26 +28,24 @@ public final class Batch implements Statement<int[]> {
 
     /**
      * Ctor.
-     * @param session A Session
+     * @param connection A Session
      * @param query A SQL query
      */
-    public Batch(final Session session, final Query query) {
-        this.sssn = session;
+    public Batch(final Connection connection, final Query query) {
+        this.connexio = connection;
         this.qry = query;
     }
 
     @Override
     public int[] execute() throws Exception {
-        try (
-            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
-        ) {
+        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
             return stmt.executeBatch();
         }
     }
 
     @Override
-    public Session session() {
-        return this.sssn;
+    public Connection connection() {
+        return this.connexio;
     }
 
     @Override

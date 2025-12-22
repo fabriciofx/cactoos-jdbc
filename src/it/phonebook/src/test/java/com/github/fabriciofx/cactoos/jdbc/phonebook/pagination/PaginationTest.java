@@ -12,6 +12,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
@@ -28,6 +29,7 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * @since 0.8.0
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle NestedTryDepthCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginationTest {
@@ -43,22 +45,24 @@ final class PaginationTest {
             )
         ) {
             server.start();
-            try (
-                ResultSet rset = new Paginated(
-                    new Select(
-                        new NoAuth(server.resource()),
-                        new QueryOf("SELECT * FROM contact")
-                    ),
-                    1,
-                    2
-                ).execute()
-            ) {
-                if (rset.next()) {
-                    new Assertion<>(
-                        "must retrieve the contact's id",
-                        new TextOf(rset.getObject(1).toString()),
-                        new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
-                    ).affirm();
+            try (Connection connection = new NoAuth(server.resource()).connection()) {
+                try (
+                    ResultSet rset = new Paginated(
+                        new Select(
+                            connection,
+                            new QueryOf("SELECT * FROM contact")
+                        ),
+                        1,
+                        2
+                    ).execute()
+                ) {
+                    if (rset.next()) {
+                        new Assertion<>(
+                            "must retrieve the contact's id",
+                            new TextOf(rset.getObject(1).toString()),
+                            new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
+                        ).affirm();
+                    }
                 }
             }
         }
@@ -76,13 +80,13 @@ final class PaginationTest {
             )
         ) {
             server.start();
-            new Assertion<>(
-                "must have at least one page",
-                new SqlPhonebook(
-                    new NoAuth(server.resource())
-                ).search("maria").size(),
-                new IsNumber(1)
-            ).affirm();
+            try (Connection connection = new NoAuth(server.resource()).connection()) {
+                new Assertion<>(
+                    "must have at least one page",
+                    new SqlPhonebook(connection).search("maria").size(),
+                    new IsNumber(1)
+                ).affirm();
+            }
         }
     }
 }

@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -14,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXmlEach;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
+import java.sql.Connection;
 import java.util.UUID;
 import org.cactoos.text.FormattedText;
 
@@ -28,9 +28,9 @@ import org.cactoos.text.FormattedText;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
     /**
-     * Session.
+     * Connection.
      */
-    private final Session session;
+    private final Connection connection;
 
     /**
      * Contact's ID.
@@ -40,11 +40,11 @@ public final class SqlContact implements Contact {
     /**
      * Ctor.
      *
-     * @param sssn A Session
+     * @param connection A Session
      * @param id A Contact's ID
      */
-    public SqlContact(final Session sssn, final UUID id) {
-        this.session = sssn;
+    public SqlContact(final Connection connection, final UUID id) {
+        this.connection = connection;
         this.id = id;
     }
 
@@ -52,7 +52,7 @@ public final class SqlContact implements Contact {
     public String about() throws Exception {
         final String contact = new ResultSetAsValue<String>(
             new Select(
-                this.session,
+                this.connection,
                 new QueryOf(
                     "SELECT name FROM contact WHERE id = :id",
                     new UuidOf("id", this.id)
@@ -61,7 +61,7 @@ public final class SqlContact implements Contact {
         ).value();
         final String phones = new ResultSetAsXmlEach(
             new Select(
-                this.session,
+                this.connection,
                 new QueryOf(
                     "SELECT number, carrier FROM phone WHERE contact_id = :contact_id",
                     new UuidOf("contact_id", this.id)
@@ -84,13 +84,13 @@ public final class SqlContact implements Contact {
 
     @Override
     public Phones phones() throws Exception {
-        return new SqlPhones(this.session, this.id);
+        return new SqlPhones(this.connection, this.id);
     }
 
     @Override
     public void delete() throws Exception {
         new Update(
-            this.session,
+            this.connection,
             new QueryOf(
                 "DELETE FROM contact WHERE id = :id",
                 new UuidOf("id", this.id)
@@ -101,7 +101,7 @@ public final class SqlContact implements Contact {
     @Override
     public void update(final String name) throws Exception {
         new Update(
-            this.session,
+            this.connection,
             new QueryOf(
                 "UPDATE contact SET name = :name WHERE id = :id",
                 new TextOf("name", name),
