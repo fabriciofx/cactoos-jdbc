@@ -19,16 +19,16 @@ import org.cactoos.scalar.Sticky;
  */
 public final class Transacted implements Session {
     /**
-     * Held connection.
+     * Hold connection.
      */
-    private final Scalar<Connection> scalar;
+    private final Scalar<Connection> cnnctn;
 
     /**
      * Ctor.
      * @param session Session
      */
     public Transacted(final Session session) {
-        this.scalar = new Sticky<>(
+        this.cnnctn = new Sticky<>(
             () -> {
                 final Connection connection = session.connection();
                 connection.setAutoCommit(false);
@@ -39,6 +39,6 @@ public final class Transacted implements Session {
 
     @Override
     public Connection connection() throws Exception {
-        return this.scalar.value();
+        return this.cnnctn.value();
     }
 }
