@@ -2,38 +2,38 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.query.WithKey;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.statement.InsertWithKey;
-import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.server.Server;
-import com.github.fabriciofx.fake.server.db.server.MysqlServer;
-import java.math.BigInteger;
+import com.github.fabriciofx.fake.server.db.server.H2Server;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * ResultAsValue tests.
+ * InsertWithKeys tests.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.3
+ * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-final class ResultAsValueTest {
+final class InsertWithKeyTest {
     @Test
     void insertWithKeys() throws Exception {
-        try (Server<DataSource> server = new MysqlServer()) {
+        try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connection connection = new NoAuth(server.resource()).connection()) {
+            try (
+                Connection connection = new NoAuth(server.resource()).connection()
+            ) {
                 new Update(
                     connection,
                     new QueryOf(
@@ -42,16 +42,16 @@ final class ResultAsValueTest {
                 ).execute();
                 new Assertion<>(
                     "must generated key value",
-                    new ResultAsValue<>(
-                        new InsertWithKey<>(
+                    new ScalarOf<>(
+                        () -> new InsertWithKey<>(
                             connection,
                             new WithKey(
                                 () -> "INSERT INTO contact (name) VALUES (:name)",
                                 new TextOf("name", "Leonardo da Vinci")
                             )
-                        )
+                        ).execute()
                     ),
-                    new HasValue<>(BigInteger.ONE)
+                    new HasValue<>(1)
                 ).affirm();
             }
         }
