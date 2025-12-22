@@ -26,8 +26,8 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @checkstyle JavadocMethodCheck (500 lines)
  * @since 0.8.0
+ * @checkstyle JavadocMethodCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginationTest {

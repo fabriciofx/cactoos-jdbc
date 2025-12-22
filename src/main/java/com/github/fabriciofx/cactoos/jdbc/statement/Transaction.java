@@ -4,14 +4,16 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 /**
- * StatementTransaction.
+ * Transaction statement.
  *
  * @param <T> Type of the result
  * @since 0.1
@@ -27,7 +29,7 @@ public final class Transaction<T> implements Statement<T> {
     /**
      * The session.
      */
-    private final Session session;
+    private final Session sssn;
 
     /**
      * Callable to be executed in a transaction.
@@ -37,27 +39,27 @@ public final class Transaction<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param sssn A session
+     * @param session A session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final Session sssn, final Callable<T> call) {
-        this(new Transacted(sssn), call);
+    public Transaction(final Session session, final Callable<T> call) {
+        this(new Transacted(session), call);
     }
 
     /**
      * Ctor.
      *
-     * @param sssn A transacted session
+     * @param session A transacted session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final Transacted sssn, final Callable<T> call) {
-        this.session = sssn;
+    public Transaction(final Transacted session, final Callable<T> call) {
+        this.sssn = session;
         this.callable = call;
     }
 
     @Override
     public T execute() throws Exception {
-        final Connection connection = this.session.connection();
+        final Connection connection = this.sssn.connection();
         try {
             final T res = this.callable.call();
             connection.commit();
@@ -67,5 +69,15 @@ public final class Transaction<T> implements Statement<T> {
             connection.rollback();
             throw ex;
         }
+    }
+
+    @Override
+    public Session session() {
+        return this.sssn;
+    }
+
+    @Override
+    public Query query() {
+        return new QueryOf("");
     }
 }

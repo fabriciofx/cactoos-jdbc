@@ -33,17 +33,17 @@ public final class SqlPage<T> implements Page<T> {
     /**
      * The page's elements.
      */
-    private final Unchecked<List<T>> items;
+    private final Unchecked<List<T>> elements;
 
     /**
      * Total amount of items.
      */
-    private final List<Long> total;
+    private final List<Long> ttl;
 
     /**
      * The page's number.
      */
-    private final int number;
+    private final int page;
 
     /**
      * Ctor.
@@ -58,8 +58,8 @@ public final class SqlPage<T> implements Page<T> {
         final int number,
         final int size
     ) {
-        this.total = new LinkedList<>();
-        this.items = new Unchecked<>(
+        this.ttl = new LinkedList<>();
+        this.elements = new Unchecked<>(
             () -> {
                 try (
                     ResultSet rset = new Paginated(
@@ -68,37 +68,37 @@ public final class SqlPage<T> implements Page<T> {
                         size
                     ).execute()
                 ) {
-                    final List<T> elements = new LinkedList<>();
+                    final List<T> list = new LinkedList<>();
                     while (rset.next()) {
-                        this.total.add(rset.getLong("__total__"));
-                        elements.add(adapter.adapt(rset));
+                        this.ttl.add(rset.getLong("__total__"));
+                        list.add(adapter.adapt(rset));
                     }
-                    return elements;
+                    return list;
                 } catch (final Exception ex) {
                     throw new RuntimeException(ex);
                 }
             }
         );
-        this.number = number;
+        this.page = number;
     }
 
     @Override
     public List<T> items() {
-        return this.items.value();
+        return this.elements.value();
     }
 
     @Override
     public long total() {
-        return this.total.getFirst();
+        return this.ttl.getFirst();
     }
 
     @Override
     public int number() {
-        return this.number;
+        return this.page;
     }
 
     @Override
     public int size() {
-        return this.items.value().size();
+        return this.elements.value().size();
     }
 }

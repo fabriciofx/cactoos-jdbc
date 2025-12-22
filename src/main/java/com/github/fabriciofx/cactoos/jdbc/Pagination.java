@@ -20,7 +20,7 @@ public interface Pagination<T> {
      * Get the pages of data.
      * @param number The number of page
      * @param size The amount of items per page
-     * @return A page with items of <T>
+     * @return A page with items of T
      */
     Page<T> page(int number, int size);
 }

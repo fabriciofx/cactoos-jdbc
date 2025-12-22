@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 
 /**
- * StatementBatch statements.
+ * Batch statement.
  *
  * @since 0.1
  */
@@ -19,29 +19,39 @@ public final class Batch implements Statement<int[]> {
     /**
      * The session.
      */
-    private final Session session;
+    private final Session sssn;
 
     /**
      * The SQL query.
      */
-    private final Query query;
+    private final Query qry;
 
     /**
      * Ctor.
-     * @param sssn A Session
-     * @param qry A SQL query
+     * @param session A Session
+     * @param query A SQL query
      */
-    public Batch(final Session sssn, final Query qry) {
-        this.session = sssn;
-        this.query = qry;
+    public Batch(final Session session, final Query query) {
+        this.sssn = session;
+        this.qry = query;
     }
 
     @Override
     public int[] execute() throws Exception {
         try (
-            PreparedStatement stmt = this.query.prepared(this.session.connection())
+            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
         ) {
             return stmt.executeBatch();
         }
+    }
+
+    @Override
+    public Session session() {
+        return this.sssn;
+    }
+
+    @Override
+    public Query query() {
+        return this.qry;
     }
 }

@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,13 +13,31 @@ import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetFactory;
 import javax.sql.rowset.RowSetProvider;
 
+/**
+ * Paginated, a decorator for {@link Select} which paginate the result.
+ *
+ * @since 0.9.0
+ */
 public final class Paginated implements Statement<ResultSet> {
+    /**
+     * The Select statement.
+     */
     private final Select origin;
-    private final Query paginated;
 
+    /**
+     * The query which contains paginated SQL code.
+     */
+    private final Query qry;
+
+    /**
+     * Ctor.
+     * @param select The {@link Select} statement
+     * @param page The page number
+     * @param size The page size
+     */
     public Paginated(final Select select, final int page, final int size) {
         this.origin = select;
-        this.paginated = new com.github.fabriciofx.cactoos.jdbc.query.Paginated(
+        this.qry = new com.github.fabriciofx.cactoos.jdbc.query.Paginated(
             this.origin.query(),
             page,
             size
@@ -28,7 +47,9 @@ public final class Paginated implements Statement<ResultSet> {
     @Override
     public ResultSet execute() throws Exception {
         try (
-            PreparedStatement stmt = this.paginated.prepared(this.origin.session().connection())
+            PreparedStatement stmt = this.qry.prepared(
+                this.origin.session().connection()
+            )
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
@@ -39,7 +60,13 @@ public final class Paginated implements Statement<ResultSet> {
         }
     }
 
+    @Override
+    public Session session() {
+        return this.origin.session();
+    }
+
+    @Override
     public Query query() {
-        return this.paginated;
+        return this.qry;
     }
 }

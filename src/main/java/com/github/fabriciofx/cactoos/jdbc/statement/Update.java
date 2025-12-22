@@ -19,29 +19,39 @@ public final class Update implements Statement<Integer> {
     /**
      * The session.
      */
-    private final Session session;
+    private final Session sssn;
 
     /**
      * The SQL query.
      */
-    private final Query query;
+    private final Query qry;
 
     /**
      * Ctor.
-     * @param sssn A Session
-     * @param qry A SQL query
+     * @param session A Session
+     * @param query A SQL query
      */
-    public Update(final Session sssn, final Query qry) {
-        this.session = sssn;
-        this.query = qry;
+    public Update(final Session session, final Query query) {
+        this.sssn = session;
+        this.qry = query;
     }
 
     @Override
     public Integer execute() throws Exception {
         try (
-            PreparedStatement stmt = this.query.prepared(this.session.connection())
+            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
         ) {
             return stmt.executeUpdate();
         }
+    }
+
+    @Override
+    public Session session() {
+        return this.sssn;
+    }
+
+    @Override
+    public Query query() {
+        return this.qry;
     }
 }

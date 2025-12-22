@@ -22,7 +22,7 @@ public final class Paginated implements Query {
     /**
      * The paginated query.
      */
-    private final Query paginated;
+    private final Query qry;
 
     /**
      * Ctor.
@@ -31,7 +31,7 @@ public final class Paginated implements Query {
      * @param size The amount of elements in this page
      */
     public Paginated(final Query query, final int page, final int size) {
-        this.paginated = new QueryOf(
+        this.qry = new QueryOf(
             new FormattedText(
                 "SELECT q.*, COUNT(*) OVER () AS __total__ FROM (%s) q LIMIT :limit OFFSET :offset",
                 query.sql().named()
@@ -47,21 +47,21 @@ public final class Paginated implements Query {
     @Override
     public PreparedStatement prepared(final Connection connection)
         throws Exception {
-        return this.paginated.prepared(connection);
+        return this.qry.prepared(connection);
     }
 
     @Override
     public Params params() {
-        return this.paginated.params();
+        return this.qry.params();
     }
 
     @Override
     public Sql sql() {
-        return this.paginated.sql();
+        return this.qry.sql();
     }
 
     @Override
     public String asString() throws Exception {
-        return this.paginated.asString();
+        return this.qry.asString();
     }
 }

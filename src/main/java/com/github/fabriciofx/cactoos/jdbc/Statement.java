@@ -10,7 +10,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  * <p>There is no thread-safety guarantee.
  *
  * @param <T> Type of the result
- * @since 0.9.0
+ * @since 0.1
  */
 public interface Statement<T> {
     /**
@@ -19,4 +19,16 @@ public interface Statement<T> {
      * @throws Exception If fails
      */
     T execute() throws Exception;
+
+    /**
+     * Get the {@link Session} where the statement was executed.
+     * @return The {@link Session}
+     */
+    Session session();
+
+    /**
+     * Get the {@link Query} which statement executes.
+     * @return The {@link Query}
+     */
+    Query query();
 }

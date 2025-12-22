@@ -14,7 +14,7 @@ import javax.sql.rowset.RowSetFactory;
 import javax.sql.rowset.RowSetProvider;
 
 /**
- * StatementSelect.
+ * Select statement.
  *
  * @since 0.1
  */
@@ -23,27 +23,27 @@ public final class Select implements Statement<ResultSet> {
     /**
      * The session.
      */
-    private final Session session;
+    private final Session sssn;
 
     /**
      * The SQL query.
      */
-    private final Query query;
+    private final Query qry;
 
     /**
      * Ctor.
-     * @param sssn A Session
-     * @param qry A SQL query
+     * @param session A Session
+     * @param query A SQL query
      */
-    public Select(final Session sssn, final Query qry) {
-        this.session = sssn;
-        this.query = qry;
+    public Select(final Session session, final Query query) {
+        this.sssn = session;
+        this.qry = query;
     }
 
     @Override
     public ResultSet execute() throws Exception {
         try (
-            PreparedStatement stmt = this.query.prepared(this.session.connection())
+            PreparedStatement stmt = this.qry.prepared(this.sssn.connection())
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
@@ -54,11 +54,13 @@ public final class Select implements Statement<ResultSet> {
         }
     }
 
-    public Query query() {
-        return this.query;
+    @Override
+    public Session session() {
+        return this.sssn;
     }
 
-    public Session session() {
-        return this.session;
+    @Override
+    public Query query() {
+        return this.qry;
     }
 }
