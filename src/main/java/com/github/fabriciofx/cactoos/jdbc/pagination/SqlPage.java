@@ -10,6 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
+import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
 /**
@@ -47,6 +48,7 @@ public final class SqlPage<T> implements Page<T> {
 
     /**
      * Ctor.
+     *
      * @param adapter An adapter
      * @param select A select statement that retrieves the elements
      * @param number The page number
@@ -60,24 +62,26 @@ public final class SqlPage<T> implements Page<T> {
     ) {
         this.ttl = new LinkedList<>();
         this.elements = new Unchecked<>(
-            () -> {
-                try (
-                    ResultSet rset = new Paginated(
-                        select,
-                        number,
-                        size
-                    ).execute()
-                ) {
-                    final List<T> list = new LinkedList<>();
-                    while (rset.next()) {
-                        this.ttl.add(rset.getLong("__total__"));
-                        list.add(adapter.adapt(rset));
+            new Sticky<>(
+                () -> {
+                    try (
+                        ResultSet rset = new Paginated(
+                            select,
+                            number,
+                            size
+                        ).execute()
+                    ) {
+                        final List<T> list = new LinkedList<>();
+                        while (rset.next()) {
+                            this.ttl.add(rset.getLong("__total__"));
+                            list.add(adapter.adapt(rset));
+                        }
+                        return list;
+                    } catch (final Exception ex) {
+                        throw new RuntimeException(ex);
                     }
-                    return list;
-                } catch (final Exception ex) {
-                    throw new RuntimeException(ex);
                 }
-            }
+            )
         );
         this.page = number;
     }
