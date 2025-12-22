@@ -48,12 +48,15 @@ public final class Transaction<T> implements Statement<T> {
     @Override
     public T execute() throws Exception {
         try {
-            final T res = this.callable.call();
+            this.connexio.setAutoCommit(false);
+            final T result = this.callable.call();
             this.connexio.commit();
-            return res;
+            this.connexio.setAutoCommit(true);
+            return result;
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception ex) {
             this.connexio.rollback();
+            this.connexio.setAutoCommit(true);
             throw ex;
         }
     }

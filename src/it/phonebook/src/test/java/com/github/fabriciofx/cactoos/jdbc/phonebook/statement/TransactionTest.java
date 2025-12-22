@@ -9,7 +9,6 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import com.github.fabriciofx.cactoos.jdbc.statement.Transaction;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -49,9 +48,7 @@ final class TransactionTest {
         ) {
             server.start();
             try (
-                Connection connection = new Transacted(
-                    new NoAuth(server.resource())
-                ).connection()
+                Connection connection = new NoAuth(server.resource()).connection()
             ) {
                 new Assertion<>(
                     "must perform a transaction commit",
@@ -97,9 +94,7 @@ final class TransactionTest {
         ) {
             server.start();
             try (
-                Connection connection = new Transacted(
-                    new NoAuth(server.resource())
-                ).connection()
+                Connection connection = new NoAuth(server.resource()).connection()
             ) {
                 final Phonebook phonebook = new SqlPhonebook(connection);
                 final String name = "Frank Miller";
