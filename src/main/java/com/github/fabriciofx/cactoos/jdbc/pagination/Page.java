@@ -12,36 +12,31 @@ import java.util.List;
  * <p>There is no thread-safety guarantee.
  *
  * @param <T> Type of the page's content
- * @since 0.8.0
+ * @since 0.9.0
  */
 public interface Page<T> {
     /**
-     * Get the content of this page.
-     * @return A content's list
+     * Get the items of this page.
+     *
+     * @return An item's list
      */
-    List<T> content();
+    List<T> items();
 
     /**
-     * Check if there is a next page.
-     * @return True if contains or false if it doesn't
+     * Get the total amount of items.
+     * @return The total number of items
      */
-    boolean hasNext();
+    long total();
 
     /**
-     * Get the next page.
-     * @return The next page
+     * Get the current page number.
+     * @return The current page number
      */
-    Page<T> next();
+    int number();
 
     /**
-     * Check if there is a previous page.
-     * @return True if contains or false if it doesn't
+     * Get the amount items in this page.
+     * @return The number of items in this page
      */
-    boolean hasPrevious();
-
-    /**
-     * Get the previous page.
-     * @return The previous page
-     */
-    Page<T> previous();
+    int size();
 }

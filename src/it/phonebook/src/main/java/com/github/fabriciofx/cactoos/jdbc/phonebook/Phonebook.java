@@ -4,7 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
+import java.util.List;
 
 /**
  * Phonebook.
@@ -15,26 +16,27 @@ import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
  */
 public interface Phonebook {
     /**
-     * Create a new Contact.
+     * Create a new {@link Contact}.
      * @param name Contact's name
-     * @return A new Contact
-     * @throws Exception If fails
+     * @return A new {@link Contact}
+     * @throws Exception Is something goes wrong
      */
-    Contact contact(String name) throws Exception;
+    Contact create(String name) throws Exception;
 
     /**
-     * Search for a Contact.
+     * Search for a {@link Contact}.
      * @param name Contact's name
-     * @return A Contact's pages
-     * @throws Exception If fails
+     * @return A list of contacts
+     * @throws Exception Is something goes wrong
      */
-    Pages<Contact> search(String name) throws Exception;
+    List<Contact> search(String name) throws Exception;
 
     /**
-     * Retrieve all Contacts.
-     * @param max The max amount contacts per page
-     * @return Pages with all phonebook Contacts
-     * @throws Exception Is fails
+     * Retrieve a page of {@link Contact}s.
+     * @param number The contacts page
+     * @param size The amount of contacts per page
+     * @return A page of contacts
+     * @throws Exception Is something goes wrong
      */
-    Pages<Contact> contacts(int max) throws Exception;
+    Page<Contact> page(int number, int size) throws Exception;
 }

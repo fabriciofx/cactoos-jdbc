@@ -4,15 +4,20 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
-import com.github.fabriciofx.cactoos.jdbc.pagination.SqlPages;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
+import com.github.fabriciofx.cactoos.jdbc.pagination.SqlPage;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
+import com.github.fabriciofx.cactoos.jdbc.statement.Select;
+import java.sql.ResultSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import org.cactoos.text.Lowered;
 
@@ -31,6 +36,7 @@ public final class SqlPhonebook implements Phonebook {
 
     /**
      * Ctor.
+     *
      * @param sssn The Session
      */
     public SqlPhonebook(final Session sssn) {
@@ -38,7 +44,7 @@ public final class SqlPhonebook implements Phonebook {
     }
 
     @Override
-    public Contact contact(final String name) throws Exception {
+    public Contact create(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
         new Insert(
             this.session,
@@ -52,30 +58,35 @@ public final class SqlPhonebook implements Phonebook {
     }
 
     @Override
-    public Pages<Contact> search(final String name) throws Exception {
-        return new SqlPages<>(
+    public List<Contact> search(final String name) throws Exception {
+        final List<Contact> contacts = new LinkedList<>();
+        final Select select = new Select(
             this.session,
             new QueryOf(
-                "SELECT COUNT(*) FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
+                "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
                 new TextOf("name", new Lowered(name))
-            ),
-            new QueryOf(
-                "SELECT * FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
-                new TextOf("name", new Lowered(name))
-            ),
-            new ResultSetAsContact(this.session),
-            1
+            )
         );
+        final Adapter<Contact> adapter = new ResultSetAsContact(this.session);
+        try (ResultSet rset = select.execute()) {
+            while (rset.next()) {
+                contacts.add(adapter.adapt(rset));
+            }
+        }
+        return contacts;
     }
 
     @Override
-    public Pages<Contact> contacts(final int max) throws Exception {
-        return new SqlPages<>(
-            this.session,
-            new QueryOf("SELECT COUNT(*) FROM contact"),
-            new QueryOf("SELECT * FROM contact"),
+    public Page<Contact> page(final int number, final int size)
+        throws Exception {
+        return new SqlPage<>(
             new ResultSetAsContact(this.session),
-            max
+            new Select(
+                this.session,
+                new QueryOf("SELECT id FROM contact")
+            ),
+            number,
+            size
         );
     }
 }

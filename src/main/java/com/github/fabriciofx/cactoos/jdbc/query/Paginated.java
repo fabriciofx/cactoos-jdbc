@@ -22,24 +22,24 @@ public final class Paginated implements Query {
     /**
      * The paginated query.
      */
-    private final Query origin;
+    private final Query paginated;
 
     /**
      * Ctor.
-     * @param query The query that retrieves all elements
-     * @param max The maximum amount of elements per page
-     * @param skip Skip the first nth elements
+     * @param query A select query that retrieves all elements
+     * @param page The page number
+     * @param size The amount of elements in this page
      */
-    public Paginated(final Query query, final int max, final int skip) {
-        this.origin = new QueryOf(
+    public Paginated(final Query query, final int page, final int size) {
+        this.paginated = new QueryOf(
             new FormattedText(
-                "%s LIMIT :limit OFFSET :offset",
+                "SELECT q.*, COUNT(*) OVER () AS __total__ FROM (%s) q LIMIT :limit OFFSET :offset",
                 query.sql().named()
             ),
             new ParamsOf(
                 query.params(),
-                new IntOf("limit", max),
-                new IntOf("offset", skip)
+                new IntOf("limit", size),
+                new IntOf("offset", Math.max(page - 1, 0) * size)
             )
         );
     }
@@ -47,21 +47,21 @@ public final class Paginated implements Query {
     @Override
     public PreparedStatement prepared(final Connection connection)
         throws Exception {
-        return this.origin.prepared(connection);
+        return this.paginated.prepared(connection);
     }
 
     @Override
     public Params params() {
-        return this.origin.params();
+        return this.paginated.params();
     }
 
     @Override
     public Sql sql() {
-        return this.origin.sql();
+        return this.paginated.sql();
     }
 
     @Override
     public String asString() throws Exception {
-        return this.origin.asString();
+        return this.paginated.asString();
     }
 }

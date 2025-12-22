@@ -5,9 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.pagination;
 
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
+import com.github.fabriciofx.cactoos.jdbc.statement.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.ResultSet;
 import java.util.LinkedList;
@@ -38,29 +36,9 @@ public final class SqlPage<T> implements Page<T> {
     private final Unchecked<List<T>> items;
 
     /**
-     * The session.
+     * Total amount of items.
      */
-    private final Session session;
-
-    /**
-     * The adapter.
-     */
-    private final Adapter<T> adapter;
-
-    /**
-     * Query that returns all objects.
-     */
-    private final Query all;
-
-    /**
-     * Total of all pages elements.
-     */
-    private final int size;
-
-    /**
-     * Number of elements by page.
-     */
-    private final int limit;
+    private final List<Long> total;
 
     /**
      * The page's number.
@@ -69,31 +47,30 @@ public final class SqlPage<T> implements Page<T> {
 
     /**
      * Ctor.
-     * @param session A session
      * @param adapter An adapter
-     * @param all A query that retrieves all elements
-     * @param size Number of elements in this page
-     * @param limit The maximum number of elements per page
+     * @param select A select statement that retrieves the elements
      * @param number The page number
+     * @param size The maximum number of elements per page
      */
     public SqlPage(
-        final Session session,
         final Adapter<T> adapter,
-        final Query all,
-        final int size,
-        final int limit,
-        final int number
+        final Select select,
+        final int number,
+        final int size
     ) {
+        this.total = new LinkedList<>();
         this.items = new Unchecked<>(
             () -> {
                 try (
-                    ResultSet rset = new Select(
-                        session,
-                        new Paginated(all, limit, number)
+                    ResultSet rset = new Paginated(
+                        select,
+                        number,
+                        size
                     ).execute()
                 ) {
                     final List<T> elements = new LinkedList<>();
                     while (rset.next()) {
+                        this.total.add(rset.getLong("__total__"));
                         elements.add(adapter.adapt(rset));
                     }
                     return elements;
@@ -102,52 +79,26 @@ public final class SqlPage<T> implements Page<T> {
                 }
             }
         );
-        this.session = session;
-        this.all = all;
-        this.adapter = adapter;
-        this.size = size;
-        this.limit = limit;
         this.number = number;
     }
 
     @Override
-    public List<T> content() {
+    public List<T> items() {
         return this.items.value();
     }
 
     @Override
-    public boolean hasNext() {
-        final int rem = Math.min(this.size % this.limit, 1);
-        final int pages = this.size / this.limit + rem;
-        return this.number < pages - 1;
+    public long total() {
+        return this.total.getFirst();
     }
 
     @Override
-    public Page<T> next() {
-        return new SqlPage<>(
-            this.session,
-            this.adapter,
-            this.all,
-            this.size,
-            this.limit,
-            this.number + 1
-        );
+    public int number() {
+        return this.number;
     }
 
     @Override
-    public boolean hasPrevious() {
-        return this.number > 0;
-    }
-
-    @Override
-    public Page<T> previous() {
-        return new SqlPage<>(
-            this.session,
-            this.adapter,
-            this.all,
-            this.size,
-            this.limit,
-            this.number - 1
-        );
+    public int size() {
+        return this.items.value().size();
     }
 }

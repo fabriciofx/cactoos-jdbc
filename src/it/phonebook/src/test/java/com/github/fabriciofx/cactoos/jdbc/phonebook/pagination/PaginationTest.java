@@ -5,9 +5,9 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.pagination;
 
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
-import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.statement.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -26,8 +26,8 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * <p>There is no thread-safety guarantee.
  *
- * @since 0.8.0
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @since 0.8.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginationTest {
@@ -44,9 +44,13 @@ final class PaginationTest {
         ) {
             server.start();
             try (
-                ResultSet rset = new Select(
-                    new NoAuth(server.resource()),
-                    new Paginated(new QueryOf("SELECT * FROM contact"), 1, 0)
+                ResultSet rset = new Paginated(
+                    new Select(
+                        new NoAuth(server.resource()),
+                        new QueryOf("SELECT * FROM contact")
+                    ),
+                    1,
+                    2
                 ).execute()
             ) {
                 if (rset.next()) {
@@ -74,8 +78,9 @@ final class PaginationTest {
             server.start();
             new Assertion<>(
                 "must have at least one page",
-                new SqlPhonebook(new NoAuth(server.resource())).search("maria")
-                    .count(),
+                new SqlPhonebook(
+                    new NoAuth(server.resource())
+                ).search("maria").size(),
                 new IsNumber(1)
             ).affirm();
         }

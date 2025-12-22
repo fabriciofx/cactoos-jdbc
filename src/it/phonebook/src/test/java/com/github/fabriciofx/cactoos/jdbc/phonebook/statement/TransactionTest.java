@@ -52,7 +52,7 @@ final class TransactionTest {
                             final Phonebook phonebook = new SqlPhonebook(
                                 transacted
                             );
-                            final Contact contact = phonebook.contact(
+                            final Contact contact = phonebook.create(
                                 "Albert Einstein"
                             );
                             contact.phones().add("99991234", "TIM");
@@ -90,7 +90,7 @@ final class TransactionTest {
             new Transaction<>(
                 transacted,
                 () -> {
-                    final Contact contact = phonebook.contact(name);
+                    final Contact contact = phonebook.create(name);
                     contact.phones().add("99991234", "TIM");
                     throw new IllegalStateException("Rollback");
                 }
@@ -99,7 +99,7 @@ final class TransactionTest {
         }
         new Assertion<>(
             "must perform a transaction rollback",
-            () -> phonebook.search(name).page(0).content().size(),
+            () -> phonebook.search(name).size(),
             new HasValue<>(0)
         ).affirm();
     }

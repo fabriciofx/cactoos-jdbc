@@ -26,7 +26,7 @@ final class PaginatedTest {
                 20,
                 0
             ),
-            new IsText("SELECT name, address FROM employee LIMIT ? OFFSET ?")
+            new IsText("SELECT q.*, COUNT(*) OVER () AS __total__ FROM (SELECT name, address FROM employee) q LIMIT ? OFFSET ?")
         ).affirm();
     }
 }

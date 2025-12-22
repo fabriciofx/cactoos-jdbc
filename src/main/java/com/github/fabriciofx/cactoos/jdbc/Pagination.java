@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
 
 /**
  * Pagination.
@@ -18,8 +18,9 @@ import com.github.fabriciofx.cactoos.jdbc.pagination.Pages;
 public interface Pagination<T> {
     /**
      * Get the pages of data.
-     * @param limit The number of data by page
-     * @return The pages of data
+     * @param number The number of page
+     * @param size The amount of items per page
+     * @return A page with items of <T>
      */
-    Pages<T> pages(int limit);
+    Page<T> page(int number, int size);
 }

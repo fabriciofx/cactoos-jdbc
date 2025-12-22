@@ -53,4 +53,12 @@ public final class Select implements Statement<ResultSet> {
             }
         }
     }
+
+    public Query query() {
+        return this.query;
+    }
+
+    public Session session() {
+        return this.session;
+    }
 }
