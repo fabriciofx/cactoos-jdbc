@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 
 /**
- * StatementUpdate.
+ * Update statement.
  *
  * @since 0.1
  */
