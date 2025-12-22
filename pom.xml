@@ -167,12 +167,24 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
-        <configuration combine.children="append">
+        <version>3.9.1</version>
+        <configuration>
+          <projectsDirectory>src/it</projectsDirectory>
           <pomIncludes>
             <pomInclude>phonebook/pom.xml</pomInclude>
           </pomIncludes>
         </configuration>
+        <executions>
+          <execution>
+            <id>run-it</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>install</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
