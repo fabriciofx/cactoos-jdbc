@@ -73,7 +73,7 @@ public final class PositionedSql implements Sql {
             () -> {
                 final String str = sql.asString();
                 final List<String> names = new LinkedList<>();
-                final Pattern find = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+                final Pattern find = Pattern.compile(":(\\p{Alpha}[\\p{Alnum}_]*)");
                 final Matcher matcher = find.matcher(str);
                 while (matcher.find()) {
                     names.add(matcher.group().substring(1));
