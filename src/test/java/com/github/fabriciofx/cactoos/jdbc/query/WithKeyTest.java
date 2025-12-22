@@ -4,16 +4,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
-import org.llorllale.cactoos.matchers.Matches;
-import org.llorllale.cactoos.matchers.Throws;
 
 /**
  * WithKey query tests.
