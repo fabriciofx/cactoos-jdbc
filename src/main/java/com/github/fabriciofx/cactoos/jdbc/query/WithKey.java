@@ -27,18 +27,13 @@ public final class WithKey implements Query {
     private final Sql sql;
 
     /**
-     * Primary key's name.
-     */
-    private final String key;
-
-    /**
      * SQL query parameters.
      */
     private final Params parameters;
 
     /**
      * Ctor.
-     * @param sql The SQL query
+     * @param sql The SQL query code
      * @param params SQL query parameters
      */
     public WithKey(final String sql, final Param... params) {
@@ -47,41 +42,30 @@ public final class WithKey implements Query {
 
     /**
      * Ctor.
-     * @param sql The SQL query
-     * @param params SQL query parameters
+     * @param sql The SQL query code
+     * @param params An array of SQL query parameters
      */
     public WithKey(final Text sql, final Param... params) {
-        this(sql, "id", params);
+        this(sql, new ParamsOf(params));
+    }
+
+    /**
+     * Ctor.
+     * @param sql The SQL query code
+     * @param params SQL query parameters
+     */
+    public WithKey(final Text sql, final Params params) {
+        this(new PositionedSql(sql, params), params);
     }
 
     /**
      * Ctor.
      * @param sql The SQL query
-     * @param pkname The primary key name
      * @param params SQL query parameters
      */
-    public WithKey(
-        final Text sql,
-        final String pkname,
-        final Param... params
-    ) {
-        this(new PositionedSql(sql, params), pkname, params);
-    }
-
-    /**
-     * Ctor.
-     * @param sql The SQL query
-     * @param pkname The primary key name
-     * @param params SQL query parameters
-     */
-    public WithKey(
-        final Sql sql,
-        final String pkname,
-        final Param... params
-    ) {
+    public WithKey(final Sql sql, final Params params) {
         this.sql = sql;
-        this.key = pkname;
-        this.parameters = new ParamsOf(params);
+        this.parameters = params;
     }
 
     @Override
@@ -90,7 +74,7 @@ public final class WithKey implements Query {
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
             this.sql.parse(),
-            new String[]{this.key}
+            java.sql.Statement.RETURN_GENERATED_KEYS
         );
         this.parameters.prepare(stmt);
         return stmt;

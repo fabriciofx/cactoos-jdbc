@@ -47,7 +47,6 @@ final class ResultAsValueTest {
                             connection,
                             new WithKey(
                                 () -> "INSERT INTO contact (name) VALUES (:name)",
-                                "id",
                                 new TextOf("name", "Leonardo da Vinci")
                             )
                         )

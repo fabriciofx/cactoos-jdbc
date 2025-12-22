@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.query.WithKey;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,17 +28,17 @@ public final class InsertWithKey<T> implements Statement<T> {
     private final Connection connexio;
 
     /**
-     * The SQL query.
+     * WithKey query.
      */
-    private final Query qry;
+    private final WithKey qry;
 
     /**
      * Ctor.
      *
      * @param connection A Session
-     * @param query  A SQL query
+     * @param query A {@link WithKey} query
      */
-    public InsertWithKey(final Connection connection, final Query query) {
+    public InsertWithKey(final Connection connection, final WithKey query) {
         this.connexio = connection;
         this.qry = query;
     }
