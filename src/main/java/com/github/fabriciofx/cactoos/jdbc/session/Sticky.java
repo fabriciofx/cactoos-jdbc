@@ -15,6 +15,11 @@ import org.cactoos.Scalar;
  */
 public final class Sticky implements Session {
     /**
+     * Session.
+     */
+    private final Session origin;
+
+    /**
      * The Connection.
      */
     private final Scalar<Connection> connexio;
@@ -24,11 +29,27 @@ public final class Sticky implements Session {
      * @param session Session
      */
     public Sticky(final Session session) {
+        this.origin = session;
         this.connexio = new org.cactoos.scalar.Sticky<>(session::connection);
     }
 
     @Override
     public Connection connection() throws Exception {
         return this.connexio.value();
+    }
+
+    @Override
+    public String url() {
+        return this.origin.url();
+    }
+
+    @Override
+    public String username() {
+        return this.origin.username();
+    }
+
+    @Override
+    public String password() {
+        return this.origin.password();
     }
 }

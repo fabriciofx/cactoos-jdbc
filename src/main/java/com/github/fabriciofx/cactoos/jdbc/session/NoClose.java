@@ -67,6 +67,21 @@ public final class NoClose implements Session, Closeable {
     }
 
     @Override
+    public String url() {
+        return this.origin.url();
+    }
+
+    @Override
+    public String username() {
+        return this.origin.username();
+    }
+
+    @Override
+    public String password() {
+        return this.origin.password();
+    }
+
+    @Override
     public void close() throws IOException {
         try {
             for (final NoCloseConnection connection : this.connections) {

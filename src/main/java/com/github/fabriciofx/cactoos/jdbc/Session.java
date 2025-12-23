@@ -14,7 +14,6 @@ import java.sql.Connection;
  *
  * @since 0.1
  */
-@FunctionalInterface
 public interface Session {
     /**
      * Create a {@link java.sql.Connection}.
@@ -22,4 +21,22 @@ public interface Session {
      * @throws Exception If fails
      */
     Connection connection() throws Exception;
+
+    /**
+     * Session JDBC URL.
+     * @return The JDBC URL
+     */
+    String url();
+
+    /**
+     * Session username.
+     * @return The username
+     */
+    String username();
+
+    /**
+     * Session password.
+     * @return The password.
+     */
+    String password();
 }

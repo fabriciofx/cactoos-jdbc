@@ -22,12 +22,12 @@ public final class Auth implements Session {
     /**
      * User name.
      */
-    private final String username;
+    private final String user;
 
     /**
      * User password.
      */
-    private final String password;
+    private final String pass;
 
     /**
      * Ctor.
@@ -41,12 +41,27 @@ public final class Auth implements Session {
         final String password
     ) {
         this.source = source;
-        this.username = username;
-        this.password = password;
+        this.user = username;
+        this.pass = password;
     }
 
     @Override
     public Connection connection() throws Exception {
-        return this.source.getConnection(this.username, this.password);
+        return this.source.getConnection(this.user, this.pass);
+    }
+
+    @Override
+    public String url() {
+        return "";
+    }
+
+    @Override
+    public String username() {
+        return this.user;
+    }
+
+    @Override
+    public String password() {
+        return this.pass;
     }
 }

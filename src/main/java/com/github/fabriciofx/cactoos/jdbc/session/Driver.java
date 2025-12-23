@@ -17,40 +17,55 @@ public final class Driver implements Session {
     /**
      * JDBC URL.
      */
-    private final String url;
+    private final String jdbc;
 
     /**
      * User name.
      */
-    private final String username;
+    private final String user;
 
     /**
      * User password.
      */
-    private final String password;
+    private final String pass;
 
     /**
      * Ctor.
      * @param url JDBC URL
-     * @param user User name
+     * @param username User name
      * @param password User password
      */
     public Driver(
         final String url,
-        final String user,
+        final String username,
         final String password
     ) {
-        this.url = url;
-        this.username = user;
-        this.password = password;
+        this.jdbc = url;
+        this.user = username;
+        this.pass = password;
     }
 
     @Override
     public Connection connection() throws Exception {
         return DriverManager.getConnection(
-            this.url,
-            this.username,
-            this.password
+            this.jdbc,
+            this.user,
+            this.pass
         );
+    }
+
+    @Override
+    public String url() {
+        return this.jdbc;
+    }
+
+    @Override
+    public String username() {
+        return this.user;
+    }
+
+    @Override
+    public String password() {
+        return this.pass;
     }
 }

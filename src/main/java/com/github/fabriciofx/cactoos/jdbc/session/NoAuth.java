@@ -31,4 +31,19 @@ public final class NoAuth implements Session {
     public Connection connection() throws Exception {
         return this.source.getConnection();
     }
+
+    @Override
+    public String url() {
+        return "";
+    }
+
+    @Override
+    public String username() {
+        return "";
+    }
+
+    @Override
+    public String password() {
+        return "";
+    }
 }

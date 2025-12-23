@@ -127,4 +127,19 @@ public final class Logged implements Session {
             this.statements
         );
     }
+
+    @Override
+    public String url() {
+        return this.origin.url();
+    }
+
+    @Override
+    public String username() {
+        return this.origin.username();
+    }
+
+    @Override
+    public String password() {
+        return this.origin.password();
+    }
 }
