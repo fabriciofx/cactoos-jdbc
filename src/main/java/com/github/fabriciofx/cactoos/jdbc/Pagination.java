@@ -22,5 +22,5 @@ public interface Pagination<T> {
      * @param size The amount of items per page
      * @return A page with items of T
      */
-    Page<T> page(int number, int size);
+    Page<T> page(int number, int size) throws Exception;
 }

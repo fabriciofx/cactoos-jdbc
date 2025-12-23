@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
+import com.github.fabriciofx.cactoos.jdbc.Pagination;
 import java.util.List;
 
 /**
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @since 0.4
  */
-public interface Phonebook {
+public interface Phonebook extends Pagination<Contact> {
     /**
      * Create a new {@link Contact}.
      * @param name Contact's name
@@ -30,13 +30,4 @@ public interface Phonebook {
      * @throws Exception Is something goes wrong
      */
     List<Contact> search(String name) throws Exception;
-
-    /**
-     * Retrieve a page of {@link Contact}s.
-     * @param number The contacts page
-     * @param size The amount of contacts per page
-     * @return A page of contacts
-     * @throws Exception Is something goes wrong
-     */
-    Page<Contact> page(int number, int size) throws Exception;
 }
