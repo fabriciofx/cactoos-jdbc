@@ -13,6 +13,13 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
  */
 public interface Phone {
     /**
+     * Retrieve the phone's data.
+     * @return Phone's data
+     * @throws Exception If fails
+     */
+    String about() throws Exception;
+
+    /**
      * Delete a contact's phone.
      * @throws Exception If fails
      */

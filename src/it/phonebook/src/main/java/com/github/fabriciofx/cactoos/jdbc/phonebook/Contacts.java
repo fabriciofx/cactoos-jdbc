@@ -11,7 +11,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
  *
  * @since 0.1
  */
-public interface Contacts extends Iterable<Contact> {
+public interface Contacts {
     /**
      * Returns the quantity of contacts.
      * @return The quantity

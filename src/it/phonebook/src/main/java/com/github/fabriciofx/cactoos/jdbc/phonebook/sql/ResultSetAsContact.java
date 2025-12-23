@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.UUID;
 
@@ -27,22 +27,22 @@ import java.util.UUID;
 )
 public final class ResultSetAsContact implements Adapter<Contact> {
     /**
-     * Connection.
+     * Session.
      */
-    private final Connection connection;
+    private final Session session;
 
     /**
      * Ctor.
-     * @param connection A connection
+     * @param session A session
      */
-    public ResultSetAsContact(final Connection connection) {
-        this.connection = connection;
+    public ResultSetAsContact(final Session session) {
+        this.session = session;
     }
 
     @Override
     public Contact adapt(final ResultSet rset) {
         try {
-            return new SqlContact(this.connection, (UUID) rset.getObject(1));
+            return new SqlContact(this.session, (UUID) rset.getObject(1));
         } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }

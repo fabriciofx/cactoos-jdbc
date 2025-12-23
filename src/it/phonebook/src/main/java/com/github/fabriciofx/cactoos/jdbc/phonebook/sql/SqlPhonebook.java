@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
 import com.github.fabriciofx.cactoos.jdbc.pagination.SqlPage;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
@@ -30,47 +31,51 @@ import org.cactoos.text.Lowered;
  */
 public final class SqlPhonebook implements Phonebook {
     /**
-     * Connection.
+     * Session.
      */
-    private final Connection connection;
+    private final Session session;
 
     /**
      * Ctor.
      *
-     * @param connection The Session
+     * @param session The Session
      */
-    public SqlPhonebook(final Connection connection) {
-        this.connection = connection;
+    public SqlPhonebook(final Session session) {
+        this.session = session;
     }
 
     @Override
     public Contact create(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
-        new Insert(
-            this.connection,
-            new QueryOf(
-                "INSERT INTO contact (id, name) VALUES (:id, :name)",
-                new UuidOf("id", id),
-                new TextOf("name", name)
-            )
-        ).execute();
-        return new SqlContact(this.connection, id);
+        try (Connection connection = this.session.connection()) {
+            new Insert(
+                connection,
+                new QueryOf(
+                    "INSERT INTO contact (id, name) VALUES (:id, :name)",
+                    new UuidOf("id", id),
+                    new TextOf("name", name)
+                )
+            ).execute();
+        }
+        return new SqlContact(this.session, id);
     }
 
     @Override
     public List<Contact> search(final String name) throws Exception {
         final List<Contact> contacts = new LinkedList<>();
-        final Select select = new Select(
-            this.connection,
-            new QueryOf(
-                "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
-                new TextOf("name", new Lowered(name))
-            )
-        );
-        final Adapter<Contact> adapter = new ResultSetAsContact(this.connection);
-        try (ResultSet rset = select.execute()) {
-            while (rset.next()) {
-                contacts.add(adapter.adapt(rset));
+        try (Connection connection = this.session.connection()) {
+            final Select select = new Select(
+                connection,
+                new QueryOf(
+                    "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
+                    new TextOf("name", new Lowered(name))
+                )
+            );
+            final Adapter<Contact> adapter = new ResultSetAsContact(this.session);
+            try (ResultSet rset = select.execute()) {
+                while (rset.next()) {
+                    contacts.add(adapter.adapt(rset));
+                }
             }
         }
         return contacts;
@@ -79,14 +84,16 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public Page<Contact> page(final int number, final int size)
         throws Exception {
-        return new SqlPage<>(
-            new ResultSetAsContact(this.connection),
-            new Select(
-                this.connection,
-                new QueryOf("SELECT id FROM contact")
-            ),
-            number,
-            size
-        );
+        try (Connection connection = this.session.connection()) {
+            return new SqlPage<>(
+                new ResultSetAsContact(this.session),
+                new Select(
+                    connection,
+                    new QueryOf("SELECT id FROM contact")
+                ),
+                number,
+                size
+            );
+        }
     }
 }

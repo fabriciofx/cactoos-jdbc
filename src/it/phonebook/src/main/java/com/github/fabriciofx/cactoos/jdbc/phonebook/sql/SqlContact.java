@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -28,9 +29,9 @@ import org.cactoos.text.FormattedText;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
     /**
-     * Connection.
+     * Session.
      */
-    private final Connection connection;
+    private final Session session;
 
     /**
      * Contact's ID.
@@ -40,73 +41,79 @@ public final class SqlContact implements Contact {
     /**
      * Ctor.
      *
-     * @param connection A Session
+     * @param session A Session
      * @param id A Contact's ID
      */
-    public SqlContact(final Connection connection, final UUID id) {
-        this.connection = connection;
+    public SqlContact(final Session session, final UUID id) {
+        this.session = session;
         this.id = id;
     }
 
     @Override
     public String about() throws Exception {
-        final String contact = new ResultSetAsValue<String>(
-            new Select(
-                this.connection,
-                new QueryOf(
-                    "SELECT name FROM contact WHERE id = :id",
-                    new UuidOf("id", this.id)
+        try (Connection connection = this.session.connection()) {
+            final String contact = new ResultSetAsValue<String>(
+                new Select(
+                    connection,
+                    new QueryOf(
+                        "SELECT name FROM contact WHERE id = :id",
+                        new UuidOf("id", this.id)
+                    )
                 )
-            )
-        ).value();
-        final String phones = new ResultSetAsXmlEach(
-            new Select(
-                this.connection,
-                new QueryOf(
-                    "SELECT number, carrier FROM phone WHERE contact_id = :contact_id",
-                    new UuidOf("contact_id", this.id)
-                )
-            ),
-            "phone"
-        ).value();
-        final String xml;
-        if (phones.isEmpty()) {
-            xml = "<contact><name>%s</name></contact>";
-        } else {
-            xml = "<contact><name>%s</name><phones>%s</phones></contact>";
+            ).value();
+            final String phones = new ResultSetAsXmlEach(
+                new Select(
+                    connection,
+                    new QueryOf(
+                        "SELECT number, carrier FROM phone WHERE contact_id = :contact_id",
+                        new UuidOf("contact_id", this.id)
+                    )
+                ),
+                "phone"
+            ).value();
+            final String xml;
+            if (phones.isEmpty()) {
+                xml = "<contact><name>%s</name></contact>";
+            } else {
+                xml = "<contact><name>%s</name><phones>%s</phones></contact>";
+            }
+            return new FormattedText(
+                xml,
+                contact,
+                phones
+            ).asString();
         }
-        return new FormattedText(
-            xml,
-            contact,
-            phones
-        ).asString();
     }
 
     @Override
     public Phones phones() throws Exception {
-        return new SqlPhones(this.connection, this.id);
+        return new SqlPhones(this.session, this.id);
     }
 
     @Override
     public void delete() throws Exception {
-        new Update(
-            this.connection,
-            new QueryOf(
-                "DELETE FROM contact WHERE id = :id",
-                new UuidOf("id", this.id)
-            )
-        ).execute();
+        try (Connection connection = this.session.connection()) {
+            new Update(
+                connection,
+                new QueryOf(
+                    "DELETE FROM contact WHERE id = :id",
+                    new UuidOf("id", this.id)
+                )
+            ).execute();
+        }
     }
 
     @Override
     public void update(final String name) throws Exception {
-        new Update(
-            this.connection,
-            new QueryOf(
-                "UPDATE contact SET name = :name WHERE id = :id",
-                new TextOf("name", name),
-                new UuidOf("id", this.id)
-            )
-        ).execute();
+        try (Connection connection = this.session.connection()) {
+            new Update(
+                connection,
+                new QueryOf(
+                    "UPDATE contact SET name = :name WHERE id = :id",
+                    new TextOf("name", name),
+                    new UuidOf("id", this.id)
+                )
+            ).execute();
+        }
     }
 }

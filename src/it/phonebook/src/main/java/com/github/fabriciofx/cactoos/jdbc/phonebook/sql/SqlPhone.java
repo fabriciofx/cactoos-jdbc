@@ -4,10 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXml;
+import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.sql.Connection;
 import java.util.UUID;
@@ -22,9 +25,9 @@ import java.util.UUID;
  */
 public final class SqlPhone implements Phone {
     /**
-     * Connection.
+     * Session.
      */
-    private final Connection connection;
+    private final Session session;
 
     /**
      * Contact's ID.
@@ -39,30 +42,49 @@ public final class SqlPhone implements Phone {
     /**
      * Ctor.
      *
-     * @param connection A Session
+     * @param session A Session
      * @param contact A Contact's ID
      * @param number Phone number
      */
     public SqlPhone(
-        final Connection connection,
+        final Session session,
         final UUID contact,
         final String number
     ) {
-        this.connection = connection;
+        this.session = session;
         this.id = contact;
         this.num = number;
     }
 
     @Override
+    public String about() throws Exception {
+        try (Connection connection = this.session.connection()) {
+            return new ResultSetAsXml(
+                new Select(
+                    connection,
+                    new QueryOf(
+                        "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
+                        new UuidOf("contact_id", this.id)
+                    )
+                ),
+                "phones",
+                "phone"
+            ).value();
+        }
+    }
+
+    @Override
     public void delete() throws Exception {
-        new Update(
-            this.connection,
-            new QueryOf(
-                "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
-                new UuidOf("contact_id", this.id),
-                new TextOf("number", this.num)
-            )
-        ).execute();
+        try (Connection connection = this.session.connection()) {
+            new Update(
+                connection,
+                new QueryOf(
+                    "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
+                    new UuidOf("contact_id", this.id),
+                    new TextOf("number", this.num)
+                )
+            ).execute();
+        }
     }
 
     @Override
@@ -70,15 +92,17 @@ public final class SqlPhone implements Phone {
         final String number,
         final String carrier
     ) throws Exception {
-        new Update(
-            this.connection,
-            new QueryOf(
-                "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
-                new TextOf("number", number),
-                new TextOf("carrier", carrier),
-                new UuidOf("contact_id", this.id),
-                new TextOf("number", this.num)
-            )
-        ).execute();
+        try (Connection connection = this.session.connection()) {
+            new Update(
+                connection,
+                new QueryOf(
+                    "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
+                    new TextOf("number", number),
+                    new TextOf("carrier", carrier),
+                    new UuidOf("contact_id", this.id),
+                    new TextOf("number", this.num)
+                )
+            ).execute();
+        }
     }
 }

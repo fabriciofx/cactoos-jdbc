@@ -4,18 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValues;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.Connection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
-import org.cactoos.iterator.Mapped;
-import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 
 /**
@@ -28,58 +24,47 @@ import org.cactoos.text.FormattedText;
  */
 public final class SqlContacts implements Contacts {
     /**
-     * Connection.
+     * Session.
      */
-    private final Connection connection;
+    private final Session session;
 
     /**
      * Ctor.
-     * @param connection A Connection.
+     * @param session A Session.
      */
-    public SqlContacts(final Connection connection) {
-        this.connection = connection;
+    public SqlContacts(final Session session) {
+        this.session = session;
     }
 
     @Override
     public int count() throws Exception {
-        return new ResultSetAsValue<Integer>(
-            new Select(
-                this.connection,
-                new QueryOf("SELECT COUNT(name) FROM contact")
-            )
-        ).value();
+        try (Connection connection = this.session.connection()) {
+            return new ResultSetAsValue<Integer>(
+                new Select(
+                    connection,
+                    new QueryOf("SELECT COUNT(name) FROM contact")
+                )
+            ).value();
+        }
     }
 
     @Override
     public Contact get(final int index) throws Exception {
-        return new SqlContact(
-            this.connection,
-            new ResultSetAsValue<UUID>(
-                new Select(
-                    this.connection,
-                    new QueryOf(
-                        new FormattedText(
-                            "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
-                            index
+        try (Connection connection = this.session.connection()) {
+            return new SqlContact(
+                this.session,
+                new ResultSetAsValue<UUID>(
+                    new Select(
+                        connection,
+                        new QueryOf(
+                            new FormattedText(
+                                "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",
+                                index
+                            )
                         )
                     )
-                )
-            ).value()
-        );
-    }
-
-    @Override
-    public Iterator<Contact> iterator() {
-        return new Mapped<>(
-            id -> new SqlContact(this.connection, id),
-            new Unchecked<List<UUID>>(
-                new ResultSetAsValues<>(
-                    new Select(
-                        this.connection,
-                        new QueryOf("SELECT id FROM contact")
-                    )
-                )
-            ).value().iterator()
-        );
+                ).value()
+            );
+        }
     }
 }
