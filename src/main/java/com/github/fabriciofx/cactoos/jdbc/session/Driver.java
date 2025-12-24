@@ -55,7 +55,7 @@ public final class Driver implements Session {
     }
 
     @Override
-    public String url() {
+    public String url() throws Exception {
         return this.jdbc;
     }
 

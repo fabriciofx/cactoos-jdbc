@@ -26,7 +26,7 @@ public interface Session {
      * Session JDBC URL.
      * @return The JDBC URL
      */
-    String url();
+    String url() throws Exception;
 
     /**
      * Session username.

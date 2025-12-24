@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.cactoos.Text;
 
 /**
  * Authenticated session.
@@ -18,6 +19,11 @@ public final class Auth implements Session {
      * The DataSource.
      */
     private final DataSource source;
+
+    /**
+     * JDBC URL.
+     */
+    private final Text jdbc;
 
     /**
      * User name.
@@ -41,6 +47,7 @@ public final class Auth implements Session {
         final String password
     ) {
         this.source = source;
+        this.jdbc = new UrlFromSource(this.source);
         this.user = username;
         this.pass = password;
     }
@@ -51,8 +58,8 @@ public final class Auth implements Session {
     }
 
     @Override
-    public String url() {
-        return "";
+    public String url() throws Exception {
+        return this.jdbc.asString();
     }
 
     @Override

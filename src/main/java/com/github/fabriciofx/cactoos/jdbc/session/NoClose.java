@@ -67,7 +67,7 @@ public final class NoClose implements Session, Closeable {
     }
 
     @Override
-    public String url() {
+    public String url() throws Exception {
         return this.origin.url();
     }
 

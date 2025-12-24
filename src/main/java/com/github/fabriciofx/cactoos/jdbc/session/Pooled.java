@@ -51,8 +51,8 @@ public final class Pooled implements Session {
     }
 
     @Override
-    public String url() {
-        return new Unchecked<>(this.hikari).value().getJdbcUrl();
+    public String url() throws Exception {
+        return this.hikari.value().getJdbcUrl();
     }
 
     @Override

@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.cactoos.Text;
 
 /**
  * No authenticated session.
@@ -20,11 +21,17 @@ public final class NoAuth implements Session {
     private final DataSource source;
 
     /**
+     * JDBC URL.
+     */
+    private final Text jdbc;
+
+    /**
      * Ctor.
      * @param source DataSource
      */
     public NoAuth(final DataSource source) {
         this.source = source;
+        this.jdbc = new UrlFromSource(this.source);
     }
 
     @Override
@@ -33,8 +40,8 @@ public final class NoAuth implements Session {
     }
 
     @Override
-    public String url() {
-        return "";
+    public String url() throws Exception {
+        return this.jdbc.asString();
     }
 
     @Override

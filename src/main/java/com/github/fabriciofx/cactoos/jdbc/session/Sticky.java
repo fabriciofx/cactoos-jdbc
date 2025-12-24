@@ -39,7 +39,7 @@ public final class Sticky implements Session {
     }
 
     @Override
-    public String url() {
+    public String url() throws Exception {
         return this.origin.url();
     }
 
