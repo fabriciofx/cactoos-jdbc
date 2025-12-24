@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.pagination;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
@@ -45,7 +46,9 @@ final class PaginationTest {
             )
         ) {
             server.start();
-            try (Connection connection = new NoAuth(server.resource()).connection()) {
+            try (
+                Connection connection = new NoAuth(server.resource()).connection()
+            ) {
                 try (
                     ResultSet rset = new Paginated(
                         new Select(
@@ -80,13 +83,12 @@ final class PaginationTest {
             )
         ) {
             server.start();
-            try (Connection connection = new NoAuth(server.resource()).connection()) {
-                new Assertion<>(
-                    "must have at least one page",
-                    new SqlPhonebook(connection).search("maria").size(),
-                    new IsNumber(1)
-                ).affirm();
-            }
+            final Session session = new NoAuth(server.resource());
+            new Assertion<>(
+                "must have at least one page",
+                new SqlPhonebook(session).search("maria").size(),
+                new IsNumber(1)
+            ).affirm();
         }
     }
 }

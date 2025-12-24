@@ -4,11 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.session.NoClose;
+import com.github.fabriciofx.cactoos.jdbc.session.Sticky;
 import com.github.fabriciofx.cactoos.jdbc.statement.Transaction;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -47,9 +50,12 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
+            final Session session = new Sticky(
+                new NoClose(
+                    new NoAuth(server.resource())
+                )
+            );
+            try (Connection connection = session.connection()) {
                 new Assertion<>(
                     "must perform a transaction commit",
                     XhtmlMatchers.xhtml(
@@ -59,7 +65,7 @@ final class TransactionTest {
                                 () -> {
                                     final Phonebook phonebook =
                                         new SqlPhonebook(
-                                            connection
+                                            session
                                         );
                                     final Contact contact = phonebook.create(
                                         "Albert Einstein"
@@ -93,10 +99,13 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
-                final Phonebook phonebook = new SqlPhonebook(connection);
+            final Session session = new Sticky(
+                new NoClose(
+                    new NoAuth(server.resource())
+                )
+            );
+            try (Connection connection = session.connection()) {
+                final Phonebook phonebook = new SqlPhonebook(session);
                 final String name = "Frank Miller";
                 try {
                     new Transaction<>(
