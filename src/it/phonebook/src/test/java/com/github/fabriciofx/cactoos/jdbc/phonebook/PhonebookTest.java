@@ -15,7 +15,6 @@ import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.jcabi.matchers.XhtmlMatchers;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 
@@ -50,11 +49,9 @@ final class PhonebookTest {
             final Contact contact = phonebook.create("Donald Knuth");
             contact.phones().add("99991234", "TIM");
             contact.phones().add("98812564", "Oi");
-            MatcherAssert.assertThat(
+            new Assertion<>(
                 "must contacts contain correct phone number",
-                XhtmlMatchers.xhtml(
-                    contact.about()
-                ),
+                XhtmlMatchers.xhtml(contact.about()),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Donald Knuth']",
                     "/contact/phones/phone/number[text()='99991234']",
@@ -62,7 +59,7 @@ final class PhonebookTest {
                     "/contact/phones/phone/number[text()='98812564']",
                     "/contact/phones/phone/carrier[text()='Oi']"
                 )
-            );
+            ).affirm();
         }
     }
 
@@ -77,7 +74,7 @@ final class PhonebookTest {
         ) {
             server.start();
             final Session session = new NoAuth(server.resource());
-            MatcherAssert.assertThat(
+            new Assertion<>(
                 "must have contact name",
                 XhtmlMatchers.xhtml(
                     new SqlPhonebook(session)
@@ -85,10 +82,8 @@ final class PhonebookTest {
                         .get(0)
                         .about()
                 ),
-                XhtmlMatchers.hasXPaths(
-                    "/contact/name[text()='Maria Souza']"
-                )
-            );
+                XhtmlMatchers.hasXPaths("/contact/name[text()='Maria Souza']")
+            ).affirm();
         }
     }
 
@@ -106,8 +101,8 @@ final class PhonebookTest {
             final Phonebook phonebook = new SqlPhonebook(session);
             final Contact contact = phonebook.search("maria").get(0);
             contact.update("Maria Lima");
-            MatcherAssert.assertThat(
-                "Must update contact name",
+            new Assertion<>(
+                "must update contact name",
                 XhtmlMatchers.xhtml(
                     new SqlPhonebook(session)
                         .search("maria")
@@ -117,7 +112,7 @@ final class PhonebookTest {
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Maria Lima']"
                 )
-            );
+            ).affirm();
         }
     }
 
@@ -153,9 +148,7 @@ final class PhonebookTest {
             new Assertion<>(
                 "must match Jeff Duham phonebook contact",
                 XhtmlMatchers.xhtml(page.items().get(0).about()),
-                XhtmlMatchers.hasXPaths(
-                    "/contact/name[text()='Jeff Duham']"
-                )
+                XhtmlMatchers.hasXPaths("/contact/name[text()='Jeff Duham']")
             ).affirm();
         }
     }
