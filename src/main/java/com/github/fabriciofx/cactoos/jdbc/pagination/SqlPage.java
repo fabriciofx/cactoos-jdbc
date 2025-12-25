@@ -8,6 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.statement.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.cactoos.scalar.Sticky;
@@ -39,7 +40,7 @@ public final class SqlPage<T> implements Page<T> {
     /**
      * Total amount of items.
      */
-    private final List<Long> ttl;
+    private final List<Long> amount;
 
     /**
      * The page's number.
@@ -60,7 +61,7 @@ public final class SqlPage<T> implements Page<T> {
         final int number,
         final int size
     ) {
-        this.ttl = new LinkedList<>();
+        this.amount = new ArrayList<>(0);
         this.elements = new Unchecked<>(
             new Sticky<>(
                 () -> {
@@ -72,8 +73,11 @@ public final class SqlPage<T> implements Page<T> {
                         ).execute()
                     ) {
                         final List<T> list = new LinkedList<>();
+                        if (rset.next()) {
+                            this.amount.add(rset.getLong("__total__"));
+                            list.add(adapter.adapt(rset));
+                        }
                         while (rset.next()) {
-                            this.ttl.add(rset.getLong("__total__"));
                             list.add(adapter.adapt(rset));
                         }
                         return list;
@@ -93,7 +97,14 @@ public final class SqlPage<T> implements Page<T> {
 
     @Override
     public long total() {
-        return this.ttl.get(0);
+        final long num;
+        this.elements.value();
+        if (this.amount.isEmpty()) {
+            num = 0;
+        } else {
+            num = this.amount.get(0);
+        }
+        return num;
     }
 
     @Override
