@@ -93,7 +93,7 @@ public final class SqlPage<T> implements Page<T> {
 
     @Override
     public long total() {
-        return this.ttl.getFirst();
+        return this.ttl.get(0);
     }
 
     @Override
