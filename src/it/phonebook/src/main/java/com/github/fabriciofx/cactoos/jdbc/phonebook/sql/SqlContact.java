@@ -10,13 +10,12 @@ import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXmlEach;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.UUID;
-import org.cactoos.text.FormattedText;
+import org.cactoos.text.Concatenated;
 
 /**
  * Contact for SQL.
@@ -51,37 +50,20 @@ public final class SqlContact implements Contact {
 
     @Override
     public String about() throws Exception {
-        try (Connection connection = this.session.connection()) {
-            final String contact = new ResultSetAsValue<String>(
-                new Select(
-                    connection,
-                    new QueryOf(
-                        "SELECT name FROM contact WHERE id = :id",
-                        new UuidOf("id", this.id)
-                    )
+        try (
+            Connection connection = this.session.connection();
+            ResultSet rset = new Select(
+                connection,
+                new QueryOf(
+                    new Concatenated(
+                        "SELECT name, number, carrier FROM contact INNER JOIN ",
+                        "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
+                    ),
+                    new UuidOf("id", this.id)
                 )
-            ).value();
-            final String phones = new ResultSetAsXmlEach(
-                new Select(
-                    connection,
-                    new QueryOf(
-                        "SELECT number, carrier FROM phone WHERE contact_id = :contact_id",
-                        new UuidOf("contact_id", this.id)
-                    )
-                ),
-                "phone"
-            ).value();
-            final String xml;
-            if (phones.isEmpty()) {
-                xml = "<contact><name>%s</name></contact>";
-            } else {
-                xml = "<contact><name>%s</name><phones>%s</phones></contact>";
-            }
-            return new FormattedText(
-                xml,
-                contact,
-                phones
-            ).asString();
+            ).execute()
+        ) {
+            return new ContactAsXml().adapt(rset);
         }
     }
 
