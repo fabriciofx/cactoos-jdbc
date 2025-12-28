@@ -22,7 +22,7 @@ final class WithKeyTest {
     void withKey() {
         new Assertion<>(
             "must build a with key query",
-            new WithKey(
+            new KeyedQuery(
                 () -> "INSERT INTO contact (name) VALUES (:name)",
                 new TextOf("name", "Leonardo da Vinci")
             ),

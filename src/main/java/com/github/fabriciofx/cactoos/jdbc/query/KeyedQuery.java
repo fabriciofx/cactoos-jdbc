@@ -15,12 +15,12 @@ import java.sql.PreparedStatement;
 import org.cactoos.Text;
 
 /**
- * Keyed query.
+ * KeyedQuery.
  *
- * @since 0.1
+ * @since 0.9.0
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-public final class WithKey implements Query {
+public final class KeyedQuery implements Query {
     /**
      * SQL query.
      */
@@ -36,7 +36,7 @@ public final class WithKey implements Query {
      * @param sql The SQL query code
      * @param params SQL query parameters
      */
-    public WithKey(final String sql, final Param... params) {
+    public KeyedQuery(final String sql, final Param... params) {
         this(() -> sql, params);
     }
 
@@ -45,7 +45,7 @@ public final class WithKey implements Query {
      * @param sql The SQL query code
      * @param params An array of SQL query parameters
      */
-    public WithKey(final Text sql, final Param... params) {
+    public KeyedQuery(final Text sql, final Param... params) {
         this(sql, new ParamsOf(params));
     }
 
@@ -54,7 +54,7 @@ public final class WithKey implements Query {
      * @param sql The SQL query code
      * @param params SQL query parameters
      */
-    public WithKey(final Text sql, final Params params) {
+    public KeyedQuery(final Text sql, final Params params) {
         this(new PositionedSql(sql, params), params);
     }
 
@@ -63,7 +63,7 @@ public final class WithKey implements Query {
      * @param sql The SQL query
      * @param params SQL query parameters
      */
-    public WithKey(final Sql sql, final Params params) {
+    public KeyedQuery(final Sql sql, final Params params) {
         this.sql = sql;
         this.parameters = params;
     }
