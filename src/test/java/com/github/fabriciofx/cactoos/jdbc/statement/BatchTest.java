@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.BatchOf;
+import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -40,7 +40,7 @@ final class BatchTest {
                 ).execute();
                 new Batch(
                     connection,
-                    new BatchOf(
+                    new BatchedQuery(
                         "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new ParamsOf(
                             new IntOf("id", 1),

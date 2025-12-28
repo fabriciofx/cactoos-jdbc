@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.BatchOf;
+import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXml;
@@ -47,7 +47,7 @@ final class SelectTest {
                 ).execute();
                 new Batch(
                     connection,
-                    new BatchOf(
+                    new BatchedQuery(
                         "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
                         new ParamsOf(
                             new IntOf("id", 1),
@@ -113,7 +113,7 @@ final class SelectTest {
                 ).execute();
                 new Batch(
                     connection,
-                    new BatchOf(
+                    new BatchedQuery(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
                             new IntOf("id", 1),

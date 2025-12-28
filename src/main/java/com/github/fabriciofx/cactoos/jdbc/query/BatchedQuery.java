@@ -14,12 +14,12 @@ import org.cactoos.Text;
 import org.cactoos.list.ListOf;
 
 /**
- * Batch query.
+ * BatchedQuery.
  *
- * @since 0.1
+ * @since 0.9.0
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-public final class BatchOf implements Query {
+public final class BatchedQuery implements Query {
     /**
      * SQL query.
      */
@@ -35,7 +35,7 @@ public final class BatchOf implements Query {
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
-    public BatchOf(final String sql, final Params... params) {
+    public BatchedQuery(final String sql, final Params... params) {
         this(() -> sql, params);
     }
 
@@ -44,7 +44,7 @@ public final class BatchOf implements Query {
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
-    public BatchOf(final Text sql, final Params... params) {
+    public BatchedQuery(final Text sql, final Params... params) {
         this(sql, new ListOf<>(params));
     }
 
@@ -53,7 +53,7 @@ public final class BatchOf implements Query {
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
-    public BatchOf(final Text sql, final Iterable<Params> params) {
+    public BatchedQuery(final Text sql, final Iterable<Params> params) {
         this(new PositionedSql(sql, params.iterator().next()), params);
     }
 
@@ -62,7 +62,7 @@ public final class BatchOf implements Query {
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
-    public BatchOf(final Sql sql, final Iterable<Params> params) {
+    public BatchedQuery(final Sql sql, final Iterable<Params> params) {
         this.sql = sql;
         this.parameters = params;
     }

@@ -11,7 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.BatchOf;
+import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Batch;
@@ -51,7 +51,7 @@ final class PooledTest {
             try (Connection connection = session.connection()) {
                 new Batch(
                     connection,
-                    new BatchOf(
+                    new BatchedQuery(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
                             new IntOf("id", 1),
