@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
+import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.cactoos.text.FormattedText;
 import org.junit.jupiter.api.Test;

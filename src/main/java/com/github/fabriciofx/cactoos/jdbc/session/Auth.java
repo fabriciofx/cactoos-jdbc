@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.Text;
