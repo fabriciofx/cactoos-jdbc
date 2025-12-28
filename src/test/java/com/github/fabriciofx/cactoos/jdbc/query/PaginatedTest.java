@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
+import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
@@ -26,7 +27,12 @@ final class PaginatedTest {
                 20,
                 0
             ),
-            new IsText("SELECT q.*, COUNT(*) OVER () AS __total__ FROM (SELECT name, address FROM employee) q LIMIT ? OFFSET ?")
+            new IsText(
+                new Concatenated(
+                    "SELECT q.*, COUNT(*) OVER () AS __total__ FROM ",
+                    "(SELECT name, address FROM employee) q LIMIT ? OFFSET ?"
+                )
+            )
         ).affirm();
     }
 }

@@ -10,6 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
+import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasString;
@@ -28,7 +29,10 @@ final class PositionedSqlTest {
         new Assertion<>(
             "must parse a query for all columns",
             () -> new PositionedSql(
-                "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
+                new Concatenated(
+                    "INSERT INTO employee (id, name, birthday, address, married, salary) ",
+                    "VALUES (:id, :name, :birthday, :address, :married, :salary)"
+                ),
                 new ParamsOf(
                     new IntOf("id", 1),
                     new TextOf("name", "John Wick"),
@@ -38,7 +42,12 @@ final class PositionedSqlTest {
                     new DecimalOf("salary", "13456.00")
                 )
             ).parse(),
-            new HasString("INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (?, ?, ?, ?, ?, ?)")
+            new HasString(
+                new Concatenated(
+                    "INSERT INTO employee (id, name, birthday, address, married, salary) ",
+                    "VALUES (?, ?, ?, ?, ?, ?)"
+                )
+            )
         ).affirm();
     }
 }

@@ -9,6 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import org.cactoos.scalar.ScalarOf;
+import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
@@ -67,15 +68,22 @@ final class QueryOfTest {
         new Assertion<>(
             "must build a query with many values",
             new QueryOf(
-                "INSERT INTO employee (name, birthday, address, married, salary) VALUES (:name, :birthday, :address, :married, :salary)",
+                new Concatenated(
+                    "INSERT INTO employee (name, birthday, address, married, salary) ",
+                    "VALUES (:name, :birthday, :address, :married, :salary)"
+                ),
                 new TextOf("name", "John Wick"),
                 new DateOf("birthday", "1980-08-16"),
                 new TextOf("address", "Boulevard Street, 34"),
                 new BoolOf("married", false),
                 new DecimalOf("salary", "13456.00")
             ),
-            // @checkstyle LineLengthCheck (1 line)
-            new IsText("INSERT INTO employee (name, birthday, address, married, salary) VALUES (?, ?, ?, ?, ?)")
+            new IsText(
+                new Concatenated(
+                    "INSERT INTO employee (name, birthday, address, married, salary) ",
+                    "VALUES (?, ?, ?, ?, ?)"
+                )
+            )
         ).affirm();
     }
 
@@ -87,7 +95,10 @@ final class QueryOfTest {
             new Matches<>(
                 new ScalarOf<>(
                     () -> new QueryOf(
-                        "INSERT INTO employee (name, birthday, address, married, salary) VALUES (:name, :birthday, :address, :married, :salary)",
+                        new Concatenated(
+                            "INSERT INTO employee (name, birthday, address, married, salary) ",
+                            "VALUES (:name, :birthday, :address, :married, :salary)"
+                        ),
                         new TextOf("name", "John Wick"),
                         new DateOf("address", "1980-08-16"),
                         new TextOf("birthday", "Boulevard Street, 34"),
