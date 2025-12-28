@@ -6,9 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.pagination;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
+import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.statement.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -47,25 +47,22 @@ final class PaginationTest {
         ) {
             server.start();
             try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
-                try (
-                    ResultSet rset = new Paginated(
-                        new Select(
-                            connection,
-                            new QueryOf("SELECT * FROM contact")
-                        ),
+                Connection connection = new NoAuth(server.resource()).connection();
+                ResultSet rset = new Select(
+                    connection,
+                    new Paginated(
+                        new QueryOf("SELECT * FROM contact"),
                         1,
                         2
-                    ).execute()
-                ) {
-                    if (rset.next()) {
-                        new Assertion<>(
-                            "must retrieve the contact's id",
-                            new TextOf(rset.getObject(1).toString()),
-                            new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
-                        ).affirm();
-                    }
+                    )
+                ).execute()
+            ) {
+                if (rset.next()) {
+                    new Assertion<>(
+                        "must retrieve the contact's id",
+                        new TextOf(rset.getObject(1).toString()),
+                        new IsText("2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1")
+                    ).affirm();
                 }
             }
         }
