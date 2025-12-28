@@ -16,12 +16,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * Insert with keys statement.
+ * KeyedInsert.
+ * Insert statement which returns a key.
  *
  * @param <T> Type of the key
- * @since 0.1
+ * @since 0.9.0
  */
-public final class InsertWithKey<T> implements Statement<T> {
+public final class KeyedInsert<T> implements Statement<T> {
     /**
      * The connection.
      */
@@ -38,7 +39,7 @@ public final class InsertWithKey<T> implements Statement<T> {
      * @param connection A Session
      * @param query A {@link KeyedQuery} query
      */
-    public InsertWithKey(final Connection connection, final KeyedQuery query) {
+    public KeyedInsert(final Connection connection, final KeyedQuery query) {
         this.connexio = connection;
         this.qry = query;
     }

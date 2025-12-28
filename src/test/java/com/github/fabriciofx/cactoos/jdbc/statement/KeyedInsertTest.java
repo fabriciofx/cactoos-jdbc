@@ -18,7 +18,7 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
 
 /**
- * InsertWithKeys tests.
+ * KeyedInsert tests.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -26,7 +26,7 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-final class InsertWithKeyTest {
+final class KeyedInsertTest {
     @Test
     void insertWithKeys() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
@@ -43,7 +43,7 @@ final class InsertWithKeyTest {
                 new Assertion<>(
                     "must generated key value",
                     new ScalarOf<>(
-                        () -> new InsertWithKey<>(
+                        () -> new KeyedInsert<>(
                             connection,
                             new KeyedQuery(
                                 () -> "INSERT INTO contact (name) VALUES (:name)",
