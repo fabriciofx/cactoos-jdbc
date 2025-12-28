@@ -21,17 +21,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Result as XML.
+ * ResultSet as XML.
  *
  * @since 0.4
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidCatchingGenericException",
-        "PMD.AvoidThrowingRawExceptionTypes",
-        "PMD.UnnecessaryLocalRule"
-    }
-)
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class ResultSetAsXml implements Adapter<String> {
     /**
      * Root tag in the XML.
@@ -54,46 +48,38 @@ public final class ResultSetAsXml implements Adapter<String> {
     }
 
     @Override
-    public String adapt(final ResultSet rset) {
-        try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory
-                .newInstance();
-            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            factory.setExpandEntityReferences(false);
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.newDocument();
-            final Element entries = doc.createElement(this.root);
-            doc.appendChild(entries);
-            final ResultSetMetaData rsmd = rset.getMetaData();
-            final int cols = rsmd.getColumnCount();
-            while (rset.next()) {
-                final Element entry = doc.createElement(this.child);
-                entries.appendChild(entry);
-                for (int idx = 1; idx <= cols; ++idx) {
-                    final String name = rsmd.getColumnName(idx)
-                        .toLowerCase(Locale.ENGLISH);
-                    final Object value = rset.getObject(idx);
-                    final Element node = doc.createElement(name);
-                    node.appendChild(doc.createTextNode(value.toString()));
-                    entry.appendChild(node);
-                }
+    public String adapt(final ResultSet rset) throws Exception {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory
+            .newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setExpandEntityReferences(false);
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        final Document doc = builder.newDocument();
+        final Element entries = doc.createElement(this.root);
+        doc.appendChild(entries);
+        final ResultSetMetaData rsmd = rset.getMetaData();
+        final int cols = rsmd.getColumnCount();
+        while (rset.next()) {
+            final Element entry = doc.createElement(this.child);
+            entries.appendChild(entry);
+            for (int idx = 1; idx <= cols; ++idx) {
+                final String name = rsmd.getColumnName(idx)
+                    .toLowerCase(Locale.ENGLISH);
+                final Object value = rset.getObject(idx);
+                final Element node = doc.createElement(name);
+                node.appendChild(doc.createTextNode(value.toString()));
+                entry.appendChild(node);
             }
-            final DOMSource src = new DOMSource(doc);
-            final Transformer transformer = TransformerFactory.newInstance()
-                .newTransformer();
-            transformer.setOutputProperty(
-                OutputKeys.OMIT_XML_DECLARATION,
-                "yes"
-            );
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            final StringWriter writer = new StringWriter();
-            final StreamResult result = new StreamResult(writer);
-            transformer.transform(src, result);
-            return writer.toString();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Exception ex) {
-            throw new RuntimeException(ex);
         }
+        final DOMSource src = new DOMSource(doc);
+        final Transformer transformer = TransformerFactory.newInstance()
+            .newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        final StringWriter writer = new StringWriter();
+        final StreamResult result = new StreamResult(writer);
+        transformer.transform(src, result);
+        return writer.toString();
     }
 }

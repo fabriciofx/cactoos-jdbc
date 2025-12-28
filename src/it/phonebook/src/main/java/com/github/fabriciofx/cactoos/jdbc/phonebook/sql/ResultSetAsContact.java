@@ -40,11 +40,7 @@ public final class ResultSetAsContact implements Adapter<Contact> {
     }
 
     @Override
-    public Contact adapt(final ResultSet rset) {
-        try {
-            return new SqlContact(this.session, (UUID) rset.getObject(1));
-        } catch (final Exception ex) {
-            throw new RuntimeException(ex);
-        }
+    public Contact adapt(final ResultSet rset) throws Exception {
+        return new SqlContact(this.session, (UUID) rset.getObject("id"));
     }
 }
