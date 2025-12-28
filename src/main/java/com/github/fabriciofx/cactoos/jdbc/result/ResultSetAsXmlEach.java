@@ -41,12 +41,12 @@ public final class ResultSetAsXmlEach implements Scalar<String> {
 
     @Override
     public String value() throws Exception {
-        final StringBuilder strb = new StringBuilder();
+        final StringBuilder line = new StringBuilder();
         try (ResultSet rset = this.statement.execute()) {
             for (final Map<String, Object> rows : new ResultSetAsRows(rset)) {
-                strb.append(String.format("<%s>", this.root));
+                line.append(String.format("<%s>", this.root));
                 for (final Map.Entry<String, Object> row : rows.entrySet()) {
-                    strb.append(
+                    line.append(
                         String.format(
                             "<%s>%s</%s>",
                             row.getKey(),
@@ -55,9 +55,9 @@ public final class ResultSetAsXmlEach implements Scalar<String> {
                         )
                     );
                 }
-                strb.append(String.format("</%s>", this.root));
+                line.append(String.format("</%s>\n", this.root));
             }
         }
-        return strb.toString();
+        return line.toString();
     }
 }
