@@ -83,10 +83,9 @@ public final class SqlContactPage implements Page<Contact> {
                         final List<Contact> list = new LinkedList<>();
                         if (rset.next()) {
                             this.amount.add(rset.getLong("__total__"));
-                            list.add(adapter.adapt(rset));
-                        }
-                        while (rset.next()) {
-                            list.add(adapter.adapt(rset));
+                            do {
+                                list.add(adapter.adapt(rset));
+                            } while (rset.next());
                         }
                         return list;
                     } catch (final Exception ex) {
