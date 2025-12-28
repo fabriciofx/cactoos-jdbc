@@ -2,11 +2,12 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.adapter;
 
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlContact;
 import java.sql.ResultSet;
 import java.util.UUID;
 
