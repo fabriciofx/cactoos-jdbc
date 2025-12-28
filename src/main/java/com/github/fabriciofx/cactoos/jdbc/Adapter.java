@@ -20,6 +20,7 @@ public interface Adapter<T> {
      * Transform the ResultSet in an object.
      * @param rset The ResultSet
      * @return The adapted object
+     * @throws Exception If fails
      */
-    T adapt(ResultSet rset);
+    T adapt(ResultSet rset) throws Exception;
 }
