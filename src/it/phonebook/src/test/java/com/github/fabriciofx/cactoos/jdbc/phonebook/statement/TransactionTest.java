@@ -8,10 +8,8 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.session.NoClose;
-import com.github.fabriciofx.cactoos.jdbc.session.Sticky;
+import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
 import com.github.fabriciofx.cactoos.jdbc.statement.Transaction;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -41,7 +39,8 @@ import org.llorllale.cactoos.matchers.HasValue;
 })
 final class TransactionTest {
     @Test
-    void commit() throws Exception {
+    void commitsATransaction() throws Exception {
+        final String name = "Albert Einstein";
         try (
             Server<DataSource> server = new H2Server(
                 new SqlScript(
@@ -50,47 +49,39 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            final Session session = new Sticky(
-                new NoClose(
-                    new NoAuth(server.resource())
-                )
-            );
-            try (Connection connection = session.connection()) {
-                new Assertion<>(
-                    "must perform a transaction commit",
-                    XhtmlMatchers.xhtml(
-                        new ResultAsValue<>(
-                            new Transaction<>(
-                                connection,
-                                () -> {
-                                    final Phonebook phonebook =
-                                        new SqlPhonebook(
-                                            session
-                                        );
-                                    final Contact contact = phonebook.create(
-                                        "Albert Einstein"
-                                    );
-                                    contact.phones().add("99991234", "TIM");
-                                    contact.phones().add("98812564", "Oi");
-                                    return contact.about();
-                                }
-                            )
-                        ).value()
-                    ),
-                    XhtmlMatchers.hasXPaths(
-                        "/contact/name[text()='Albert Einstein']",
-                        "/contact/phones/phone/number[text()='99991234']",
-                        "/contact/phones/phone/carrier[text()='TIM']",
-                        "/contact/phones/phone/number[text()='98812564']",
-                        "/contact/phones/phone/carrier[text()='Oi']"
-                    )
-                ).affirm();
+            final Session session = new NoAuth(server.resource());
+            final Session transacted = new Transacted(session);
+            try (Connection connection = transacted.connection()) {
+                new Transaction<>(
+                    connection,
+                    () -> {
+                        final Phonebook phonebook = new SqlPhonebook(transacted);
+                        final Contact contact = phonebook.create(name);
+                        contact.phones().add("99991234", "TIM");
+                        contact.phones().add("98812564", "Oi");
+                        return true;
+                    }
+                ).execute();
             }
+            new Assertion<>(
+                "must perform a transaction commit",
+                XhtmlMatchers.xhtml(
+                    new SqlPhonebook(session).search(name).get(0).about()
+                ),
+                XhtmlMatchers.hasXPaths(
+                    "/contact/name[text()='Albert Einstein']",
+                    "/contact/phones/phone/number[text()='99991234']",
+                    "/contact/phones/phone/carrier[text()='TIM']",
+                    "/contact/phones/phone/number[text()='98812564']",
+                    "/contact/phones/phone/carrier[text()='Oi']"
+                )
+            ).affirm();
         }
     }
 
     @Test
-    void rollback() throws Exception {
+    void rollbackATransaction() throws Exception {
+        final String name = "Frank Miller";
         try (
             Server<DataSource> server = new H2Server(
                 new SqlScript(
@@ -99,31 +90,29 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            final Session session = new Sticky(
-                new NoClose(
-                    new NoAuth(server.resource())
-                )
-            );
-            try (Connection connection = session.connection()) {
-                final Phonebook phonebook = new SqlPhonebook(session);
-                final String name = "Frank Miller";
+            final Session session = new NoAuth(server.resource());
+            final Session transacted = new Transacted(session);
+            try (Connection connection = transacted.connection()) {
                 try {
                     new Transaction<>(
                         connection,
                         () -> {
+                            final Phonebook phonebook =
+                                new SqlPhonebook(transacted);
                             final Contact contact = phonebook.create(name);
-                            contact.phones().add("99991234", "TIM");
+                            contact.phones().add("88884321", "Vivo");
+                            contact.phones().add("97824562", "Claro");
                             throw new IllegalStateException("Rollback");
                         }
                     ).execute();
                 } catch (final IllegalStateException ex) {
                 }
-                new Assertion<>(
-                    "must perform a transaction rollback",
-                    () -> phonebook.search(name).size(),
-                    new HasValue<>(0)
-                ).affirm();
             }
+            new Assertion<>(
+                "must perform a transaction rollback",
+                () -> new SqlPhonebook(session).search(name).size(),
+                new HasValue<>(0)
+            ).affirm();
         }
     }
 }
