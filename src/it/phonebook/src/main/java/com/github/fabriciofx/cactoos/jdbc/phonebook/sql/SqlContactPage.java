@@ -2,11 +2,16 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.pagination;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
-import com.github.fabriciofx.cactoos.jdbc.statement.Paginated;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,11 +20,10 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
 /**
- * SqlPage.
+ * SqlContactPage.
  *
  * <p>There is no thread-safety guarantee.
  *
- * @param <T> Type of the page's content
  * @since 0.8.0
  * @checkstyle ParameterNumberCheck (1500 lines)
  * @checkstyle IllegalCatchCheck (1500 lines)
@@ -31,11 +35,11 @@ import org.cactoos.scalar.Unchecked;
         "PMD.UnnecessaryLocalRule"
     }
 )
-public final class SqlPage<T> implements Page<T> {
+public final class SqlContactPage implements Page<Contact> {
     /**
      * The page's elements.
      */
-    private final Unchecked<List<T>> elements;
+    private final Unchecked<List<Contact>> elements;
 
     /**
      * Total amount of items.
@@ -50,14 +54,14 @@ public final class SqlPage<T> implements Page<T> {
     /**
      * Ctor.
      *
+     * @param session A session
      * @param adapter An adapter
-     * @param select A select statement that retrieves the elements
      * @param number The page number
      * @param size The maximum number of elements per page
      */
-    public SqlPage(
-        final Adapter<T> adapter,
-        final Select select,
+    public SqlContactPage(
+        final Session session,
+        final Adapter<Contact> adapter,
         final int number,
         final int size
     ) {
@@ -66,13 +70,17 @@ public final class SqlPage<T> implements Page<T> {
             new Sticky<>(
                 () -> {
                     try (
-                        ResultSet rset = new Paginated(
-                            select,
-                            number,
-                            size
+                        Connection connection = session.connection();
+                        ResultSet rset = new Select(
+                            connection,
+                            new Paginated(
+                                new QueryOf("SELECT id FROM contact"),
+                                number,
+                                size
+                            )
                         ).execute()
                     ) {
-                        final List<T> list = new LinkedList<>();
+                        final List<Contact> list = new LinkedList<>();
                         if (rset.next()) {
                             this.amount.add(rset.getLong("__total__"));
                             list.add(adapter.adapt(rset));
@@ -91,7 +99,7 @@ public final class SqlPage<T> implements Page<T> {
     }
 
     @Override
-    public List<T> items() {
+    public List<Contact> items() {
         return this.elements.value();
     }
 

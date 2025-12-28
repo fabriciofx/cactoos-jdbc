@@ -7,7 +7,6 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
-import com.github.fabriciofx.cactoos.jdbc.pagination.SqlPage;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -84,16 +83,11 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public Page<Contact> page(final int number, final int size)
         throws Exception {
-        try (Connection connection = this.session.connection()) {
-            return new SqlPage<>(
-                new ResultSetAsContact(this.session),
-                new Select(
-                    connection,
-                    new QueryOf("SELECT id FROM contact")
-                ),
-                number,
-                size
-            );
-        }
+        return new SqlContactPage(
+            this.session,
+            new ResultSetAsContact(this.session),
+            number,
+            size
+        );
     }
 }

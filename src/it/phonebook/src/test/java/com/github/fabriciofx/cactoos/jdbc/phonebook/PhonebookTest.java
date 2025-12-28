@@ -8,7 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.session.NoClose;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
@@ -126,7 +125,7 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Session session = new NoClose(new NoAuth(server.resource()));
+            final Session session = new NoAuth(server.resource());
             Page<Contact> page = new SqlPhonebook(session).page(1, 2);
             new Assertion<>(
                 "must match Maria Souza phonebook contact",
