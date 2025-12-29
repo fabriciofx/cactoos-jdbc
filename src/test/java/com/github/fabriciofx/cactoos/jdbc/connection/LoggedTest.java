@@ -47,9 +47,9 @@ final class LoggedTest {
             final Text regex = new Joined(
                 "\n",
                 "(?m)^\\[cactoos-jdbc\\] Connection\\[#0\\] has been opened with properties numServers=0,\\s*",
-                "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] created using SQL 'CREATE TABLE .*?'\\.\\s*",
-                "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] updated a source and returned '\\d+' in \\d+ms\\.\\s*",
-                "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] closed\\.\n$"
+                "\\[cactoos-jdbc\\] connection created PreparedStatement\\[#0\\] using SQL 'CREATE TABLE .*?' in \\d+ns\\.",
+                "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] updated a source and returned '\\d+' in \\d+ns\\.",
+                "\\[cactoos-jdbc\\] PreparedStatement\\[#0\\] closed in \\d+ns\\.\n$"
             );
             new Assertion<>(
                 "must log a cactoos-jdbc update statement",
