@@ -1,17 +1,17 @@
 package com.github.fabriciofx.cactoos.jdbc.connection;
 
+import com.github.fabriciofx.cactoos.jdbc.cache.Cache;
 import com.github.fabriciofx.cactoos.jdbc.cache.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map;
 
 public final class Cached extends ConnectionEnvelope {
-    private final Map<String, Table> cache;
+    private final Cache<String, Table> cache;
 
     public Cached(
         final Connection connection,
-        final Map<String, Table> cache
+        final Cache<String, Table> cache
     ) {
         super(connection);
         this.cache = cache;

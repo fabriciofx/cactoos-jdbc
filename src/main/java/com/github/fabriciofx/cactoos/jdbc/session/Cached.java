@@ -1,18 +1,22 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.cache.Cache;
 import com.github.fabriciofx.cactoos.jdbc.cache.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
 import java.sql.Connection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class Cached implements Session {
-    private final Map<String, Table> cache;
     private final Session origin;
+    private final Cache<String, Table> cache;
 
     public Cached(final Session session) {
+        this(session, new TableCache());
+    }
+
+    public Cached(final Session session, final Cache<String, Table> cache) {
         this.origin = session;
-        this.cache = new ConcurrentHashMap<>();
+        this.cache = cache;
     }
 
     @Override
