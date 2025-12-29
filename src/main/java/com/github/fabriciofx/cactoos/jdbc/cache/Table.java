@@ -24,4 +24,9 @@ public final class Table {
     public String name() {
         return this.name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Table(%s)", this.name);
+    }
 }

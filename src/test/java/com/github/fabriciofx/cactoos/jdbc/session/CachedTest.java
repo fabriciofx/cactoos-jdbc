@@ -1,6 +1,8 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.cache.Logged;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -25,10 +27,9 @@ final class CachedTest {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
             final FakeLogger logger = new FakeLogger();
-            final Session session = new Logged(
-                    new NoAuth(server.resource()),
-                "cached",
-                logger
+            final Session session = new Cached(
+                new NoAuth(server.resource()),
+                new Logged<>(new TableCache(), logger)
             );
             try (Connection connection = session.connection()) {
                 new Update(
