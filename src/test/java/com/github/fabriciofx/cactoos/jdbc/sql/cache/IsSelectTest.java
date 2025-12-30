@@ -1,5 +1,6 @@
 package com.github.fabriciofx.cactoos.jdbc.sql.cache;
 
+import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsTrue;
@@ -18,8 +19,8 @@ final class IsSelectTest {
     void validateIfAStatementNotIsASelect() throws Exception {
         new Assertion<>(
             "must validate if is a select",
-            !new IsSelect("CREATE TABLE person (id INT, name VARCHAR(30) PRIMARY KEY (id))").value(),
-            new IsTrue()
+            new IsSelect("CREATE TABLE person (id INT, name VARCHAR(30) PRIMARY KEY (id))").value(),
+            new IsNot<>(new IsTrue())
         ).affirm();
     }
 }
