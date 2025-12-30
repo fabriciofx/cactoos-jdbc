@@ -24,16 +24,18 @@ public final class Cached extends ConnectionEnvelope {
         final String sql
     ) throws SQLException {
         try {
+            final PreparedStatement prepared;
             if (new IsSelect(sql).value()) {
-                final String normalized = new NormalizedSelect(sql).asString();
-                return new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
+                prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                     super.prepareStatement(sql),
-                    super.prepareStatement(normalized),
+                    super.prepareStatement(new NormalizedSelect(sql).asString()),
                     sql,
                     this.cache
                 );
+            } else {
+                prepared = super.prepareStatement(sql);
             }
-            return super.prepareStatement(sql);
+            return prepared;
         } catch (final Exception ex) {
             throw new SQLException(ex);
         }
