@@ -2,6 +2,7 @@ package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import com.github.fabriciofx.cactoos.jdbc.cache.Cache;
 import com.github.fabriciofx.cactoos.jdbc.cache.Table;
+import com.github.fabriciofx.cactoos.jdbc.sql.cache.NormalizedSelect;
 import com.github.fabriciofx.cactoos.jdbc.sql.cache.IsSelect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +25,10 @@ public final class Cached extends ConnectionEnvelope {
     ) throws SQLException {
         try {
             if (new IsSelect(sql).value()) {
-                final String expanded = "SELECT * FROM person";
+                final String normalized = new NormalizedSelect(sql).asString();
                 return new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                     super.prepareStatement(sql),
-                    super.prepareStatement(expanded),
+                    super.prepareStatement(normalized),
                     sql,
                     this.cache
                 );
