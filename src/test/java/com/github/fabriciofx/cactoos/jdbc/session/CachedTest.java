@@ -5,8 +5,6 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
-import com.github.fabriciofx.cactoos.jdbc.cache.Logged;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -16,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import java.sql.Connection;
@@ -39,13 +36,9 @@ final class CachedTest {
     void cacheASelect() throws Exception {
         final String name = "Rob Pike";
         final String city = "San Francisco";
-        final FakeLogger logger = new FakeLogger();
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            final Session session = new Cached(
-                new NoAuth(server.resource()),
-                new Logged<>(new CachedRowSetCache(), "cache", logger)
-            );
+            final Session session = new Cached(new NoAuth(server.resource()));
             try (Connection connection = session.connection()) {
                 new Update(
                     connection,
