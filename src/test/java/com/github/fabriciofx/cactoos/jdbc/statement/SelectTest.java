@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -13,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsValue;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
@@ -71,15 +71,16 @@ final class SelectTest {
                     "must insert employees records",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
+                            "employees",
+                            "employee"
+                        ).adapt(
                             new Select(
                                 connection,
                                 new QueryOf(
                                     "SELECT * FROM employee"
                                 )
-                            ),
-                            "employees",
-                            "employee"
-                        ).value()
+                            ).execute()
+                        )
                     ),
                     XhtmlMatchers.hasXPaths(
                         "/employees/employee/id[text()='1']",

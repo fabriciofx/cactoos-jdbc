@@ -5,12 +5,12 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -35,13 +35,13 @@ final class UpdateTest {
             ) {
                 new Assertion<>(
                     "must create a table",
-                    new ResultAsValue<>(
-                        new Update(
+                    new ScalarOf<>(
+                        () -> new Update(
                             connection,
                             new QueryOf(
                                 "CREATE TABLE foo1 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                             )
-                        )
+                        ).execute()
                     ),
                     new HasValue<>(0)
                 ).affirm();

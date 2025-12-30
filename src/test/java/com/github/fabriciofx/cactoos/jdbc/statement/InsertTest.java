@@ -7,12 +7,12 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -42,15 +42,15 @@ final class InsertTest {
                 ).execute();
                 new Assertion<>(
                     "must insert into table",
-                    new ResultAsValue<>(
-                        new Insert(
+                    new ScalarOf<>(
+                        () -> new Insert(
                             connection,
                             new QueryOf(
                                 "INSERT INTO t01 (id, name) VALUES (:id, :name)",
                                 new IntOf("id", 1),
                                 new TextOf("name", "Yegor Bugayenko")
                             )
-                        )
+                        ).execute()
                     ),
                     new HasValue<>(false)
                 ).affirm();

@@ -6,8 +6,6 @@ package com.github.fabriciofx.cactoos.jdbc.result;
 
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.ResultSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import org.cactoos.Scalar;
 
@@ -36,12 +34,10 @@ public final class ResultSetAsValue<T> implements Scalar<T> {
     @Override
     public T value() throws Exception {
         try (ResultSet rset = this.statement.execute()) {
-            final Iterator<Map<String, Object>> iter = new ResultSetAsRows(rset)
-                .iterator();
-            if (!iter.hasNext()) {
-                throw new NoSuchElementException();
+            if (rset.next()) {
+                return (T) rset.getObject(1);
             }
-            return (T) iter.next().values().toArray()[0];
+            throw new NoSuchElementException("value not found");
         }
     }
 }

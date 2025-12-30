@@ -7,12 +7,9 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import com.github.fabriciofx.cactoos.jdbc.result.ResultSetAsRows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -50,13 +47,10 @@ public final class KeyedInsert<T> implements Statement<T> {
         try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
-                final Iterator<Map<String, Object>> iter = new ResultSetAsRows(
-                    rset
-                ).iterator();
-                if (!iter.hasNext()) {
-                    throw new NoSuchElementException();
+                if (rset.next()) {
+                    return (T) rset.getObject(1);
                 }
-                return (T) iter.next().values().toArray()[0];
+                throw new NoSuchElementException("generated key not found");
             }
         }
     }
