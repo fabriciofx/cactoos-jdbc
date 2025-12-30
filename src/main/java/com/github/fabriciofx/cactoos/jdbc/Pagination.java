@@ -4,8 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
-
 /**
  * Pagination.
  *
