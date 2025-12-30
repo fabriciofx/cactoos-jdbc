@@ -9,12 +9,11 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.adapter.ContactAsXml;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.scalar.ContactAsXml;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.UUID;
 import org.cactoos.text.Concatenated;
 
@@ -51,20 +50,19 @@ public final class SqlContact implements Contact {
 
     @Override
     public String about() throws Exception {
-        try (
-            Connection connection = this.session.connection();
-            ResultSet rset = new Select(
-                connection,
-                new QueryOf(
-                    new Concatenated(
-                        "SELECT name, number, carrier FROM contact INNER JOIN ",
-                        "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
-                    ),
-                    new UuidOf("id", this.id)
+        try (Connection connection = this.session.connection()) {
+            return new ContactAsXml(
+                new Select(
+                    connection,
+                    new QueryOf(
+                        new Concatenated(
+                            "SELECT name, number, carrier FROM contact INNER JOIN ",
+                            "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
+                        ),
+                        new UuidOf("id", this.id)
+                    )
                 )
-            ).execute()
-        ) {
-            return new ContactAsXml().adapt(rset);
+            ).value();
         }
     }
 

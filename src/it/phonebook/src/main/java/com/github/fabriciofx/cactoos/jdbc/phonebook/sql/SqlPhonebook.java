@@ -4,14 +4,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
-import com.github.fabriciofx.cactoos.jdbc.phonebook.adapter.ResultSetAsContact;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
@@ -71,10 +69,14 @@ public final class SqlPhonebook implements Phonebook {
                     new TextOf("name", new Lowered(name))
                 )
             );
-            final Adapter<Contact> adapter = new ResultSetAsContact(this.session);
             try (ResultSet rset = select.execute()) {
                 while (rset.next()) {
-                    contacts.add(adapter.adapt(rset));
+                    contacts.add(
+                        new SqlContact(
+                            this.session,
+                            (UUID) rset.getObject("id")
+                        )
+                    );
                 }
             }
         }
@@ -86,7 +88,6 @@ public final class SqlPhonebook implements Phonebook {
         throws Exception {
         return new SqlContactPage(
             this.session,
-            new ResultSetAsContact(this.session),
             number,
             size
         );

@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.result;
+package com.github.fabriciofx.cactoos.jdbc.scalar;
 
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.ResultSet;
@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import org.cactoos.Scalar;
 
 /**
- * Result as data.
+ * ResultSet as one value.
  *
  * @param <T> Type of the result
  * @since 0.1

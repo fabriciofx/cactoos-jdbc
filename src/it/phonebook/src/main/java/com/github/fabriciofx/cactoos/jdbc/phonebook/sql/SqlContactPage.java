@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Adapter;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.pagination.Page;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -16,6 +15,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
@@ -55,13 +55,11 @@ public final class SqlContactPage implements Page<Contact> {
      * Ctor.
      *
      * @param session A session
-     * @param adapter An adapter
      * @param number The page number
      * @param size The maximum number of elements per page
      */
     public SqlContactPage(
         final Session session,
-        final Adapter<Contact> adapter,
         final int number,
         final int size
     ) {
@@ -84,7 +82,12 @@ public final class SqlContactPage implements Page<Contact> {
                         if (rset.next()) {
                             this.amount.add(rset.getLong("__total__"));
                             do {
-                                list.add(adapter.adapt(rset));
+                                list.add(
+                                    new SqlContact(
+                                        session,
+                                        (UUID) rset.getObject("id")
+                                    )
+                                );
                             } while (rset.next());
                         }
                         return list;

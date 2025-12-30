@@ -4,8 +4,8 @@
  */
 
 /**
- * Adapter tests.
+ * Scalar for Contact.
  *
- * @since 0.8.1
+ * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.phonebook.adapter;
+package com.github.fabriciofx.cactoos.jdbc.phonebook.scalar;

@@ -5,11 +5,11 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.adapter.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.sql.Connection;
@@ -60,17 +60,16 @@ public final class SqlPhone implements Phone {
     public String about() throws Exception {
         try (Connection connection = this.session.connection()) {
             return new ResultSetAsXml(
-                "phones",
-                "phone"
-            ).adapt(
                 new Select(
                     connection,
                     new QueryOf(
                         "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
                         new UuidOf("contact_id", this.id)
                     )
-                ).execute()
-            );
+                ),
+                "phones",
+                "phone"
+            ).value();
         }
     }
 
