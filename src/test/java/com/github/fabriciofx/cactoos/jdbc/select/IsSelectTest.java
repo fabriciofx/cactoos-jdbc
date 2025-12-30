@@ -1,10 +1,18 @@
-package com.github.fabriciofx.cactoos.jdbc.sql.cache;
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
+package com.github.fabriciofx.cactoos.jdbc.select;
 
 import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsTrue;
 
+/**
+ * IsSelect tests.
+ * @since 0.9.0
+ */
 final class IsSelectTest {
     @Test
     void validateIfAStatementIsASelect() throws Exception {

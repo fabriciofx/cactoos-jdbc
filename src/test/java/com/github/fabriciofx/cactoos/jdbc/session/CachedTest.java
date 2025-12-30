@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
@@ -24,17 +28,23 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 import org.llorllale.cactoos.matchers.IsTrue;
 
+/**
+ * Cached tests.
+ *
+ * @since 0.9.0
+ * @checkstyle NestedTryDepthCheck (500 lines)
+ */
 final class CachedTest {
     @Test
     void cacheASelect() throws Exception {
         final String name = "Rob Pike";
         final String city = "San Francisco";
+        final FakeLogger logger = new FakeLogger();
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            final FakeLogger logger = new FakeLogger();
             final Session session = new Cached(
                 new NoAuth(server.resource()),
-                new Logged<>(new ResultSetCache(), logger)
+                new Logged<>(new ResultSetCache(), "cache", logger)
             );
             try (Connection connection = session.connection()) {
                 new Update(
@@ -90,7 +100,6 @@ final class CachedTest {
                     ).affirm();
                 }
             }
-            System.out.println(logger.toString());
         }
     }
 }

@@ -1,4 +1,8 @@
-package com.github.fabriciofx.cactoos.jdbc.sql.cache;
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
+package com.github.fabriciofx.cactoos.jdbc.select;
 
 import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -7,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
+/**
+ * NormalizedSelect tests.
+ * @since 0.9.0
+ */
 final class NormalizedSelectTest {
     @Test
     void normalizeWithWhere() {

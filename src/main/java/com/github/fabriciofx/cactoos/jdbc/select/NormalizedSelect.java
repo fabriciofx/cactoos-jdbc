@@ -1,4 +1,8 @@
-package com.github.fabriciofx.cactoos.jdbc.sql.cache;
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
+package com.github.fabriciofx.cactoos.jdbc.select;
 
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlKind;
@@ -13,13 +17,29 @@ import org.cactoos.Text;
 import org.cactoos.text.Sticky;
 import org.cactoos.text.TextOf;
 
+/**
+ * NormalizedSelect.
+ * Normalize (transform to the canonical query) a select query.
+ * @since 0.9.0
+ */
 public final class NormalizedSelect implements Text {
+    /**
+     * The query.
+     */
     private final Text sql;
 
+    /**
+     * Ctor.
+     * @param sql The query
+     */
     public NormalizedSelect(final String sql) {
         this(new TextOf(sql));
     }
 
+    /**
+     * Ctor.
+     * @param sql The query
+     */
     public NormalizedSelect(final Text sql) {
         this.sql = new Sticky(
             () -> {

@@ -1,16 +1,35 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
 package com.github.fabriciofx.cactoos.jdbc.connection;
 
-import com.github.fabriciofx.cactoos.jdbc.cache.Cache;
-import com.github.fabriciofx.cactoos.jdbc.sql.cache.IsSelect;
-import com.github.fabriciofx.cactoos.jdbc.sql.cache.NormalizedSelect;
+import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
+import com.github.fabriciofx.cactoos.jdbc.select.NormalizedSelect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Cached.
+ * A {@link java.sql.Connection} decorator for cache query data.
+ * @since 0.9.0
+ * @checkstyle IllegalCatchCheck (500 lines)
+ */
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class Cached extends ConnectionEnvelope {
+    /**
+     * Cache.
+     */
     private final Cache<String, ResultSet> cache;
 
+    /**
+     * Ctor.
+     * @param connection The connection
+     * @param cache The cache
+     */
     public Cached(
         final Connection connection,
         final Cache<String, ResultSet> cache

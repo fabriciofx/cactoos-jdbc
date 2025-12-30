@@ -1,5 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.jdbc.Cache;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.Sticky;
@@ -7,29 +12,94 @@ import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
 
+/**
+ * Logged.
+ * A {@link Cache} decorator to logging caching operations.
+ * @param <K> The key type
+ * @param <V> The value type
+ * @since 0.9.0
+ * @checkstyle ParameterNumberCheck (500 lines)
+ */
 public final class Logged<K, V> implements Cache<K, V> {
+    /**
+     * Cache to be logged.
+     */
     private final Cache<K, V> origin;
+
+    /**
+     * Where the data comes from.
+     */
+    private final String source;
+
+    /**
+     * Logger.
+     */
     private final Logger logger;
+
+    /**
+     * Level log.
+     */
     private final Unchecked<Level> level;
 
-    public Logged(final Cache<K, V> origin, final Logger logger) {
-        this.origin = origin;
-        this.logger = logger;
-        this.level = new Unchecked<>(
-            new Sticky<>(
-                () -> {
-                    Level lvl = logger.getLevel();
-                    if (lvl == null) {
-                        Logger parent = logger;
-                        while (lvl == null) {
-                            parent = parent.getParent();
-                            lvl = parent.getLevel();
+    /**
+     * Ctor.
+     * @param origin The cache to be logged
+     * @param source Where the data comes from
+     */
+    public Logged(final Cache<K, V> origin, final String source) {
+        this(origin, source, Logger.getLogger(source));
+    }
+
+    /**
+     * Ctor.
+     * @param origin The cache to be logged
+     * @param source Where the data comes from
+     * @param logger The logger
+     */
+    public Logged(
+        final Cache<K, V> origin,
+        final String source,
+        final Logger logger
+    ) {
+        this(
+            origin,
+            source,
+            logger,
+            new Unchecked<>(
+                new Sticky<>(
+                    () -> {
+                        Level lvl = logger.getLevel();
+                        if (lvl == null) {
+                            Logger parent = logger;
+                            while (lvl == null) {
+                                parent = parent.getParent();
+                                lvl = parent.getLevel();
+                            }
                         }
+                        return lvl;
                     }
-                    return lvl;
-                }
+                )
             )
         );
+    }
+
+    /**
+     * Ctor.
+     * @param origin The cache to be logged
+     * @param source Where the data comes from
+     * @param logger The logger
+     * @param level The logger level
+     */
+    public Logged(
+        final Cache<K, V> origin,
+        final String source,
+        final Logger logger,
+        final Unchecked<Level> level
+    ) {
+        this.origin = origin;
+        this.source = source;
+        this.logger = logger;
+        this.level = level;
     }
 
     @Override
@@ -39,7 +109,8 @@ public final class Logged<K, V> implements Cache<K, V> {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "Retrieving from cache with key '%s' and value '%s'.",
+                    "[%s] Retrieving from cache with key '%s' and value '%s'.",
+                    this.source,
                     key.toString(),
                     value.toString()
                 )
@@ -55,7 +126,8 @@ public final class Logged<K, V> implements Cache<K, V> {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "Storing in cache with key '%s' and value '%s'.",
+                    "[%s] Storing in cache with key '%s' and value '%s'.",
+                    this.source,
                     key.toString(),
                     value.toString()
                 )
@@ -70,7 +142,8 @@ public final class Logged<K, V> implements Cache<K, V> {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "Checking if cache has a value for key '%s': %s.",
+                    "[%s] Checking if cache has a value for key '%s': %s.",
+                    this.source,
                     key.toString(),
                     exists
                 )
@@ -84,7 +157,12 @@ public final class Logged<K, V> implements Cache<K, V> {
         this.origin.clear();
         this.logger.log(
             this.level.value(),
-            new UncheckedText("Cleaning the cache.").asString()
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Cleaning the cache.",
+                    this.source
+                )
+            ).asString()
         );
     }
 }
