@@ -2,9 +2,8 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.url;
 
-import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.cactoos.text.FormattedText;
 import org.junit.jupiter.api.Test;
