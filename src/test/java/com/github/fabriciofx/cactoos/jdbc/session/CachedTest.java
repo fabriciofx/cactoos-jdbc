@@ -2,7 +2,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.cache.Logged;
-import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.ResultSetCache;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -20,16 +20,21 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
+import org.llorllale.cactoos.matchers.IsText;
+import org.llorllale.cactoos.matchers.IsTrue;
 
 final class CachedTest {
     @Test
     void cacheASelect() throws Exception {
+        final String name = "Rob Pike";
+        final String city = "San Francisco";
         try (Server<DataSource> server = new H2Server()) {
             server.start();
             final FakeLogger logger = new FakeLogger();
             final Session session = new Cached(
                 new NoAuth(server.resource()),
-                new Logged<>(new TableCache(), logger)
+                new Logged<>(new ResultSetCache(), logger)
             );
             try (Connection connection = session.connection()) {
                 new Update(
@@ -43,9 +48,9 @@ final class CachedTest {
                     new QueryOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new IntOf("id", 1),
-                        new TextOf("name", "Rob Pike"),
+                        new TextOf("name", name),
                         new DateOf("created_at", LocalDate.now()),
-                        new TextOf("city", "San Francisco"),
+                        new TextOf("city", city),
                         new BoolOf("working", true),
                         new DecimalOf("height", "1.86")
                     )
@@ -56,10 +61,16 @@ final class CachedTest {
                         new QueryOf("SELECT name FROM person")
                     ).execute()
                 ) {
-                    if (rset.next()) {
-                        final String name = rset.getString("name");
-                        System.out.println(name);
-                    }
+                    new Assertion<>(
+                        "must have the name",
+                        rset.next(),
+                        new IsTrue()
+                    ).affirm();
+                    new Assertion<>(
+                        "must have the correct name",
+                        new org.cactoos.text.TextOf(rset.getString("name")),
+                        new IsText(name)
+                    ).affirm();
                 }
                 try (
                     ResultSet rset = new Select(
@@ -67,10 +78,16 @@ final class CachedTest {
                         new QueryOf("SELECT city FROM person")
                     ).execute()
                 ) {
-                    if (rset.next()) {
-                        final String city = rset.getString("city");
-                        System.out.println(city);
-                    }
+                    new Assertion<>(
+                        "must have the city",
+                        rset.next(),
+                        new IsTrue()
+                    ).affirm();
+                    new Assertion<>(
+                        "must have the correct city",
+                        new org.cactoos.text.TextOf(rset.getString("city")),
+                        new IsText(city)
+                    ).affirm();
                 }
             }
             System.out.println(logger.toString());
