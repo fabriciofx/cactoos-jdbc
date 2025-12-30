@@ -9,8 +9,8 @@ import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
 import com.github.fabriciofx.cactoos.jdbc.select.NormalizedSelect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.rowset.CachedRowSet;
 
 /**
  * Cached.
@@ -23,7 +23,7 @@ public final class Cached extends ConnectionEnvelope {
     /**
      * Cache.
      */
-    private final Cache<String, ResultSet> cache;
+    private final Cache<String, CachedRowSet> cache;
 
     /**
      * Ctor.
@@ -32,7 +32,7 @@ public final class Cached extends ConnectionEnvelope {
      */
     public Cached(
         final Connection connection,
-        final Cache<String, ResultSet> cache
+        final Cache<String, CachedRowSet> cache
     ) {
         super(connection);
         this.cache = cache;
@@ -47,11 +47,7 @@ public final class Cached extends ConnectionEnvelope {
             if (new IsSelect(sql).value()) {
                 prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                     super.prepareStatement(sql),
-                    super.prepareStatement(
-                        new NormalizedSelect(sql).asString(),
-                        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                        ResultSet.CONCUR_READ_ONLY
-                    ),
+                    super.prepareStatement(new NormalizedSelect(sql).asString()),
                     new NormalizedSelect(sql),
                     this.cache
                 );

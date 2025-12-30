@@ -20,7 +20,7 @@ import org.cactoos.Text;
  * @checkstyle ParameterNumberCheck (500 lines)
  * @checkstyle IllegalCatchCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidCatchingGenericException")
+@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
 public final class Cached extends PreparedStatementEnvelope {
     /**
      * A PreparedStatement to normalized SQL select.
@@ -35,7 +35,7 @@ public final class Cached extends PreparedStatementEnvelope {
     /**
      * The cache.
      */
-    private final Cache<String, ResultSet> cache;
+    private final Cache<String, CachedRowSet> cache;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class Cached extends PreparedStatementEnvelope {
         final PreparedStatement origin,
         final PreparedStatement prepared,
         final Text normalized,
-        final Cache<String, ResultSet> cache
+        final Cache<String, CachedRowSet> cache
     ) {
         super(origin);
         this.prepared = prepared;
@@ -61,17 +61,17 @@ public final class Cached extends PreparedStatementEnvelope {
     public ResultSet executeQuery() throws SQLException {
         try {
             if (!this.cache.contains(this.normalized.asString())) {
-                this.cache.store(
-                    this.normalized.asString(),
-                    this.prepared.executeQuery()
-                );
+                try (ResultSet rset = this.prepared.executeQuery()) {
+                    final RowSetFactory rsf = RowSetProvider.newFactory();
+                    final CachedRowSet crs = rsf.createCachedRowSet();
+                    crs.populate(rset);
+                    this.cache.store(this.normalized.asString(), crs);
+                }
             }
-            final ResultSet rset = this.cache.retrieve(this.normalized.asString());
-            final RowSetFactory rsf = RowSetProvider.newFactory();
-            final CachedRowSet crs = rsf.createCachedRowSet();
-            crs.populate(rset);
-            rset.beforeFirst();
-            return crs;
+            final CachedRowSet cached = this.cache.retrieve(
+                this.normalized.asString()
+            );
+            return cached.createCopy();
         } catch (final Exception ex) {
             throw new SQLException(ex);
         }

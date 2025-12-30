@@ -6,9 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.cache.ResultSetCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
 import java.sql.Connection;
-import java.sql.ResultSet;
+import javax.sql.rowset.CachedRowSet;
 
 /**
  * Cached.
@@ -24,14 +24,14 @@ public final class Cached implements Session {
     /**
      * Cache.
      */
-    private final Cache<String, ResultSet> cache;
+    private final Cache<String, CachedRowSet> cache;
 
     /**
      * Ctor.
      * @param session The session
      */
     public Cached(final Session session) {
-        this(session, new ResultSetCache());
+        this(session, new CachedRowSetCache());
     }
 
     /**
@@ -39,7 +39,10 @@ public final class Cached implements Session {
      * @param session The session
      * @param cache The cache
      */
-    public Cached(final Session session, final Cache<String, ResultSet> cache) {
+    public Cached(
+        final Session session,
+        final Cache<String, CachedRowSet> cache
+    ) {
         this.origin = session;
         this.cache = cache;
     }

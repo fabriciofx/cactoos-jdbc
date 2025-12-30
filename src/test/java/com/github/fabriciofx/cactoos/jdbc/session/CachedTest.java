@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
 import com.github.fabriciofx.cactoos.jdbc.cache.Logged;
-import com.github.fabriciofx.cactoos.jdbc.cache.ResultSetCache;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
@@ -44,7 +44,7 @@ final class CachedTest {
             server.start();
             final Session session = new Cached(
                 new NoAuth(server.resource()),
-                new Logged<>(new ResultSetCache(), "cache", logger)
+                new Logged<>(new CachedRowSetCache(), "cache", logger)
             );
             try (Connection connection = session.connection()) {
                 new Update(

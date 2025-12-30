@@ -5,25 +5,25 @@
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import java.sql.ResultSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.sql.rowset.CachedRowSet;
 
 /**
- * ResultSetCache.
- * Store a {@link java.sql.ResultSet} associated with a SQL query.
+ * CachedRowSetCache.
+ * Store a {@link javax.sql.rowset.CachedRowSet} associated with a SQL query.
  * @since 0.9.0
  */
-public final class ResultSetCache implements Cache<String, ResultSet> {
+public final class CachedRowSetCache implements Cache<String, CachedRowSet> {
     /**
-     * The ResultSets.
+     * The CachedRowSets.
      */
-    private final Map<String, ResultSet> results;
+    private final Map<String, CachedRowSet> results;
 
     /**
      * Ctor.
      */
-    public ResultSetCache() {
+    public CachedRowSetCache() {
         this(new ConcurrentHashMap<>());
     }
 
@@ -31,17 +31,17 @@ public final class ResultSetCache implements Cache<String, ResultSet> {
      * Ctor.
      * @param results Data to initialize the cache
      */
-    public ResultSetCache(final Map<String, ResultSet> results) {
+    public CachedRowSetCache(final Map<String, CachedRowSet> results) {
         this.results = results;
     }
 
     @Override
-    public ResultSet retrieve(final String key) {
+    public CachedRowSet retrieve(final String key) {
         return this.results.get(key);
     }
 
     @Override
-    public void store(final String key, final ResultSet value) {
+    public void store(final String key, final CachedRowSet value) {
         this.results.put(key, value);
     }
 
