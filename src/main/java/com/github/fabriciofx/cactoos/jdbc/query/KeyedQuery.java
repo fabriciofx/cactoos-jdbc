@@ -73,7 +73,7 @@ public final class KeyedQuery implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.parse(),
+            this.sql.parsed(),
             java.sql.Statement.RETURN_GENERATED_KEYS
         );
         this.parameters.prepare(stmt);
@@ -92,6 +92,6 @@ public final class KeyedQuery implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql.parse();
+        return this.sql.parsed();
     }
 }

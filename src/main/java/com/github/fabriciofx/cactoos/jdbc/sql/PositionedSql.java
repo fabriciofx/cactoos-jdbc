@@ -99,7 +99,7 @@ public final class PositionedSql implements Sql {
     }
 
     @Override
-    public String parse() throws Exception {
+    public String parsed() throws Exception {
         return this.positioned.value();
     }
 }

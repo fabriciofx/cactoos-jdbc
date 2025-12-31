@@ -19,9 +19,9 @@ public interface Sql {
     String named();
 
     /**
-     * Parse a named SQL positioning according to parameters.
+     * Returns a parsed named SQL according to position of the parameters.
      * @return A positioned SQL code
      * @throws Exception If fails
      */
-    String parse() throws Exception;
+    String parsed() throws Exception;
 }

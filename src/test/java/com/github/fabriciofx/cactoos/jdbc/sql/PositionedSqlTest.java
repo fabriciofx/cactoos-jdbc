@@ -25,7 +25,7 @@ import org.llorllale.cactoos.matchers.HasString;
  */
 final class PositionedSqlTest {
     @Test
-    void parse() {
+    void parsed() {
         new Assertion<>(
             "must parse a query for all columns",
             () -> new PositionedSql(
@@ -41,7 +41,7 @@ final class PositionedSqlTest {
                     new BoolOf("married", false),
                     new DecimalOf("salary", "13456.00")
                 )
-            ).parse(),
+            ).parsed(),
             new HasString(
                 new Concatenated(
                     "INSERT INTO employee (id, name, birthday, address, married, salary) ",

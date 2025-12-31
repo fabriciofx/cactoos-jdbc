@@ -72,7 +72,7 @@ public final class BatchedQuery implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.parse()
+            this.sql.parsed()
         );
         for (final Params params : this.parameters) {
             params.prepare(stmt);
@@ -93,6 +93,6 @@ public final class BatchedQuery implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql.parse();
+        return this.sql.parsed();
     }
 }

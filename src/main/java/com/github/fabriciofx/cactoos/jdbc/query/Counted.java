@@ -65,6 +65,6 @@ public final class Counted implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql().parse();
+        return this.sql().parsed();
     }
 }

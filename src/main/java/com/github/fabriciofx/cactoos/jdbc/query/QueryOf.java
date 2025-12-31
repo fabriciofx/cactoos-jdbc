@@ -73,7 +73,7 @@ public final class QueryOf implements Query {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.sql.parse()
+            this.sql.parsed()
         );
         this.parameters.prepare(stmt);
         return stmt;
@@ -91,6 +91,6 @@ public final class QueryOf implements Query {
 
     @Override
     public String asString() throws Exception {
-        return this.sql.parse();
+        return this.sql.parsed();
     }
 }
