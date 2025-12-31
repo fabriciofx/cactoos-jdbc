@@ -46,6 +46,11 @@ public final class CachedRowSetCache implements Cache<String, CachedRowSet> {
     }
 
     @Override
+    public CachedRowSet delete(final String key) {
+        return this.results.remove(key);
+    }
+
+    @Override
     public boolean contains(final String key) {
         return this.results.containsKey(key);
     }

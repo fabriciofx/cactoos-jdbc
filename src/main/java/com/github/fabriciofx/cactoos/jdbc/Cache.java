@@ -26,6 +26,13 @@ public interface Cache<K, V> {
     void store(K key, V value);
 
     /**
+     * Delete a value into cache.
+     * @param key The key associated to the value
+     * @return The value associated with the key
+     */
+    V delete(K key);
+
+    /**
      * Checks if the cache has a value associated with the key.
      * @param key The key
      * @return True if there is, false otherwise

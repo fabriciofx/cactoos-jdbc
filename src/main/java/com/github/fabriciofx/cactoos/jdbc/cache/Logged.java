@@ -136,6 +136,23 @@ public final class Logged<K, V> implements Cache<K, V> {
     }
 
     @Override
+    public V delete(final K key) {
+        final V value = this.origin.delete(key);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Deleting into cache with key '%s' and returning value '%s'.",
+                    this.source,
+                    key.toString(),
+                    value.toString()
+                )
+            ).asString()
+        );
+        return value;
+    }
+
+    @Override
     public boolean contains(final K key) {
         final boolean exists = this.origin.contains(key);
         this.logger.log(
