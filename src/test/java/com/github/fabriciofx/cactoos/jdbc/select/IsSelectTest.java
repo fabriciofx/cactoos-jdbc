@@ -31,4 +31,23 @@ final class IsSelectTest {
             new IsNot<>(new IsTrue())
         ).affirm();
     }
+
+    @Test
+    void validateIfAStatementIsUpdate() throws Exception {
+        new Assertion<>(
+            "must validate if is a select",
+            new IsSelect("UPDATE emp SET salary = 5000 WHERE id = 1").value(),
+            new IsNot<>(new IsTrue())
+        ).affirm();
+    }
+
+    @Test
+    void validateIfAStatementIsCreate() throws Exception {
+        new Assertion<>(
+            "must validate if is a create",
+            new IsSelect("CREATE TABLE emp (id INT)").value(),
+            new IsNot<>(new IsTrue())
+        ).affirm();
+    }
+
 }
