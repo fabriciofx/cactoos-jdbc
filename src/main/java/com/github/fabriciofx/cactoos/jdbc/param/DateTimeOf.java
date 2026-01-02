@@ -8,6 +8,8 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * DateTime param.
@@ -49,7 +51,7 @@ public final class DateTimeOf implements Param {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.datetime.toString();
+    public SqlNode value(final SqlParserPos from) {
+        return null;
     }
 }

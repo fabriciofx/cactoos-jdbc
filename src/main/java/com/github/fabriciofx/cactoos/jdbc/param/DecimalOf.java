@@ -7,6 +7,9 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import org.apache.calcite.sql.SqlLiteral;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * Decimal param.
@@ -57,7 +60,7 @@ public final class DecimalOf implements Param {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.decimal.toString();
+    public SqlNode value(final SqlParserPos from) {
+        return SqlLiteral.createExactNumeric(this.decimal.toString(), from);
     }
 }

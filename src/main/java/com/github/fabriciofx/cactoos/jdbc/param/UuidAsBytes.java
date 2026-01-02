@@ -8,6 +8,8 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.util.UUID;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * UUID param.
@@ -53,7 +55,7 @@ public final class UuidAsBytes implements Param {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.uuid.toString();
+    public SqlNode value(final SqlParserPos from) {
+        return null;
     }
 }

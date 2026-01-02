@@ -5,9 +5,13 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.apache.calcite.sql.SqlLiteral;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
+import org.apache.calcite.util.DateString;
 
 /**
  * Date param.
@@ -58,7 +62,12 @@ public final class DateOf implements Param {
     }
 
     @Override
-    public String asString() throws IOException {
-        return this.date.toString();
+    public SqlNode value(final SqlParserPos from) {
+        return SqlLiteral.createDate(
+            new DateString(
+                this.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            ),
+            from
+        );
     }
 }

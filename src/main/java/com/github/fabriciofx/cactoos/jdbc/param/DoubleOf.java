@@ -6,6 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import org.apache.calcite.sql.SqlLiteral;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * Double param.
@@ -47,7 +50,7 @@ public final class DoubleOf implements Param {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.num.toString();
+    public SqlNode value(final SqlParserPos from) {
+        return SqlLiteral.createExactNumeric(this.num.toString(), from);
     }
 }

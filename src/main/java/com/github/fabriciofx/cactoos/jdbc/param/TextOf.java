@@ -6,6 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import org.apache.calcite.sql.SqlLiteral;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.parser.SqlParserPos;
 import org.cactoos.Text;
 import org.cactoos.text.UncheckedText;
 
@@ -76,7 +79,7 @@ public final class TextOf implements Param {
     }
 
     @Override
-    public String asString() throws Exception {
-        return this.text.asString();
+    public SqlNode value(final SqlParserPos from) {
+        return SqlLiteral.createCharString(this.text.toString(), from);
     }
 }
