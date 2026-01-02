@@ -29,4 +29,11 @@ public interface Params extends Iterable<Param> {
      * @return True if contains or false if don't
      */
     boolean contains(String name, int index);
+
+    /**
+     * Get the Param at the position index.
+     * @param index The parameter position in Params
+     * @return The Param
+     */
+    Param param(int index);
 }

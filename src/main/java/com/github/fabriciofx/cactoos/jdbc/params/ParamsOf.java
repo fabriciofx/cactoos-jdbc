@@ -79,6 +79,11 @@ public final class ParamsOf implements Params {
     }
 
     @Override
+    public Param param(final int index) {
+        return this.prms.value().get(index);
+    }
+
+    @Override
     public Iterator<Param> iterator() {
         return this.prms.value().iterator();
     }
