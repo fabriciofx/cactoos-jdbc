@@ -34,7 +34,7 @@ public final class Paginated implements Query {
         this.qry = new QueryOf(
             new FormattedText(
                 "SELECT q.*, COUNT(*) OVER () AS __total__ FROM (%s) q LIMIT :limit OFFSET :offset",
-                query.sql().named()
+                query.sql().source()
             ),
             new ParamsOf(
                 query.params(),

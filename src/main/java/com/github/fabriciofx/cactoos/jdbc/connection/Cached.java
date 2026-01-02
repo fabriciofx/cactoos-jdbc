@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
-import com.github.fabriciofx.cactoos.jdbc.select.NormalizedSelect;
+import com.github.fabriciofx.cactoos.jdbc.sql.NormalizedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -47,8 +47,8 @@ public final class Cached extends ConnectionEnvelope {
             if (new IsSelect(sql).value()) {
                 prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                     super.prepareStatement(sql),
-                    super.prepareStatement(new NormalizedSelect(sql).asString()),
-                    new NormalizedSelect(sql),
+                    super.prepareStatement(new NormalizedSql(sql).parsed()),
+                    new NormalizedSql(sql),
                     this.cache
                 );
             } else {

@@ -16,19 +16,19 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasString;
 
 /**
- * Positioned SQL tests.
+ * NamedSQL tests.
  *
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-final class PositionedSqlTest {
+final class NamedSqlTest {
     @Test
     void parsed() {
         new Assertion<>(
             "must parse a query for all columns",
-            () -> new PositionedSql(
+            () -> new NamedSql(
                 new Concatenated(
                     "INSERT INTO employee (id, name, birthday, address, married, salary) ",
                     "VALUES (:id, :name, :birthday, :address, :married, :salary)"

@@ -13,14 +13,14 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 public interface Sql {
     /**
-     * Return a named SQL.
-     * @return The named SQL code
+     * Return the SQL before parsing.
+     * @return The SQL code before parsing
      */
-    String named();
+    String source();
 
     /**
-     * Returns a parsed named SQL according to position of the parameters.
-     * @return A positioned SQL code
+     * Parse the SQL code and transform it.
+     * @return A parsed SQL code
      * @throws Exception If fails
      */
     String parsed() throws Exception;

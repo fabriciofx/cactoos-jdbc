@@ -9,7 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Sql;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.PositionedSql;
+import com.github.fabriciofx.cactoos.jdbc.sql.NamedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
@@ -55,7 +55,7 @@ public final class QueryOf implements Query {
      * @param params SQL query parameters
      */
     public QueryOf(final Text sql, final Params params) {
-        this(new PositionedSql(sql, params), params);
+        this(new NamedSql(sql, params), params);
     }
 
     /**

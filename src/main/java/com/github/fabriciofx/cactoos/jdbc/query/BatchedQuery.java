@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Sql;
-import com.github.fabriciofx.cactoos.jdbc.sql.PositionedSql;
+import com.github.fabriciofx.cactoos.jdbc.sql.NamedSql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.cactoos.Text;
@@ -54,7 +54,7 @@ public final class BatchedQuery implements Query {
      * @param params A list of SQL query parameters
      */
     public BatchedQuery(final Text sql, final Iterable<Params> params) {
-        this(new PositionedSql(sql, params.iterator().next()), params);
+        this(new NamedSql(sql, params.iterator().next()), params);
     }
 
     /**
