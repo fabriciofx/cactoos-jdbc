@@ -6,15 +6,11 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.sql.ParameterShuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlDynamicParam;
-import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.parser.SqlParserPos;
-import org.apache.calcite.sql.util.SqlShuttle;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
@@ -55,17 +51,8 @@ public final class Parametrized implements Query {
                         config
                     );
                     final SqlNode stmt = parser.parseStmt();
-                    final AtomicInteger index = new AtomicInteger(0);
                     final SqlNode replaced = stmt.accept(
-                        new SqlShuttle() {
-                            @Override
-                            public SqlNode visit(final SqlLiteral literal) {
-                                return new SqlDynamicParam(
-                                    index.getAndIncrement(),
-                                    SqlParserPos.ZERO
-                                );
-                            }
-                        }
+                        new ParameterShuttle()
                     );
                     result = new Pretty(replaced).asString();
                 }
