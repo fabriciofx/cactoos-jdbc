@@ -6,16 +6,14 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.SqlWith;
-import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
@@ -66,7 +64,7 @@ public final class Normalized implements Query {
                             "Not a SELECT statement"
                         );
                     }
-                    final SqlSelect normal = new SqlSelect(
+                    final SqlSelect canonical = new SqlSelect(
                         select.getParserPosition(),
                         new SqlNodeList(select.getParserPosition()),
                         SqlNodeList.SINGLETON_STAR,
@@ -81,23 +79,10 @@ public final class Normalized implements Query {
                         select.getFetch(),
                         select.getHints()
                     );
-                    normal.setOrderBy(null);
-                    normal.setOffset(null);
-                    normal.setFetch(null);
-                    final SqlDialect dialect = SqlDialect
-                        .DatabaseProduct
-                        .UNKNOWN
-                        .getDialect();
-                    final SqlWriterConfig conf = SqlPrettyWriter.config()
-                        .withDialect(dialect)
-                        .withIndentation(0)
-                        .withClauseStartsLine(false)
-                        .withSelectListItemsOnSeparateLines(false);
-                    final SqlPrettyWriter writer = new SqlPrettyWriter(conf);
-                    result = writer
-                        .format(normal)
-                        .replaceAll("\\s+", " ")
-                        .trim();
+                    canonical.setOrderBy(null);
+                    canonical.setOffset(null);
+                    canonical.setFetch(null);
+                    result = new Pretty(canonical).asString();
                 } else {
                     result = query.sql();
                 }

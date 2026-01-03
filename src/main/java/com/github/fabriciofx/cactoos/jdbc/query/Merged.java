@@ -7,13 +7,11 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlDynamicParam;
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.apache.calcite.sql.util.SqlShuttle;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
@@ -68,20 +66,7 @@ public final class Merged implements Query {
                             }
                         }
                     );
-                    final SqlDialect dialect = SqlDialect
-                        .DatabaseProduct
-                        .UNKNOWN
-                        .getDialect();
-                    final SqlWriterConfig conf = SqlPrettyWriter.config()
-                        .withDialect(dialect)
-                        .withIndentation(0)
-                        .withClauseStartsLine(false)
-                        .withSelectListItemsOnSeparateLines(false);
-                    final SqlPrettyWriter writer = new SqlPrettyWriter(conf);
-                    result = writer
-                        .format(replaced)
-                        .replaceAll("\\s+", " ")
-                        .trim();
+                    result = new Pretty(replaced).asString();
                 }
                 return result;
             }
