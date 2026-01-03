@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Sql;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import org.cactoos.text.FormattedText;
 
@@ -36,8 +36,8 @@ public final class Paginated implements Query {
             ),
             new ParamsOf(
                 query.params().iterator().next(),
-                new IntOf("limit", size),
-                new IntOf("offset", Math.max(page - 1, 0) * size)
+                new IntParam("limit", size),
+                new IntParam("offset", Math.max(page - 1, 0) * size)
             )
         );
     }

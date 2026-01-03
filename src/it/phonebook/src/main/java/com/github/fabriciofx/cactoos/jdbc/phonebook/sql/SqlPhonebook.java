@@ -7,8 +7,8 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Page;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -50,8 +50,8 @@ public final class SqlPhonebook implements Phonebook {
                 connexio,
                 new QueryOf(
                     "INSERT INTO contact (id, name) VALUES (:id, :name)",
-                    new UuidOf("id", id),
-                    new TextOf("name", name)
+                    new UuidParam("id", id),
+                    new TextParam("name", name)
                 )
             ).execute();
         }
@@ -66,7 +66,7 @@ public final class SqlPhonebook implements Phonebook {
                 connexio,
                 new QueryOf(
                     "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
-                    new TextOf("name", new Lowered(name))
+                    new TextParam("name", new Lowered(name))
                 )
             );
             try (ResultSet rset = select.execute()) {

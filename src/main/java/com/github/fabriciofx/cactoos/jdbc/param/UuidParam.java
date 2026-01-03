@@ -5,18 +5,18 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.util.UUID;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * Decimal param.
+ * UuidParam.
  *
  * @since 0.2
  */
-public final class DecimalOf implements Param {
+public final class UuidParam implements Param {
     /**
      * Name.
      */
@@ -25,25 +25,16 @@ public final class DecimalOf implements Param {
     /**
      * Value.
      */
-    private final BigDecimal decimal;
+    private final UUID uuid;
 
     /**
      * Ctor.
      * @param name The id
-     * @param value The data
+     * @param value The apply
      */
-    public DecimalOf(final String name, final String value) {
-        this(name, new BigDecimal(value));
-    }
-
-    /**
-     * Ctor.
-     * @param name The id
-     * @param value The data
-     */
-    public DecimalOf(final String name, final BigDecimal value) {
+    public UuidParam(final String name, final UUID value) {
         this.id = name;
-        this.decimal = value;
+        this.uuid = value;
     }
 
     @Override
@@ -56,11 +47,11 @@ public final class DecimalOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBigDecimal(index, this.decimal);
+        stmt.setObject(index, this.uuid);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createExactNumeric(this.decimal.toString(), from);
+        return SqlLiteral.createUuid(this.uuid, from);
     }
 }

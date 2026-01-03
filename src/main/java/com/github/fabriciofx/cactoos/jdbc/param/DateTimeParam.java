@@ -6,16 +6,17 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
-import org.apache.calcite.sql.SqlLiteral;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * Boolean param.
+ * DateTimeParam.
  *
  * @since 0.2
  */
-public final class BoolOf implements Param {
+public final class DateTimeParam implements Param {
     /**
      * Name.
      */
@@ -24,16 +25,16 @@ public final class BoolOf implements Param {
     /**
      * Value.
      */
-    private final Boolean bool;
+    private final LocalDateTime datetime;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public BoolOf(final String name, final Boolean value) {
+    public DateTimeParam(final String name, final LocalDateTime value) {
         this.id = name;
-        this.bool = value;
+        this.datetime = value;
     }
 
     @Override
@@ -46,11 +47,11 @@ public final class BoolOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setBoolean(index, this.bool);
+        stmt.setTimestamp(index, Timestamp.valueOf(this.datetime));
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createBoolean(this.bool, from);
+        return null;
     }
 }

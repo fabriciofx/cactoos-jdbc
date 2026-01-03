@@ -4,11 +4,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -29,7 +29,7 @@ final class MergedSqlTest {
             "must merge a select",
             () -> new MergedSql(
                 "SELECT id, name FROM person WHERE id = :id",
-                new IntOf("id", 1)
+                new IntParam("id", 1)
             ).parsed(),
             new IsText("SELECT `ID`, `NAME` FROM `PERSON` WHERE `ID` = 1")
         ).affirm();
@@ -44,12 +44,12 @@ final class MergedSqlTest {
                     "INSERT INTO employee (id, name, birthday, address, married, salary) ",
                     "VALUES (:id, :name, :birthday, :address, :married, :salary)"
                 ),
-                new IntOf("id", 1),
-                new TextOf("name", "John Wick"),
-                new DateOf("birthday", "1980-08-15"),
-                new TextOf("address", "Boulevard Street, 34"),
-                new BoolOf("married", false),
-                new DecimalOf("salary", "13456.00")
+                new IntParam("id", 1),
+                new TextParam("name", "John Wick"),
+                new DateParam("birthday", "1980-08-15"),
+                new TextParam("address", "Boulevard Street, 34"),
+                new BoolParam("married", false),
+                new DecimalParam("salary", "13456.00")
             ).parsed(),
             new IsText(
                 new Concatenated(

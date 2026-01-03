@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -45,8 +45,8 @@ final class InsertTest {
                             connexio,
                             new QueryOf(
                                 "INSERT INTO t01 (id, name) VALUES (:id, :name)",
-                                new IntOf("id", 1),
-                                new TextOf("name", "Yegor Bugayenko")
+                                new IntParam("id", 1),
+                                new TextParam("name", "Yegor Bugayenko")
                             )
                         ).execute()
                     ),

@@ -5,17 +5,18 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
-import org.apache.calcite.sql.SqlLiteral;
+import java.util.UUID;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * Long param.
+ * UuidAsBytesParam.
  *
  * @since 0.2
  */
-public final class LongOf implements Param {
+public final class UuidAsBytesParam implements Param {
     /**
      * Name.
      */
@@ -24,16 +25,16 @@ public final class LongOf implements Param {
     /**
      * Value.
      */
-    private final Long num;
+    private final UUID uuid;
 
     /**
      * Ctor.
      * @param name The id
-     * @param value The data
+     * @param value The apply
      */
-    public LongOf(final String name, final Long value) {
+    public UuidAsBytesParam(final String name, final UUID value) {
         this.id = name;
-        this.num = value;
+        this.uuid = value;
     }
 
     @Override
@@ -46,11 +47,15 @@ public final class LongOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setLong(index, this.num);
+        // @checkstyle MagicNumber (1 line)
+        final ByteBuffer bytes = ByteBuffer.wrap(new byte[16]);
+        bytes.putLong(this.uuid.getMostSignificantBits());
+        bytes.putLong(this.uuid.getLeastSignificantBits());
+        stmt.setBytes(index, bytes.array());
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createExactNumeric(this.num.toString(), from);
+        return null;
     }
 }

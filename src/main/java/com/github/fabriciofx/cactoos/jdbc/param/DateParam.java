@@ -6,16 +6,19 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
+import org.apache.calcite.util.DateString;
 
 /**
- * Double param.
+ * DateParam.
  *
  * @since 0.2
  */
-public final class DoubleOf implements Param {
+public final class DateParam implements Param {
     /**
      * Name.
      */
@@ -24,16 +27,25 @@ public final class DoubleOf implements Param {
     /**
      * Value.
      */
-    private final Double num;
+    private final LocalDate date;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public DoubleOf(final String name, final Double value) {
+    public DateParam(final String name, final String value) {
+        this(name, LocalDate.parse(value));
+    }
+
+    /**
+     * Ctor.
+     * @param name The id
+     * @param value The data
+     */
+    public DateParam(final String name, final LocalDate value) {
         this.id = name;
-        this.num = value;
+        this.date = value;
     }
 
     @Override
@@ -46,11 +58,16 @@ public final class DoubleOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDouble(index, this.num);
+        stmt.setDate(index, java.sql.Date.valueOf(this.date));
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createExactNumeric(this.num.toString(), from);
+        return SqlLiteral.createDate(
+            new DateString(
+                this.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            ),
+            from
+        );
     }
 }

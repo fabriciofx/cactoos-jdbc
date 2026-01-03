@@ -6,11 +6,11 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
@@ -53,20 +53,20 @@ final class PooledTest {
                     new QueryOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
-                            new IntOf("id", 1),
-                            new TextOf("name", "Rob Pike"),
-                            new DateOf("created_at", LocalDate.now()),
-                            new TextOf("city", "San Francisco"),
-                            new BoolOf("working", true),
-                            new DecimalOf("height", "1.86")
+                            new IntParam("id", 1),
+                            new TextParam("name", "Rob Pike"),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "San Francisco"),
+                            new BoolParam("working", true),
+                            new DecimalParam("height", "1.86")
                         ),
                         new ParamsOf(
-                            new IntOf("id", 2),
-                            new TextOf("name", "Ana Pivot"),
-                            new DateOf("created_at", LocalDate.now()),
-                            new TextOf("city", "Washington"),
-                            new BoolOf("working", false),
-                            new DecimalOf("height", "1.62")
+                            new IntParam("id", 2),
+                            new TextParam("name", "Ana Pivot"),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "Washington"),
+                            new BoolParam("working", false),
+                            new DecimalParam("height", "1.62")
                         )
                     )
                 ).execute();

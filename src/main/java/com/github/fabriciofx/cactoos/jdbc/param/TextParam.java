@@ -10,14 +10,15 @@ import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 import org.cactoos.Text;
+import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
- * String param.
+ * TextParam.
  *
  * @since 0.2
  */
-public final class TextOf implements Param {
+public final class TextParam implements Param {
     /**
      * Name.
      */
@@ -33,8 +34,8 @@ public final class TextOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public TextOf(final String name, final String value) {
-        this(new org.cactoos.text.TextOf(name), new org.cactoos.text.TextOf(value));
+    public TextParam(final String name, final String value) {
+        this(new TextOf(name), new TextOf(value));
     }
 
     /**
@@ -42,8 +43,8 @@ public final class TextOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public TextOf(final String name, final Text value) {
-        this(new org.cactoos.text.TextOf(name), value);
+    public TextParam(final String name, final Text value) {
+        this(new TextOf(name), value);
     }
 
     /**
@@ -51,8 +52,8 @@ public final class TextOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public TextOf(final Text name, final String value) {
-        this(name, new org.cactoos.text.TextOf(value));
+    public TextParam(final Text name, final String value) {
+        this(name, new TextOf(value));
     }
 
     /**
@@ -60,7 +61,7 @@ public final class TextOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public TextOf(final Text name, final Text value) {
+    public TextParam(final Text name, final Text value) {
         this.id = name;
         this.text = value;
     }

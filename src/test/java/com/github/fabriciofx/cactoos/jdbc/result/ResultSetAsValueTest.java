@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.result;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
@@ -45,7 +45,7 @@ final class ResultSetAsValueTest {
                     connexio,
                     new QueryOf(
                         "INSERT INTO contact (name) VALUES (?)",
-                        new TextOf("name", "Joseph Klimber")
+                        new TextParam("name", "Joseph Klimber")
                     )
                 ).execute();
                 new Assertion<>(
@@ -55,7 +55,7 @@ final class ResultSetAsValueTest {
                             connexio,
                             new QueryOf(
                                 "SELECT name FROM contact WHERE id = :id",
-                                new IntOf("id", 1)
+                                new IntParam("id", 1)
                             )
                         )
                     ),

@@ -6,11 +6,11 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
@@ -52,18 +52,18 @@ final class CachedTest {
                     connexio,
                     new QueryOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
-                        new IntOf("id", 1),
-                        new TextOf("name", name),
-                        new DateOf("created_at", LocalDate.now()),
-                        new TextOf("city", city),
-                        new BoolOf("working", true),
-                        new DecimalOf("height", "1.86")
+                        new IntParam("id", 1),
+                        new TextParam("name", name),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", city),
+                        new BoolParam("working", true),
+                        new DecimalParam("height", "1.86")
                     )
                 ).execute();
                 try (
                     ResultSet rset = new Select(
                         connexio,
-                        new QueryOf("SELECT name FROM person WHERE id = :id", new IntOf("id", 1))
+                        new QueryOf("SELECT name FROM person WHERE id = :id", new IntParam("id", 1))
                     ).execute()
                 ) {
                     new Assertion<>(
@@ -80,7 +80,7 @@ final class CachedTest {
                 try (
                     ResultSet rset = new Select(
                         connexio,
-                        new QueryOf("SELECT city FROM person WHERE id = :id", new IntOf("id", 1))
+                        new QueryOf("SELECT city FROM person WHERE id = :id", new IntParam("id", 1))
                     ).execute()
                 ) {
                     new Assertion<>(

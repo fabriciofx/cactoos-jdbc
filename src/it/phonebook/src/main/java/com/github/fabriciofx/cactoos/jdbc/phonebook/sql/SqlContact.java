@@ -6,8 +6,8 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.scalar.ContactAsXml;
@@ -59,7 +59,7 @@ public final class SqlContact implements Contact {
                             "SELECT name, number, carrier FROM contact INNER JOIN ",
                             "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
                         ),
-                        new UuidOf("id", this.id)
+                        new UuidParam("id", this.id)
                     )
                 )
             ).value();
@@ -78,7 +78,7 @@ public final class SqlContact implements Contact {
                 connexio,
                 new QueryOf(
                     "DELETE FROM contact WHERE id = :id",
-                    new UuidOf("id", this.id)
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }
@@ -91,8 +91,8 @@ public final class SqlContact implements Contact {
                 connexio,
                 new QueryOf(
                     "UPDATE contact SET name = :name WHERE id = :id",
-                    new TextOf("name", name),
-                    new UuidOf("id", this.id)
+                    new TextParam("name", name),
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }

@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
@@ -40,22 +40,22 @@ final class BatchedQueryTest {
                     new QueryOf(
                         "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new ParamsOf(
-                            new IntOf("id", 1),
-                            new TextOf("name", "Jeff Bridges"),
+                            new IntParam("id", 1),
+                            new TextParam("name", "Jeff Bridges"),
                             // @checkstyle MagicNumber (1 line)
-                            new IntOf("age", 34)
+                            new IntParam("age", 34)
                         ),
                         new ParamsOf(
-                            new IntOf("id", 2),
-                            new TextOf("name", "Anna Miller"),
+                            new IntParam("id", 2),
+                            new TextParam("name", "Anna Miller"),
                             // @checkstyle MagicNumber (1 line)
-                            new IntOf("age", 26)
+                            new IntParam("age", 26)
                         ),
                         new ParamsOf(
                             // @checkstyle MagicNumber (3 lines)
-                            new IntOf("id", 3),
-                            new TextOf("name", "Michal Douglas"),
-                            new IntOf("age", 32)
+                            new IntParam("id", 3),
+                            new TextParam("name", "Michal Douglas"),
+                            new IntParam("age", 32)
                         )
                     )
                 ).execute();

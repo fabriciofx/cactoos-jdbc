@@ -6,17 +6,16 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * DateTime param.
+ * AnyParam.
  *
- * @since 0.2
+ * @since 0.8.1
  */
-public final class DateTimeOf implements Param {
+public final class AnyParam implements Param {
     /**
      * Name.
      */
@@ -25,16 +24,16 @@ public final class DateTimeOf implements Param {
     /**
      * Value.
      */
-    private final LocalDateTime datetime;
+    private final Object object;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public DateTimeOf(final String name, final LocalDateTime value) {
+    public AnyParam(final String name, final Object value) {
         this.id = name;
-        this.datetime = value;
+        this.object = value;
     }
 
     @Override
@@ -47,11 +46,11 @@ public final class DateTimeOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setTimestamp(index, Timestamp.valueOf(this.datetime));
+        stmt.setObject(index, this.object);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return null;
+        return SqlLiteral.createCharString(this.object.toString(), from);
     }
 }

@@ -6,17 +6,16 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
-import java.util.UUID;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * UUID param.
+ * BoolParam.
  *
  * @since 0.2
  */
-public final class UuidOf implements Param {
+public final class BoolParam implements Param {
     /**
      * Name.
      */
@@ -25,16 +24,16 @@ public final class UuidOf implements Param {
     /**
      * Value.
      */
-    private final UUID uuid;
+    private final Boolean bool;
 
     /**
      * Ctor.
      * @param name The id
-     * @param value The apply
+     * @param value The data
      */
-    public UuidOf(final String name, final UUID value) {
+    public BoolParam(final String name, final Boolean value) {
         this.id = name;
-        this.uuid = value;
+        this.bool = value;
     }
 
     @Override
@@ -47,11 +46,11 @@ public final class UuidOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.uuid);
+        stmt.setBoolean(index, this.bool);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createUuid(this.uuid, from);
+        return SqlLiteral.createBoolean(this.bool, from);
     }
 }

@@ -4,11 +4,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
-import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
@@ -34,12 +34,12 @@ final class NamedSqlTest {
                     "VALUES (:id, :name, :birthday, :address, :married, :salary)"
                 ),
                 new ParamsOf(
-                    new IntOf("id", 1),
-                    new TextOf("name", "John Wick"),
-                    new DateOf("birthday", "1980-08-15"),
-                    new TextOf("address", "Boulevard Street, 34"),
-                    new BoolOf("married", false),
-                    new DecimalOf("salary", "13456.00")
+                    new IntParam("id", 1),
+                    new TextParam("name", "John Wick"),
+                    new DateParam("birthday", "1980-08-15"),
+                    new TextParam("address", "Boulevard Street, 34"),
+                    new BoolParam("married", false),
+                    new DecimalParam("salary", "13456.00")
                 )
             ).parsed(),
             new HasString(

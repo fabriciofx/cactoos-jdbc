@@ -6,8 +6,8 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -57,7 +57,7 @@ public final class SqlPhones implements Phones {
                     connexio,
                     new QueryOf(
                         "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
-                        new UuidOf("contact_id", this.id)
+                        new UuidParam("contact_id", this.id)
                     )
                 )
             ).value();
@@ -92,9 +92,9 @@ public final class SqlPhones implements Phones {
                 connexio,
                 new QueryOf(
                     "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
-                    new UuidOf("contact_id", this.id),
-                    new TextOf("number", number),
-                    new TextOf("carrier", carrier)
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", number),
+                    new TextParam("carrier", carrier)
                 )
             ).execute();
         }

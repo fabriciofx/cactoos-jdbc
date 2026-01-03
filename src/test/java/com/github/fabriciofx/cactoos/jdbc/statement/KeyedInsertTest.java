@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -44,7 +44,7 @@ final class KeyedInsertTest {
                             connexio,
                             new QueryOf(
                                 "INSERT INTO contact (name) VALUES (:name)",
-                                new TextOf("name", "Leonardo da Vinci")
+                                new TextParam("name", "Leonardo da Vinci")
                             )
                         ).execute()
                     ),

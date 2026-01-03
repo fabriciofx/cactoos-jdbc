@@ -6,8 +6,8 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
@@ -64,7 +64,7 @@ public final class SqlPhone implements Phone {
                     connexio,
                     new QueryOf(
                         "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
-                        new UuidOf("contact_id", this.id)
+                        new UuidParam("contact_id", this.id)
                     )
                 ),
                 "phones",
@@ -80,8 +80,8 @@ public final class SqlPhone implements Phone {
                 connexio,
                 new QueryOf(
                     "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
-                    new UuidOf("contact_id", this.id),
-                    new TextOf("number", this.num)
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", this.num)
                 )
             ).execute();
         }
@@ -97,10 +97,10 @@ public final class SqlPhone implements Phone {
                 connexio,
                 new QueryOf(
                     "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
-                    new TextOf("number", number),
-                    new TextOf("carrier", carrier),
-                    new UuidOf("contact_id", this.id),
-                    new TextOf("number", this.num)
+                    new TextParam("number", number),
+                    new TextParam("carrier", carrier),
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", this.num)
                 )
             ).execute();
         }

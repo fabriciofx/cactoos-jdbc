@@ -5,20 +5,18 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
-import org.apache.calcite.util.DateString;
 
 /**
- * Date param.
+ * DecimalParam.
  *
  * @since 0.2
  */
-public final class DateOf implements Param {
+public final class DecimalParam implements Param {
     /**
      * Name.
      */
@@ -27,15 +25,15 @@ public final class DateOf implements Param {
     /**
      * Value.
      */
-    private final LocalDate date;
+    private final BigDecimal decimal;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public DateOf(final String name, final String value) {
-        this(name, LocalDate.parse(value));
+    public DecimalParam(final String name, final String value) {
+        this(name, new BigDecimal(value));
     }
 
     /**
@@ -43,9 +41,9 @@ public final class DateOf implements Param {
      * @param name The id
      * @param value The data
      */
-    public DateOf(final String name, final LocalDate value) {
+    public DecimalParam(final String name, final BigDecimal value) {
         this.id = name;
-        this.date = value;
+        this.decimal = value;
     }
 
     @Override
@@ -58,16 +56,11 @@ public final class DateOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDate(index, java.sql.Date.valueOf(this.date));
+        stmt.setBigDecimal(index, this.decimal);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createDate(
-            new DateString(
-                this.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            ),
-            from
-        );
+        return SqlLiteral.createExactNumeric(this.decimal.toString(), from);
     }
 }

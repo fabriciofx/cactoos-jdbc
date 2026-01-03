@@ -4,10 +4,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
-import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
-import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
+import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
+import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import org.cactoos.scalar.ScalarOf;
 import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ final class QueryOfTest {
             "must build a simple query",
             () -> new QueryOf(
                 "INSERT INTO foo2 (name) VALUES (:name)",
-                new TextOf("name", "Yegor Bugayenko")
+                new TextParam("name", "Yegor Bugayenko")
             ).sql().parsed(),
             new IsText("INSERT INTO foo2 (name) VALUES (?)")
         ).affirm();
@@ -56,7 +56,7 @@ final class QueryOfTest {
                 new ScalarOf<>(
                     () -> new QueryOf(
                         "INSERT INTO foo2 (name) VALUES (:name)",
-                        new TextOf("address", "Sunset Boulevard")
+                        new TextParam("address", "Sunset Boulevard")
                     ).sql().parsed()
                 )
             )
@@ -72,11 +72,11 @@ final class QueryOfTest {
                     "INSERT INTO employee (name, birthday, address, married, salary) ",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
                 ),
-                new TextOf("name", "John Wick"),
-                new DateOf("birthday", "1980-08-16"),
-                new TextOf("address", "Boulevard Street, 34"),
-                new BoolOf("married", false),
-                new DecimalOf("salary", "13456.00")
+                new TextParam("name", "John Wick"),
+                new DateParam("birthday", "1980-08-16"),
+                new TextParam("address", "Boulevard Street, 34"),
+                new BoolParam("married", false),
+                new DecimalParam("salary", "13456.00")
             ).sql().parsed(),
             new IsText(
                 new Concatenated(
@@ -99,11 +99,11 @@ final class QueryOfTest {
                             "INSERT INTO employee (name, birthday, address, married, salary) ",
                             "VALUES (:name, :birthday, :address, :married, :salary)"
                         ),
-                        new TextOf("name", "John Wick"),
-                        new DateOf("address", "1980-08-16"),
-                        new TextOf("birthday", "Boulevard Street, 34"),
-                        new BoolOf("married", false),
-                        new DecimalOf("salary", "13456.00")
+                        new TextParam("name", "John Wick"),
+                        new DateParam("address", "1980-08-16"),
+                        new TextParam("birthday", "Boulevard Street, 34"),
+                        new BoolParam("married", false),
+                        new DecimalParam("salary", "13456.00")
                     ).sql().parsed()
                 )
             )

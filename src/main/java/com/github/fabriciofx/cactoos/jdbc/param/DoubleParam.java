@@ -11,11 +11,11 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
- * Any param.
+ * DoubleParam.
  *
- * @since 0.8.1
+ * @since 0.2
  */
-public final class AnyOf implements Param {
+public final class DoubleParam implements Param {
     /**
      * Name.
      */
@@ -24,16 +24,16 @@ public final class AnyOf implements Param {
     /**
      * Value.
      */
-    private final Object object;
+    private final Double num;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public AnyOf(final String name, final Object value) {
+    public DoubleParam(final String name, final Double value) {
         this.id = name;
-        this.object = value;
+        this.num = value;
     }
 
     @Override
@@ -46,11 +46,11 @@ public final class AnyOf implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setObject(index, this.object);
+        stmt.setDouble(index, this.num);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createCharString(this.object.toString(), from);
+        return SqlLiteral.createExactNumeric(this.num.toString(), from);
     }
 }
