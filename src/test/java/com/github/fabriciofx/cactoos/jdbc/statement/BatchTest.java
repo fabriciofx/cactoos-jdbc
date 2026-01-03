@@ -16,14 +16,14 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 
 /**
- * BatchedQuery tests.
+ * Batch tests.
  *
  * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
-final class BatchedQueryTest {
+final class BatchTest {
     @Test
     void batch() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
