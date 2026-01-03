@@ -6,7 +6,6 @@ package com.github.fabriciofx.cactoos.jdbc;
 
 /**
  * SQL.
- *
  * Represent a SQL code.
  *
  * @since 0.9.0

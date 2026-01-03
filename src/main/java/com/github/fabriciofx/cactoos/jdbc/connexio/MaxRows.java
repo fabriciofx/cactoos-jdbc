@@ -1,0 +1,79 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
+package com.github.fabriciofx.cactoos.jdbc.connexio;
+
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+
+/**
+ * MaxRows.
+ * A decorator for Connexio that sets the max of rows.
+ * @since 0.9.0
+ */
+public final class MaxRows implements Connexio {
+    /**
+     * Connexio.
+     */
+    private final Connexio origin;
+
+    /**
+     * Max of rows.
+     */
+    private final int max;
+
+    /**
+     * Ctor.
+     * @param origin A connexio
+     * @param max The max number of rows
+     */
+    public MaxRows(final Connexio origin, final int max) {
+        this.origin = origin;
+        this.max = max;
+    }
+
+    @Override
+    public PreparedStatement prepared(final Query query) throws Exception {
+        final PreparedStatement stmt = this.origin.prepared(query);
+        stmt.setMaxRows(this.max);
+        return stmt;
+    }
+
+    @Override
+    public PreparedStatement batched(final Query query) throws Exception {
+        final PreparedStatement stmt = this.origin.batched(query);
+        stmt.setMaxRows(this.max);
+        return stmt;
+    }
+
+    @Override
+    public PreparedStatement keyed(final Query query)
+        throws Exception {
+        final PreparedStatement stmt = this.origin.keyed(query);
+        stmt.setMaxRows(this.max);
+        return stmt;
+    }
+
+    @Override
+    public void autoCommit(final boolean enabled) throws Exception {
+        this.origin.autoCommit(enabled);
+    }
+
+    @Override
+    public void commit() throws Exception {
+        this.origin.commit();
+    }
+
+    @Override
+    public void rollback() throws Exception {
+        this.origin.rollback();
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.origin.close();
+    }
+}

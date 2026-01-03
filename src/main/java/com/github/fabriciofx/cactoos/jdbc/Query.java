@@ -4,10 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import org.cactoos.Text;
-
 /**
  * Query.
  *
@@ -15,20 +11,12 @@ import org.cactoos.Text;
  *
  * @since 0.1
  */
-public interface Query extends Text {
-    /**
-     * Create a PreparedStatement.
-     * @param connection A connection to the DataSource
-     * @return A PreparedStatement
-     * @throws Exception If fails
-     */
-    PreparedStatement prepared(Connection connection) throws Exception;
-
+public interface Query {
     /**
      * Return the Query params.
      * @return The query parameters
      */
-    Params params();
+    Iterable<Params> params();
 
     /**
      * Return the SQL query.

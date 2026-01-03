@@ -4,9 +4,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.Text;
 
@@ -54,8 +55,10 @@ public final class Auth implements Session {
     }
 
     @Override
-    public Connection connection() throws Exception {
-        return this.source.getConnection(this.user, this.pass);
+    public Connexio connexio() throws Exception {
+        return new JdbcConnexio(
+            this.source.getConnection(this.user, this.pass)
+        );
     }
 
     @Override

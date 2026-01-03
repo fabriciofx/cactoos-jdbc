@@ -4,11 +4,11 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
@@ -29,15 +29,12 @@ final class UpdateTest {
     void createTable() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource())
-                    .connection()
-            ) {
+            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
                 new Assertion<>(
                     "must create a table",
                     new ScalarOf<>(
                         () -> new Update(
-                            connection,
+                            connexio,
                             new QueryOf(
                                 "CREATE TABLE foo1 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                             )

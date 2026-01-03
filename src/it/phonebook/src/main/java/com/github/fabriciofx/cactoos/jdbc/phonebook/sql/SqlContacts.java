@@ -4,13 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
-import java.sql.Connection;
 import java.util.UUID;
 import org.cactoos.text.FormattedText;
 
@@ -38,10 +38,10 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public int count() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
-                    connection,
+                    connexio,
                     new QueryOf("SELECT COUNT(name) FROM contact")
                 )
             ).value();
@@ -50,12 +50,12 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact get(final int index) throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             return new SqlContact(
                 this.session,
                 new ResultSetAsValue<UUID>(
                     new Select(
-                        connection,
+                        connexio,
                         new QueryOf(
                             new FormattedText(
                                 "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",

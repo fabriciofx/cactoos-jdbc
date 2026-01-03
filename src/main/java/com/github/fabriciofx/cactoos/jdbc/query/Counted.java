@@ -7,8 +7,6 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Sql;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
@@ -32,7 +30,7 @@ public final class Counted implements Query {
             new Sticky<>(
                 () -> {
                     if (
-                        query.asString().matches(
+                        query.sql().parsed().matches(
                             "(?i)SELECT\\s+COUNT\\(.*\\).*"
                         )
                     ) {
@@ -48,23 +46,12 @@ public final class Counted implements Query {
     }
 
     @Override
-    public PreparedStatement prepared(final Connection connection)
-        throws Exception {
-        return this.origin.value().prepared(connection);
-    }
-
-    @Override
-    public Params params() {
+    public Iterable<Params> params() {
         return this.origin.value().params();
     }
 
     @Override
     public Sql sql() {
         return this.origin.value().sql();
-    }
-
-    @Override
-    public String asString() throws Exception {
-        return this.sql().parsed();
     }
 }

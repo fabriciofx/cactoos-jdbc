@@ -4,13 +4,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
-import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
@@ -31,11 +30,9 @@ final class KeyedInsertTest {
     void insertWithKeys() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
+            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
                 new Update(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                     )
@@ -44,9 +41,9 @@ final class KeyedInsertTest {
                     "must generated key value",
                     new ScalarOf<>(
                         () -> new KeyedInsert<>(
-                            connection,
-                            new KeyedQuery(
-                                () -> "INSERT INTO contact (name) VALUES (:name)",
+                            connexio,
+                            new QueryOf(
+                                "INSERT INTO contact (name) VALUES (:name)",
                                 new TextOf("name", "Leonardo da Vinci")
                             )
                         ).execute()

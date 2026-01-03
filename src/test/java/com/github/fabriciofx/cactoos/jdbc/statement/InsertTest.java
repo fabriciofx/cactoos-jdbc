@@ -4,13 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
@@ -31,11 +31,9 @@ final class InsertTest {
     void insert() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
+            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
                 new Update(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "CREATE TABLE t01 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                     )
@@ -44,7 +42,7 @@ final class InsertTest {
                     "must insert into table",
                     new ScalarOf<>(
                         () -> new Insert(
-                            connection,
+                            connexio,
                             new QueryOf(
                                 "INSERT INTO t01 (id, name) VALUES (:id, :name)",
                                 new IntOf("id", 1),

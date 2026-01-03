@@ -4,17 +4,15 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.query.KeyedQuery;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.NoSuchElementException;
 
 /**
- * KeyedInsert.
- * Insert statement which returns a key.
+ * KeyedInsert. Insert statement which returns a key.
  *
  * @param <T> Type of the key
  * @since 0.9.0
@@ -23,28 +21,28 @@ public final class KeyedInsert<T> implements Statement<T> {
     /**
      * The connection.
      */
-    private final Connection connexio;
+    private final Connexio connexio;
 
     /**
-     * WithKey query.
+     * Query.
      */
-    private final KeyedQuery qry;
+    private final Query qry;
 
     /**
      * Ctor.
      *
-     * @param connection A Session
-     * @param query A {@link KeyedQuery} query
+     * @param connexio A Connection
+     * @param query A {@link Query} query
      */
-    public KeyedInsert(final Connection connection, final KeyedQuery query) {
-        this.connexio = connection;
+    public KeyedInsert(final Connexio connexio, final Query query) {
+        this.connexio = connexio;
         this.qry = query;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
-        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
+        try (PreparedStatement stmt = this.connexio.keyed(this.qry)) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
                 if (rset.next()) {
@@ -53,11 +51,6 @@ public final class KeyedInsert<T> implements Statement<T> {
                 throw new NoSuchElementException("generated key not found");
             }
         }
-    }
-
-    @Override
-    public Connection connection() {
-        return this.connexio;
     }
 
     @Override

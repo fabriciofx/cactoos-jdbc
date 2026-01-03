@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
@@ -15,7 +16,6 @@ import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.jcabi.matchers.XhtmlMatchers;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
 import org.junit.jupiter.api.Test;
@@ -51,9 +51,9 @@ final class TransactionTest {
             server.start();
             final Session session = new NoAuth(server.resource());
             final Session transacted = new Transacted(session);
-            try (Connection connection = transacted.connection()) {
+            try (Connexio connexio = transacted.connexio()) {
                 new Transaction<>(
-                    connection,
+                    connexio,
                     () -> {
                         final Phonebook phonebook = new SqlPhonebook(transacted);
                         final Contact contact = phonebook.create(name);
@@ -92,10 +92,10 @@ final class TransactionTest {
             server.start();
             final Session session = new NoAuth(server.resource());
             final Session transacted = new Transacted(session);
-            try (Connection connection = transacted.connection()) {
+            try (Connexio connexio = transacted.connexio()) {
                 try {
                     new Transaction<>(
-                        connection,
+                        connexio,
                         () -> {
                             final Phonebook phonebook =
                                 new SqlPhonebook(transacted);

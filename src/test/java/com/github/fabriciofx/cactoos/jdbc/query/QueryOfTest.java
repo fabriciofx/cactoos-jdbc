@@ -30,7 +30,7 @@ final class QueryOfTest {
         final String sql = "SELECT * FROM employee";
         new Assertion<>(
             "must build a query without values",
-            new QueryOf(sql),
+            () -> new QueryOf(sql).sql().parsed(),
             new IsText("SELECT * FROM employee")
         ).affirm();
     }
@@ -39,10 +39,10 @@ final class QueryOfTest {
     void valid() {
         new Assertion<>(
             "must build a simple query",
-            new QueryOf(
+            () -> new QueryOf(
                 "INSERT INTO foo2 (name) VALUES (:name)",
                 new TextOf("name", "Yegor Bugayenko")
-            ),
+            ).sql().parsed(),
             new IsText("INSERT INTO foo2 (name) VALUES (?)")
         ).affirm();
     }
@@ -57,17 +57,17 @@ final class QueryOfTest {
                     () -> new QueryOf(
                         "INSERT INTO foo2 (name) VALUES (:name)",
                         new TextOf("address", "Sunset Boulevard")
-                    ).asString()
+                    ).sql().parsed()
                 )
             )
         ).affirm();
     }
 
     @Test
-    void manyValues() throws Exception {
+    void manyValues() {
         new Assertion<>(
             "must build a query with many values",
-            new QueryOf(
+            () -> new QueryOf(
                 new Concatenated(
                     "INSERT INTO employee (name, birthday, address, married, salary) ",
                     "VALUES (:name, :birthday, :address, :married, :salary)"
@@ -77,7 +77,7 @@ final class QueryOfTest {
                 new TextOf("address", "Boulevard Street, 34"),
                 new BoolOf("married", false),
                 new DecimalOf("salary", "13456.00")
-            ),
+            ).sql().parsed(),
             new IsText(
                 new Concatenated(
                     "INSERT INTO employee (name, birthday, address, married, salary) ",
@@ -104,7 +104,7 @@ final class QueryOfTest {
                         new TextOf("birthday", "Boulevard Street, 34"),
                         new BoolOf("married", false),
                         new DecimalOf("salary", "13456.00")
-                    ).asString()
+                    ).sql().parsed()
                 )
             )
         ).affirm();

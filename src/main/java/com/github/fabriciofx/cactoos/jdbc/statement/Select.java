@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.sql.rowset.CachedRowSet;
@@ -23,7 +23,7 @@ public final class Select implements Statement<ResultSet> {
     /**
      * The connection.
      */
-    private final Connection connexio;
+    private final Connexio connexio;
 
     /**
      * The SQL query.
@@ -32,17 +32,17 @@ public final class Select implements Statement<ResultSet> {
 
     /**
      * Ctor.
-     * @param connection A Session
+     * @param connexio A Connection
      * @param query A SQL query
      */
-    public Select(final Connection connection, final Query query) {
-        this.connexio = connection;
+    public Select(final Connexio connexio, final Query query) {
+        this.connexio = connexio;
         this.qry = query;
     }
 
     @Override
     public ResultSet execute() throws Exception {
-        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
+        try (PreparedStatement stmt = this.connexio.prepared(this.qry)) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
                 final CachedRowSet crs = rsf.createCachedRowSet();
@@ -50,11 +50,6 @@ public final class Select implements Statement<ResultSet> {
                 return crs;
             }
         }
-    }
-
-    @Override
-    public Connection connection() {
-        return this.connexio;
     }
 
     @Override

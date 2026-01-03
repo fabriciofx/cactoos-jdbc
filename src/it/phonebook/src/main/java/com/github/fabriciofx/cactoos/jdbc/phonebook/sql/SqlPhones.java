@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
@@ -13,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
-import java.sql.Connection;
 import java.util.UUID;
 import org.cactoos.Scalar;
 import org.cactoos.text.FormattedText;
@@ -51,10 +51,10 @@ public final class SqlPhones implements Phones {
 
     @Override
     public int count() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
                         new UuidOf("contact_id", this.id)
@@ -66,10 +66,10 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Phone get(final int index) throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             final Scalar<String> number = new ResultSetAsValue<>(
                 new Select(
-                    connection,
+                    connexio,
                     new QueryOf(
                         new FormattedText(
                             "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
@@ -87,9 +87,9 @@ public final class SqlPhones implements Phones {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Insert(
-                connection,
+                connexio,
                 new QueryOf(
                     "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
                     new UuidOf("contact_id", this.id),

@@ -4,8 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.Connection;
-
 /**
  * Statement.
  *
@@ -21,12 +19,6 @@ public interface Statement<T> {
      * @throws Exception If fails
      */
     T execute() throws Exception;
-
-    /**
-     * Get the {@link java.sql.Connection} where the statement was executed.
-     * @return The {@link java.sql.Connection}
-     */
-    Connection connection();
 
     /**
      * Get the {@link Query} which statement executes.

@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connection;
+package com.github.fabriciofx.cactoos.jdbc.jdk.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

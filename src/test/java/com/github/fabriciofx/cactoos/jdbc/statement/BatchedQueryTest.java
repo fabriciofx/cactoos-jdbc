@@ -4,15 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 
@@ -29,18 +28,16 @@ final class BatchedQueryTest {
     void batch() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
+            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
                 new Update(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "CREATE TABLE client (id INT, name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    connection,
-                    new BatchedQuery(
+                    connexio,
+                    new QueryOf(
                         "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
                         new ParamsOf(
                             new IntOf("id", 1),

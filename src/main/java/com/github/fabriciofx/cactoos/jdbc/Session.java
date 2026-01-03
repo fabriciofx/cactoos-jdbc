@@ -4,11 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
-import java.sql.Connection;
-
 /**
  * Session.
- * Create a {@link java.sql.Connection}.
  *
  * <p>There is no thread-safety guarantee.
  *
@@ -16,11 +13,11 @@ import java.sql.Connection;
  */
 public interface Session {
     /**
-     * Create a {@link java.sql.Connection}.
-     * @return A {@link java.sql.Connection}
+     * Create a {@link Connexio}.
+     * @return A {@link Connexio}
      * @throws Exception If fails
      */
-    Connection connection() throws Exception;
+    Connexio connexio() throws Exception;
 
     /**
      * Session JDBC URL.

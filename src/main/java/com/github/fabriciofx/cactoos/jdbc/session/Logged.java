@@ -4,16 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import java.sql.Connection;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
-import org.cactoos.text.FormattedText;
-import org.cactoos.text.UncheckedText;
 
 /**
  * Logged session.
@@ -40,11 +37,6 @@ public final class Logged implements Session {
      * The logger level.
      */
     private final Unchecked<Level> level;
-
-    /**
-     * The connections id.
-     */
-    private final AtomicInteger connections;
 
     /**
      * The statements id.
@@ -89,41 +81,16 @@ public final class Logged implements Session {
                 }
             )
         );
-        this.connections = new AtomicInteger();
         this.statements = new AtomicInteger();
     }
 
     @Override
-    public Connection connection() throws Exception {
-        final Connection connection = this.origin.connection();
-        final Properties props = connection.getClientInfo();
-        final StringBuilder strb = new StringBuilder();
-        for (final String key : props.stringPropertyNames()) {
-            strb.append(
-                String.format(
-                    "%s=%s, ",
-                    key,
-                    props.getProperty(key)
-                )
-            );
-        }
-        this.logger.log(
-            this.level.value(),
-            new UncheckedText(
-                new FormattedText(
-                    "[%s] Connection[#%d] has been opened with properties %s",
-                    this.source,
-                    this.connections.get(),
-                    strb.toString()
-                )
-            ).asString()
-        );
-        return new com.github.fabriciofx.cactoos.jdbc.connection.Logged(
-            connection,
+    public Connexio connexio() throws Exception {
+        return new com.github.fabriciofx.cactoos.jdbc.connexio.Logged(
+            this.origin.connexio(),
             this.source,
             this.logger,
             this.level.value(),
-            this.connections.getAndIncrement(),
             this.statements
         );
     }

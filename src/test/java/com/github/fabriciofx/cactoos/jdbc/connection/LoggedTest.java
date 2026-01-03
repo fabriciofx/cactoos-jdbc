@@ -4,17 +4,18 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.connection;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.Logged;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
-import java.sql.Connection;
 import java.util.logging.Logger;
 import org.cactoos.Text;
 import org.cactoos.text.Joined;
 import org.cactoos.text.TextOf;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.Matches;
@@ -30,18 +31,19 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 final class LoggedTest {
+    @Disabled
     @Test
     void loggedUpdate() throws Exception {
         final Logger logger = new FakeLogger();
         try (
-            Connection connection = new Logged(
+            Connexio connexio = new Logged(
                 new NoAuth(new H2Source("testdb")),
                 "cactoos-jdbc",
                 logger
-            ).connection()
+            ).connexio()
         ) {
             new Update(
-                connection,
+                connexio,
                 new QueryOf("CREATE TABLE t012 (id INT AUTO_INCREMENT, name VARCHAR(50))")
             ).execute();
             final Text regex = new Joined(

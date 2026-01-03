@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
@@ -19,7 +19,7 @@ public final class Insert implements Statement<Boolean> {
     /**
      * The connection.
      */
-    private final Connection connexio;
+    private final Connexio connexio;
 
     /**
      * The SQL query.
@@ -28,24 +28,19 @@ public final class Insert implements Statement<Boolean> {
 
     /**
      * Ctor.
-     * @param connection A Session
+     * @param connexio A Connexio
      * @param query A SQL query
      */
-    public Insert(final Connection connection, final Query query) {
-        this.connexio = connection;
+    public Insert(final Connexio connexio, final Query query) {
+        this.connexio = connexio;
         this.qry = query;
     }
 
     @Override
     public Boolean execute() throws Exception {
-        try (PreparedStatement stmt = this.qry.prepared(this.connexio)) {
+        try (PreparedStatement stmt = this.connexio.prepared(this.qry)) {
             return stmt.execute();
         }
-    }
-
-    @Override
-    public Connection connection() {
-        return this.connexio;
     }
 
     @Override

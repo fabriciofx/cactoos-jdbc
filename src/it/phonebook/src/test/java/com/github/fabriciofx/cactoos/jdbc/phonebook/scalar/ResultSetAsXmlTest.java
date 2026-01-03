@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.scalar;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
@@ -12,7 +13,6 @@ import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.jcabi.matchers.XhtmlMatchers;
-import java.sql.Connection;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
 import org.junit.jupiter.api.Test;
@@ -42,15 +42,13 @@ final class ResultSetAsXmlTest {
             )
         ) {
             server.start();
-            try (
-                Connection connection = new NoAuth(server.resource()).connection()
-            ) {
+            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
                 new Assertion<>(
                     "must convert a contact into a XML",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(
-                                connection,
+                                connexio,
                                 new QueryOf(
                                     "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
                                 )

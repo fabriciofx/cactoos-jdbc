@@ -69,7 +69,7 @@ final class NormalizedSqlTest {
                     new QueryOf("SELECT id, name FROM contact"),
                     1,
                     30
-                )
+                ).sql().parsed()
             ).parsed(),
             new IsText("")
         ).affirm();

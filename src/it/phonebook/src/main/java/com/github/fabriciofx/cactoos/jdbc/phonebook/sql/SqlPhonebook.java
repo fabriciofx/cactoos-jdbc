@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Page;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
@@ -13,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,9 +45,9 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public Contact create(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Insert(
-                connection,
+                connexio,
                 new QueryOf(
                     "INSERT INTO contact (id, name) VALUES (:id, :name)",
                     new UuidOf("id", id),
@@ -61,9 +61,9 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public List<Contact> search(final String name) throws Exception {
         final List<Contact> contacts = new LinkedList<>();
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             final Select select = new Select(
-                connection,
+                connexio,
                 new QueryOf(
                     "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
                     new TextOf("name", new Lowered(name))

@@ -25,7 +25,7 @@ final class CountedTest {
         final String sql = "SELECT COUNT(*) FROM employee";
         new Assertion<>(
             "must contains a count query for all columns",
-            new Counted(new QueryOf(sql)),
+            () -> new Counted(new QueryOf(sql)).sql().parsed(),
             new IsText(sql)
         ).affirm();
     }
@@ -35,7 +35,7 @@ final class CountedTest {
         final String sql = "SELECT COUNT(id) FROM employee";
         new Assertion<>(
             "must contains a count query for one column",
-            new Counted(new QueryOf(sql)),
+            () -> new Counted(new QueryOf(sql)).sql().parsed(),
             new IsText(sql)
         );
     }
@@ -48,7 +48,7 @@ final class CountedTest {
             new Matches<>(
                 new ScalarOf<>(
                     () -> new Counted(new QueryOf("SELECT * FROM employee"))
-                        .asString()
+                        .sql().parsed()
                 )
             )
         ).affirm();

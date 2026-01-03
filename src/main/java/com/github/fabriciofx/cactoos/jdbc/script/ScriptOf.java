@@ -4,13 +4,15 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -30,6 +32,7 @@ public class ScriptOf implements Script {
 
     /**
      * Ctor.
+     *
      * @param npt The SQL Script file
      */
     public ScriptOf(final Input npt) {
@@ -38,6 +41,7 @@ public class ScriptOf implements Script {
 
     /**
      * Execute this Script on the Session context.
+     *
      * @param session The context
      * @throws Exception if fails
      */
@@ -69,11 +73,14 @@ public class ScriptOf implements Script {
             joiner.add(line);
         }
         final String[] cmds = joiner.toString().split(";");
-        try (Connection conn = session.connection()) {
+        try (Connexio connexio = session.connexio()) {
             for (final String cmd : cmds) {
-                try (java.sql.Statement stmt = conn.createStatement()) {
-                    final String sql = cmd.trim();
-                    stmt.execute(sql);
+                try (
+                    PreparedStatement stmt = connexio.prepared(
+                        new QueryOf(cmd.trim())
+                    )
+                ) {
+                    stmt.execute();
                 }
             }
         }

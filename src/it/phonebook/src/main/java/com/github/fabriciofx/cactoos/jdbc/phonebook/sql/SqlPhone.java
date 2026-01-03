@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
@@ -12,7 +13,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import java.sql.Connection;
 import java.util.UUID;
 
 /**
@@ -58,10 +58,10 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String about() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             return new ResultSetAsXml(
                 new Select(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
                         new UuidOf("contact_id", this.id)
@@ -75,9 +75,9 @@ public final class SqlPhone implements Phone {
 
     @Override
     public void delete() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Update(
-                connection,
+                connexio,
                 new QueryOf(
                     "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
                     new UuidOf("contact_id", this.id),
@@ -92,9 +92,9 @@ public final class SqlPhone implements Phone {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Update(
-                connection,
+                connexio,
                 new QueryOf(
                     "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
                     new TextOf("number", number),

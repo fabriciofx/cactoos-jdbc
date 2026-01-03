@@ -4,8 +4,8 @@
  */
 
 /**
- * PreparedStatement.
+ * Connexio.
  *
- * @since 0.4
+ * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.prepared;
+package com.github.fabriciofx.cactoos.jdbc.connexio;

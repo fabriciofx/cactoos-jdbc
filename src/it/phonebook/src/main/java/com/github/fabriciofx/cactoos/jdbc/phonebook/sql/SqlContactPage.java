@@ -4,13 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Page;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -68,9 +68,9 @@ public final class SqlContactPage implements Page<Contact> {
             new Sticky<>(
                 () -> {
                     try (
-                        Connection connection = session.connection();
+                        Connexio connexio = session.connexio();
                         ResultSet rset = new Select(
-                            connection,
+                            connexio,
                             new Paginated(
                                 new QueryOf("SELECT id FROM contact"),
                                 number,

@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidOf;
@@ -13,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.phonebook.scalar.ContactAsXml;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import java.sql.Connection;
 import java.util.UUID;
 import org.cactoos.text.Concatenated;
 
@@ -50,10 +50,10 @@ public final class SqlContact implements Contact {
 
     @Override
     public String about() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             return new ContactAsXml(
                 new Select(
-                    connection,
+                    connexio,
                     new QueryOf(
                         new Concatenated(
                             "SELECT name, number, carrier FROM contact INNER JOIN ",
@@ -73,9 +73,9 @@ public final class SqlContact implements Contact {
 
     @Override
     public void delete() throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Update(
-                connection,
+                connexio,
                 new QueryOf(
                     "DELETE FROM contact WHERE id = :id",
                     new UuidOf("id", this.id)
@@ -86,9 +86,9 @@ public final class SqlContact implements Contact {
 
     @Override
     public void update(final String name) throws Exception {
-        try (Connection connection = this.session.connection()) {
+        try (Connexio connexio = this.session.connexio()) {
             new Update(
-                connection,
+                connexio,
                 new QueryOf(
                     "UPDATE contact SET name = :name WHERE id = :id",
                     new TextOf("name", name),

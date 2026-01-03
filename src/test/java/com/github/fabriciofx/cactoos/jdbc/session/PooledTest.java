@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolOf;
 import com.github.fabriciofx.cactoos.jdbc.param.DateOf;
@@ -11,7 +12,6 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalOf;
 import com.github.fabriciofx.cactoos.jdbc.param.IntOf;
 import com.github.fabriciofx.cactoos.jdbc.param.TextOf;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.BatchedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Batch;
@@ -19,7 +19,6 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import java.time.LocalDate;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
@@ -40,18 +39,18 @@ final class PooledTest {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
             final Session session = new Pooled(new NoAuth(server.resource()));
-            try (Connection connection = session.connection()) {
+            try (Connexio connexio = session.connexio()) {
                 new Update(
-                    connection,
+                    connexio,
                     new QueryOf(
                         "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
             }
-            try (Connection connection = session.connection()) {
+            try (Connexio connexio = session.connexio()) {
                 new Batch(
-                    connection,
-                    new BatchedQuery(
+                    connexio,
+                    new QueryOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new ParamsOf(
                             new IntOf("id", 1),
@@ -72,12 +71,12 @@ final class PooledTest {
                     )
                 ).execute();
             }
-            try (Connection connection = session.connection()) {
+            try (Connexio connexio = session.connexio()) {
                 new Assertion<>(
                     "must select a person name",
                     new ResultSetAsValue<>(
                         new Select(
-                            connection,
+                            connexio,
                             new QueryOf(
                                 "SELECT name FROM person"
                             )

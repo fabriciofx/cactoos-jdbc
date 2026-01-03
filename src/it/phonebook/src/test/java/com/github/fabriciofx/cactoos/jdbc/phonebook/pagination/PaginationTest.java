@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.pagination;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
 import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
@@ -13,7 +14,6 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import javax.sql.DataSource;
 import org.cactoos.io.ResourceOf;
@@ -47,9 +47,9 @@ final class PaginationTest {
         ) {
             server.start();
             try (
-                Connection connection = new NoAuth(server.resource()).connection();
+                Connexio connexio = new NoAuth(server.resource()).connexio();
                 ResultSet rset = new Select(
-                    connection,
+                    connexio,
                     new Paginated(
                         new QueryOf("SELECT * FROM contact"),
                         1,

@@ -22,11 +22,11 @@ final class PaginatedTest {
     void paginated() {
         new Assertion<>(
             "must contains a count query for all columns",
-            new Paginated(
+            () -> new Paginated(
                 new QueryOf("SELECT name, address FROM employee"),
                 20,
                 0
-            ),
+            ).sql().parsed(),
             new IsText(
                 new Concatenated(
                     "SELECT q.*, COUNT(*) OVER () AS __total__ FROM ",

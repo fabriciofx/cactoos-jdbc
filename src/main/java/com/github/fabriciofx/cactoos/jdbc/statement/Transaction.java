@@ -4,10 +4,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 /**
@@ -27,7 +27,7 @@ public final class Transaction<T> implements Statement<T> {
     /**
      * The connection.
      */
-    private final Connection connexio;
+    private final Connexio connexio;
 
     /**
      * Callable to be executed in a transaction.
@@ -37,11 +37,11 @@ public final class Transaction<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param connection A session
+     * @param connexio A session
      * @param call A Callable to be executed in a transaction
      */
-    public Transaction(final Connection connection, final Callable<T> call) {
-        this.connexio = connection;
+    public Transaction(final Connexio connexio, final Callable<T> call) {
+        this.connexio = connexio;
         this.callable = call;
     }
 
@@ -56,11 +56,6 @@ public final class Transaction<T> implements Statement<T> {
             this.connexio.rollback();
             throw ex;
         }
-    }
-
-    @Override
-    public Connection connection() {
-        return this.connexio;
     }
 
     @Override

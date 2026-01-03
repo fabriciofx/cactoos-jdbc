@@ -4,8 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
+import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import java.sql.Connection;
+import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import java.sql.DriverManager;
 
 /**
@@ -46,11 +47,13 @@ public final class Driver implements Session {
     }
 
     @Override
-    public Connection connection() throws Exception {
-        return DriverManager.getConnection(
-            this.jdbc,
-            this.user,
-            this.pass
+    public Connexio connexio() throws Exception {
+        return new JdbcConnexio(
+            DriverManager.getConnection(
+                this.jdbc,
+                this.user,
+                this.pass
+            )
         );
     }
 
