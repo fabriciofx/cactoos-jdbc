@@ -2,79 +2,69 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.Sql;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.github.fabriciofx.cactoos.jdbc.Param;
+import com.github.fabriciofx.cactoos.jdbc.Params;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlDynamicParam;
-import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.apache.calcite.sql.util.SqlShuttle;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
-import org.cactoos.text.TextOf;
-import org.cactoos.text.UncheckedText;
 
 /**
- * Parametrized SQL.
- * Parse a SQL changing literals for question mark (dynamic params).
+ * Merged.
+ * A decorator for {@link Query} that inlines parameter values into a query.
  * @since 0.9.0
  */
-public final class ParametrizedSql implements Sql {
+public final class Merged implements Query {
     /**
-     * Source SQL.
+     * Query.
      */
-    private final Text origin;
+    private final Query origin;
 
     /**
-     * Parametrized SQL.
+     * SQL code.
      */
-    private final Text parametrized;
-
-    /**
-     * Ctor.
-     * @param sql SQL query
-     */
-    public ParametrizedSql(final String sql) {
-        this(new TextOf(sql));
-    }
+    private final Text code;
 
     /**
      * Ctor.
-     * @param sql SQL query
+     * @param named A Named query
      */
-    public ParametrizedSql(final Text sql) {
-        this.origin = sql;
-        this.parametrized = new Sticky(
+    public Merged(final Named named) {
+        this.origin = named;
+        this.code = new Sticky(
             () -> {
                 final String result;
-                if (sql.asString().startsWith("CREATE")) {
-                    result = sql.asString();
+                if (named.sql().startsWith("CREATE")) {
+                    result = named.sql();
                 } else {
                     final SqlParser.Config config = SqlParser.config()
                         .withConformance(SqlConformanceEnum.DEFAULT)
                         .withQuoting(Quoting.BACK_TICK);
                     final SqlParser parser = SqlParser.create(
-                        sql.asString(),
+                        named.sql(),
                         config
                     );
                     final SqlNode stmt = parser.parseStmt();
-                    final AtomicInteger index = new AtomicInteger(0);
                     final SqlNode replaced = stmt.accept(
                         new SqlShuttle() {
                             @Override
-                            public SqlNode visit(final SqlLiteral literal) {
-                                return new SqlDynamicParam(
-                                    index.getAndIncrement(),
-                                    SqlParserPos.ZERO
+                            public SqlNode visit(final SqlDynamicParam mark) {
+                                final Params params = named.params().iterator()
+                                    .next();
+                                final Param param = params.param(
+                                    mark.getIndex()
                                 );
+                                return param.value(mark.getParserPosition());
                             }
                         }
                     );
@@ -99,12 +89,12 @@ public final class ParametrizedSql implements Sql {
     }
 
     @Override
-    public String source() {
-        return new UncheckedText(this.origin).asString();
+    public Iterable<Params> params() {
+        return this.origin.params();
     }
 
     @Override
-    public String parsed() throws Exception {
-        return this.parametrized.asString();
+    public String sql() throws Exception {
+        return this.code.asString();
     }
 }

@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -18,11 +19,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * KeyedInsert tests.
- *
- * <p>There is no thread-safety guarantee.
- *
  * @since 0.9.0
- * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class KeyedInsertTest {
@@ -42,9 +39,11 @@ final class KeyedInsertTest {
                     new ScalarOf<>(
                         () -> new KeyedInsert<>(
                             connexio,
-                            new QueryOf(
-                                "INSERT INTO contact (name) VALUES (:name)",
-                                new TextParam("name", "Leonardo da Vinci")
+                            new Named(
+                                new QueryOf(
+                                    "INSERT INTO contact (name) VALUES (:name)",
+                                    new TextParam("name", "Leonardo da Vinci")
+                                )
                             )
                         ).execute()
                     ),

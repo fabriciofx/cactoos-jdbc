@@ -11,6 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.scalar.ContactAsXml;
+import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
@@ -54,12 +55,14 @@ public final class SqlContact implements Contact {
             return new ContactAsXml(
                 new Select(
                     connexio,
-                    new QueryOf(
-                        new Concatenated(
-                            "SELECT name, number, carrier FROM contact INNER JOIN ",
-                            "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
-                        ),
-                        new UuidParam("id", this.id)
+                    new Named(
+                        new QueryOf(
+                            new Concatenated(
+                                "SELECT name, number, carrier FROM contact INNER JOIN ",
+                                "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
+                            ),
+                            new UuidParam("id", this.id)
+                        )
                     )
                 )
             ).value();
@@ -76,9 +79,11 @@ public final class SqlContact implements Contact {
         try (Connexio connexio = this.session.connexio()) {
             new Update(
                 connexio,
-                new QueryOf(
-                    "DELETE FROM contact WHERE id = :id",
-                    new UuidParam("id", this.id)
+                new Named(
+                    new QueryOf(
+                        "DELETE FROM contact WHERE id = :id",
+                        new UuidParam("id", this.id)
+                    )
                 )
             ).execute();
         }
@@ -89,10 +94,12 @@ public final class SqlContact implements Contact {
         try (Connexio connexio = this.session.connexio()) {
             new Update(
                 connexio,
-                new QueryOf(
-                    "UPDATE contact SET name = :name WHERE id = :id",
-                    new TextParam("name", name),
-                    new UuidParam("id", this.id)
+                new Named(
+                    new QueryOf(
+                        "UPDATE contact SET name = :name WHERE id = :id",
+                        new TextParam("name", name),
+                        new UuidParam("id", this.id)
+                    )
                 )
             ).execute();
         }

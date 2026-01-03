@@ -11,6 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
+import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
@@ -26,11 +27,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Select tests.
- *
- * <p>There is no thread-safety guarantee.
- *
  * @since 0.1
- * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class SelectTest {
@@ -46,23 +43,28 @@ final class SelectTest {
                 ).execute();
                 new Batch(
                     connexio,
-                    new QueryOf(
-                        "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
-                        new ParamsOf(
-                            new IntParam("id", 1),
-                            new TextParam("name", "John Wick"),
-                            new DateParam("birthday", "1980-08-15"),
-                            new TextParam("address", "Boulevard Street, 34"),
-                            new BoolParam("married", false),
-                            new DecimalParam("salary", "13456.00")
-                        ),
-                        new ParamsOf(
-                            new IntParam("id", 2),
-                            new TextParam("name", "Adam Park"),
-                            new DateParam("birthday", "1985-07-09"),
-                            new TextParam("address", "Sunset Place, 14"),
-                            new BoolParam("married", true),
-                            new DecimalParam("salary", "12345.00")
+                    new Named(
+                        new QueryOf(
+                            "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
+                            new ParamsOf(
+                                new IntParam("id", 1),
+                                new TextParam("name", "John Wick"),
+                                new DateParam("birthday", "1980-08-15"),
+                                new TextParam(
+                                    "address",
+                                    "Boulevard Street, 34"
+                                ),
+                                new BoolParam("married", false),
+                                new DecimalParam("salary", "13456.00")
+                            ),
+                            new ParamsOf(
+                                new IntParam("id", 2),
+                                new TextParam("name", "Adam Park"),
+                                new DateParam("birthday", "1985-07-09"),
+                                new TextParam("address", "Sunset Place, 14"),
+                                new BoolParam("married", true),
+                                new DecimalParam("salary", "12345.00")
+                            )
                         )
                     )
                 ).execute();
@@ -108,23 +110,25 @@ final class SelectTest {
                 ).execute();
                 new Batch(
                     connexio,
-                    new QueryOf(
-                        "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
-                        new ParamsOf(
-                            new IntParam("id", 1),
-                            new TextParam("name", "Rob Pike"),
-                            new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "San Francisco"),
-                            new BoolParam("working", true),
-                            new DecimalParam("height", "1.86")
-                        ),
-                        new ParamsOf(
-                            new IntParam("id", 2),
-                            new TextParam("name", "Ana Pivot"),
-                            new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "Washington"),
-                            new BoolParam("working", false),
-                            new DecimalParam("height", "1.62")
+                    new Named(
+                        new QueryOf(
+                            "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
+                            new ParamsOf(
+                                new IntParam("id", 1),
+                                new TextParam("name", "Rob Pike"),
+                                new DateParam("created_at", LocalDate.now()),
+                                new TextParam("city", "San Francisco"),
+                                new BoolParam("working", true),
+                                new DecimalParam("height", "1.86")
+                            ),
+                            new ParamsOf(
+                                new IntParam("id", 2),
+                                new TextParam("name", "Ana Pivot"),
+                                new DateParam("created_at", LocalDate.now()),
+                                new TextParam("city", "Washington"),
+                                new BoolParam("working", false),
+                                new DecimalParam("height", "1.62")
+                            )
                         )
                     )
                 ).execute();

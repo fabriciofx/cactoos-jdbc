@@ -7,12 +7,13 @@ package com.github.fabriciofx.cactoos.jdbc.connexio;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
-import com.github.fabriciofx.cactoos.jdbc.sql.NormalizedSql;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import javax.sql.rowset.CachedRowSet;
+import org.cactoos.text.TextOf;
 
 /**
  * Cached.
@@ -46,16 +47,16 @@ public final class Cached implements Connexio {
     @Override
     public PreparedStatement prepared(final Query query) throws Exception {
         final PreparedStatement prepared;
-        if (new IsSelect(query.sql().parsed()).value()) {
+        if (new IsSelect(query.sql()).value()) {
             prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                 this.origin.prepared(query),
                 this.origin.prepared(
                     new QueryOf(
-                        new NormalizedSql(query.sql().parsed()),
+                        new TextOf(new Normalized(query).sql()),
                         query.params()
                     )
                 ),
-                new NormalizedSql(query.sql().parsed()),
+                new Normalized(query),
                 this.cache
             );
         } else {

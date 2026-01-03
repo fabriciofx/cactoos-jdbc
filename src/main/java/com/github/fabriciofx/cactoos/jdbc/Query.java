@@ -21,6 +21,7 @@ public interface Query {
     /**
      * Return the SQL query.
      * @return The SQL query
+     * @throws Exception if something goes wrong
      */
-    Sql sql();
+    String sql() throws Exception;
 }

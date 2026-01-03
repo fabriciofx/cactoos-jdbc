@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Sql;
+import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public final class Cached extends PreparedStatementEnvelope {
     /**
      * The normalized SQL select.
      */
-    private final Sql normalized;
+    private final Normalized normalized;
 
     /**
      * The cache.
@@ -48,7 +48,7 @@ public final class Cached extends PreparedStatementEnvelope {
     public Cached(
         final PreparedStatement origin,
         final PreparedStatement prepared,
-        final Sql normalized,
+        final Normalized normalized,
         final Cache<String, CachedRowSet> cache
     ) {
         super(origin);
@@ -60,16 +60,16 @@ public final class Cached extends PreparedStatementEnvelope {
     @Override
     public ResultSet executeQuery() throws SQLException {
         try {
-            if (!this.cache.contains(this.normalized.parsed())) {
+            if (!this.cache.contains(this.normalized.sql())) {
                 try (ResultSet rset = this.prepared.executeQuery()) {
                     final RowSetFactory rsf = RowSetProvider.newFactory();
                     final CachedRowSet crs = rsf.createCachedRowSet();
                     crs.populate(rset);
-                    this.cache.store(this.normalized.parsed(), crs);
+                    this.cache.store(this.normalized.sql(), crs);
                 }
             }
             final CachedRowSet cached = this.cache.retrieve(
-                this.normalized.parsed()
+                this.normalized.sql()
             );
             return cached.createCopy();
         } catch (final Exception ex) {

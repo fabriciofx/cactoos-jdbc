@@ -7,24 +7,21 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.Sql;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.NamedSql;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 
 /**
- * Simple parametrized query.
- *
+ * QueryOf.
+ * A simple {@link Query} representation.
  * @since 0.1
  */
-@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class QueryOf implements Query {
     /**
-     * SQL query.
+     * SQL code.
      */
-    private final Sql sql;
+    private final Text code;
 
     /**
      * A list of SQL query parameters.
@@ -89,16 +86,7 @@ public final class QueryOf implements Query {
      * @param params A list of SQL query parameters
      */
     public QueryOf(final Text sql, final Iterable<Params> params) {
-        this(new NamedSql(sql, params.iterator().next()), params);
-    }
-
-    /**
-     * Ctor.
-     * @param sql The SQL query
-     * @param params A list of SQL query parameters
-     */
-    public QueryOf(final Sql sql, final Iterable<Params> params) {
-        this.sql = sql;
+        this.code = sql;
         this.parameters = params;
     }
 
@@ -108,7 +96,7 @@ public final class QueryOf implements Query {
     }
 
     @Override
-    public Sql sql() {
-        return this.sql;
+    public String sql() throws Exception {
+        return this.code.asString();
     }
 }

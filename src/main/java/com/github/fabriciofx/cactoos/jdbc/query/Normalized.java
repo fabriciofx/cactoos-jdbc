@@ -2,9 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.Sql;
+import com.github.fabriciofx.cactoos.jdbc.Params;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlKind;
@@ -18,53 +19,40 @@ import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
-import org.cactoos.text.TextOf;
-import org.cactoos.text.UncheckedText;
 
 /**
- * NormalizedSelect. Normalize (transform to the canonical query) a select
- * query.
- *
+ * Normalized.
+ * A decorator for {@link Query} that transform a query into its canonical form.
  * @since 0.9.0
  */
-public final class NormalizedSql implements Sql {
+public final class Normalized implements Query {
     /**
-     * Source SQL.
+     * Query.
      */
-    private final Text origin;
+    private final Query origin;
 
     /**
-     * Normalized SQL.
+     * SQL code.
      */
-    private final Text normalized;
-
-    /**
-     * Ctor.
-     *
-     * @param sql The query
-     */
-    public NormalizedSql(final String sql) {
-        this(new TextOf(sql));
-    }
+    private final Text code;
 
     /**
      * Ctor.
-     *
-     * @param sql The query
+     * @param query A query
      */
-    public NormalizedSql(final Text sql) {
-        this.origin = sql;
-        this.normalized = new Sticky(
+    public Normalized(final Query query) {
+        this.origin = query;
+        this.code = new Sticky(
             () -> {
                 final String result;
-                if (sql.asString().startsWith("SELECT")
-                    || sql.asString().startsWith("WITH")
+                if (query.sql().startsWith("SELECT")
+                    || query.sql().startsWith("WITH")
                 ) {
                     final SqlParser.Config config = SqlParser.config()
                         .withConformance(SqlConformanceEnum.DEFAULT)
                         .withQuoting(Quoting.BACK_TICK);
                     final SqlParser parser = SqlParser.create(
-                        sql.asString(),
+                        query.sql(),
                         config
                     );
                     final SqlNode stmt = parser.parseStmt();
@@ -111,7 +99,7 @@ public final class NormalizedSql implements Sql {
                         .replaceAll("\\s+", " ")
                         .trim();
                 } else {
-                    result = sql.asString();
+                    result = query.sql();
                 }
                 return result;
             }
@@ -119,12 +107,12 @@ public final class NormalizedSql implements Sql {
     }
 
     @Override
-    public String source() {
-        return new UncheckedText(this.origin).asString();
+    public Iterable<Params> params() {
+        return this.origin.params();
     }
 
     @Override
-    public String parsed() throws Exception {
-        return this.normalized.asString();
+    public String sql() throws Exception {
+        return this.code.asString();
     }
 }

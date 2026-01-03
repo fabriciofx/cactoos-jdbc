@@ -2,10 +2,8 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -13,18 +11,17 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
- * NormalizedSql tests.
- *
+ * Normalized tests.
  * @since 0.9.0
  */
-final class NormalizedSqlTest {
+final class NormalizedTest {
     @Test
     void normalizeWithWhere() throws Exception {
         new Assertion<>(
             "must normalize a select with where",
-            () -> new NormalizedSql(
-                "SELECT id, name FROM person WHERE id = 1"
-            ).parsed(),
+            () -> new Normalized(
+                new QueryOf("SELECT id, name FROM person WHERE id = 1")
+            ).sql(),
             new IsText("SELECT * FROM `PERSON` WHERE `ID` = 1")
         ).affirm();
     }
@@ -33,9 +30,9 @@ final class NormalizedSqlTest {
     void normalizeWithWhereAndBacksticks() {
         new Assertion<>(
             "must normalize a select with where",
-            () -> new NormalizedSql(
-                "SELECT `NAME` FROM `PERSON` WHERE `ID` = 1"
-            ).parsed(),
+            () -> new Normalized(
+                new QueryOf("SELECT `NAME` FROM `PERSON` WHERE `ID` = 1")
+            ).sql(),
             new IsText("SELECT * FROM `PERSON` WHERE `ID` = 1")
         ).affirm();
     }
@@ -44,16 +41,20 @@ final class NormalizedSqlTest {
     void normalizeWithJoins() {
         new Assertion<>(
             "must normalize a select with joins",
-            () -> new NormalizedSql(
-                new Concatenated(
-                    "SELECT name, number, carrier FROM contact INNER JOIN phone ",
-                    "ON contact.id = phone.contact_id WHERE contact.id = 123"
+            () -> new Normalized(
+                new QueryOf(
+                    new Concatenated(
+                        "SELECT name, number, carrier FROM contact INNER JOIN ",
+                        "phone ON contact.id = phone.contact_id WHERE ",
+                        "contact.id = 123"
+                    )
                 )
-            ).parsed(),
+            ).sql(),
             new IsText(
                 new Concatenated(
-                    "SELECT * FROM `CONTACT` INNER JOIN `PHONE` ON `CONTACT`.`ID` ",
-                    "= `PHONE`.`CONTACT_ID` WHERE `CONTACT`.`ID` = 123"
+                    "SELECT * FROM `CONTACT` INNER JOIN `PHONE` ON ",
+                    "`CONTACT`.`ID` = `PHONE`.`CONTACT_ID` WHERE ",
+                    "`CONTACT`.`ID` = 123"
                 )
             )
         ).affirm();
@@ -64,13 +65,13 @@ final class NormalizedSqlTest {
     void normalizeAPaginatedQuery() {
         new Assertion<>(
             "must normalize a paginated query",
-            () -> new NormalizedSql(
+            () -> new Normalized(
                 new Paginated(
                     new QueryOf("SELECT id, name FROM contact"),
                     1,
                     30
-                ).sql().parsed()
-            ).parsed(),
+                )
+            ).sql(),
             new IsText("")
         ).affirm();
     }

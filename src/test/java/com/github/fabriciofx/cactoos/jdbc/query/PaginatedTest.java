@@ -10,12 +10,9 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
- * Paginated query tests.
- *
- * <p>There is no thread-safety guarantee.
+ * Paginated tests.
  *
  * @since 0.8.0
- * @checkstyle JavadocMethodCheck (500 lines)
  */
 final class PaginatedTest {
     @Test
@@ -26,7 +23,7 @@ final class PaginatedTest {
                 new QueryOf("SELECT name, address FROM employee"),
                 20,
                 0
-            ).sql().parsed(),
+            ).sql(),
             new IsText(
                 new Concatenated(
                     "SELECT q.*, COUNT(*) OVER () AS __total__ FROM ",

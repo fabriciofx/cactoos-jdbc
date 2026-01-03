@@ -34,7 +34,7 @@ public final class JdbcConnexio implements Connexio {
     @Override
     public PreparedStatement prepared(final Query query) throws Exception {
         final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql().parsed()
+            query.sql()
         );
         for (final Params params : query.params()) {
             params.prepare(stmt);
@@ -45,7 +45,7 @@ public final class JdbcConnexio implements Connexio {
     @Override
     public PreparedStatement batched(final Query query) throws Exception {
         final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql().parsed()
+            query.sql()
         );
         for (final Params params : query.params()) {
             params.prepare(stmt);
@@ -57,7 +57,7 @@ public final class JdbcConnexio implements Connexio {
     @Override
     public PreparedStatement keyed(final Query query) throws Exception {
         final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql().parsed(),
+            query.sql(),
             java.sql.Statement.RETURN_GENERATED_KEYS
         );
         for (final Params params : query.params()) {

@@ -17,11 +17,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Update tests.
- *
- * <p>There is no thread-safety guarantee.
- *
  * @since 0.1
- * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class UpdateTest {

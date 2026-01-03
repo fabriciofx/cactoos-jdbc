@@ -25,16 +25,9 @@ import org.cactoos.scalar.Unchecked;
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.8.0
- * @checkstyle ParameterNumberCheck (1500 lines)
  * @checkstyle IllegalCatchCheck (1500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidCatchingGenericException",
-        "PMD.AvoidThrowingRawExceptionTypes",
-        "PMD.UnnecessaryLocalRule"
-    }
-)
+@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContactPage implements Page<Contact> {
     /**
      * The page's elements.
@@ -91,8 +84,6 @@ public final class SqlContactPage implements Page<Contact> {
                             } while (rset.next());
                         }
                         return list;
-                    } catch (final Exception ex) {
-                        throw new RuntimeException(ex);
                     }
                 }
             )
