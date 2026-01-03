@@ -4,15 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
-import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.sql.MergeShuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlDynamicParam;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.util.SqlShuttle;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
@@ -54,17 +52,7 @@ public final class Merged implements Query {
                     );
                     final SqlNode stmt = parser.parseStmt();
                     final SqlNode replaced = stmt.accept(
-                        new SqlShuttle() {
-                            @Override
-                            public SqlNode visit(final SqlDynamicParam mark) {
-                                final Params params = named.params().iterator()
-                                    .next();
-                                final Param param = params.param(
-                                    mark.getIndex()
-                                );
-                                return param.value(mark.getParserPosition());
-                            }
-                        }
+                        new MergeShuttle(named)
                     );
                     result = new Pretty(replaced).asString();
                 }
