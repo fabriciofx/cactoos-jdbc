@@ -47,7 +47,7 @@ public final class Cached implements Connexio {
     public PreparedStatement prepared(final Query query) throws Exception {
         final PreparedStatement prepared;
         if (new IsSelect(query.sql().parsed()).value()) {
-            prepared = new com.github.fabriciofx.cactoos.jdbc.jdk.prepared.Cached(
+            prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                 this.origin.prepared(query),
                 this.origin.prepared(
                     new QueryOf(

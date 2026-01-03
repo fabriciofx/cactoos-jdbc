@@ -4,8 +4,8 @@
  */
 
 /**
- * PreparedStatement.
+ * Connection.
  *
  * @since 0.4
  */
-package com.github.fabriciofx.cactoos.jdbc.jdk.prepared;
+package com.github.fabriciofx.cactoos.jdbc.connection;

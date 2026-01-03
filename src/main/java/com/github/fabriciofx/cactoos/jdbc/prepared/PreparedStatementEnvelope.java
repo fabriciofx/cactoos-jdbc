@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.jdk.prepared;
+package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import java.io.InputStream;
 import java.io.Reader;

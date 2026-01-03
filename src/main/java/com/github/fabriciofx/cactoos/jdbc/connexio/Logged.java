@@ -68,7 +68,7 @@ public final class Logged implements Connexio {
 
     @Override
     public PreparedStatement prepared(final Query query) throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.jdk.prepared.Logged(
+        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
             this.origin.prepared(query),
             this.source,
             this.logger,
@@ -79,7 +79,7 @@ public final class Logged implements Connexio {
 
     @Override
     public PreparedStatement batched(final Query query) throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.jdk.prepared.Logged(
+        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
             this.origin.batched(query),
             this.source,
             this.logger,
@@ -90,7 +90,7 @@ public final class Logged implements Connexio {
 
     @Override
     public PreparedStatement keyed(final Query query) throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.jdk.prepared.Logged(
+        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
             this.origin.keyed(query),
             this.source,
             this.logger,

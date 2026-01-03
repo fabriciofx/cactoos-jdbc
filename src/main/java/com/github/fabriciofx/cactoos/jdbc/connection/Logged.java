@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.jdk.connection;
+package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -144,7 +144,7 @@ public final class Logged implements Connection {
                 )
             ).asString()
         );
-        return new com.github.fabriciofx.cactoos.jdbc.jdk.prepared.Logged(
+        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
             stmt,
             this.source,
             this.logger,
