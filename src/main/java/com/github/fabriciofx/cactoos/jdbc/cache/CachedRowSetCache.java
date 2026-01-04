@@ -21,18 +21,28 @@ public final class CachedRowSetCache implements Cache<String, CachedRowSet> {
     private final Map<String, CachedRowSet> results;
 
     /**
+     * Maximum cache size.
+     */
+    private final int size;
+
+    /**
      * Ctor.
      */
     public CachedRowSetCache() {
-        this(new ConcurrentHashMap<>());
+        this(new ConcurrentHashMap<>(), Integer.MAX_VALUE);
     }
 
     /**
      * Ctor.
      * @param results Data to initialize the cache
+     * @param max Maximum cache size
      */
-    public CachedRowSetCache(final Map<String, CachedRowSet> results) {
+    public CachedRowSetCache(
+        final Map<String, CachedRowSet> results,
+        final int max
+    ) {
         this.results = results;
+        this.size = max;
     }
 
     @Override
@@ -42,6 +52,9 @@ public final class CachedRowSetCache implements Cache<String, CachedRowSet> {
 
     @Override
     public void store(final String key, final CachedRowSet value) {
+        while (this.results.size() > this.size) {
+            this.results.remove(this.results.keySet().iterator().next());
+        }
         this.results.put(key, value);
     }
 
