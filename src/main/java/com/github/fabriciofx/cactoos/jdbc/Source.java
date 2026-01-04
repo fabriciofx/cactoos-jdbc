@@ -5,13 +5,10 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 /**
- * Session.
- *
- * <p>There is no thread-safety guarantee.
- *
- * @since 0.1
+ * Source.
+ * @since 0.9.0
  */
-public interface Session {
+public interface Source {
     /**
      * Create a {@link Connexio}.
      * @return A {@link Connexio}
@@ -20,19 +17,19 @@ public interface Session {
     Connexio connexio() throws Exception;
 
     /**
-     * Session JDBC URL.
+     * Source JDBC URL.
      * @return The JDBC URL
      */
     String url() throws Exception;
 
     /**
-     * Session username.
+     * Source username.
      * @return The username
      */
     String username();
 
     /**
-     * Session password.
+     * Source password.
      * @return The password.
      */
     String password();

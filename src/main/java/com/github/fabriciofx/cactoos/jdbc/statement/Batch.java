@@ -28,7 +28,7 @@ public final class Batch implements Statement<int[]> {
 
     /**
      * Ctor.
-     * @param connexio A Session
+     * @param connexio A Source
      * @param query A SQL query
      */
     public Batch(final Connexio connexio, final Query query) {

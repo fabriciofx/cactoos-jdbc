@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,20 +13,20 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
 /**
- * Logged session.
+ * Logged Source.
  *
  * @since 0.1
  */
-public final class Logged implements Session {
+public final class Logged implements Source {
     /**
-     * The session.
+     * Source.
      */
-    private final Session origin;
+    private final Source origin;
 
     /**
      * Where the data comes from.
      */
-    private final String source;
+    private final String from;
 
     /**
      * The logger.
@@ -45,33 +45,33 @@ public final class Logged implements Session {
 
     /**
      * Ctor.
-     * @param session A Session
-     * @param source Where the data comes from
+     * @param source A Source
+     * @param from Where the data comes from
      */
-    public Logged(final Session session, final String source) {
-        this(session, source, Logger.getLogger(source));
+    public Logged(final Source source, final String from) {
+        this(source, from, Logger.getLogger(from));
     }
 
     /**
      * Ctor.
-     * @param session A Session
-     * @param src Where the data comes from
-     * @param lgr A logger
+     * @param source A Source
+     * @param from Where the data comes from
+     * @param logger A logger
      */
     public Logged(
-        final Session session,
-        final String src,
-        final Logger lgr
+        final Source source,
+        final String from,
+        final Logger logger
     ) {
-        this.origin = session;
-        this.source = src;
-        this.logger = lgr;
+        this.origin = source;
+        this.from = from;
+        this.logger = logger;
         this.level = new Unchecked<>(
             new Sticky<>(
                 () -> {
-                    Level lvl = lgr.getLevel();
+                    Level lvl = logger.getLevel();
                     if (lvl == null) {
-                        Logger parent = lgr;
+                        Logger parent = logger;
                         while (lvl == null) {
                             parent = parent.getParent();
                             lvl = parent.getLevel();
@@ -88,7 +88,7 @@ public final class Logged implements Session {
     public Connexio connexio() throws Exception {
         return new com.github.fabriciofx.cactoos.jdbc.connexio.Logged(
             this.origin.connexio(),
-            this.source,
+            this.from,
             this.logger,
             this.level.value(),
             this.statements

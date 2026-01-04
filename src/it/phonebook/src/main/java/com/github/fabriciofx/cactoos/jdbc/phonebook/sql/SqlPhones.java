@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
@@ -30,9 +30,9 @@ import org.cactoos.text.FormattedText;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlPhones implements Phones {
     /**
-     * Session.
+     * Source.
      */
-    private final Session session;
+    private final Source source;
 
     /**
      * Contact's ID.
@@ -42,17 +42,17 @@ public final class SqlPhones implements Phones {
     /**
      * Ctor.
      *
-     * @param session A Connection
+     * @param source A Connection
      * @param contact A Contact's ID
      */
-    public SqlPhones(final Session session, final UUID contact) {
-        this.session = session;
+    public SqlPhones(final Source source, final UUID contact) {
+        this.source = source;
         this.id = contact;
     }
 
     @Override
     public int count() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
                     connexio,
@@ -69,7 +69,7 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Phone get(final int index) throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             final Scalar<String> number = new ResultSetAsValue<>(
                 new Select(
                     connexio,
@@ -83,7 +83,7 @@ public final class SqlPhones implements Phones {
                     )
                 )
             );
-            return new SqlPhone(this.session, this.id, number.value());
+            return new SqlPhone(this.source, this.id, number.value());
         }
     }
 
@@ -92,7 +92,7 @@ public final class SqlPhones implements Phones {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Insert(
                 connexio,
                 new Named(

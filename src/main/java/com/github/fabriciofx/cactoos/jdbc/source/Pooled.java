@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,11 +14,11 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
 /**
- * Pooled session.
+ * Pooled source.
  *
  * @since 0.9.0
  */
-public final class Pooled implements Session {
+public final class Pooled implements Source {
     /**
      * Hikari DataSource.
      */
@@ -26,16 +26,16 @@ public final class Pooled implements Session {
 
     /**
      * Ctor.
-     * @param session Session to be pooled
+     * @param source Source to be pooled
      */
-    public Pooled(final Session session) {
+    public Pooled(final Source source) {
         this.hikari = new Sticky<>(
             () -> {
                 final HikariConfig config = new HikariConfig();
                 config.setPoolName("cactoos-jdbc-pool");
-                config.setJdbcUrl(session.url());
-                config.setUsername(session.username());
-                config.setPassword(session.password());
+                config.setJdbcUrl(source.url());
+                config.setUsername(source.username());
+                config.setPassword(source.password());
                 config.setMaximumPoolSize(10);
                 config.setMinimumIdle(2);
                 config.setConnectionTimeout(30_000);

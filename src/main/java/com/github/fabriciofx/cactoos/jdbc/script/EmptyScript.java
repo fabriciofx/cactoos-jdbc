@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import org.cactoos.io.DeadInput;
 
 /**
@@ -21,7 +21,7 @@ public final class EmptyScript extends ScriptOf {
     }
 
     @Override
-    public void run(final Session session) throws Exception {
+    public void run(final Source source) throws Exception {
         // Intended empty.
     }
 }

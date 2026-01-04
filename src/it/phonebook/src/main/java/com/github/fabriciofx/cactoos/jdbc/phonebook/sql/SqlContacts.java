@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -24,21 +24,21 @@ import org.cactoos.text.FormattedText;
  */
 public final class SqlContacts implements Contacts {
     /**
-     * Session.
+     * Source.
      */
-    private final Session session;
+    private final Source source;
 
     /**
      * Ctor.
-     * @param session A Session.
+     * @param source A Source.
      */
-    public SqlContacts(final Session session) {
-        this.session = session;
+    public SqlContacts(final Source source) {
+        this.source = source;
     }
 
     @Override
     public int count() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
                     connexio,
@@ -50,9 +50,9 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact get(final int index) throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             return new SqlContact(
-                this.session,
+                this.source,
                 new ResultSetAsValue<UUID>(
                     new Select(
                         connexio,

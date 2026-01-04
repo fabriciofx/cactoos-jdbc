@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Page;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.query.Paginated;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -47,12 +47,12 @@ public final class SqlContactPage implements Page<Contact> {
     /**
      * Ctor.
      *
-     * @param session A session
+     * @param source A Source
      * @param number The page number
      * @param size The maximum number of elements per page
      */
     public SqlContactPage(
-        final Session session,
+        final Source source,
         final int number,
         final int size
     ) {
@@ -61,7 +61,7 @@ public final class SqlContactPage implements Page<Contact> {
             new Sticky<>(
                 () -> {
                     try (
-                        Connexio connexio = session.connexio();
+                        Connexio connexio = source.connexio();
                         ResultSet rset = new Select(
                             connexio,
                             new Paginated(
@@ -77,7 +77,7 @@ public final class SqlContactPage implements Page<Contact> {
                             do {
                                 list.add(
                                     new SqlContact(
-                                        session,
+                                        source,
                                         (UUID) rset.getObject("id")
                                     )
                                 );

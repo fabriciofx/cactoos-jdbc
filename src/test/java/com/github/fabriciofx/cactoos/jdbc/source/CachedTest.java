@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -40,8 +40,8 @@ final class CachedTest {
         final String city = "San Francisco";
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            final Session session = new Cached(new NoAuth(server.resource()));
-            try (Connexio connexio = session.connexio()) {
+            final Source source = new Cached(new NoAuth(server.resource()));
+            try (Connexio connexio = source.connexio()) {
                 new Update(
                     connexio,
                     new QueryOf(

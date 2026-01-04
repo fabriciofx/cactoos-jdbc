@@ -2,19 +2,19 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import java.sql.DriverManager;
 
 /**
- * Driver session.
+ * Driver Source.
  *
  * @since 0.1
  */
-public final class Driver implements Session {
+public final class Driver implements Source {
     /**
      * JDBC URL.
      */

@@ -68,10 +68,10 @@ Java version required: 1.8+.
 ### Usage
 
 Let's show how use the API. For all above examples, let's start creating a
-`Session` object:
+`Source` object:
 
 ```java
-final Session session = new NoAuth(
+final Source Source = new NoAuth(
     new H2Source("testdb")
 );
 ```
@@ -82,7 +82,7 @@ Now, let's create a table using a `Update` command:
 
 ```java
 new Update(
-    session,
+    Source,
     new QueryOf(
         new Joined(
             " ",
@@ -100,7 +100,7 @@ Let's insert a new employee and return the id of inserted employee.
 ```java
 final int id = new ResultAsValue<Integer>(
     new InsertWithKey(
-        session,
+        Source,
         new QueryWithKey(
             () -> "INSERT INTO employee (name, salary) VALUES (:name, :salary)",
             "id",
@@ -118,7 +118,7 @@ Let's retrieve the name of a employee:
 ```java
 final String name = new ResultAsValue<String>(
     new Select(
-        session,
+        Source,
         new QueryOf(
             "SELECT name FROM employee WHERE id = :id",
             new IntOf("id", 123)
@@ -132,7 +132,7 @@ Let's retrieve all employee salaries:
 ```java
 final List<Double> salaries = new ResultAsValues<Double>(
     new Select(
-        session,
+        Source,
         new QueryOf("SELECT salary FROM employee")
     )
 ).value();
@@ -142,10 +142,10 @@ final List<Double> salaries = new ResultAsValues<Double>(
 
 To enable a transaction you will need to do two things:
 
-- Decorates a `Session` using a `Transacted` object, like here:
+- Decorates a `Source` using a `Transacted` object, like here:
 
 ```java
-final Session transacted = new Transacted(session);
+final Source transacted = new Transacted(Source);
 ```
 
 - Use a `Transaction` object to perform all transacted operations,  like here:
@@ -194,10 +194,10 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public Pages<Contact> contacts(final int max) throws Exception {
         return new SqlPages<>(
-            this.session,
+            this.Source,
             new QueryOf("SELECT COUNT(*) FROM contact"),
             new QueryOf("SELECT * FROM contact"),
-            new ResultSetAsContact(this.session),
+            new ResultSetAsContact(this.Source),
             max
         );
     }
@@ -209,10 +209,10 @@ To see more details, please take a look in
 
 ### Logging
 
-To enable logging just decorate a `Session` object:
+To enable logging just decorate a `Source` object:
 
 ```java
-final Session logged = new Logged(session);
+final Source logged = new Logged(Source);
 ```
 
 ## Phonebook application (demo)

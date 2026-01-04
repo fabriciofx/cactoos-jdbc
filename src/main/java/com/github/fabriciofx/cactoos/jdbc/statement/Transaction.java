@@ -37,7 +37,7 @@ public final class Transaction<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param connexio A session
+     * @param connexio A source
      * @param call A Callable to be executed in a transaction
      */
     public Transaction(final Connexio connexio, final Callable<T> call) {

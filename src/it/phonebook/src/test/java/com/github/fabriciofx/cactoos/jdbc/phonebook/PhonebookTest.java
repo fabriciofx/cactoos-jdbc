@@ -5,9 +5,9 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
 import com.github.fabriciofx.cactoos.jdbc.Page;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
@@ -43,8 +43,8 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            final Phonebook phonebook = new SqlPhonebook(session);
+            final Source source = new NoAuth(server.resource());
+            final Phonebook phonebook = new SqlPhonebook(source);
             final Contact contact = phonebook.create("Donald Knuth");
             contact.phones().add("99991234", "TIM");
             contact.phones().add("98812564", "Oi");
@@ -72,11 +72,11 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
+            final Source source = new NoAuth(server.resource());
             new Assertion<>(
                 "must have contact name",
                 XhtmlMatchers.xhtml(
-                    new SqlPhonebook(session)
+                    new SqlPhonebook(source)
                         .search("maria")
                         .get(0)
                         .about()
@@ -96,14 +96,14 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            final Phonebook phonebook = new SqlPhonebook(session);
+            final Source source = new NoAuth(server.resource());
+            final Phonebook phonebook = new SqlPhonebook(source);
             final Contact contact = phonebook.search("maria").get(0);
             contact.update("Maria Lima");
             new Assertion<>(
                 "must update contact name",
                 XhtmlMatchers.xhtml(
-                    new SqlPhonebook(session)
+                    new SqlPhonebook(source)
                         .search("maria")
                         .get(0)
                         .about()
@@ -125,8 +125,8 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            Page<Contact> page = new SqlPhonebook(session).page(1, 2);
+            final Source source = new NoAuth(server.resource());
+            Page<Contact> page = new SqlPhonebook(source).page(1, 2);
             new Assertion<>(
                 "must match Maria Souza phonebook contact",
                 XhtmlMatchers.xhtml(page.items().get(0).about()),
@@ -143,7 +143,7 @@ final class PhonebookTest {
                     "/contact/name[text()='Joseph Klimber']"
                 )
             ).affirm();
-            page = new SqlPhonebook(session).page(2, 2);
+            page = new SqlPhonebook(source).page(2, 2);
             new Assertion<>(
                 "must match Jeff Duham phonebook contact",
                 XhtmlMatchers.xhtml(page.items().get(0).about()),

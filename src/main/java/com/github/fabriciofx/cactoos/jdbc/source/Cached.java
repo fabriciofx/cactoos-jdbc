@@ -2,24 +2,24 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
 import javax.sql.rowset.CachedRowSet;
 
 /**
  * Cached.
- * A {@link Session} decorator to cache query data.
+ * A {@link Source} decorator to cache query data.
  * @since 0.9.0
  */
-public final class Cached implements Session {
+public final class Cached implements Source {
     /**
-     * Session.
+     * Source.
      */
-    private final Session origin;
+    private final Source origin;
 
     /**
      * Cache.
@@ -28,22 +28,22 @@ public final class Cached implements Session {
 
     /**
      * Ctor.
-     * @param session The session
+     * @param source The source
      */
-    public Cached(final Session session) {
-        this(session, new CachedRowSetCache());
+    public Cached(final Source source) {
+        this(source, new CachedRowSetCache());
     }
 
     /**
      * Ctor.
-     * @param session The session
+     * @param source The source
      * @param cache The cache
      */
     public Cached(
-        final Session session,
+        final Source source,
         final Cache<String, CachedRowSet> cache
     ) {
-        this.origin = session;
+        this.origin = source;
         this.cache = cache;
     }
 

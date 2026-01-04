@@ -5,12 +5,12 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.sql.SqlPhonebook;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
-import com.github.fabriciofx.cactoos.jdbc.session.Transacted;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.Transacted;
 import com.github.fabriciofx.cactoos.jdbc.statement.Transaction;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -49,8 +49,8 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            final Session transacted = new Transacted(session);
+            final Source source = new NoAuth(server.resource());
+            final Source transacted = new Transacted(source);
             try (Connexio connexio = transacted.connexio()) {
                 new Transaction<>(
                     connexio,
@@ -66,7 +66,7 @@ final class TransactionTest {
             new Assertion<>(
                 "must perform a transaction commit",
                 XhtmlMatchers.xhtml(
-                    new SqlPhonebook(session).search(name).get(0).about()
+                    new SqlPhonebook(source).search(name).get(0).about()
                 ),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Albert Einstein']",
@@ -90,8 +90,8 @@ final class TransactionTest {
             )
         ) {
             server.start();
-            final Session session = new NoAuth(server.resource());
-            final Session transacted = new Transacted(session);
+            final Source source = new NoAuth(server.resource());
+            final Source transacted = new Transacted(source);
             try (Connexio connexio = transacted.connexio()) {
                 try {
                     new Transaction<>(
@@ -110,7 +110,7 @@ final class TransactionTest {
             }
             new Assertion<>(
                 "must perform a transaction rollback",
-                () -> new SqlPhonebook(session).search(name).size(),
+                () -> new SqlPhonebook(source).search(name).size(),
                 new HasValue<>(0)
             ).affirm();
         }

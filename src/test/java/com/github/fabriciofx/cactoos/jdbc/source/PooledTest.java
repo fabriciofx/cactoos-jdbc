@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -35,8 +35,8 @@ final class PooledTest {
     void pooled() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            final Session session = new Pooled(new NoAuth(server.resource()));
-            try (Connexio connexio = session.connexio()) {
+            final Source source = new Pooled(new NoAuth(server.resource()));
+            try (Connexio connexio = source.connexio()) {
                 new Update(
                     connexio,
                     new QueryOf(
@@ -44,7 +44,7 @@ final class PooledTest {
                     )
                 ).execute();
             }
-            try (Connexio connexio = session.connexio()) {
+            try (Connexio connexio = source.connexio()) {
                 new Batch(
                     connexio,
                     new Named(
@@ -70,7 +70,7 @@ final class PooledTest {
                     )
                 ).execute();
             }
-            try (Connexio connexio = session.connexio()) {
+            try (Connexio connexio = source.connexio()) {
                 new Assertion<>(
                     "must select a person name",
                     new ResultSetAsValue<>(

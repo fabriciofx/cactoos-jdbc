@@ -2,25 +2,25 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import javax.sql.DataSource;
 import org.cactoos.Text;
 
 /**
- * Authenticated session.
+ * Authenticated Source.
  *
  * @since 0.1
  */
-public final class Auth implements Session {
+public final class Auth implements Source {
     /**
-     * The DataSource.
+     * DataSource.
      */
-    private final DataSource source;
+    private final DataSource src;
 
     /**
      * JDBC URL.
@@ -39,17 +39,17 @@ public final class Auth implements Session {
 
     /**
      * Ctor.
-     * @param source DataSource
+     * @param src DataSource
      * @param username User name
      * @param password User password
      */
     public Auth(
-        final DataSource source,
+        final DataSource src,
         final String username,
         final String password
     ) {
-        this.source = source;
-        this.jdbc = new UrlFromSource(this.source);
+        this.src = src;
+        this.jdbc = new UrlFromSource(this.src);
         this.user = username;
         this.pass = password;
     }
@@ -57,7 +57,7 @@ public final class Auth implements Session {
     @Override
     public Connexio connexio() throws Exception {
         return new JdbcConnexio(
-            this.source.getConnection(this.user, this.pass)
+            this.src.getConnection(this.user, this.pass)
         );
     }
 

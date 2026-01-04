@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -29,9 +29,9 @@ import org.cactoos.text.Concatenated;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
     /**
-     * Session.
+     * Source.
      */
-    private final Session session;
+    private final Source source;
 
     /**
      * Contact's ID.
@@ -41,17 +41,17 @@ public final class SqlContact implements Contact {
     /**
      * Ctor.
      *
-     * @param session A Session
+     * @param source A Source
      * @param id A Contact's ID
      */
-    public SqlContact(final Session session, final UUID id) {
-        this.session = session;
+    public SqlContact(final Source source, final UUID id) {
+        this.source = source;
         this.id = id;
     }
 
     @Override
     public String about() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             return new ContactAsXml(
                 new Select(
                     connexio,
@@ -71,12 +71,12 @@ public final class SqlContact implements Contact {
 
     @Override
     public Phones phones() throws Exception {
-        return new SqlPhones(this.session, this.id);
+        return new SqlPhones(this.source, this.id);
     }
 
     @Override
     public void delete() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Update(
                 connexio,
                 new Named(
@@ -91,7 +91,7 @@ public final class SqlContact implements Contact {
 
     @Override
     public void update(final String name) throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Update(
                 connexio,
                 new Named(

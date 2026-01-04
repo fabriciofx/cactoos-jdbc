@@ -4,8 +4,8 @@
  */
 
 /**
- * Session tests.
+ * Source tests.
  *
  * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;

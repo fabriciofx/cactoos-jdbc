@@ -15,7 +15,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.server.H2Server;
 import com.jcabi.matchers.XhtmlMatchers;

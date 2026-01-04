@@ -2,26 +2,26 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import org.cactoos.Scalar;
 
 /**
- * Transacted session.
- * A decorator for {@link Session}. Produces a unique not auto commited
+ * Transacted source.
+ * A decorator for {@link Source}. Produces a unique not auto commited
  * {@link Connexio} that must be used in a
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}. This
  * connection only can be closed after a commit() or rollback() provided by
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}.
  * @since 0.9.0
  */
-public final class Transacted implements Session {
+public final class Transacted implements Source {
     /**
-     * Session.
+     * Source.
      */
-    private final Session origin;
+    private final Source origin;
 
     /**
      * Unique not auto commited connection.
@@ -30,13 +30,13 @@ public final class Transacted implements Session {
 
     /**
      * Ctor.
-     * @param session The original session to be decorated
+     * @param source The original source to be decorated
      */
-    public Transacted(final Session session) {
-        this.origin = session;
+    public Transacted(final Source source) {
+        this.origin = source;
         this.cnnx = new org.cactoos.scalar.Sticky<>(
             () -> {
-                final Connexio conn = session.connexio();
+                final Connexio conn = source.connexio();
                 conn.autoCommit(false);
                 return new com.github.fabriciofx.cactoos.jdbc.connexio.Transacted(
                     conn

@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.script;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Script;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -40,12 +40,12 @@ public class ScriptOf implements Script {
     }
 
     /**
-     * Execute this Script on the Session context.
+     * Execute this Script on the {@link Source} context.
      *
-     * @param session The context
+     * @param source The Source
      * @throws Exception if fails
      */
-    public void run(final Session session) throws Exception {
+    public void run(final Source source) throws Exception {
         final List<String> lines = new ArrayList<>(0);
         try (
             Reader reader = new InputStreamReader(
@@ -73,7 +73,7 @@ public class ScriptOf implements Script {
             joiner.add(line);
         }
         final String[] cmds = joiner.toString().split(";");
-        try (Connexio connexio = session.connexio()) {
+        try (Connexio connexio = source.connexio()) {
             for (final String cmd : cmds) {
                 try (
                     PreparedStatement stmt = connexio.prepared(

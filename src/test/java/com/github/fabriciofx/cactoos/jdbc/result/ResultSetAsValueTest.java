@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;

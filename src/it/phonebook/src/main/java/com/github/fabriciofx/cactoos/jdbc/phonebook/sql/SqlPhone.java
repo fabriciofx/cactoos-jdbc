@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
@@ -26,9 +26,9 @@ import java.util.UUID;
  */
 public final class SqlPhone implements Phone {
     /**
-     * Session.
+     * Source.
      */
-    private final Session session;
+    private final Source source;
 
     /**
      * Contact's ID.
@@ -43,23 +43,23 @@ public final class SqlPhone implements Phone {
     /**
      * Ctor.
      *
-     * @param session A Session
+     * @param source A Source
      * @param contact A Contact's ID
      * @param number Phone number
      */
     public SqlPhone(
-        final Session session,
+        final Source source,
         final UUID contact,
         final String number
     ) {
-        this.session = session;
+        this.source = source;
         this.id = contact;
         this.num = number;
     }
 
     @Override
     public String about() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             return new ResultSetAsXml(
                 new Select(
                     connexio,
@@ -78,7 +78,7 @@ public final class SqlPhone implements Phone {
 
     @Override
     public void delete() throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Update(
                 connexio,
                 new Named(
@@ -97,7 +97,7 @@ public final class SqlPhone implements Phone {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Update(
                 connexio,
                 new Named(

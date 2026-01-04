@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.Page;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -30,23 +30,23 @@ import org.cactoos.text.Lowered;
  */
 public final class SqlPhonebook implements Phonebook {
     /**
-     * Session.
+     * Source.
      */
-    private final Session session;
+    private final Source source;
 
     /**
      * Ctor.
      *
-     * @param session The Session
+     * @param source The Source
      */
-    public SqlPhonebook(final Session session) {
-        this.session = session;
+    public SqlPhonebook(final Source source) {
+        this.source = source;
     }
 
     @Override
     public Contact create(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             new Insert(
                 connexio,
                 new Named(
@@ -58,13 +58,13 @@ public final class SqlPhonebook implements Phonebook {
                 )
             ).execute();
         }
-        return new SqlContact(this.session, id);
+        return new SqlContact(this.source, id);
     }
 
     @Override
     public List<Contact> search(final String name) throws Exception {
         final List<Contact> contacts = new LinkedList<>();
-        try (Connexio connexio = this.session.connexio()) {
+        try (Connexio connexio = this.source.connexio()) {
             final Select select = new Select(
                 connexio,
                 new Named(
@@ -78,7 +78,7 @@ public final class SqlPhonebook implements Phonebook {
                 while (rset.next()) {
                     contacts.add(
                         new SqlContact(
-                            this.session,
+                            this.source,
                             (UUID) rset.getObject("id")
                         )
                     );
@@ -92,7 +92,7 @@ public final class SqlPhonebook implements Phonebook {
     public Page<Contact> page(final int number, final int size)
         throws Exception {
         return new SqlContactPage(
-            this.session,
+            this.source,
             number,
             size
         );

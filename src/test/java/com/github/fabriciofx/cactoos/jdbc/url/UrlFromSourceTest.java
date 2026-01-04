@@ -23,7 +23,7 @@ final class UrlFromSourceTest {
     void url() {
         final String dbname = "testdb";
         new Assertion<>(
-            "must get a JDBC url from session",
+            "must get a JDBC url from source",
             new UrlFromSource(new H2Source(dbname)),
             new IsText(new FormattedText("jdbc:h2:mem:%s", dbname))
         ).affirm();

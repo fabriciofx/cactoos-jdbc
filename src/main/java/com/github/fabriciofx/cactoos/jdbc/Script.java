@@ -14,9 +14,9 @@ package com.github.fabriciofx.cactoos.jdbc;
 @FunctionalInterface
 public interface Script {
     /**
-     * Execute this Script on the session.
-     * @param session The session
+     * Execute this Script on the source.
+     * @param source The source
      * @throws Exception if fails
      */
-    void run(Session session) throws Exception;
+    void run(Source source) throws Exception;
 }

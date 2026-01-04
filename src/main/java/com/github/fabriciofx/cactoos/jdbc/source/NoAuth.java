@@ -2,25 +2,25 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.session;
+package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
-import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
 import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import javax.sql.DataSource;
 import org.cactoos.Text;
 
 /**
- * No authenticated session.
+ * No authenticated source.
  *
  * @since 0.1
  */
-public final class NoAuth implements Session {
+public final class NoAuth implements Source {
     /**
      * DataSource.
      */
-    private final DataSource source;
+    private final DataSource src;
 
     /**
      * JDBC URL.
@@ -29,16 +29,16 @@ public final class NoAuth implements Session {
 
     /**
      * Ctor.
-     * @param source DataSource
+     * @param src DataSource
      */
-    public NoAuth(final DataSource source) {
-        this.source = source;
-        this.jdbc = new UrlFromSource(this.source);
+    public NoAuth(final DataSource src) {
+        this.src = src;
+        this.jdbc = new UrlFromSource(this.src);
     }
 
     @Override
     public Connexio connexio() throws Exception {
-        return new JdbcConnexio(this.source.getConnection());
+        return new JdbcConnexio(this.src.getConnection());
     }
 
     @Override

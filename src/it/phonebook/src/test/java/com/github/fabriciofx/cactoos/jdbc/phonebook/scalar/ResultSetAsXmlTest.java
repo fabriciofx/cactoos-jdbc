@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook.scalar;
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;

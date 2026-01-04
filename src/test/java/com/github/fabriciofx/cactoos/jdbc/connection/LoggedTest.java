@@ -6,8 +6,8 @@ package com.github.fabriciofx.cactoos.jdbc.connection;
 
 import com.github.fabriciofx.cactoos.jdbc.Connexio;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.session.Logged;
-import com.github.fabriciofx.cactoos.jdbc.session.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.source.Logged;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
