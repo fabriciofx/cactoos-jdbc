@@ -36,10 +36,10 @@ public final class Transacted implements Source {
         this.origin = source;
         this.cnnx = new org.cactoos.scalar.Sticky<>(
             () -> {
-                final Session conn = source.session();
-                conn.autoCommit(false);
+                final Session session = source.session();
+                session.autocommit(false);
                 return new com.github.fabriciofx.cactoos.jdbc.session.Transacted(
-                    conn
+                    session
                 );
             }
         );

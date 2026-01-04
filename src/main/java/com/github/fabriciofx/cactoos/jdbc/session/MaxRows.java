@@ -43,8 +43,8 @@ public final class MaxRows implements Session {
     }
 
     @Override
-    public void autoCommit(final boolean enabled) throws Exception {
-        this.origin.autoCommit(enabled);
+    public void autocommit(final boolean enabled) throws Exception {
+        this.origin.autocommit(enabled);
     }
 
     @Override

@@ -36,7 +36,7 @@ public final class JdbcSession implements Session {
     }
 
     @Override
-    public void autoCommit(final boolean enabled) throws Exception {
+    public void autocommit(final boolean enabled) throws Exception {
         this.connection.setAutoCommit(enabled);
     }
 

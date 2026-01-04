@@ -21,11 +21,11 @@ public interface Session extends AutoCloseable {
     PreparedStatement prepared(Plan plan) throws Exception;
 
     /**
-     * Turn on or off auto commit.
-     * @param enabled If true, enable auto commit. If false, disable
+     * Turn on or off automatic commit.
+     * @param enabled If true, enable automatic commit. If false, disable
      * @throws Exception if something goes wrong
      */
-    void autoCommit(boolean enabled) throws Exception;
+    void autocommit(boolean enabled) throws Exception;
 
     /**
      * Commit a session.

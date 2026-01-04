@@ -42,8 +42,8 @@ public final class Transacted implements Session {
     }
 
     @Override
-    public void autoCommit(final boolean enabled) throws Exception {
-        this.origin.autoCommit(false);
+    public void autocommit(final boolean enabled) throws Exception {
+        this.origin.autocommit(false);
     }
 
     @Override
