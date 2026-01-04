@@ -27,7 +27,7 @@ public final class Logged implements Session {
     /**
      * Where the logs come from.
      */
-    private final String source;
+    private final String from;
 
     /**
      * Logger.
@@ -47,20 +47,20 @@ public final class Logged implements Session {
     /**
      * Ctor.
      * @param session A Session
-     * @param source The source, where the logs come from
+     * @param from Where the logs come from
      * @param logger A logger
      * @param level A level
      * @param statements Statements counter
      */
     public Logged(
         final Session session,
-        final String source,
+        final String from,
         final Logger logger,
         final Level level,
         final AtomicInteger statements
     ) {
         this.origin = session;
-        this.source = source;
+        this.from = from;
         this.logger = logger;
         this.level = level;
         this.statements = statements;
@@ -70,7 +70,7 @@ public final class Logged implements Session {
     public PreparedStatement prepared(final Plan plan) throws Exception {
         return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
             this.origin.prepared(plan),
-            this.source,
+            this.from,
             this.logger,
             this.level,
             this.statements.getAndIncrement()

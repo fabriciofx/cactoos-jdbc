@@ -24,7 +24,7 @@ public final class Logged implements Source {
     private final Source origin;
 
     /**
-     * Where the data comes from.
+     * Where the logs come from.
      */
     private final String from;
 
@@ -46,7 +46,7 @@ public final class Logged implements Source {
     /**
      * Ctor.
      * @param source A Source
-     * @param from Where the data comes from
+     * @param from Where the logs come from
      */
     public Logged(final Source source, final String from) {
         this(source, from, Logger.getLogger(from));
@@ -55,7 +55,7 @@ public final class Logged implements Source {
     /**
      * Ctor.
      * @param source A Source
-     * @param from Where the data comes from
+     * @param from Where the logs come from
      * @param logger A logger
      */
     public Logged(

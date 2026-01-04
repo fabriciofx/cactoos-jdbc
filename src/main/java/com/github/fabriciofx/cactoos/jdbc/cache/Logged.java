@@ -27,9 +27,9 @@ public final class Logged<K, V> implements Cache<K, V> {
     private final Cache<K, V> origin;
 
     /**
-     * Where the data comes from.
+     * Where the logs come from.
      */
-    private final String source;
+    private final String from;
 
     /**
      * Logger.
@@ -44,26 +44,26 @@ public final class Logged<K, V> implements Cache<K, V> {
     /**
      * Ctor.
      * @param origin The cache to be logged
-     * @param source Where the data comes from
+     * @param from Where the data comes from
      */
-    public Logged(final Cache<K, V> origin, final String source) {
-        this(origin, source, Logger.getLogger(source));
+    public Logged(final Cache<K, V> origin, final String from) {
+        this(origin, from, Logger.getLogger(from));
     }
 
     /**
      * Ctor.
      * @param origin The cache to be logged
-     * @param source Where the data comes from
+     * @param from Where the data comes from
      * @param logger The logger
      */
     public Logged(
         final Cache<K, V> origin,
-        final String source,
+        final String from,
         final Logger logger
     ) {
         this(
             origin,
-            source,
+            from,
             logger,
             new Unchecked<>(
                 new Sticky<>(
@@ -86,18 +86,18 @@ public final class Logged<K, V> implements Cache<K, V> {
     /**
      * Ctor.
      * @param origin The cache to be logged
-     * @param source Where the data comes from
+     * @param from Where the data comes from
      * @param logger The logger
      * @param level The logger level
      */
     public Logged(
         final Cache<K, V> origin,
-        final String source,
+        final String from,
         final Logger logger,
         final Unchecked<Level> level
     ) {
         this.origin = origin;
-        this.source = source;
+        this.from = from;
         this.logger = logger;
         this.level = level;
     }
@@ -110,7 +110,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             new UncheckedText(
                 new FormattedText(
                     "[%s] Retrieving from cache with key '%s' and value '%s'.",
-                    this.source,
+                    this.from,
                     key.toString(),
                     value.toString()
                 )
@@ -127,7 +127,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             new UncheckedText(
                 new FormattedText(
                     "[%s] Storing in cache with key '%s' and value '%s'.",
-                    this.source,
+                    this.from,
                     key.toString(),
                     value.toString()
                 )
@@ -143,7 +143,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             new UncheckedText(
                 new FormattedText(
                     "[%s] Deleting into cache with key '%s' and returning value '%s'.",
-                    this.source,
+                    this.from,
                     key.toString(),
                     value.toString()
                 )
@@ -160,7 +160,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             new UncheckedText(
                 new FormattedText(
                     "[%s] Checking if cache has a value for key '%s': %s.",
-                    this.source,
+                    this.from,
                     key.toString(),
                     exists
                 )
@@ -177,7 +177,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             new UncheckedText(
                 new FormattedText(
                     "[%s] Cleaning the cache.",
-                    this.source
+                    this.from
                 )
             ).asString()
         );
