@@ -12,6 +12,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @param <T> Type of the result
  * @since 0.1
  */
+@FunctionalInterface
 public interface Statement<T> {
     /**
      * Execute it and returns a single or set of data.
@@ -19,10 +20,4 @@ public interface Statement<T> {
      * @throws Exception If fails
      */
     T execute() throws Exception;
-
-    /**
-     * Get the {@link Query} which statement executes.
-     * @return The {@link Query}
-     */
-    Query query();
 }

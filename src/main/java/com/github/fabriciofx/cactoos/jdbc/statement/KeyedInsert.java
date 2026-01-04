@@ -55,9 +55,4 @@ public final class KeyedInsert<T> implements Statement<T> {
             }
         }
     }
-
-    @Override
-    public Query query() {
-        return this.qry;
-    }
 }

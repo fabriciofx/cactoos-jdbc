@@ -45,9 +45,4 @@ public final class Insert implements Statement<Boolean> {
             return stmt.execute();
         }
     }
-
-    @Override
-    public Query query() {
-        return this.qry;
-    }
 }

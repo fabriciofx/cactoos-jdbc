@@ -47,9 +47,4 @@ public final class Batch implements Statement<int[]> {
             return stmt.executeBatch();
         }
     }
-
-    @Override
-    public Query query() {
-        return this.qry;
-    }
 }

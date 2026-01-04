@@ -4,10 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import java.util.concurrent.Callable;
 
 /**
@@ -19,8 +17,7 @@ import java.util.concurrent.Callable;
 @SuppressWarnings(
     {
         "PMD.AvoidCatchingGenericException",
-        "PMD.UnnecessaryLocalRule",
-        "PMD.CloseResource"
+        "PMD.UnnecessaryLocalRule"
     }
 )
 public final class Transaction<T> implements Statement<T> {
@@ -56,10 +53,5 @@ public final class Transaction<T> implements Statement<T> {
             this.session.rollback();
             throw ex;
         }
-    }
-
-    @Override
-    public Query query() {
-        return new QueryOf("");
     }
 }

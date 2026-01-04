@@ -54,9 +54,4 @@ public final class Select implements Statement<ResultSet> {
             }
         }
     }
-
-    @Override
-    public Query query() {
-        return this.qry;
-    }
 }

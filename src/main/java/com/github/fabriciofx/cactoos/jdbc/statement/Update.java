@@ -45,9 +45,4 @@ public final class Update implements Statement<Integer> {
             return stmt.executeUpdate();
         }
     }
-
-    @Override
-    public Query query() {
-        return this.qry;
-    }
 }
