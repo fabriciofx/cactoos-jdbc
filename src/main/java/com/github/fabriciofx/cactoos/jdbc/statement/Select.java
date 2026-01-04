@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +21,7 @@ import javax.sql.rowset.RowSetProvider;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Select implements Statement<ResultSet> {
     /**
-     * The connection.
+     * Session.
      */
     private final Session session;
 

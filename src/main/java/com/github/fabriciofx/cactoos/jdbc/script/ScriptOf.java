@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Script;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import java.io.InputStreamReader;

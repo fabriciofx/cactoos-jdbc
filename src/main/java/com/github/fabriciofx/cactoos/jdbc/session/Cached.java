@@ -5,8 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;

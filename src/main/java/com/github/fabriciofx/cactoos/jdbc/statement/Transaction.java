@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import java.util.concurrent.Callable;
@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 )
 public final class Transaction<T> implements Statement<T> {
     /**
-     * The connection.
+     * Session.
      */
     private final Session session;
 

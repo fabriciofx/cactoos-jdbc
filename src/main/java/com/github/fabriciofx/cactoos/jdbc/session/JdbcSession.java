@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

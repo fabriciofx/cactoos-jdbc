@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Transacted.
  * A decorator for Session which allows transactions. This decorator only
- * close the JDBC connecion after a commit or rollback.
+ * close the JDBC connection after a commit or rollback.
  * @since 0.9.0
  */
 public final class Transacted implements Session {

@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
  */
 public final class KeyedInsert<T> implements Statement<T> {
     /**
-     * The connection.
+     * Session.
      */
     private final Session session;
 

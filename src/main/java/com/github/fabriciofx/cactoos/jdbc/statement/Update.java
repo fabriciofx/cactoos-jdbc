@@ -4,8 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
 
@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Update implements Statement<Integer> {
     /**
-     * The connection.
+     * Session.
      */
     private final Session session;
 
