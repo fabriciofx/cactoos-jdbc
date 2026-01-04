@@ -29,8 +29,8 @@ public final class Batch implements Statement<int[]> {
 
     /**
      * Ctor.
-     * @param session A Source
-     * @param query A SQL query
+     * @param session A {@link Session}
+     * @param query A SQL {@link Query}
      */
     public Batch(final Session session, final Query query) {
         this.session = session;

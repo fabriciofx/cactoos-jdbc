@@ -33,8 +33,8 @@ public final class Select implements Statement<ResultSet> {
 
     /**
      * Ctor.
-     * @param session A Connection
-     * @param query A SQL query
+     * @param session A {@link Session}
+     * @param query A SQL {@link Query}
      */
     public Select(final Session session, final Query query) {
         this.session = session;

@@ -29,8 +29,8 @@ public final class Insert implements Statement<Boolean> {
 
     /**
      * Ctor.
-     * @param session A Session
-     * @param query A SQL query
+     * @param session A {@link Session}
+     * @param query A SQL {@link Query}
      */
     public Insert(final Session session, final Query query) {
         this.session = session;

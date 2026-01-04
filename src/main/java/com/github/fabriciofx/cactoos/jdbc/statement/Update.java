@@ -29,8 +29,8 @@ public final class Update implements Statement<Integer> {
 
     /**
      * Ctor.
-     * @param session A Session
-     * @param query A SQL query
+     * @param session A {@link Session}
+     * @param query A SQL {@link Query}
      */
     public Update(final Session session, final Query query) {
         this.session = session;

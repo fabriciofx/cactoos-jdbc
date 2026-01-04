@@ -32,8 +32,8 @@ public final class KeyedInsert<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param session A Connection
-     * @param query A {@link Query} query
+     * @param session A {@link Session}
+     * @param query A SQL {@link Query}
      */
     public KeyedInsert(final Session session, final Query query) {
         this.session = session;
