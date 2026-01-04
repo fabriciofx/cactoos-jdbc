@@ -43,7 +43,9 @@ public final class Select implements Statement<ResultSet> {
 
     @Override
     public ResultSet execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(new Simple(this.qry))) {
+        try (
+            PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
+        ) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
                 final CachedRowSet crs = rsf.createCachedRowSet();

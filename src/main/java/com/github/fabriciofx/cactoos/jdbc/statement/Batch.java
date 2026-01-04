@@ -39,7 +39,11 @@ public final class Batch implements Statement<int[]> {
 
     @Override
     public int[] execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(new Batched(this.qry))) {
+        try (
+            PreparedStatement stmt = this.session.prepared(
+                new Batched(this.qry)
+            )
+        ) {
             return stmt.executeBatch();
         }
     }

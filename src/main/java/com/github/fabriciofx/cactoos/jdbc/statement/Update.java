@@ -39,7 +39,9 @@ public final class Update implements Statement<Integer> {
 
     @Override
     public Integer execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(new Simple(this.qry))) {
+        try (
+            PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
+        ) {
             return stmt.executeUpdate();
         }
     }

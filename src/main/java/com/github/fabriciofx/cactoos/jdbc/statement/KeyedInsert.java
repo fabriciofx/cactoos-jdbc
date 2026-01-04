@@ -43,7 +43,9 @@ public final class KeyedInsert<T> implements Statement<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(new Keyed(this.qry))) {
+        try (
+            PreparedStatement stmt = this.session.prepared(new Keyed(this.qry))
+        ) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
                 if (rset.next()) {
