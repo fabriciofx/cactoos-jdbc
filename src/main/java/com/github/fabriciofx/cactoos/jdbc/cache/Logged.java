@@ -8,6 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Cache;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Ternary;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
@@ -145,7 +146,13 @@ public final class Logged<K, V> implements Cache<K, V> {
                     "[%s] Deleting into cache with key '%s' and returning value '%s'.",
                     this.from,
                     key.toString(),
-                    value.toString()
+                    new Unchecked<>(
+                        new Ternary<>(
+                            value != null,
+                            () -> value.toString(),
+                            () -> "(null)"
+                        )
+                    ).value()
                 )
             ).asString()
         );

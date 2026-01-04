@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.UncheckedText;
 
 /**
  * Logged Source.
@@ -39,7 +41,12 @@ public final class Logged implements Source {
     private final Unchecked<Level> level;
 
     /**
-     * The statements id.
+     * The sessions counter.
+     */
+    private final AtomicInteger sessions;
+
+    /**
+     * The statements counter.
      */
     private final AtomicInteger statements;
 
@@ -81,32 +88,73 @@ public final class Logged implements Source {
                 }
             )
         );
-        this.statements = new AtomicInteger();
+        this.sessions = new AtomicInteger(-1);
+        this.statements = new AtomicInteger(-1);
     }
 
     @Override
     public Session session() throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.session.Logged(
+        final Session session = new com.github.fabriciofx.cactoos.jdbc.session.Logged(
             this.origin.session(),
             this.from,
             this.logger,
             this.level.value(),
+            this.sessions.incrementAndGet(),
             this.statements
         );
+        this.logger.log(
+            this.level.value(),
+            new FormattedText(
+                "[%s] Session[#%d] opened.",
+                this.from,
+                this.sessions.get()
+            ).asString()
+        );
+        return session;
     }
 
     @Override
     public String url() throws Exception {
-        return this.origin.url();
+        final String location = this.origin.url();
+        this.logger.log(
+            this.level.value(),
+            new FormattedText(
+                "[%s] Source retrieve url: '%s'.",
+                this.from,
+                location
+            ).asString()
+        );
+        return location;
     }
 
     @Override
     public String username() {
-        return this.origin.username();
+        final String user = this.origin.username();
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Source retrieve username: '%s'.",
+                    this.from,
+                    user
+                )
+            ).asString()
+        );
+        return user;
     }
 
     @Override
     public String password() {
-        return this.origin.password();
+        final String pass = this.origin.password();
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Source retrieve password: '********'.",
+                    this.from
+                )
+            ).asString()
+        );
+        return pass;
     }
 }

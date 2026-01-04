@@ -132,7 +132,7 @@ public final class Logged implements PreparedStatement {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] updated a source and returned '%d' in %dns.",
+                    "[%s] PreparedStatement[#%d] executed an update and returned '%d' in %dns.",
                     this.from,
                     this.id,
                     updated,
