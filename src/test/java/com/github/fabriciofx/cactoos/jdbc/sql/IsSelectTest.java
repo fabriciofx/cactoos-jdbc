@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.select;
+package com.github.fabriciofx.cactoos.jdbc.sql;
 
 import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.Test;

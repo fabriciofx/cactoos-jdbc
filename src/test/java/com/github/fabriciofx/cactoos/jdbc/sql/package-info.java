@@ -4,8 +4,8 @@
  */
 
 /**
- * Select.
+ * SQL tests.
  *
  * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.select;
+package com.github.fabriciofx.cactoos.jdbc.sql;

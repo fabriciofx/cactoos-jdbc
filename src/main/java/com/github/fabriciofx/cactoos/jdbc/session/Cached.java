@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.plan.Normal;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
+import com.github.fabriciofx.cactoos.jdbc.sql.IsSelect;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import javax.sql.rowset.CachedRowSet;
