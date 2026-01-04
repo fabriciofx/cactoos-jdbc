@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
 
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,22 @@ final class NormalizedTest {
                 new QueryOf("SELECT id, name FROM person WHERE id = 1")
             ).sql(),
             new IsText("SELECT * FROM `PERSON` WHERE `ID` = 1")
+        ).affirm();
+    }
+
+    @Test
+    void normalizeANamedQuery() throws Exception {
+        new Assertion<>(
+            "must normalize a select with where",
+            () -> new Normalized(
+                new Named(
+                    new QueryOf(
+                        "SELECT id, name FROM person WHERE id = :id",
+                        new IntParam("id", 1)
+                    )
+                )
+            ).sql(),
+            new IsText("SELECT * FROM `PERSON` WHERE `ID` = ?")
         ).affirm();
     }
 
