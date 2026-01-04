@@ -33,26 +33,26 @@ public final class Merged implements Query {
 
     /**
      * Ctor.
-     * @param named A Named query
+     * @param query A {@link Query}
      */
-    public Merged(final Named named) {
-        this.origin = named;
+    public Merged(final Query query) {
+        this.origin = query;
         this.code = new Sticky(
             () -> {
                 final String result;
-                if (named.sql().startsWith("CREATE")) {
-                    result = named.sql();
+                if (query.sql().startsWith("CREATE")) {
+                    result = query.sql();
                 } else {
                     final SqlParser.Config config = SqlParser.config()
                         .withConformance(SqlConformanceEnum.DEFAULT)
                         .withQuoting(Quoting.BACK_TICK);
                     final SqlParser parser = SqlParser.create(
-                        named.sql(),
+                        query.sql(),
                         config
                     );
                     final SqlNode stmt = parser.parseStmt();
                     final SqlNode replaced = stmt.accept(
-                        new MergeShuttle(named)
+                        new MergeShuttle(query)
                     );
                     result = new Pretty(replaced).asString();
                 }

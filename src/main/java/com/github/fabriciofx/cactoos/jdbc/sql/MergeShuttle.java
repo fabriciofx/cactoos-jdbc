@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import org.apache.calcite.sql.SqlDynamicParam;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.util.SqlShuttle;
@@ -18,15 +18,15 @@ import org.apache.calcite.sql.util.SqlShuttle;
  */
 public final class MergeShuttle extends SqlShuttle {
     /**
-     * Named query.
+     * Query.
      */
-    private final Named query;
+    private final Query query;
 
     /**
      * Ctor.
-     * @param query A Named query
+     * @param query A {@link Query}
      */
-    public MergeShuttle(final Named query) {
+    public MergeShuttle(final Query query) {
         this.query = query;
     }
 
