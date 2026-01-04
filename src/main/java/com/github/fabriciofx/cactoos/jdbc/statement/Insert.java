@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import java.sql.PreparedStatement;
 
 /**
@@ -38,7 +39,7 @@ public final class Insert implements Statement<Boolean> {
 
     @Override
     public Boolean execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(new Simple(this.qry))) {
             return stmt.execute();
         }
     }

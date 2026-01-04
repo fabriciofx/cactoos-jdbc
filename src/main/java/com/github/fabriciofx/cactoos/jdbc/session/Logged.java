@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -67,31 +67,9 @@ public final class Logged implements Session {
     }
 
     @Override
-    public PreparedStatement prepared(final Query query) throws Exception {
+    public PreparedStatement prepared(final Plan plan) throws Exception {
         return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
-            this.origin.prepared(query),
-            this.source,
-            this.logger,
-            this.level,
-            this.statements.getAndIncrement()
-        );
-    }
-
-    @Override
-    public PreparedStatement batched(final Query query) throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
-            this.origin.batched(query),
-            this.source,
-            this.logger,
-            this.level,
-            this.statements.getAndIncrement()
-        );
-    }
-
-    @Override
-    public PreparedStatement keyed(final Query query) throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
-            this.origin.keyed(query),
+            this.origin.prepared(plan),
             this.source,
             this.logger,
             this.level,

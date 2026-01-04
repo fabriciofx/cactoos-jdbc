@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.sql.rowset.CachedRowSet;
@@ -42,7 +43,7 @@ public final class Select implements Statement<ResultSet> {
 
     @Override
     public ResultSet execute() throws Exception {
-        try (PreparedStatement stmt = this.session.prepared(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(new Simple(this.qry))) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
                 final CachedRowSet crs = rsf.createCachedRowSet();

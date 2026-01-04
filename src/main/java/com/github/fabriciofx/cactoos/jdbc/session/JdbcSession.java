@@ -4,8 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Params;
-import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.Connection;
@@ -32,38 +31,8 @@ public final class JdbcSession implements Session {
     }
 
     @Override
-    public PreparedStatement prepared(final Query query) throws Exception {
-        final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql()
-        );
-        for (final Params params : query.params()) {
-            params.prepare(stmt);
-        }
-        return stmt;
-    }
-
-    @Override
-    public PreparedStatement batched(final Query query) throws Exception {
-        final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql()
-        );
-        for (final Params params : query.params()) {
-            params.prepare(stmt);
-            stmt.addBatch();
-        }
-        return stmt;
-    }
-
-    @Override
-    public PreparedStatement keyed(final Query query) throws Exception {
-        final PreparedStatement stmt = this.connection.prepareStatement(
-            query.sql(),
-            java.sql.Statement.RETURN_GENERATED_KEYS
-        );
-        for (final Params params : query.params()) {
-            params.prepare(stmt);
-        }
-        return stmt;
+    public PreparedStatement prepared(final Plan plan) throws Exception {
+        return plan.prepare(this.connection);
     }
 
     @Override

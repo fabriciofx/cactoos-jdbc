@@ -13,28 +13,12 @@ import java.sql.PreparedStatement;
  */
 public interface Session extends AutoCloseable {
     /**
-     * Create a PreparedStatement from query.
-     * @param query The query
+     * Create a PreparedStatement from plan.
+     * @param plan A Plan
      * @return A PreparedStatement
      * @throws Exception if something goes wrong
      */
-    PreparedStatement prepared(Query query) throws Exception;
-
-    /**
-     * Create a batched PreparedStatement from query.
-     * @param query The query
-     * @return A PreparedStatement
-     * @throws Exception if something goes wrong
-     */
-    PreparedStatement batched(Query query) throws Exception;
-
-    /**
-     * Create a PreparedStatement with keys from query.
-     * @param query The query
-     * @return A PreparedStatement
-     * @throws Exception if something goes wrong
-     */
-    PreparedStatement keyed(Query query) throws Exception;
+    PreparedStatement prepared(Plan plan) throws Exception;
 
     /**
      * Turn on or off auto commit.

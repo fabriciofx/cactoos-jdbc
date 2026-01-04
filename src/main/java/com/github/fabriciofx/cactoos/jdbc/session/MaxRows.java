@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -36,23 +36,8 @@ public final class MaxRows implements Session {
     }
 
     @Override
-    public PreparedStatement prepared(final Query query) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(query);
-        stmt.setMaxRows(this.max);
-        return stmt;
-    }
-
-    @Override
-    public PreparedStatement batched(final Query query) throws Exception {
-        final PreparedStatement stmt = this.origin.batched(query);
-        stmt.setMaxRows(this.max);
-        return stmt;
-    }
-
-    @Override
-    public PreparedStatement keyed(final Query query)
-        throws Exception {
-        final PreparedStatement stmt = this.origin.keyed(query);
+    public PreparedStatement prepared(final Plan plan) throws Exception {
+        final PreparedStatement stmt = this.origin.prepared(plan);
         stmt.setMaxRows(this.max);
         return stmt;
     }

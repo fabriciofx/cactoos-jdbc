@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -37,19 +37,8 @@ public final class Transacted implements Session {
     }
 
     @Override
-    public PreparedStatement prepared(final Query query) throws Exception {
-        return this.origin.prepared(query);
-    }
-
-    @Override
-    public PreparedStatement batched(final Query query) throws Exception {
-        return this.origin.batched(query);
-    }
-
-    @Override
-    public PreparedStatement keyed(final Query query)
-        throws Exception {
-        return this.origin.keyed(query);
+    public PreparedStatement prepared(final Plan plan) throws Exception {
+        return this.origin.prepared(plan);
     }
 
     @Override

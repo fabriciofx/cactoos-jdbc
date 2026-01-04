@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.plan.Batched;
 import java.sql.PreparedStatement;
 
 /**
@@ -38,7 +39,7 @@ public final class Batch implements Statement<int[]> {
 
     @Override
     public int[] execute() throws Exception {
-        try (PreparedStatement stmt = this.session.batched(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(new Batched(this.qry))) {
             return stmt.executeBatch();
         }
     }

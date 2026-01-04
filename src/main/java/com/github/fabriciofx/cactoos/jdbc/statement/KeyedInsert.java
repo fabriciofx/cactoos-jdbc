@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.plan.Keyed;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.NoSuchElementException;
@@ -42,7 +43,7 @@ public final class KeyedInsert<T> implements Statement<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
-        try (PreparedStatement stmt = this.session.keyed(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(new Keyed(this.qry))) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
                 if (rset.next()) {

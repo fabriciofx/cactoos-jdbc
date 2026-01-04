@@ -5,8 +5,9 @@
 package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.plan.Normal;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.select.IsSelect;
@@ -16,8 +17,8 @@ import javax.sql.rowset.CachedRowSet;
 import org.cactoos.text.TextOf;
 
 /**
- * Cached.
- * A decorator for Session that allows caching results.
+ * Cached. A decorator for Session that allows caching results.
+ *
  * @since 0.9.0
  */
 public final class Cached implements Session {
@@ -33,6 +34,7 @@ public final class Cached implements Session {
 
     /**
      * Ctor.
+     *
      * @param session A session
      * @param cache The cache
      */
@@ -45,34 +47,26 @@ public final class Cached implements Session {
     }
 
     @Override
-    public PreparedStatement prepared(final Query query) throws Exception {
+    public PreparedStatement prepared(final Plan plan) throws Exception {
         final PreparedStatement prepared;
-        if (new IsSelect(query.sql()).value()) {
+        if (new IsSelect(plan.query().sql()).value()) {
             prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
-                this.origin.prepared(query),
+                this.origin.prepared(plan),
                 this.origin.prepared(
-                    new QueryOf(
-                        new TextOf(new Normalized(query).sql()),
-                        query.params()
+                    new Normal(
+                        new QueryOf(
+                            new TextOf(new Normalized(plan.query()).sql()),
+                            plan.query().params()
+                        )
                     )
                 ),
-                new Normalized(query),
+                new Normalized(plan.query()),
                 this.cache
             );
         } else {
-            prepared = this.origin.prepared(query);
+            prepared = this.origin.prepared(plan);
         }
         return prepared;
-    }
-
-    @Override
-    public PreparedStatement batched(final Query query) throws Exception {
-        return this.origin.batched(query);
-    }
-
-    @Override
-    public PreparedStatement keyed(final Query query) throws Exception {
-        return this.origin.keyed(query);
     }
 
     @Override
