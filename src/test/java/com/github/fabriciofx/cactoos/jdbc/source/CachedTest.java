@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
+import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -16,106 +17,318 @@ import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import com.github.fabriciofx.fake.server.Server;
-import com.github.fabriciofx.fake.server.db.server.H2Server;
+import com.github.fabriciofx.fake.logger.FakeLogger;
+import com.github.fabriciofx.fake.server.RandomName;
+import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import javax.sql.DataSource;
 import org.cactoos.text.Concatenated;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
-import org.llorllale.cactoos.matchers.IsText;
-import org.llorllale.cactoos.matchers.IsTrue;
+import org.llorllale.cactoos.matchers.HasString;
+import org.llorllale.cactoos.matchers.Matches;
 
 /**
  * Cached tests.
  *
  * @since 0.9.0
- * @checkstyle NestedTryDepthCheck (500 lines)
+ * @checkstyle MethodLengthCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 final class CachedTest {
     @Test
     void cacheASelect() throws Exception {
         final String name = "Rob Pike";
         final String city = "San Francisco";
-        try (Server<DataSource> server = new H2Server()) {
-            server.start();
-            final Source source = new Cached(new NoAuth(server.resource()));
-            try (Session session = source.session()) {
-                new Update(
-                    session,
+        final FakeLogger logger = new FakeLogger();
+        final Source source = new Logged(
+            new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())),
+                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                    new CachedRowSetCache(),
+                    "cache",
+                    logger
+                )
+            ),
+            "cache",
+            logger
+        );
+        try (Session session = source.session()) {
+            new Update(
+                session,
+                new QueryOf(
+                    """
+                    CREATE TABLE person (id INT, name VARCHAR(30),
+                    created_at DATE, city VARCHAR(20), working
+                    BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))
+                    """
+                )
+            ).execute();
+            new Insert(
+                session,
+                new Named(
                     new QueryOf(
-                        new Concatenated(
-                            "CREATE TABLE person (id INT, name VARCHAR(30), ",
-                            "created_at DATE, city VARCHAR(20), working ",
-                            "BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
-                        )
+                        """
+                        INSERT INTO person (id, name, created_at, city,
+                        working, height) VALUES (:id, :name, :created_at,
+                        :city, :working, :height)
+                        """,
+                        new IntParam("id", 1),
+                        new TextParam("name", name),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", city),
+                        new BoolParam("working", true),
+                        new DecimalParam("height", "1.86")
                     )
-                ).execute();
-                new Insert(
+                )
+            ).execute();
+            try (
+                ResultSet rset = new Select(
                     session,
                     new Named(
                         new QueryOf(
-                            new Concatenated(
-                                "INSERT INTO person (id, name, created_at, ",
-                                "city, working, height) VALUES (:id, :name, ",
-                                ":created_at, :city, :working, :height)"
-                            ),
-                            new IntParam("id", 1),
-                            new TextParam("name", name),
-                            new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", city),
-                            new BoolParam("working", true),
-                            new DecimalParam("height", "1.86")
+                            "SELECT name FROM person WHERE id = :id",
+                            new IntParam("id", 1)
                         )
                     )
-                ).execute();
-                try (
-                    ResultSet rset = new Select(
-                        session,
-                        new Named(
-                            new QueryOf(
-                                "SELECT name FROM person WHERE id = :id",
-                                new IntParam("id", 1)
-                            )
-                        )
-                    ).execute()
-                ) {
-                    new Assertion<>(
-                        "must have the name",
-                        rset.next(),
-                        new IsTrue()
-                    ).affirm();
-                    new Assertion<>(
-                        "must have the correct name",
-                        new TextOf(rset.getString("name")),
-                        new IsText(name)
-                    ).affirm();
+                ).execute()
+            ) {
+                if (rset.next()) {
+                    rset.getString("name");
                 }
-                try (
-                    ResultSet rset = new Select(
-                        session,
-                        new Named(
-                            new QueryOf(
-                                "SELECT city FROM person WHERE id = :id",
-                                new IntParam("id", 1)
-                            )
+            }
+            try (
+                ResultSet rset = new Select(
+                    session,
+                    new Named(
+                        new QueryOf(
+                            "SELECT city FROM person WHERE id = :id",
+                            new IntParam("id", 1)
                         )
-                    ).execute()
-                ) {
-                    new Assertion<>(
-                        "must have the city",
-                        rset.next(),
-                        new IsTrue()
-                    ).affirm();
-                    new Assertion<>(
-                        "must have the correct city",
-                        new TextOf(rset.getString("city")),
-                        new IsText(city)
-                    ).affirm();
+                    )
+                ).execute()
+            ) {
+                if (rset.next()) {
+                    rset.getString("city");
                 }
             }
         }
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Checking if cache has a value for key 'SELECT * FROM ",
+                    "`PERSON` WHERE `ID` = 1': false"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Storing in cache with key 'SELECT * FROM `PERSON` WHERE ",
+                    "`ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
+                    "WHERE `ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Checking if cache has a value for key 'SELECT * FROM ",
+                    "`PERSON` WHERE `ID` = 1': true"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
+                    "WHERE `ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+    }
+
+    @Test
+    void deleteACachedResult() throws Exception {
+        final String name = "Rob Pike";
+        final String city = "San Francisco";
+        final FakeLogger logger = new FakeLogger();
+        final Source source = new Logged(
+            new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())),
+                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                    new CachedRowSetCache(),
+                    "cache",
+                    logger
+                )
+            ),
+            "cache",
+            logger
+        );
+        try (Session session = source.session()) {
+            new Update(
+                session,
+                new QueryOf(
+                    """
+                    CREATE TABLE person (id INT, name VARCHAR(30),
+                    created_at DATE, city VARCHAR(20), working
+                    BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))
+                    """
+                )
+            ).execute();
+            new Insert(
+                session,
+                new Named(
+                    new QueryOf(
+                        """
+                        INSERT INTO person (id, name, created_at, city,
+                        working, height) VALUES (:id, :name, :created_at,
+                        :city, :working, :height)
+                        """,
+                        new IntParam("id", 1),
+                        new TextParam("name", name),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", city),
+                        new BoolParam("working", true),
+                        new DecimalParam("height", "1.86")
+                    )
+                )
+            ).execute();
+            new Insert(
+                session,
+                new Named(
+                    new QueryOf(
+                        """
+                        INSERT INTO person (id, name, created_at, city,
+                        working, height) VALUES (:id, :name, :created_at,
+                        :city, :working, :height)
+                        """,
+                        new IntParam("id", 2),
+                        new TextParam("name", "Maria Souza"),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", "New York"),
+                        new BoolParam("working", false),
+                        new DecimalParam("height", "1.62")
+                    )
+                )
+            ).execute();
+            try (
+                ResultSet rset = new Select(
+                    session,
+                    new Named(
+                        new QueryOf(
+                            "SELECT name FROM person WHERE id = :id",
+                            new IntParam("id", 1)
+                        )
+                    )
+                ).execute()
+            ) {
+                if (rset.next()) {
+                    rset.getString("name");
+                }
+            }
+            try (
+                ResultSet rset = new Select(
+                    session,
+                    new Named(
+                        new QueryOf(
+                            "SELECT city FROM person WHERE id = :id",
+                            new IntParam("id", 1)
+                        )
+                    )
+                ).execute()
+            ) {
+                if (rset.next()) {
+                    rset.getString("city");
+                }
+            }
+            new Update(
+                session,
+                new Named(
+                    new QueryOf(
+                        "DELETE FROM person WHERE id = :id",
+                        new IntParam("id", 1)
+                    )
+                )
+            ).execute();
+        }
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Checking if cache has a value for key 'SELECT * FROM ",
+                    "`PERSON` WHERE `ID` = 1': false"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Storing in cache with key 'SELECT * FROM `PERSON` WHERE ",
+                    "`ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
+                    "WHERE `ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Checking if cache has a value for key 'SELECT * FROM ",
+                    "`PERSON` WHERE `ID` = 1': true"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
+                    "WHERE `ID` = 1' and value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log a cache store and retrieve",
+            new HasString(
+                new Concatenated(
+                    "Deleting into cache with key 'SELECT * FROM `PERSON` ",
+                    "WHERE `ID` = 1' and returning value"
+                )
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
     }
 }

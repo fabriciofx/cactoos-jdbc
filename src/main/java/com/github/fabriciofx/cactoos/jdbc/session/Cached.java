@@ -7,21 +7,21 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.plan.Normal;
+import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
+import com.github.fabriciofx.cactoos.jdbc.query.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.query.Symmetric;
 import com.github.fabriciofx.cactoos.jdbc.sql.StatementKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import javax.sql.rowset.CachedRowSet;
-import org.apache.calcite.sql.SqlKind;
-import org.cactoos.text.TextOf;
 
 /**
  * Cached. A decorator for Session that allows caching results.
  *
  * @since 0.9.0
  */
+@SuppressWarnings("PMD.CloseResource")
 public final class Cached implements Session {
     /**
      * Session.
@@ -50,22 +50,30 @@ public final class Cached implements Session {
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
         final PreparedStatement prepared;
-        if (new StatementKind(plan.query().sql()).value() == SqlKind.SELECT) {
-            prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
-                this.origin.prepared(plan),
-                this.origin.prepared(
-                    new Normal(
-                        new QueryOf(
-                            new TextOf(new Normalized(plan.query()).sql()),
-                            plan.query().params()
-                        )
-                    )
-                ),
-                new Normalized(plan.query()),
-                this.cache
-            );
-        } else {
-            prepared = this.origin.prepared(plan);
+        switch (new StatementKind(plan.query().sql()).value()) {
+            case SELECT:
+                prepared =
+                    new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
+                        this.origin.prepared(plan),
+                        this.origin.prepared(
+                            new Simple(
+                                new Normalized(plan.query())
+                            )
+                        ),
+                        new Normalized(new Merged(plan.query())),
+                        this.cache
+                    );
+                break;
+            case DELETE:
+                prepared = this.origin.prepared(plan);
+                final CachedRowSet cached = this.cache.delete(
+                    new Symmetric(new Merged(plan.query())).sql()
+                );
+                cached.close();
+                break;
+            default:
+                prepared = this.origin.prepared(plan);
+                break;
         }
         return prepared;
     }

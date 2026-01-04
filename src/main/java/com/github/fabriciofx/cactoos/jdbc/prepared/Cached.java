@@ -23,9 +23,9 @@ import javax.sql.rowset.RowSetProvider;
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
 public final class Cached extends PreparedStatementEnvelope {
     /**
-     * A PreparedStatement to normalized SQL select.
+     * A normalized PreparedStatement to be stored into cache.
      */
-    private final PreparedStatement prepared;
+    private final PreparedStatement stored;
 
     /**
      * The normalized SQL select.
@@ -41,18 +41,18 @@ public final class Cached extends PreparedStatementEnvelope {
      * Ctor.
      *
      * @param origin Decorated PreparedStatement
-     * @param prepared PreparedStatement to normalized SQL select
+     * @param stored PreparedStatement to normalized SQL select
      * @param normalized The normalized select SQL
      * @param cache The cache
      */
     public Cached(
         final PreparedStatement origin,
-        final PreparedStatement prepared,
+        final PreparedStatement stored,
         final Normalized normalized,
         final Cache<String, CachedRowSet> cache
     ) {
         super(origin);
-        this.prepared = prepared;
+        this.stored = stored;
         this.normalized = normalized;
         this.cache = cache;
     }
@@ -61,7 +61,7 @@ public final class Cached extends PreparedStatementEnvelope {
     public ResultSet executeQuery() throws SQLException {
         try {
             if (!this.cache.contains(this.normalized.sql())) {
-                try (ResultSet rset = this.prepared.executeQuery()) {
+                try (ResultSet rset = this.stored.executeQuery()) {
                     final RowSetFactory rsf = RowSetProvider.newFactory();
                     final CachedRowSet crs = rsf.createCachedRowSet();
                     crs.populate(rset);
