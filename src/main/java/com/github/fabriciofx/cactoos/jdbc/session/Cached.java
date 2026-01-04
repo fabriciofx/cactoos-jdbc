@@ -10,10 +10,11 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.plan.Normal;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
-import com.github.fabriciofx.cactoos.jdbc.sql.IsSelect;
+import com.github.fabriciofx.cactoos.jdbc.sql.StatementKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import javax.sql.rowset.CachedRowSet;
+import org.apache.calcite.sql.SqlKind;
 import org.cactoos.text.TextOf;
 
 /**
@@ -49,7 +50,7 @@ public final class Cached implements Session {
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
         final PreparedStatement prepared;
-        if (new IsSelect(plan.query().sql()).value()) {
+        if (new StatementKind(plan.query().sql()).value() == SqlKind.SELECT) {
             prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                 this.origin.prepared(plan),
                 this.origin.prepared(
