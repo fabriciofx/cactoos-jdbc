@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ public final class KeyedInsert<T> implements Statement<T> {
     /**
      * The connection.
      */
-    private final Connexio connexio;
+    private final Session session;
 
     /**
      * Query.
@@ -31,18 +31,18 @@ public final class KeyedInsert<T> implements Statement<T> {
     /**
      * Ctor.
      *
-     * @param connexio A Connection
+     * @param session A Connection
      * @param query A {@link Query} query
      */
-    public KeyedInsert(final Connexio connexio, final Query query) {
-        this.connexio = connexio;
+    public KeyedInsert(final Session session, final Query query) {
+        this.session = session;
         this.qry = query;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
-        try (PreparedStatement stmt = this.connexio.keyed(this.qry)) {
+        try (PreparedStatement stmt = this.session.keyed(this.qry)) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
                 if (rset.next()) {

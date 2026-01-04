@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contacts;
@@ -38,10 +38,10 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public int count() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
-                    connexio,
+                    session,
                     new QueryOf("SELECT COUNT(name) FROM contact")
                 )
             ).value();
@@ -50,12 +50,12 @@ public final class SqlContacts implements Contacts {
 
     @Override
     public Contact get(final int index) throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             return new SqlContact(
                 this.source,
                 new ResultSetAsValue<UUID>(
                     new Select(
-                        connexio,
+                        session,
                         new QueryOf(
                             new FormattedText(
                                 "SELECT id FROM contact FETCH FIRST %d ROWS ONLY",

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Page;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
@@ -46,9 +46,9 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public Contact create(final String name) throws Exception {
         final UUID id = UUID.randomUUID();
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Insert(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "INSERT INTO contact (id, name) VALUES (:id, :name)",
@@ -64,9 +64,9 @@ public final class SqlPhonebook implements Phonebook {
     @Override
     public List<Contact> search(final String name) throws Exception {
         final List<Contact> contacts = new LinkedList<>();
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             final Select select = new Select(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
@@ -52,10 +52,10 @@ public final class SqlPhones implements Phones {
 
     @Override
     public int count() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             return new ResultSetAsValue<Integer>(
                 new Select(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
@@ -69,10 +69,10 @@ public final class SqlPhones implements Phones {
 
     @Override
     public Phone get(final int index) throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             final Scalar<String> number = new ResultSetAsValue<>(
                 new Select(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             new FormattedText(
@@ -92,9 +92,9 @@ public final class SqlPhones implements Phones {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Insert(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",

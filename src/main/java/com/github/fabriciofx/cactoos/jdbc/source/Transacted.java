@@ -4,14 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import org.cactoos.Scalar;
 
 /**
  * Transacted source.
  * A decorator for {@link Source}. Produces a unique not auto commited
- * {@link Connexio} that must be used in a
+ * {@link Session} that must be used in a
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}. This
  * connection only can be closed after a commit() or rollback() provided by
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}.
@@ -26,7 +26,7 @@ public final class Transacted implements Source {
     /**
      * Unique not auto commited connection.
      */
-    private final Scalar<Connexio> cnnx;
+    private final Scalar<Session> cnnx;
 
     /**
      * Ctor.
@@ -36,9 +36,9 @@ public final class Transacted implements Source {
         this.origin = source;
         this.cnnx = new org.cactoos.scalar.Sticky<>(
             () -> {
-                final Connexio conn = source.connexio();
+                final Session conn = source.session();
                 conn.autoCommit(false);
-                return new com.github.fabriciofx.cactoos.jdbc.connexio.Transacted(
+                return new com.github.fabriciofx.cactoos.jdbc.session.Transacted(
                     conn
                 );
             }
@@ -46,7 +46,7 @@ public final class Transacted implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
+    public Session session() throws Exception {
         return this.cnnx.value();
     }
 

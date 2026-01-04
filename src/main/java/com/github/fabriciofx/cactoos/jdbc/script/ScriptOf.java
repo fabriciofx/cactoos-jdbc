@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.script;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Script;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -73,10 +73,10 @@ public class ScriptOf implements Script {
             joiner.add(line);
         }
         final String[] cmds = joiner.toString().split(";");
-        try (Connexio connexio = source.connexio()) {
+        try (Session session = source.session()) {
             for (final String cmd : cmds) {
                 try (
-                    PreparedStatement stmt = connexio.prepared(
+                    PreparedStatement stmt = session.prepared(
                         new QueryOf(cmd.trim())
                     )
                 ) {

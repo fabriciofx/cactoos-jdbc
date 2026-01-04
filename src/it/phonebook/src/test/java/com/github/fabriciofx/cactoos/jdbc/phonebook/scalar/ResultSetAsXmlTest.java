@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.scalar;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
@@ -42,13 +42,13 @@ final class ResultSetAsXmlTest {
             )
         ) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Assertion<>(
                     "must convert a contact into a XML",
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(
-                                connexio,
+                                session,
                                 new QueryOf(
                                     "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
                                 )

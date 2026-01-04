@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -27,9 +27,9 @@ final class KeyedInsertTest {
     void insertWithKeys() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                     )
@@ -38,7 +38,7 @@ final class KeyedInsertTest {
                     "must generated key value",
                     new ScalarOf<>(
                         () -> new KeyedInsert<>(
-                            connexio,
+                            session,
                             new Named(
                                 new QueryOf(
                                     "INSERT INTO contact (name) VALUES (:name)",

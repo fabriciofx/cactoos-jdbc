@@ -2,78 +2,77 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connexio;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * MaxRows.
- * A decorator for Connexio that sets the max of rows.
+ * Transacted.
+ * A decorator for Session which allows transactions. This decorator only
+ * close the JDBC connecion after a commit or rollback.
  * @since 0.9.0
  */
-public final class MaxRows implements Connexio {
+public final class Transacted implements Session {
     /**
-     * Connexio.
+     * Session.
      */
-    private final Connexio origin;
+    private final Session origin;
 
     /**
-     * Max of rows.
+     * Close or not the connection.
      */
-    private final int max;
+    private final AtomicBoolean closeable;
 
     /**
      * Ctor.
-     * @param origin A connexio
-     * @param max The max number of rows
+     * @param session A Session
      */
-    public MaxRows(final Connexio origin, final int max) {
-        this.origin = origin;
-        this.max = max;
+    public Transacted(final Session session) {
+        this.origin = session;
+        this.closeable = new AtomicBoolean(false);
     }
 
     @Override
     public PreparedStatement prepared(final Query query) throws Exception {
-        final PreparedStatement stmt = this.origin.prepared(query);
-        stmt.setMaxRows(this.max);
-        return stmt;
+        return this.origin.prepared(query);
     }
 
     @Override
     public PreparedStatement batched(final Query query) throws Exception {
-        final PreparedStatement stmt = this.origin.batched(query);
-        stmt.setMaxRows(this.max);
-        return stmt;
+        return this.origin.batched(query);
     }
 
     @Override
     public PreparedStatement keyed(final Query query)
         throws Exception {
-        final PreparedStatement stmt = this.origin.keyed(query);
-        stmt.setMaxRows(this.max);
-        return stmt;
+        return this.origin.keyed(query);
     }
 
     @Override
     public void autoCommit(final boolean enabled) throws Exception {
-        this.origin.autoCommit(enabled);
+        this.origin.autoCommit(false);
     }
 
     @Override
     public void commit() throws Exception {
         this.origin.commit();
+        this.closeable.set(true);
     }
 
     @Override
     public void rollback() throws Exception {
         this.origin.rollback();
+        this.closeable.set(true);
     }
 
     @Override
     public void close() throws IOException {
-        this.origin.close();
+        if (this.closeable.get()) {
+            this.origin.close();
+        }
     }
 }

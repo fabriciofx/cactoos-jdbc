@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
@@ -23,7 +23,7 @@ public final class Select implements Statement<ResultSet> {
     /**
      * The connection.
      */
-    private final Connexio connexio;
+    private final Session session;
 
     /**
      * The SQL query.
@@ -32,17 +32,17 @@ public final class Select implements Statement<ResultSet> {
 
     /**
      * Ctor.
-     * @param connexio A Connection
+     * @param session A Connection
      * @param query A SQL query
      */
-    public Select(final Connexio connexio, final Query query) {
-        this.connexio = connexio;
+    public Select(final Session session, final Query query) {
+        this.session = session;
         this.qry = query;
     }
 
     @Override
     public ResultSet execute() throws Exception {
-        try (PreparedStatement stmt = this.connexio.prepared(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(this.qry)) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final RowSetFactory rsf = RowSetProvider.newFactory();
                 final CachedRowSet crs = rsf.createCachedRowSet();

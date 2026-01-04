@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
@@ -59,10 +59,10 @@ public final class SqlPhone implements Phone {
 
     @Override
     public String about() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             return new ResultSetAsXml(
                 new Select(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
@@ -78,9 +78,9 @@ public final class SqlPhone implements Phone {
 
     @Override
     public void delete() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Update(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
@@ -97,9 +97,9 @@ public final class SqlPhone implements Phone {
         final String number,
         final String carrier
     ) throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Update(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",

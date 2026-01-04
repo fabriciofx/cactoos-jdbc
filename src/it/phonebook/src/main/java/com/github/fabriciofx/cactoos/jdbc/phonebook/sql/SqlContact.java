@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
@@ -51,10 +51,10 @@ public final class SqlContact implements Contact {
 
     @Override
     public String about() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             return new ContactAsXml(
                 new Select(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             new Concatenated(
@@ -76,9 +76,9 @@ public final class SqlContact implements Contact {
 
     @Override
     public void delete() throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Update(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "DELETE FROM contact WHERE id = :id",
@@ -91,9 +91,9 @@ public final class SqlContact implements Contact {
 
     @Override
     public void update(final String name) throws Exception {
-        try (Connexio connexio = this.source.connexio()) {
+        try (Session session = this.source.session()) {
             new Update(
-                connexio,
+                session,
                 new Named(
                     new QueryOf(
                         "UPDATE contact SET name = :name WHERE id = :id",

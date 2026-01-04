@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
@@ -51,9 +51,9 @@ final class TransactionTest {
             server.start();
             final Source source = new NoAuth(server.resource());
             final Source transacted = new Transacted(source);
-            try (Connexio connexio = transacted.connexio()) {
+            try (Session session = transacted.session()) {
                 new Transaction<>(
-                    connexio,
+                    session,
                     () -> {
                         final Phonebook phonebook = new SqlPhonebook(transacted);
                         final Contact contact = phonebook.create(name);
@@ -92,10 +92,10 @@ final class TransactionTest {
             server.start();
             final Source source = new NoAuth(server.resource());
             final Source transacted = new Transacted(source);
-            try (Connexio connexio = transacted.connexio()) {
+            try (Session session = transacted.session()) {
                 try {
                     new Transaction<>(
-                        connexio,
+                        session,
                         () -> {
                             final Phonebook phonebook =
                                 new SqlPhonebook(transacted);

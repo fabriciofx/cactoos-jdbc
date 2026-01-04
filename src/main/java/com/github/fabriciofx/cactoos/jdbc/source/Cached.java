@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
 import javax.sql.rowset.CachedRowSet;
@@ -48,9 +48,9 @@ public final class Cached implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.connexio.Cached(
-            this.origin.connexio(),
+    public Session session() throws Exception {
+        return new com.github.fabriciofx.cactoos.jdbc.session.Cached(
+            this.origin.session(),
             this.cache
         );
     }

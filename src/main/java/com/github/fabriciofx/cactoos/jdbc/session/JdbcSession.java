@@ -2,9 +2,9 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connexio;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * JdbcConnexio.
+ * JdbcSession.
  * Encapsulate the {@link java.sql.Connection}.
  * @since 0.9.0
  */
-public final class JdbcConnexio implements Connexio {
+public final class JdbcSession implements Session {
     /**
      * JDBC Connection.
      */
@@ -27,7 +27,7 @@ public final class JdbcConnexio implements Connexio {
      * Ctor.
      * @param connection A JDBC connection
      */
-    public JdbcConnexio(final Connection connection) {
+    public JdbcSession(final Connection connection) {
         this.connection = connection;
     }
 

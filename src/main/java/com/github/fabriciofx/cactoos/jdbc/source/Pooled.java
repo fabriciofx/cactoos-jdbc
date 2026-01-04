@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
+import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.cactoos.Scalar;
@@ -47,8 +47,8 @@ public final class Pooled implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
-        return new JdbcConnexio(this.hikari.value().getConnection());
+    public Session session() throws Exception {
+        return new JdbcSession(this.hikari.value().getConnection());
     }
 
     @Override

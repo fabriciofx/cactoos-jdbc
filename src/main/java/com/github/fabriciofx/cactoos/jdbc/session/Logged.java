@@ -2,9 +2,9 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connexio;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -14,15 +14,15 @@ import java.util.logging.Logger;
 
 /**
  * Logged.
- * A decorator for connexio that logged all activities.
+ * A decorator for session that logged all activities.
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (150 lines)
  */
-public final class Logged implements Connexio {
+public final class Logged implements Session {
     /**
-     * Connexio.
+     * Session.
      */
-    private final Connexio origin;
+    private final Session origin;
 
     /**
      * Where the logs come from.
@@ -46,20 +46,20 @@ public final class Logged implements Connexio {
 
     /**
      * Ctor.
-     * @param connexio A Connexio
+     * @param session A Session
      * @param source The source, where the logs come from
      * @param logger A logger
      * @param level A level
      * @param statements Statements counter
      */
     public Logged(
-        final Connexio connexio,
+        final Session session,
         final String source,
         final Logger logger,
         final Level level,
         final AtomicInteger statements
     ) {
-        this.origin = connexio;
+        this.origin = session;
         this.source = source;
         this.logger = logger;
         this.level = level;

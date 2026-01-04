@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ public final class Update implements Statement<Integer> {
     /**
      * The connection.
      */
-    private final Connexio connexio;
+    private final Session session;
 
     /**
      * The SQL query.
@@ -28,17 +28,17 @@ public final class Update implements Statement<Integer> {
 
     /**
      * Ctor.
-     * @param connexio A Connexio
+     * @param session A Session
      * @param query A SQL query
      */
-    public Update(final Connexio connexio, final Query query) {
-        this.connexio = connexio;
+    public Update(final Session session, final Query query) {
+        this.session = session;
         this.qry = query;
     }
 
     @Override
     public Integer execute() throws Exception {
-        try (PreparedStatement stmt = this.connexio.prepared(this.qry)) {
+        try (PreparedStatement stmt = this.session.prepared(this.qry)) {
             return stmt.executeUpdate();
         }
     }

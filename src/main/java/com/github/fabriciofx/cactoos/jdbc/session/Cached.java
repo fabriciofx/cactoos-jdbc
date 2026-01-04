@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connexio;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
@@ -17,14 +17,14 @@ import org.cactoos.text.TextOf;
 
 /**
  * Cached.
- * A decorator for Connexio that allows caching results.
+ * A decorator for Session that allows caching results.
  * @since 0.9.0
  */
-public final class Cached implements Connexio {
+public final class Cached implements Session {
     /**
-     * Connexio.
+     * Session.
      */
-    private final Connexio origin;
+    private final Session origin;
 
     /**
      * Cache.
@@ -33,14 +33,14 @@ public final class Cached implements Connexio {
 
     /**
      * Ctor.
-     * @param connexio A connexio
+     * @param session A session
      * @param cache The cache
      */
     public Cached(
-        final Connexio connexio,
+        final Session session,
         final Cache<String, CachedRowSet> cache
     ) {
-        this.origin = connexio;
+        this.origin = session;
         this.cache = cache;
     }
 

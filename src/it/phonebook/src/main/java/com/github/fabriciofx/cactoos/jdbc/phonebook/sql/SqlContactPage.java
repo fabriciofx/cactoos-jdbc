@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Page;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
@@ -61,9 +61,9 @@ public final class SqlContactPage implements Page<Contact> {
             new Sticky<>(
                 () -> {
                     try (
-                        Connexio connexio = source.connexio();
+                        Session session = source.session();
                         ResultSet rset = new Select(
-                            connexio,
+                            session,
                             new Paginated(
                                 new QueryOf("SELECT id FROM contact"),
                                 number,

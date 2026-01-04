@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
+import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
 import com.github.fabriciofx.cactoos.jdbc.url.UrlFromSource;
 import javax.sql.DataSource;
 import org.cactoos.Text;
@@ -37,8 +37,8 @@ public final class NoAuth implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
-        return new JdbcConnexio(this.src.getConnection());
+    public Session session() throws Exception {
+        return new JdbcSession(this.src.getConnection());
     }
 
     @Override

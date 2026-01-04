@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
@@ -41,15 +41,15 @@ final class CachedTest {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
             final Source source = new Cached(new NoAuth(server.resource()));
-            try (Connexio connexio = source.connexio()) {
+            try (Session session = source.session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Insert(
-                    connexio,
+                    session,
                     new QueryOf(
                         "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
                         new IntParam("id", 1),
@@ -62,7 +62,7 @@ final class CachedTest {
                 ).execute();
                 try (
                     ResultSet rset = new Select(
-                        connexio,
+                        session,
                         new QueryOf("SELECT name FROM person WHERE id = :id", new IntParam("id", 1))
                     ).execute()
                 ) {
@@ -79,7 +79,7 @@ final class CachedTest {
                 }
                 try (
                     ResultSet rset = new Select(
-                        connexio,
+                        session,
                         new QueryOf("SELECT city FROM person WHERE id = :id", new IntParam("id", 1))
                     ).execute()
                 ) {

@@ -4,9 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.connexio.JdbcConnexio;
+import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
 import java.sql.DriverManager;
 
 /**
@@ -47,8 +47,8 @@ public final class Driver implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
-        return new JdbcConnexio(
+    public Session session() throws Exception {
+        return new JdbcSession(
             DriverManager.getConnection(
                 this.jdbc,
                 this.user,

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.connection;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.Logged;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
@@ -36,14 +36,14 @@ final class LoggedTest {
     void loggedUpdate() throws Exception {
         final Logger logger = new FakeLogger();
         try (
-            Connexio connexio = new Logged(
+            Session session = new Logged(
                 new NoAuth(new H2Source("testdb")),
                 "cactoos-jdbc",
                 logger
-            ).connexio()
+            ).session()
         ) {
             new Update(
-                connexio,
+                session,
                 new QueryOf("CREATE TABLE t012 (id INT AUTO_INCREMENT, name VARCHAR(50))")
             ).execute();
             final Text regex = new Joined(

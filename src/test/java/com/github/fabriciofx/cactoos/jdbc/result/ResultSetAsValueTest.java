@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.result;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.Named;
@@ -31,15 +31,15 @@ final class ResultSetAsValueTest {
     void value() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
                     )
                 ).execute();
                 new Insert(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "INSERT INTO contact (name) VALUES (:name)",
@@ -51,7 +51,7 @@ final class ResultSetAsValueTest {
                     "must generated key value",
                     new ResultSetAsValue<>(
                         new Select(
-                            connexio,
+                            session,
                             new Named(
                                 new QueryOf(
                                     "SELECT name FROM contact WHERE id = :id",

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -85,9 +85,9 @@ public final class Logged implements Source {
     }
 
     @Override
-    public Connexio connexio() throws Exception {
-        return new com.github.fabriciofx.cactoos.jdbc.connexio.Logged(
-            this.origin.connexio(),
+    public Session session() throws Exception {
+        return new com.github.fabriciofx.cactoos.jdbc.session.Logged(
+            this.origin.session(),
             this.from,
             this.logger,
             this.level.value(),

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ public final class Batch implements Statement<int[]> {
     /**
      * The connection.
      */
-    private final Connexio connexio;
+    private final Session session;
 
     /**
      * The SQL query.
@@ -28,17 +28,17 @@ public final class Batch implements Statement<int[]> {
 
     /**
      * Ctor.
-     * @param connexio A Source
+     * @param session A Source
      * @param query A SQL query
      */
-    public Batch(final Connexio connexio, final Query query) {
-        this.connexio = connexio;
+    public Batch(final Session session, final Query query) {
+        this.session = session;
         this.qry = query;
     }
 
     @Override
     public int[] execute() throws Exception {
-        try (PreparedStatement stmt = this.connexio.batched(this.qry)) {
+        try (PreparedStatement stmt = this.session.batched(this.qry)) {
             return stmt.executeBatch();
         }
     }

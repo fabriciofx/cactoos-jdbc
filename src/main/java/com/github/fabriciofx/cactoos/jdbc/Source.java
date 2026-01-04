@@ -10,11 +10,11 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 public interface Source {
     /**
-     * Create a {@link Connexio}.
-     * @return A {@link Connexio}
+     * Create a {@link Session}.
+     * @return A {@link Session}
      * @throws Exception If fails
      */
-    Connexio connexio() throws Exception;
+    Session session() throws Exception;
 
     /**
      * Source JDBC URL.

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -34,15 +34,15 @@ final class SelectTest {
     @Test
     void select() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE employee (id INT, name VARCHAR(50), birthday DATE, address VARCHAR(100), married BOOLEAN, salary DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "INSERT INTO employee (id, name, birthday, address, married, salary) VALUES (:id, :name, :birthday, :address, :married, :salary)",
@@ -73,7 +73,7 @@ final class SelectTest {
                     XhtmlMatchers.xhtml(
                         new ResultSetAsXml(
                             new Select(
-                                connexio,
+                                session,
                                 new QueryOf("SELECT * FROM employee")
                             ),
                             "employees",
@@ -101,15 +101,15 @@ final class SelectTest {
     void any() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
@@ -136,7 +136,7 @@ final class SelectTest {
                     "must select a person name",
                     new ResultSetAsValue<>(
                         new Select(
-                            connexio,
+                            session,
                             new QueryOf(
                                 "SELECT name FROM person"
                             )

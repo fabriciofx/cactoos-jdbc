@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -25,12 +25,12 @@ final class UpdateTest {
     void createTable() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Assertion<>(
                     "must create a table",
                     new ScalarOf<>(
                         () -> new Update(
-                            connexio,
+                            session,
                             new QueryOf(
                                 "CREATE TABLE foo1 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
                             )

@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.statement;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
@@ -27,15 +27,15 @@ final class BatchTest {
     void batch() throws Exception {
         try (Server<DataSource> server = new H2Server()) {
             server.start();
-            try (Connexio connexio = new NoAuth(server.resource()).connexio()) {
+            try (Session session = new NoAuth(server.resource()).session()) {
                 new Update(
-                    connexio,
+                    session,
                     new QueryOf(
                         "CREATE TABLE client (id INT, name VARCHAR(50), age INT, PRIMARY KEY (id))"
                     )
                 ).execute();
                 new Batch(
-                    connexio,
+                    session,
                     new Named(
                         new QueryOf(
                             "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",

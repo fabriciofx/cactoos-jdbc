@@ -2,23 +2,23 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.connexio;
+package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Connexio;
+import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 
 /**
  * Timeout.
- * Decorator for Connexio that configures a timeout.
+ * Decorator for Session that configures a timeout.
  * @since 0.9.0
  */
-public final class Timeout implements Connexio {
+public final class Timeout implements Session {
     /**
-     * Connexio.
+     * Session.
      */
-    private final Connexio origin;
+    private final Session origin;
 
     /**
      * The time in seconds.
@@ -27,11 +27,11 @@ public final class Timeout implements Connexio {
 
     /**
      * Ctor.
-     * @param connexio The connexio
+     * @param session The session
      * @param seconds The time in seconds
      */
-    public Timeout(final Connexio connexio, final int seconds) {
-        this.origin = connexio;
+    public Timeout(final Session session, final int seconds) {
+        this.origin = session;
         this.seconds = seconds;
     }
 

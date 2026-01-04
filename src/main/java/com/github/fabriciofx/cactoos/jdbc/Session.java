@@ -8,11 +8,10 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 
 /**
- * Connexio.
- * Represents a connection.
+ * Session.
  * @since 0.9.0
  */
-public interface Connexio extends AutoCloseable {
+public interface Session extends AutoCloseable {
     /**
      * Create a PreparedStatement from query.
      * @param query The query
@@ -45,13 +44,13 @@ public interface Connexio extends AutoCloseable {
     void autoCommit(boolean enabled) throws Exception;
 
     /**
-     * Commit a connexio.
+     * Commit a session.
      * @throws Exception if something goes wrong
      */
     void commit() throws Exception;
 
     /**
-     * Rollback a connexio.
+     * Rollback a session.
      * @throws Exception if something goes wrong
      */
     void rollback() throws Exception;
