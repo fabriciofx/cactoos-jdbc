@@ -18,10 +18,9 @@ import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Batch;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
-import com.github.fabriciofx.fake.server.Server;
-import com.github.fabriciofx.fake.server.db.server.H2Server;
+import com.github.fabriciofx.fake.server.RandomName;
+import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.time.LocalDate;
-import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -34,55 +33,64 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class PooledTest {
     @Test
     void pooled() throws Exception {
-        try (Server<DataSource> server = new H2Server()) {
-            server.start();
-            final Source source = new Pooled(new NoAuth(server.resource()));
-            try (Session session = source.session()) {
-                new Update(
-                    session,
-                    new QueryOf(
-                        "CREATE TABLE person (id INT, name VARCHAR(30), created_at DATE, city VARCHAR(20), working BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))"
-                    )
-                ).execute();
-            }
-            try (Session session = source.session()) {
-                new Batch(
-                    session,
-                    new NamedQuery(
-                        "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
-                        new ParamsOf(
-                            new IntParam("id", 1),
-                            new TextParam("name", "Rob Pike"),
-                            new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "San Francisco"),
-                            new BoolParam("working", true),
-                            new DecimalParam("height", "1.86")
-                        ),
-                        new ParamsOf(
-                            new IntParam("id", 2),
-                            new TextParam("name", "Ana Pivot"),
-                            new DateParam("created_at", LocalDate.now()),
-                            new TextParam("city", "Washington"),
-                            new BoolParam("working", false),
-                            new DecimalParam("height", "1.62")
-                        )
-                    )
-                ).execute();
-            }
-            try (Session session = source.session()) {
-                new Assertion<>(
-                    "must select a person name",
-                    new ResultSetAsValue<>(
-                        new Select(
-                            session,
-                            new QueryOf(
-                                "SELECT name FROM person"
-                            )
-                        )
+        final Source source = new Pooled(
+            new NoAuth(
+                new H2Source(
+                    new RandomName().asString()
+                )
+            )
+        );
+        try (Session session = source.session()) {
+            new Update(
+                session,
+                new QueryOf(
+                    """
+                    CREATE TABLE person (id INT, name VARCHAR(30), created_at
+                    DATE, city VARCHAR(20), working BOOLEAN, height
+                    DECIMAL(20,2), PRIMARY KEY (id))
+                    """
+                )
+            ).execute();
+        }
+        try (Session session = source.session()) {
+            new Batch(
+                session,
+                new NamedQuery(
+                    """
+                    INSERT INTO person (id, name, created_at, city, working,
+                    height) VALUES (:id, :name, :created_at, :city, :working,
+                    :height)
+                    """,
+                    new ParamsOf(
+                        new IntParam("id", 1),
+                        new TextParam("name", "Rob Pike"),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", "San Francisco"),
+                        new BoolParam("working", true),
+                        new DecimalParam("height", "1.86")
                     ),
-                    new HasValue<>("Rob Pike")
-                ).affirm();
-            }
+                    new ParamsOf(
+                        new IntParam("id", 2),
+                        new TextParam("name", "Ana Pivot"),
+                        new DateParam("created_at", LocalDate.now()),
+                        new TextParam("city", "Washington"),
+                        new BoolParam("working", false),
+                        new DecimalParam("height", "1.62")
+                    )
+                )
+            ).execute();
+        }
+        try (Session session = source.session()) {
+            new Assertion<>(
+                "must select a person name",
+                new ResultSetAsValue<>(
+                    new Select(
+                        session,
+                        new QueryOf("SELECT name FROM person")
+                    )
+                ),
+                new HasValue<>("Rob Pike")
+            ).affirm();
         }
     }
 }

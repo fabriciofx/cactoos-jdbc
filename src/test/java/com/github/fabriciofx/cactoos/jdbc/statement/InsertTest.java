@@ -10,9 +10,8 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
-import com.github.fabriciofx.fake.server.Server;
-import com.github.fabriciofx.fake.server.db.server.H2Server;
-import javax.sql.DataSource;
+import com.github.fabriciofx.fake.server.RandomName;
+import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -27,30 +26,36 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class InsertTest {
     @Test
     void insert() throws Exception {
-        try (Server<DataSource> server = new H2Server()) {
-            server.start();
-            try (Session session = new NoAuth(server.resource()).session()) {
-                new Update(
-                    session,
-                    new QueryOf(
-                        "CREATE TABLE t01 (id INT, name VARCHAR(50), PRIMARY KEY (id))"
-                    )
-                ).execute();
-                new Assertion<>(
-                    "must insert into table",
-                    new ScalarOf<>(
-                        () -> new Insert(
-                            session,
-                            new NamedQuery(
-                                "INSERT INTO t01 (id, name) VALUES (:id, :name)",
-                                new IntParam("id", 1),
-                                new TextParam("name", "Yegor Bugayenko")
-                            )
-                        ).execute()
-                    ),
-                    new HasValue<>(false)
-                ).affirm();
-            }
+        try (
+            Session session = new NoAuth(
+                new H2Source(
+                    new RandomName().asString()
+                )
+            ).session()
+        ) {
+            new Update(
+                session,
+                new QueryOf(
+                    """
+                    CREATE TABLE t01 (id INT, name VARCHAR(50),
+                    PRIMARY KEY (id))
+                    """
+                )
+            ).execute();
+            new Assertion<>(
+                "must insert into table",
+                new ScalarOf<>(
+                    () -> new Insert(
+                        session,
+                        new NamedQuery(
+                            "INSERT INTO t01 (id, name) VALUES (:id, :name)",
+                            new IntParam("id", 1),
+                            new TextParam("name", "Yegor Bugayenko")
+                        )
+                    ).execute()
+                ),
+                new HasValue<>(false)
+            ).affirm();
         }
     }
 }

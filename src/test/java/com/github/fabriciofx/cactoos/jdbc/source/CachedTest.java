@@ -39,8 +39,6 @@ import org.llorllale.cactoos.matchers.Matches;
 final class CachedTest {
     @Test
     void cacheASelect() throws Exception {
-        final String name = "Rob Pike";
-        final String city = "San Francisco";
         final FakeLogger logger = new FakeLogger();
         final Source source = new Logged(
             new Cached(
@@ -74,9 +72,9 @@ final class CachedTest {
                     :city, :working, :height)
                     """,
                     new IntParam("id", 1),
-                    new TextParam("name", name),
+                    new TextParam("name", "Rob Pike"),
                     new DateParam("created_at", LocalDate.now()),
-                    new TextParam("city", city),
+                    new TextParam("city", "San Francisco"),
                     new BoolParam("working", true),
                     new DecimalParam("height", "1.86")
                 )
@@ -162,8 +160,6 @@ final class CachedTest {
 
     @Test
     void deleteACachedResult() throws Exception {
-        final String name = "Rob Pike";
-        final String city = "San Francisco";
         final FakeLogger logger = new FakeLogger();
         final Source source = new Logged(
             new Cached(
@@ -197,9 +193,9 @@ final class CachedTest {
                     :city, :working, :height)
                     """,
                     new IntParam("id", 1),
-                    new TextParam("name", name),
+                    new TextParam("name", "Rob Pike"),
                     new DateParam("created_at", LocalDate.now()),
-                    new TextParam("city", city),
+                    new TextParam("city", "San Francisco"),
                     new BoolParam("working", true),
                     new DecimalParam("height", "1.86")
                 )

@@ -9,9 +9,8 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
-import com.github.fabriciofx.fake.server.Server;
-import com.github.fabriciofx.fake.server.db.server.H2Server;
-import javax.sql.DataSource;
+import com.github.fabriciofx.fake.server.RandomName;
+import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.cactoos.scalar.ScalarOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -26,29 +25,35 @@ import org.llorllale.cactoos.matchers.HasValue;
 final class KeyedInsertTest {
     @Test
     void insertWithKeys() throws Exception {
-        try (Server<DataSource> server = new H2Server()) {
-            server.start();
-            try (Session session = new NoAuth(server.resource()).session()) {
-                new Update(
-                    session,
-                    new QueryOf(
-                        "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
-                    )
-                ).execute();
-                new Assertion<>(
-                    "must generated key value",
-                    new ScalarOf<>(
-                        () -> new KeyedInsert<>(
-                            session,
-                            new NamedQuery(
-                                "INSERT INTO contact (name) VALUES (:name)",
-                                new TextParam("name", "Leonardo da Vinci")
-                            )
-                        ).execute()
-                    ),
-                    new HasValue<>(1)
-                ).affirm();
-            }
+        try (
+            Session session = new NoAuth(
+                new H2Source(
+                    new RandomName().asString()
+                )
+            ).session()
+        ) {
+            new Update(
+                session,
+                new QueryOf(
+                    """
+                    CREATE TABLE contact (id INT AUTO_INCREMENT, name
+                    VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))
+                    """
+                )
+            ).execute();
+            new Assertion<>(
+                "must generated key value",
+                new ScalarOf<>(
+                    () -> new KeyedInsert<>(
+                        session,
+                        new NamedQuery(
+                            "INSERT INTO contact (name) VALUES (:name)",
+                            new TextParam("name", "Leonardo da Vinci")
+                        )
+                    ).execute()
+                ),
+                new HasValue<>(1)
+            ).affirm();
         }
     }
 }

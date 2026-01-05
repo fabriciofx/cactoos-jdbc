@@ -11,10 +11,8 @@ import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import org.cactoos.scalar.ScalarOf;
-import org.cactoos.text.Concatenated;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
-import org.llorllale.cactoos.matchers.HasString;
 import org.llorllale.cactoos.matchers.IsText;
 import org.llorllale.cactoos.matchers.Matches;
 import org.llorllale.cactoos.matchers.Throws;
@@ -58,10 +56,10 @@ final class NamedQueryTest {
         new Assertion<>(
             "must build a query with many values",
             () -> new NamedQuery(
-                new Concatenated(
-                    "INSERT INTO employee (name, birthday, address, married, salary) ",
-                    "VALUES (:name, :birthday, :address, :married, :salary)"
-                ),
+                """
+                INSERT INTO employee (name, birthday, address, married, salary)
+                VALUES (:name, :birthday, :address, :married, :salary)
+                """,
                 new TextParam("name", "John Wick"),
                 new DateParam("birthday", "1980-08-16"),
                 new TextParam("address", "Boulevard Street, 34"),
@@ -69,10 +67,10 @@ final class NamedQueryTest {
                 new DecimalParam("salary", "13456.00")
             ).sql(),
             new IsText(
-                new Concatenated(
-                    "INSERT INTO employee (name, birthday, address, married, salary) ",
-                    "VALUES (?, ?, ?, ?, ?)"
-                )
+                """
+                INSERT INTO employee (name, birthday, address, married, salary)
+                VALUES (?, ?, ?, ?, ?)
+                """
             )
         ).affirm();
     }
@@ -85,10 +83,11 @@ final class NamedQueryTest {
             new Matches<>(
                 new ScalarOf<>(
                     () -> new NamedQuery(
-                        new Concatenated(
-                            "INSERT INTO employee (name, birthday, address, married, salary) ",
-                            "VALUES (:name, :birthday, :address, :married, :salary)"
-                        ),
+                        """
+                        INSERT INTO employee (name, birthday, address, married,
+                        salary) VALUES (:name, :birthday, :address, :married,
+                        :salary)
+                        """,
                         new TextParam("name", "John Wick"),
                         new DateParam("address", "1980-08-16"),
                         new TextParam("birthday", "Boulevard Street, 34"),
@@ -105,11 +104,11 @@ final class NamedQueryTest {
         new Assertion<>(
             "must parse a query for all columns",
             () -> new NamedQuery(
-                new Concatenated(
-                    "INSERT INTO employee (id, name, birthday, address, ",
-                    "married, salary) VALUES (:id, :name, :birthday, ",
-                    ":address, :married, :salary)"
-                ),
+                """
+                INSERT INTO employee (id, name, birthday, address, married,
+                salary) VALUES (:id, :name, :birthday, :address, :married, \
+                :salary)
+                """,
                 new ParamsOf(
                     new IntParam("id", 1),
                     new TextParam("name", "John Wick"),
@@ -119,11 +118,11 @@ final class NamedQueryTest {
                     new DecimalParam("salary", "13456.00")
                 )
             ).sql(),
-            new HasString(
-                new Concatenated(
-                    "INSERT INTO employee (id, name, birthday, address, ",
-                    "married, salary) VALUES (?, ?, ?, ?, ?, ?)"
-                )
+            new IsText(
+                """
+                INSERT INTO employee (id, name, birthday, address, married,
+                salary) VALUES (?, ?, ?, ?, ?, ?)
+                """
             )
         ).affirm();
     }

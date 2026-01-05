@@ -36,7 +36,11 @@ final class ResultSetAsValueTest {
                 new Update(
                     session,
                     new QueryOf(
-                        "CREATE TABLE contact (id INT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY KEY(id))"
+                        """
+                        CREATE TABLE contact (id INT AUTO_INCREMENT, name
+                        VARCHAR(50) NOT NULL, CONSTRAINT pk_contact PRIMARY
+                        KEY(id))
+                        """
                     )
                 ).execute();
                 new Insert(

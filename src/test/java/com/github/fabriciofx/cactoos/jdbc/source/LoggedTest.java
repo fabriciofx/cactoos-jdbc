@@ -36,7 +36,7 @@ final class LoggedTest {
         sessiona.close();
         sessionb.close();
         new Assertion<>(
-            "must log sessions",
+            "must log source and sessions",
             new TextOf(logger.toString()),
             new IsText(
                 new Joined(
