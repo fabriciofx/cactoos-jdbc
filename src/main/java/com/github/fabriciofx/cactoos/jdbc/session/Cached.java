@@ -11,7 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.Symmetric;
-import com.github.fabriciofx.cactoos.jdbc.sql.StatementKind;
+import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import javax.sql.rowset.CachedRowSet;
@@ -50,8 +50,9 @@ public final class Cached implements Session {
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
         final PreparedStatement prepared;
-        switch (new StatementKind(plan.query().sql()).value()) {
+        switch (new QueryKind(plan.query()).value()) {
             case SELECT:
+            case WITH:
                 prepared =
                     new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                         this.origin.prepared(plan),

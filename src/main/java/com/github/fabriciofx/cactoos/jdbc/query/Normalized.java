@@ -20,7 +20,10 @@ import org.cactoos.text.Sticky;
 
 /**
  * Normalized.
- * A decorator for {@link Query} that transform a query into its canonical form.
+ * <p>
+ * A decorator for {@link Query} that transform a select query into its
+ * canonical form.
+ *
  * @since 0.9.0
  */
 public final class Normalized implements Query {
@@ -36,57 +39,47 @@ public final class Normalized implements Query {
 
     /**
      * Ctor.
+     *
      * @param query A query
      */
     public Normalized(final Query query) {
         this.origin = query;
         this.code = new Sticky(
             () -> {
-                final String result;
-                if (query.sql().startsWith("SELECT")
-                    || query.sql().startsWith("WITH")
-                ) {
-                    final SqlParser.Config config = SqlParser.config()
-                        .withConformance(SqlConformanceEnum.DEFAULT)
-                        .withQuoting(Quoting.BACK_TICK);
-                    final SqlParser parser = SqlParser.create(
-                        query.sql(),
-                        config
-                    );
-                    final SqlNode stmt = parser.parseStmt();
-                    final SqlSelect select;
-                    if (stmt.getKind() == SqlKind.SELECT) {
-                        select = (SqlSelect) stmt;
-                    } else if (stmt.getKind() == SqlKind.WITH) {
-                        select = (SqlSelect) ((SqlWith) stmt).body;
-                    } else {
-                        throw new IllegalArgumentException(
-                            "This query is not a SELECT statement"
-                        );
-                    }
-                    final SqlSelect canonical = new SqlSelect(
-                        select.getParserPosition(),
-                        new SqlNodeList(select.getParserPosition()),
-                        SqlNodeList.SINGLETON_STAR,
-                        select.getFrom(),
-                        select.getWhere(),
-                        select.getGroup(),
-                        select.getHaving(),
-                        select.getWindowList(),
-                        select.getQualify(),
-                        select.getOrderList(),
-                        select.getOffset(),
-                        select.getFetch(),
-                        select.getHints()
-                    );
-                    canonical.setOrderBy(null);
-                    canonical.setOffset(null);
-                    canonical.setFetch(null);
-                    result = new Pretty(canonical).asString();
+                final SqlParser.Config config = SqlParser.config()
+                    .withConformance(SqlConformanceEnum.DEFAULT)
+                    .withQuoting(Quoting.BACK_TICK);
+                final SqlParser parser = SqlParser.create(query.sql(), config);
+                final SqlNode stmt = parser.parseStmt();
+                final SqlSelect select;
+                if (stmt.getKind() == SqlKind.SELECT) {
+                    select = (SqlSelect) stmt;
+                } else if (stmt.getKind() == SqlKind.WITH) {
+                    select = (SqlSelect) ((SqlWith) stmt).body;
                 } else {
-                    result = query.sql();
+                    throw new IllegalArgumentException(
+                        "This query is not a SELECT statement"
+                    );
                 }
-                return result;
+                final SqlSelect canonical = new SqlSelect(
+                    select.getParserPosition(),
+                    new SqlNodeList(select.getParserPosition()),
+                    SqlNodeList.SINGLETON_STAR,
+                    select.getFrom(),
+                    select.getWhere(),
+                    select.getGroup(),
+                    select.getHaving(),
+                    select.getWindowList(),
+                    select.getQualify(),
+                    select.getOrderList(),
+                    select.getOffset(),
+                    select.getFetch(),
+                    select.getHints()
+                );
+                canonical.setOrderBy(null);
+                canonical.setOffset(null);
+                canonical.setFetch(null);
+                return new Pretty(canonical).asString();
             }
         );
     }

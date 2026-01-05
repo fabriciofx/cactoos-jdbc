@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.sql;
 
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.util.Locale;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlKind;
@@ -12,43 +13,37 @@ import org.apache.calcite.sql.SqlWith;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Scalar;
-import org.cactoos.Text;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.Trimmed;
 import org.cactoos.text.Upper;
 
 /**
- * StatementKind.
+ * QueryKind.
  * @since 0.9.0
  */
-public final class StatementKind implements Scalar<SqlKind> {
+public final class QueryKind implements Scalar<SqlKind> {
     /**
-     * The query.
+     * Query.
      */
-    private final Text sql;
+    private final Query query;
 
     /**
      * Ctor.
      *
-     * @param sql The query
+     * @param query A {@link Query}
      */
-    public StatementKind(final String sql) {
-        this(new TextOf(sql));
-    }
-
-    /**
-     * Ctor.
-     *
-     * @param sql The query
-     */
-    public StatementKind(final Text sql) {
-        this.sql = sql;
+    public QueryKind(final Query query) {
+        this.query = query;
     }
 
     @Override
     public SqlKind value() throws Exception {
-        final String normalized = new Upper(new Trimmed(this.sql), Locale.ROOT)
-            .asString();
+        final String normalized = new Upper(
+            new Trimmed(
+                new TextOf(this.query.sql())
+            ),
+            Locale.ROOT
+        ).asString();
         SqlKind kind;
         if (normalized.startsWith("CREATE TABLE")) {
             kind = SqlKind.CREATE_TABLE;
@@ -56,10 +51,7 @@ public final class StatementKind implements Scalar<SqlKind> {
             final SqlParser.Config config = SqlParser.config()
                 .withConformance(SqlConformanceEnum.DEFAULT)
                 .withQuoting(Quoting.BACK_TICK);
-            final SqlParser parser = SqlParser.create(
-                this.sql.asString(),
-                config
-            );
+            final SqlParser parser = SqlParser.create(normalized, config);
             final SqlNode stmt = parser.parseStmt();
             kind = stmt.getKind();
             if (kind == SqlKind.WITH) {

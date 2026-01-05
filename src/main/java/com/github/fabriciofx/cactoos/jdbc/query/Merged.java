@@ -17,7 +17,9 @@ import org.cactoos.text.Sticky;
 
 /**
  * Merged.
+ * <p>
  * A decorator for {@link Query} that inlines parameter values into a query.
+ *
  * @since 0.9.0
  */
 public final class Merged implements Query {
@@ -33,30 +35,20 @@ public final class Merged implements Query {
 
     /**
      * Ctor.
+     *
      * @param query A {@link Query}
      */
     public Merged(final Query query) {
         this.origin = query;
         this.code = new Sticky(
             () -> {
-                final String result;
-                if (query.sql().startsWith("CREATE")) {
-                    result = query.sql();
-                } else {
-                    final SqlParser.Config config = SqlParser.config()
-                        .withConformance(SqlConformanceEnum.DEFAULT)
-                        .withQuoting(Quoting.BACK_TICK);
-                    final SqlParser parser = SqlParser.create(
-                        query.sql(),
-                        config
-                    );
-                    final SqlNode stmt = parser.parseStmt();
-                    final SqlNode replaced = stmt.accept(
-                        new MergeShuttle(query)
-                    );
-                    result = new Pretty(replaced).asString();
-                }
-                return result;
+                final SqlParser.Config config = SqlParser.config()
+                    .withConformance(SqlConformanceEnum.DEFAULT)
+                    .withQuoting(Quoting.BACK_TICK);
+                final SqlParser parser = SqlParser.create(query.sql(), config);
+                final SqlNode stmt = parser.parseStmt();
+                final SqlNode replaced = stmt.accept(new MergeShuttle(query));
+                return new Pretty(replaced).asString();
             }
         );
     }

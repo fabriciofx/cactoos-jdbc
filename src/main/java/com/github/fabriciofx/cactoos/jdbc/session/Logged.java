@@ -8,12 +8,16 @@ import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
+import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.calcite.sql.SqlKind;
+import org.cactoos.scalar.Ternary;
 import org.cactoos.text.FormattedText;
+import org.cactoos.text.Joined;
 import org.cactoos.text.UncheckedText;
 
 /**
@@ -88,15 +92,29 @@ public final class Logged implements Session {
             this.level,
             this.statements.incrementAndGet()
         );
+        final SqlKind kind = new QueryKind(plan.query()).value();
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] PreparedStatement[#%d] created using query: '%s'.\n    Stored query: '%s'\n       Cache key: '%s'",
+                new Joined(
+                    "\n",
+                    "[%s] PreparedStatement[#%d] created using query: '%s'.",
+                    "    Stored query: '%s'",
+                    "       Cache key: '%s'"
+                ),
                 this.from,
                 this.statements.get(),
                 plan.query().sql(),
-                new Normalized(plan.query()).sql(),
-                new Normalized(new Merged(plan.query())).sql()
+                new Ternary<>(
+                    kind == SqlKind.SELECT || kind == SqlKind.WITH,
+                    () -> new Normalized(plan.query()).sql(),
+                    () -> plan.query().sql()
+                ).value(),
+                new Ternary<>(
+                    kind == SqlKind.SELECT || kind == SqlKind.WITH,
+                    () -> new Normalized(new Merged(plan.query())).sql(),
+                    () -> plan.query().sql()
+                ).value()
             ).asString()
         );
         return prepared;

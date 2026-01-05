@@ -50,12 +50,7 @@ public final class Symmetric implements Query {
                     query.sql(),
                     config
                 );
-                final SqlNode stmt = parser.parseStmt();
-                if (!(stmt instanceof final SqlDelete delete)) {
-                    throw new IllegalArgumentException(
-                        "This query is not a DELETE statement"
-                    );
-                }
+                final SqlDelete delete = (SqlDelete) parser.parseStmt();
                 final SqlNode from = delete.getTargetTable();
                 final SqlNode where = delete.getCondition();
                 final SqlSelect select = new SqlSelect(
