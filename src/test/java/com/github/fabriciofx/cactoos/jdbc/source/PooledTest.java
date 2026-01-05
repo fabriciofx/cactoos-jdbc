@@ -12,7 +12,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Batch;
@@ -28,6 +28,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Pooled tests.
+ *
  * @since 0.9.0
  */
 final class PooledTest {
@@ -47,25 +48,23 @@ final class PooledTest {
             try (Session session = source.session()) {
                 new Batch(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
-                            new ParamsOf(
-                                new IntParam("id", 1),
-                                new TextParam("name", "Rob Pike"),
-                                new DateParam("created_at", LocalDate.now()),
-                                new TextParam("city", "San Francisco"),
-                                new BoolParam("working", true),
-                                new DecimalParam("height", "1.86")
-                            ),
-                            new ParamsOf(
-                                new IntParam("id", 2),
-                                new TextParam("name", "Ana Pivot"),
-                                new DateParam("created_at", LocalDate.now()),
-                                new TextParam("city", "Washington"),
-                                new BoolParam("working", false),
-                                new DecimalParam("height", "1.62")
-                            )
+                    new NamedQuery(
+                        "INSERT INTO person (id, name, created_at, city, working, height) VALUES (:id, :name, :created_at, :city, :working, :height)",
+                        new ParamsOf(
+                            new IntParam("id", 1),
+                            new TextParam("name", "Rob Pike"),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "San Francisco"),
+                            new BoolParam("working", true),
+                            new DecimalParam("height", "1.86")
+                        ),
+                        new ParamsOf(
+                            new IntParam("id", 2),
+                            new TextParam("name", "Ana Pivot"),
+                            new DateParam("created_at", LocalDate.now()),
+                            new TextParam("city", "Washington"),
+                            new BoolParam("working", false),
+                            new DecimalParam("height", "1.62")
                         )
                     )
                 ).execute();

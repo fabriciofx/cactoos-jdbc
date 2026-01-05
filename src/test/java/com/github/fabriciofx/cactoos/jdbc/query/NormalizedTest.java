@@ -13,6 +13,7 @@ import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * Normalized tests.
+ *
  * @since 0.9.0
  */
 final class NormalizedTest {
@@ -32,11 +33,9 @@ final class NormalizedTest {
         new Assertion<>(
             "must normalize a select with where",
             () -> new Normalized(
-                new Named(
-                    new QueryOf(
-                        "SELECT id, name FROM person WHERE id = :id",
-                        new IntParam("id", 1)
-                    )
+                new NamedQuery(
+                    "SELECT id, name FROM person WHERE id = :id",
+                    new IntParam("id", 1)
                 )
             ).sql(),
             new IsText("SELECT * FROM `PERSON` WHERE `ID` = ?")

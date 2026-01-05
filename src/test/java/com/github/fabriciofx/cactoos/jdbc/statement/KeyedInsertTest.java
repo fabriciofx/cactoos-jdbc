@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -19,6 +19,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * KeyedInsert tests.
+ *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
@@ -39,11 +40,9 @@ final class KeyedInsertTest {
                     new ScalarOf<>(
                         () -> new KeyedInsert<>(
                             session,
-                            new Named(
-                                new QueryOf(
-                                    "INSERT INTO contact (name) VALUES (:name)",
-                                    new TextParam("name", "Leonardo da Vinci")
-                                )
+                            new NamedQuery(
+                                "INSERT INTO contact (name) VALUES (:name)",
+                                new TextParam("name", "Leonardo da Vinci")
                             )
                         ).execute()
                     ),

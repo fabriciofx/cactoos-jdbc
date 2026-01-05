@@ -11,8 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phonebook;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import java.sql.ResultSet;
@@ -49,12 +48,10 @@ public final class SqlPhonebook implements Phonebook {
         try (Session session = this.source.session()) {
             new Insert(
                 session,
-                new Named(
-                    new QueryOf(
-                        "INSERT INTO contact (id, name) VALUES (:id, :name)",
-                        new UuidParam("id", id),
-                        new TextParam("name", name)
-                    )
+                new NamedQuery(
+                    "INSERT INTO contact (id, name) VALUES (:id, :name)",
+                    new UuidParam("id", id),
+                    new TextParam("name", name)
                 )
             ).execute();
         }
@@ -67,11 +64,9 @@ public final class SqlPhonebook implements Phonebook {
         try (Session session = this.source.session()) {
             final Select select = new Select(
                 session,
-                new Named(
-                    new QueryOf(
-                        "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
-                        new TextParam("name", new Lowered(name))
-                    )
+                new NamedQuery(
+                    "SELECT id FROM contact WHERE LOWER(name) LIKE '%' || :name || '%'",
+                    new TextParam("name", new Lowered(name))
                 )
             );
             try (ResultSet rset = select.execute()) {

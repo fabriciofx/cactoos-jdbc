@@ -8,7 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Batch tests.
+ *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
@@ -36,27 +37,25 @@ final class BatchTest {
                 ).execute();
                 new Batch(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
-                            new ParamsOf(
-                                new IntParam("id", 1),
-                                new TextParam("name", "Jeff Bridges"),
-                                // @checkstyle MagicNumber (1 line)
-                                new IntParam("age", 34)
-                            ),
-                            new ParamsOf(
-                                new IntParam("id", 2),
-                                new TextParam("name", "Anna Miller"),
-                                // @checkstyle MagicNumber (1 line)
-                                new IntParam("age", 26)
-                            ),
-                            new ParamsOf(
-                                // @checkstyle MagicNumber (3 lines)
-                                new IntParam("id", 3),
-                                new TextParam("name", "Michal Douglas"),
-                                new IntParam("age", 32)
-                            )
+                    new NamedQuery(
+                        "INSERT INTO client (id, name, age) VALUES (:id, :name, :age)",
+                        new ParamsOf(
+                            new IntParam("id", 1),
+                            new TextParam("name", "Jeff Bridges"),
+                            // @checkstyle MagicNumber (1 line)
+                            new IntParam("age", 34)
+                        ),
+                        new ParamsOf(
+                            new IntParam("id", 2),
+                            new TextParam("name", "Anna Miller"),
+                            // @checkstyle MagicNumber (1 line)
+                            new IntParam("age", 26)
+                        ),
+                        new ParamsOf(
+                            // @checkstyle MagicNumber (3 lines)
+                            new IntParam("id", 3),
+                            new TextParam("name", "Michal Douglas"),
+                            new IntParam("age", 32)
                         )
                     )
                 ).execute();

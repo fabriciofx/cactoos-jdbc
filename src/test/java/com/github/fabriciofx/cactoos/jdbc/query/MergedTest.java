@@ -16,6 +16,7 @@ import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * Merged tests.
+ *
  * @since 0.9.0
  */
 final class MergedTest {
@@ -24,11 +25,9 @@ final class MergedTest {
         new Assertion<>(
             "must merge a select",
             () -> new Merged(
-                new Named(
-                    new QueryOf(
-                        "SELECT id, name FROM person WHERE id = :id",
-                        new IntParam("id", 1)
-                    )
+                new NamedQuery(
+                    "SELECT id, name FROM person WHERE id = :id",
+                    new IntParam("id", 1)
                 )
             ).sql(),
             new IsText("SELECT `ID`, `NAME` FROM `PERSON` WHERE `ID` = 1")
@@ -40,20 +39,18 @@ final class MergedTest {
         new Assertion<>(
             "must merge an insert",
             () -> new Merged(
-                new Named(
-                    new QueryOf(
-                        new Concatenated(
-                            "INSERT INTO employee (id, name, birthday, ",
-                            "address, married, salary) VALUES (:id, :name, ",
-                            ":birthday, :address, :married, :salary)"
-                        ),
-                        new IntParam("id", 1),
-                        new TextParam("name", "John Wick"),
-                        new DateParam("birthday", "1980-08-15"),
-                        new TextParam("address", "Boulevard Street, 34"),
-                        new BoolParam("married", false),
-                        new DecimalParam("salary", "13456.00")
-                    )
+                new NamedQuery(
+                    new Concatenated(
+                        "INSERT INTO employee (id, name, birthday, ",
+                        "address, married, salary) VALUES (:id, :name, ",
+                        ":birthday, :address, :married, :salary)"
+                    ),
+                    new IntParam("id", 1),
+                    new TextParam("name", "John Wick"),
+                    new DateParam("birthday", "1980-08-15"),
+                    new TextParam("address", "Boulevard Street, 34"),
+                    new BoolParam("married", false),
+                    new DecimalParam("salary", "13456.00")
                 )
             ).sql(),
             new IsText(

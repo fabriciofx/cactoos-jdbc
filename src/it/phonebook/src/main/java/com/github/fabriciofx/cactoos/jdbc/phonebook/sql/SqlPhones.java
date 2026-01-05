@@ -10,8 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
@@ -56,11 +55,9 @@ public final class SqlPhones implements Phones {
             return new ResultSetAsValue<Integer>(
                 new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
-                            new UuidParam("contact_id", this.id)
-                        )
+                    new NamedQuery(
+                        "SELECT COUNT(number) FROM phone WHERE contact_id = :contact_id",
+                        new UuidParam("contact_id", this.id)
                     )
                 )
             ).value();
@@ -73,13 +70,12 @@ public final class SqlPhones implements Phones {
             final Scalar<String> number = new ResultSetAsValue<>(
                 new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            new FormattedText(
-                                "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
-                                index
-                            )
-                        )
+                    new NamedQuery(
+                        new FormattedText(
+                            "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
+                            index
+                        ),
+                        new UuidParam("contact_id", this.id)
                     )
                 )
             );
@@ -95,13 +91,11 @@ public final class SqlPhones implements Phones {
         try (Session session = this.source.session()) {
             new Insert(
                 session,
-                new Named(
-                    new QueryOf(
-                        "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
-                        new UuidParam("contact_id", this.id),
-                        new TextParam("number", number),
-                        new TextParam("carrier", carrier)
-                    )
+                new NamedQuery(
+                    "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", number),
+                    new TextParam("carrier", carrier)
                 )
             ).execute();
         }

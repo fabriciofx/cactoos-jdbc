@@ -9,8 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
@@ -63,11 +62,9 @@ public final class SqlPhone implements Phone {
             return new ResultSetAsXml(
                 new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
-                            new UuidParam("contact_id", this.id)
-                        )
+                    new NamedQuery(
+                        "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
+                        new UuidParam("contact_id", this.id)
                     )
                 ),
                 "phones",
@@ -81,12 +78,10 @@ public final class SqlPhone implements Phone {
         try (Session session = this.source.session()) {
             new Update(
                 session,
-                new Named(
-                    new QueryOf(
-                        "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
-                        new UuidParam("contact_id", this.id),
-                        new TextParam("number", this.num)
-                    )
+                new NamedQuery(
+                    "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", this.num)
                 )
             ).execute();
         }
@@ -100,14 +95,12 @@ public final class SqlPhone implements Phone {
         try (Session session = this.source.session()) {
             new Update(
                 session,
-                new Named(
-                    new QueryOf(
-                        "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
-                        new TextParam("number", number),
-                        new TextParam("carrier", carrier),
-                        new UuidParam("contact_id", this.id),
-                        new TextParam("number", this.num)
-                    )
+                new NamedQuery(
+                    "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
+                    new TextParam("number", number),
+                    new TextParam("carrier", carrier),
+                    new UuidParam("contact_id", this.id),
+                    new TextParam("number", this.num)
                 )
             ).execute();
         }

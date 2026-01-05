@@ -11,8 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.UuidParam;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Phones;
 import com.github.fabriciofx.cactoos.jdbc.phonebook.scalar.ContactAsXml;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.util.UUID;
@@ -55,14 +54,12 @@ public final class SqlContact implements Contact {
             return new ContactAsXml(
                 new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            new Concatenated(
-                                "SELECT name, number, carrier FROM contact INNER JOIN ",
-                                "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
-                            ),
-                            new UuidParam("id", this.id)
-                        )
+                    new NamedQuery(
+                        new Concatenated(
+                            "SELECT name, number, carrier FROM contact INNER JOIN ",
+                            "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
+                        ),
+                        new UuidParam("id", this.id)
                     )
                 )
             ).value();
@@ -79,11 +76,9 @@ public final class SqlContact implements Contact {
         try (Session session = this.source.session()) {
             new Update(
                 session,
-                new Named(
-                    new QueryOf(
-                        "DELETE FROM contact WHERE id = :id",
-                        new UuidParam("id", this.id)
-                    )
+                new NamedQuery(
+                    "DELETE FROM contact WHERE id = :id",
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }
@@ -94,12 +89,10 @@ public final class SqlContact implements Contact {
         try (Session session = this.source.session()) {
             new Update(
                 session,
-                new Named(
-                    new QueryOf(
-                        "UPDATE contact SET name = :name WHERE id = :id",
-                        new TextParam("name", name),
-                        new UuidParam("id", this.id)
-                    )
+                new NamedQuery(
+                    "UPDATE contact SET name = :name WHERE id = :id",
+                    new TextParam("name", name),
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }

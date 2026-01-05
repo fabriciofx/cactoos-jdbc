@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
@@ -20,6 +20,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Insert tests.
+ *
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
@@ -40,12 +41,10 @@ final class InsertTest {
                     new ScalarOf<>(
                         () -> new Insert(
                             session,
-                            new Named(
-                                new QueryOf(
-                                    "INSERT INTO t01 (id, name) VALUES (:id, :name)",
-                                    new IntParam("id", 1),
-                                    new TextParam("name", "Yegor Bugayenko")
-                                )
+                            new NamedQuery(
+                                "INSERT INTO t01 (id, name) VALUES (:id, :name)",
+                                new IntParam("id", 1),
+                                new TextParam("name", "Yegor Bugayenko")
                             )
                         ).execute()
                     ),

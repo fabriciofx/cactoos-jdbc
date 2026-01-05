@@ -15,7 +15,7 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Unchecked;
 
 /**
- * Named Query Params.
+ * NamedQuery Params.
  *
  * <p>There is no thread-safety guarantee.
  *

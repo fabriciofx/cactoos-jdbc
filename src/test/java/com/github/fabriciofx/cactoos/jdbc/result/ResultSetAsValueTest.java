@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.result;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
@@ -23,6 +23,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * ResultSetAsValue tests.
+ *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
@@ -40,11 +41,9 @@ final class ResultSetAsValueTest {
                 ).execute();
                 new Insert(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "INSERT INTO contact (name) VALUES (:name)",
-                            new TextParam("name", "Joseph Klimber")
-                        )
+                    new NamedQuery(
+                        "INSERT INTO contact (name) VALUES (:name)",
+                        new TextParam("name", "Joseph Klimber")
                     )
                 ).execute();
                 new Assertion<>(
@@ -52,11 +51,9 @@ final class ResultSetAsValueTest {
                     new ResultSetAsValue<>(
                         new Select(
                             session,
-                            new Named(
-                                new QueryOf(
-                                    "SELECT name FROM contact WHERE id = :id",
-                                    new IntParam("id", 1)
-                                )
+                            new NamedQuery(
+                                "SELECT name FROM contact WHERE id = :id",
+                                new IntParam("id", 1)
                             )
                         )
                     ),

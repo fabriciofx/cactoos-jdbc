@@ -12,7 +12,7 @@ import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
@@ -67,30 +67,26 @@ final class CachedTest {
             ).execute();
             new Insert(
                 session,
-                new Named(
-                    new QueryOf(
-                        """
-                        INSERT INTO person (id, name, created_at, city,
-                        working, height) VALUES (:id, :name, :created_at,
-                        :city, :working, :height)
-                        """,
-                        new IntParam("id", 1),
-                        new TextParam("name", name),
-                        new DateParam("created_at", LocalDate.now()),
-                        new TextParam("city", city),
-                        new BoolParam("working", true),
-                        new DecimalParam("height", "1.86")
-                    )
+                new NamedQuery(
+                    """
+                    INSERT INTO person (id, name, created_at, city,
+                    working, height) VALUES (:id, :name, :created_at,
+                    :city, :working, :height)
+                    """,
+                    new IntParam("id", 1),
+                    new TextParam("name", name),
+                    new DateParam("created_at", LocalDate.now()),
+                    new TextParam("city", city),
+                    new BoolParam("working", true),
+                    new DecimalParam("height", "1.86")
                 )
             ).execute();
             try (
                 ResultSet rset = new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT name FROM person WHERE id = :id",
-                            new IntParam("id", 1)
-                        )
+                    new NamedQuery(
+                        "SELECT name FROM person WHERE id = :id",
+                        new IntParam("id", 1)
                     )
                 ).execute()
             ) {
@@ -101,11 +97,9 @@ final class CachedTest {
             try (
                 ResultSet rset = new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT city FROM person WHERE id = :id",
-                            new IntParam("id", 1)
-                        )
+                    new NamedQuery(
+                        "SELECT city FROM person WHERE id = :id",
+                        new IntParam("id", 1)
                     )
                 ).execute()
             ) {
@@ -196,48 +190,42 @@ final class CachedTest {
             ).execute();
             new Insert(
                 session,
-                new Named(
-                    new QueryOf(
-                        """
-                        INSERT INTO person (id, name, created_at, city,
-                        working, height) VALUES (:id, :name, :created_at,
-                        :city, :working, :height)
-                        """,
-                        new IntParam("id", 1),
-                        new TextParam("name", name),
-                        new DateParam("created_at", LocalDate.now()),
-                        new TextParam("city", city),
-                        new BoolParam("working", true),
-                        new DecimalParam("height", "1.86")
-                    )
+                new NamedQuery(
+                    """
+                    INSERT INTO person (id, name, created_at, city,
+                    working, height) VALUES (:id, :name, :created_at,
+                    :city, :working, :height)
+                    """,
+                    new IntParam("id", 1),
+                    new TextParam("name", name),
+                    new DateParam("created_at", LocalDate.now()),
+                    new TextParam("city", city),
+                    new BoolParam("working", true),
+                    new DecimalParam("height", "1.86")
                 )
             ).execute();
             new Insert(
                 session,
-                new Named(
-                    new QueryOf(
-                        """
-                        INSERT INTO person (id, name, created_at, city,
-                        working, height) VALUES (:id, :name, :created_at,
-                        :city, :working, :height)
-                        """,
-                        new IntParam("id", 2),
-                        new TextParam("name", "Maria Souza"),
-                        new DateParam("created_at", LocalDate.now()),
-                        new TextParam("city", "New York"),
-                        new BoolParam("working", false),
-                        new DecimalParam("height", "1.62")
-                    )
+                new NamedQuery(
+                    """
+                    INSERT INTO person (id, name, created_at, city,
+                    working, height) VALUES (:id, :name, :created_at,
+                    :city, :working, :height)
+                    """,
+                    new IntParam("id", 2),
+                    new TextParam("name", "Maria Souza"),
+                    new DateParam("created_at", LocalDate.now()),
+                    new TextParam("city", "New York"),
+                    new BoolParam("working", false),
+                    new DecimalParam("height", "1.62")
                 )
             ).execute();
             try (
                 ResultSet rset = new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT name FROM person WHERE id = :id",
-                            new IntParam("id", 1)
-                        )
+                    new NamedQuery(
+                        "SELECT name FROM person WHERE id = :id",
+                        new IntParam("id", 1)
                     )
                 ).execute()
             ) {
@@ -248,11 +236,9 @@ final class CachedTest {
             try (
                 ResultSet rset = new Select(
                     session,
-                    new Named(
-                        new QueryOf(
-                            "SELECT city FROM person WHERE id = :id",
-                            new IntParam("id", 1)
-                        )
+                    new NamedQuery(
+                        "SELECT city FROM person WHERE id = :id",
+                        new IntParam("id", 1)
                     )
                 ).execute()
             ) {
@@ -262,11 +248,9 @@ final class CachedTest {
             }
             new Update(
                 session,
-                new Named(
-                    new QueryOf(
-                        "DELETE FROM person WHERE id = :id",
-                        new IntParam("id", 1)
-                    )
+                new NamedQuery(
+                    "DELETE FROM person WHERE id = :id",
+                    new IntParam("id", 1)
                 )
             ).execute();
         }

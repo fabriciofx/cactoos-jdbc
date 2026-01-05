@@ -7,7 +7,6 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
-import com.github.fabriciofx.cactoos.jdbc.query.Named;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -97,7 +96,7 @@ public final class Logged implements Session {
                 this.statements.get(),
                 plan.query().sql(),
                 new Normalized(plan.query()).sql(),
-                new Normalized(new Merged(new Named(plan.query()))).sql()
+                new Normalized(new Merged(plan.query())).sql()
             ).asString()
         );
         return prepared;
