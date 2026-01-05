@@ -25,38 +25,38 @@ public final class ParamsOf implements Params {
     /**
      * Params.
      */
-    private final Unchecked<List<Param>> prms;
+    private final Unchecked<List<Param>> parameters;
 
     /**
      * Ctor.
      * @param params Params
-     * @param prms Array of Param
+     * @param parameters Array of Param
      */
-    public ParamsOf(final Params params, final Param... prms) {
+    public ParamsOf(final Params params, final Param... parameters) {
         this(
             new Joined<Param>(
                 new ListOf<>(params.iterator()),
-                new ListOf<>(prms)
+                new ListOf<>(parameters)
             )
         );
     }
 
     /**
      * Ctor.
-     * @param prms Array of Param
+     * @param parameters Array of Param
      */
-    public ParamsOf(final Param... prms) {
-        this(new ListOf<>(prms));
+    public ParamsOf(final Param... parameters) {
+        this(new ListOf<>(parameters));
     }
 
     /**
      * Ctor.
-     * @param prms List of Param
+     * @param parameters List of Param
      */
-    public ParamsOf(final List<Param> prms) {
-        this.prms = new Unchecked<>(
+    public ParamsOf(final List<Param> parameters) {
+        this.parameters = new Unchecked<>(
             new Sticky<>(
-                () -> prms
+                () -> parameters
             )
         );
     }
@@ -66,7 +66,7 @@ public final class ParamsOf implements Params {
         final PreparedStatement stmt
     ) throws Exception {
         int idx = 1;
-        for (final Param param : this.prms.value()) {
+        for (final Param param : this.parameters.value()) {
             param.prepare(stmt, idx);
             ++idx;
         }
@@ -75,16 +75,16 @@ public final class ParamsOf implements Params {
 
     @Override
     public boolean contains(final String name, final int index) {
-        return this.prms.value().get(index).name().equals(name);
+        return this.parameters.value().get(index).name().equals(name);
     }
 
     @Override
     public Param param(final int index) {
-        return this.prms.value().get(index);
+        return this.parameters.value().get(index);
     }
 
     @Override
     public Iterator<Param> iterator() {
-        return this.prms.value().iterator();
+        return this.parameters.value().iterator();
     }
 }
