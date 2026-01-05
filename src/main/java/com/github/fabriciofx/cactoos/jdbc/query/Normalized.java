@@ -61,7 +61,7 @@ public final class Normalized implements Query {
                         select = (SqlSelect) ((SqlWith) stmt).body;
                     } else {
                         throw new IllegalArgumentException(
-                            "Not a SELECT statement"
+                            "This query is not a SELECT statement"
                         );
                     }
                     final SqlSelect canonical = new SqlSelect(
