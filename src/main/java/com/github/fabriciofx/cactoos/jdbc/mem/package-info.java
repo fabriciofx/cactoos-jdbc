@@ -4,8 +4,8 @@
  */
 
 /**
- * ResultSet.
+ * Memory.
  *
- * @since 0.4
+ * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.rset;
+package com.github.fabriciofx.cactoos.jdbc.mem;
