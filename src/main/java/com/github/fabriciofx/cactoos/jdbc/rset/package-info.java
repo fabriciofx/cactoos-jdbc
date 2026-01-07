@@ -4,7 +4,7 @@
  */
 
 /**
- * SnapshotResultSet.
+ * CachedResultSet.
  *
  * @since 0.9.0
  */

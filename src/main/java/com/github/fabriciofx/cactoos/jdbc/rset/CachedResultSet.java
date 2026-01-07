@@ -32,9 +32,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.cactoos.scalar.Ternary;
 
 /**
- * SnapshotResultSet.
+ * CachedResultSet.
  *
- * <p>An immutable, disconnected, in memory {@link ResultSet}.
+ * <p>A disconnected, in memory {@link ResultSet}.
  *
  * @since 0.9.0
  * @checkstyle MethodCountCheck (2000 lines)
@@ -50,7 +50,7 @@ import org.cactoos.scalar.Ternary;
         "PMD.AvoidDuplicateLiterals"
     }
 )
-public final class SnapshotResultSet implements ResultSet {
+public final class CachedResultSet implements ResultSet {
     /**
      * Rows.
      */
@@ -77,7 +77,7 @@ public final class SnapshotResultSet implements ResultSet {
      * @param rows The {@link Rows}
      * @param columns The {@link Columns}
      */
-    public SnapshotResultSet(final Rows rows, final Columns columns) {
+    public CachedResultSet(final Rows rows, final Columns columns) {
         this.rows = rows;
         this.columns = columns;
         this.cursor = new AtomicInteger(-1);
@@ -109,7 +109,7 @@ public final class SnapshotResultSet implements ResultSet {
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-        return new SnapshotResultSetMetaData(this.columns);
+        return new CachedResultSetMetaData(this.columns);
     }
 
     @Override

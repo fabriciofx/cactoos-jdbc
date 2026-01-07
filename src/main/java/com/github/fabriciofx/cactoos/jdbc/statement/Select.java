@@ -9,7 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
-import com.github.fabriciofx.cactoos.jdbc.rset.SnapshotResultSet;
+import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +48,7 @@ public final class Select implements Statement<ResultSet> {
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final Table table = new LinkedTable(rset);
-                return new SnapshotResultSet(table.rows(), table.columns());
+                return new CachedResultSet(table.rows(), table.columns());
             }
         }
     }

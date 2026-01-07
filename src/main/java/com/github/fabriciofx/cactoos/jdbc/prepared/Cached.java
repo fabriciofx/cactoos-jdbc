@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.prepared;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
-import com.github.fabriciofx.cactoos.jdbc.rset.SnapshotResultSet;
+import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -63,11 +63,11 @@ public final class Cached extends PreparedStatementEnvelope {
             final ResultSet result;
             if (this.cache.contains(this.normalized.sql())) {
                 final Table table = this.cache.retrieve(this.normalized.sql());
-                result = new SnapshotResultSet(table.rows(), table.columns());
+                result = new CachedResultSet(table.rows(), table.columns());
             } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
                     final Table table = new LinkedTable(rset);
-                    result = new SnapshotResultSet(
+                    result = new CachedResultSet(
                         table.rows(),
                         table.columns()
                     );

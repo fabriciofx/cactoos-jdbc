@@ -9,14 +9,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- * SnapshotResultSetMetaData.
+ * CachedResultSetMetaData.
  *
- * An immutable, disconnected, in memory {@link ResultSetMetaData}.
+ * <p>A disconnected, in memory {@link ResultSetMetaData}.
  * @since 0.9.0
  * @checkstyle IllegalCatchCheck (200 lines)
  */
 @SuppressWarnings("PMD.AvoidCatchingGenericException")
-public final class SnapshotResultSetMetaData implements ResultSetMetaData {
+public final class CachedResultSetMetaData implements ResultSetMetaData {
     /**
      * Columns.
      */
@@ -26,7 +26,7 @@ public final class SnapshotResultSetMetaData implements ResultSetMetaData {
      * Ctor.
      * @param columns The columns
      */
-    public SnapshotResultSetMetaData(final Columns columns) {
+    public CachedResultSetMetaData(final Columns columns) {
         this.columns = columns;
     }
 
