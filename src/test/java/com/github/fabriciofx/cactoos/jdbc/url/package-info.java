@@ -4,7 +4,7 @@
  */
 
 /**
- * UrlFromSource tests.
+ * JdbcUrl tests.
  *
  * @since 0.9.0
  */

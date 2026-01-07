@@ -11,20 +11,20 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
- * UrlFromSource tests.
+ * JdbcUrl tests.
  *
  * <p>There is no thread-safety guarantee.
  *
  * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)
  */
-final class UrlFromSourceTest {
+final class JdbcUrlTest {
     @Test
     void url() {
         final String dbname = "testdb";
         new Assertion<>(
             "must get a JDBC url from source",
-            new UrlFromSource(new H2Source(dbname)),
+            new JdbcUrl(new H2Source(dbname)),
             new IsText(new FormattedText("jdbc:h2:mem:%s", dbname))
         ).affirm();
     }
