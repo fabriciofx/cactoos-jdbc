@@ -7,12 +7,12 @@ package com.github.fabriciofx.cactoos.jdbc.statement;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Statement;
+import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
+import com.github.fabriciofx.cactoos.jdbc.rset.SnapshotResultSet;
+import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetFactory;
-import javax.sql.rowset.RowSetProvider;
 
 /**
  * Select statement.
@@ -47,10 +47,8 @@ public final class Select implements Statement<ResultSet> {
             PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
-                final RowSetFactory rsf = RowSetProvider.newFactory();
-                final CachedRowSet crs = rsf.createCachedRowSet();
-                crs.populate(rset);
-                return crs;
+                final Table table = new LinkedTable(rset);
+                return new SnapshotResultSet(table.rows(), table.columns());
             }
         }
     }
