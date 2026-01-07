@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
@@ -14,7 +15,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.Symmetric;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
-import javax.sql.rowset.CachedRowSet;
 
 /**
  * Cached. A decorator for Session that allows caching results.
@@ -31,7 +31,7 @@ public final class Cached implements Session {
     /**
      * Cache.
      */
-    private final Cache<String, CachedRowSet> cache;
+    private final Cache<String, Table> cache;
 
     /**
      * Ctor.
@@ -41,7 +41,7 @@ public final class Cached implements Session {
      */
     public Cached(
         final Session session,
-        final Cache<String, CachedRowSet> cache
+        final Cache<String, Table> cache
     ) {
         this.origin = session;
         this.cache = cache;
@@ -67,10 +67,11 @@ public final class Cached implements Session {
                 break;
             case DELETE:
                 prepared = this.origin.prepared(plan);
-                final CachedRowSet cached = this.cache.delete(
-                    new Symmetric(new Merged(plan.query())).sql()
+                this.cache.delete(
+                    new Symmetric(
+                        new Merged(plan.query())
+                    ).sql()
                 );
-                cached.close();
                 break;
             default:
                 prepared = this.origin.prepared(plan);

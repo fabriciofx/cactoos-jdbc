@@ -5,13 +5,13 @@
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
+import com.github.fabriciofx.cactoos.jdbc.rset.SnapshotResultSet;
+import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetFactory;
-import javax.sql.rowset.RowSetProvider;
 
 /**
  * Cached.
@@ -35,7 +35,7 @@ public final class Cached extends PreparedStatementEnvelope {
     /**
      * The cache.
      */
-    private final Cache<String, CachedRowSet> cache;
+    private final Cache<String, Table> cache;
 
     /**
      * Ctor.
@@ -49,7 +49,7 @@ public final class Cached extends PreparedStatementEnvelope {
         final PreparedStatement origin,
         final PreparedStatement stored,
         final Normalized normalized,
-        final Cache<String, CachedRowSet> cache
+        final Cache<String, Table> cache
     ) {
         super(origin);
         this.stored = stored;
@@ -60,18 +60,21 @@ public final class Cached extends PreparedStatementEnvelope {
     @Override
     public ResultSet executeQuery() throws SQLException {
         try {
-            if (!this.cache.contains(this.normalized.sql())) {
+            final ResultSet result;
+            if (this.cache.contains(this.normalized.sql())) {
+                final Table table = this.cache.retrieve(this.normalized.sql());
+                result = new SnapshotResultSet(table.rows(), table.columns());
+            } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
-                    final RowSetFactory rsf = RowSetProvider.newFactory();
-                    final CachedRowSet crs = rsf.createCachedRowSet();
-                    crs.populate(rset);
-                    this.cache.store(this.normalized.sql(), crs);
+                    final Table table = new LinkedTable(rset);
+                    result = new SnapshotResultSet(
+                        table.rows(),
+                        table.columns()
+                    );
+                    this.cache.store(this.normalized.sql(), table);
                 }
             }
-            final CachedRowSet cached = this.cache.retrieve(
-                this.normalized.sql()
-            );
-            return cached.createCopy();
+            return result;
         } catch (final Exception ex) {
             throw new SQLException(ex);
         }

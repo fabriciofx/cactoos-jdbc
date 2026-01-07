@@ -7,8 +7,8 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.cache.CachedRowSetCache;
-import javax.sql.rowset.CachedRowSet;
+import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
 
 /**
  * Cached.
@@ -24,14 +24,14 @@ public final class Cached implements Source {
     /**
      * Cache.
      */
-    private final Cache<String, CachedRowSet> cache;
+    private final Cache<String, Table> cache;
 
     /**
      * Ctor.
      * @param source The source
      */
     public Cached(final Source source) {
-        this(source, new CachedRowSetCache());
+        this(source, new TableCache());
     }
 
     /**
@@ -41,7 +41,7 @@ public final class Cached implements Source {
      */
     public Cached(
         final Source source,
-        final Cache<String, CachedRowSet> cache
+        final Cache<String, Table> cache
     ) {
         this.origin = source;
         this.cache = cache;
