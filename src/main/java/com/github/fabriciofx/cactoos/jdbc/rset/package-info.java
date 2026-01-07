@@ -4,7 +4,7 @@
  */
 
 /**
- * An immutable, disconnected, in memory {@link java.sql.ResultSet}.
+ * SnapshotResultSet.
  *
  * @since 0.9.0
  */

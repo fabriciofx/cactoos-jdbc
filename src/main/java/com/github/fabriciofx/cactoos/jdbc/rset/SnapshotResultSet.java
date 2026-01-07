@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.cactoos.scalar.Ternary;
 
 /**
- * MemoryResultSet.
+ * SnapshotResultSet.
  *
  * <p>An immutable, disconnected, in memory {@link ResultSet}.
  *
@@ -50,7 +50,7 @@ import org.cactoos.scalar.Ternary;
         "PMD.AvoidDuplicateLiterals"
     }
 )
-public final class MemoryResultSet implements ResultSet {
+public final class SnapshotResultSet implements ResultSet {
     /**
      * Rows.
      */
@@ -77,7 +77,7 @@ public final class MemoryResultSet implements ResultSet {
      * @param rows The {@link Rows}
      * @param columns The {@link Columns}
      */
-    public MemoryResultSet(final Rows rows, final Columns columns) {
+    public SnapshotResultSet(final Rows rows, final Columns columns) {
         this.rows = rows;
         this.columns = columns;
         this.cursor = new AtomicInteger(-1);
@@ -109,7 +109,7 @@ public final class MemoryResultSet implements ResultSet {
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-        return new MemoryResultSetMetaData(this.columns);
+        return new SnapshotResultSetMetaData(this.columns);
     }
 
     @Override
