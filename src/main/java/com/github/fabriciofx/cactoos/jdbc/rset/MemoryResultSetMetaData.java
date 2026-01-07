@@ -2,36 +2,37 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.mem;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
+import com.github.fabriciofx.cactoos.jdbc.Columns;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * MemoryResultSetMetaData.
  *
  * An immutable, disconnected, in memory {@link ResultSetMetaData}.
  * @since 0.9.0
+ * @checkstyle IllegalCatchCheck (200 lines)
  */
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class MemoryResultSetMetaData implements ResultSetMetaData {
     /**
      * Columns.
      */
-    private final Map<String, Integer> columns;
+    private final Columns columns;
 
     /**
      * Ctor.
      * @param columns The columns
      */
-    public MemoryResultSetMetaData(final Map<String, Integer> columns) {
+    public MemoryResultSetMetaData(final Columns columns) {
         this.columns = columns;
     }
 
     @Override
     public int getColumnCount() throws SQLException {
-        return this.columns.size();
+        return this.columns.count();
     }
 
     @Override
@@ -85,22 +86,20 @@ public final class MemoryResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnLabel(final int column) throws SQLException {
-        if (column < 1 || column > this.columns.size()) {
-            throw new SQLException(
-                String.format("Column index out of bounds: %d", column)
-            );
+        try {
+            return this.columns.name(column);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
         }
-        return new ArrayList<>(this.columns.keySet()).get(column - 1);
     }
 
     @Override
     public String getColumnName(final int column) throws SQLException {
-        if (column < 1 || column > this.columns.size()) {
-            throw new SQLException(
-                String.format("Column index out of bounds: %d", column)
-            );
+        try {
+            return this.columns.name(column);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
         }
-        return new ArrayList<>(this.columns.keySet()).get(column - 1);
     }
 
     @Override
@@ -140,12 +139,11 @@ public final class MemoryResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getColumnType(final int column) throws SQLException {
-        if (column < 1 || column > this.columns.size()) {
-            throw new SQLException(
-                String.format("Column index out of bounds: %d", column)
-            );
+        try {
+            return this.columns.type(this.columns.name(column));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
         }
-        return this.columns.get(this.getColumnName(column));
     }
 
     @Override

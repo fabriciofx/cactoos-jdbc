@@ -2,8 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.mem;
+package com.github.fabriciofx.cactoos.jdbc.rset;
 
+import com.github.fabriciofx.cactoos.jdbc.Columns;
+import com.github.fabriciofx.cactoos.jdbc.Rows;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -23,31 +25,41 @@ import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.cactoos.scalar.Ternary;
 
 /**
  * MemoryResultSet.
  *
- * An immutable, disconnected, in memory {@link ResultSet}.
+ * <p>An immutable, disconnected, in memory {@link ResultSet}.
+ *
  * @since 0.9.0
  * @checkstyle MethodCountCheck (2000 lines)
+ * @checkstyle IllegalCatchCheck (2000 lines)
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessivePublicCount"})
+@SuppressWarnings(
+    {
+        "PMD.TooManyMethods",
+        "PMD.ExcessivePublicCount",
+        "PMD.AvoidCatchingGenericException",
+        "PMD.CouplingBetweenObjects",
+        "PMD.GodClass",
+        "PMD.AvoidDuplicateLiterals"
+    }
+)
 public final class MemoryResultSet implements ResultSet {
     /**
      * Rows.
      */
-    private final List<Map<String, Object>> rows;
+    private final Rows rows;
 
     /**
      * Columns.
      */
-    private final Map<String, Integer> columns;
+    private final Columns columns;
 
     /**
      * Cursor.
@@ -61,13 +73,11 @@ public final class MemoryResultSet implements ResultSet {
 
     /**
      * Ctor.
-     * @param rows The rows
-     * @param columns The columns
+     *
+     * @param rows The {@link Rows}
+     * @param columns The {@link Columns}
      */
-    public MemoryResultSet(
-        final List<Map<String, Object>> rows,
-        final Map<String, Integer> columns
-    ) {
+    public MemoryResultSet(final Rows rows, final Columns columns) {
         this.rows = rows;
         this.columns = columns;
         this.cursor = new AtomicInteger(-1);
@@ -79,7 +89,7 @@ public final class MemoryResultSet implements ResultSet {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
-        return this.cursor.incrementAndGet() < this.rows.size();
+        return this.cursor.incrementAndGet() < this.rows.count();
     }
 
     @Override
@@ -93,306 +103,898 @@ public final class MemoryResultSet implements ResultSet {
     }
 
     @Override
+    public boolean isClosed() throws SQLException {
+        return this.closed.get();
+    }
+
+    @Override
+    public ResultSetMetaData getMetaData() throws SQLException {
+        return new MemoryResultSetMetaData(this.columns);
+    }
+
+    @Override
+    public int findColumn(final String column) throws SQLException {
+        try {
+            return this.columns.index(column);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public boolean isBeforeFirst() throws SQLException {
+        return this.cursor.get() == -1;
+    }
+
+    @Override
+    public boolean isAfterLast() throws SQLException {
+        return this.cursor.get() > this.rows.count() - 1;
+    }
+
+    @Override
+    public boolean isFirst() throws SQLException {
+        return this.cursor.get() == 0;
+    }
+
+    @Override
+    public boolean isLast() throws SQLException {
+        return this.cursor.get() == this.rows.count() - 1;
+    }
+
+    @Override
+    public int getRow() throws SQLException {
+        return this.cursor.get();
+    }
+
+    @Override
+    public int getType() throws SQLException {
+        return ResultSet.TYPE_FORWARD_ONLY;
+    }
+
+    @Override
+    public int getConcurrency() throws SQLException {
+        return ResultSet.CONCUR_READ_ONLY;
+    }
+
+    @Override
+    public <T> T unwrap(final Class<T> iface) throws SQLException {
+        if (iface.isInstance(this)) {
+            return iface.cast(this);
+        }
+        throw new SQLException("#unwrap(Class<T>): unable to wrap");
+    }
+
+    @Override
+    public boolean isWrapperFor(final Class<?> iface) throws SQLException {
+        return iface.isInstance(this);
+    }
+
+    @Override
     public Object getObject(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
-        if (this.cursor.get() < 0 || this.cursor.get() >= this.rows.size()) {
-            throw new SQLException("Cursor not positioned on a valid row");
+        try {
+            return this.rows.row(this.cursor.get()).value(column, Object.class);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
         }
-        return this.rows.get(this.cursor.get()).get(column);
-    }
-
-    @Override
-    public Object getObject(final int index) throws SQLException {
-        if (this.closed.get()) {
-            throw new SQLException("ResultSet is already closed");
-        }
-        if (this.cursor.get() < 0 || this.cursor.get() >= this.rows.size()) {
-            throw new SQLException("Cursor not positioned on a valid row");
-        }
-        if (index < 1 || index > this.columns.size()) {
-            throw new SQLException(
-                String.format("Column index out of bounds: %d", index)
-            );
-        }
-        final String column = new ArrayList<>(this.columns.keySet()).get(
-            index - 1
-        );
-        return this.rows.get(this.cursor.get()).get(column);
-    }
-
-    @Override
-    public String getString(final int index) throws SQLException {
-        final String value;
-        final Object object = this.getObject(index);
-        if (object != null) {
-            value = object.toString();
-        } else {
-            value = null;
-        }
-        return value;
-    }
-
-    @Override
-    public boolean getBoolean(final int index) throws SQLException {
-        final Object value = this.getObject(index);
-        return value != null && (Boolean) value;
-    }
-
-    @Override
-    public byte getByte(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final byte value;
-        if (object != null) {
-            value = ((Number) object).byteValue();
-        } else {
-            value = (byte) 0;
-        }
-        return value;
-    }
-
-    @Override
-    public short getShort(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final short value;
-        if (object != null) {
-            value = ((Number) object).shortValue();
-        } else {
-            value = (short) 0;
-        }
-        return value;
-    }
-
-    @Override
-    public int getInt(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final int value;
-        if (object != null) {
-            value = ((Number) object).intValue();
-        } else {
-            value = 0;
-        }
-        return value;
-    }
-
-    @Override
-    public long getLong(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final long value;
-        if (object != null) {
-            value = ((Number) object).longValue();
-        } else {
-            value = 0L;
-        }
-        return value;
-    }
-
-    @Override
-    public float getFloat(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final float value;
-        if (object != null) {
-            value = ((Number) object).floatValue();
-        } else {
-            value = 0f;
-        }
-        return value;
-    }
-
-    @Override
-    public double getDouble(final int index) throws SQLException {
-        final Object object = this.getObject(index);
-        final double value;
-        if (object != null) {
-            value = ((Number) object).doubleValue();
-        } else {
-            value = 0d;
-        }
-        return value;
-    }
-
-    @Deprecated
-    @Override
-    public BigDecimal getBigDecimal(final int index, final int scale)
-        throws SQLException {
-        return (BigDecimal) this.getObject(index);
-    }
-
-    @Override
-    public byte[] getBytes(final int index) throws SQLException {
-        return (byte[]) this.getObject(index);
-    }
-
-    @Override
-    public Date getDate(final int index) throws SQLException {
-        return (Date) this.getObject(index);
-    }
-
-    @Override
-    public Time getTime(final int index) throws SQLException {
-        return (Time) this.getObject(index);
-    }
-
-    @Override
-    public Timestamp getTimestamp(final int index) throws SQLException {
-        return (Timestamp) this.getObject(index);
-    }
-
-    @Override
-    public InputStream getAsciiStream(final int index)
-        throws SQLException {
-        return (InputStream) this.getObject(index);
-    }
-
-    @Deprecated
-    @Override
-    public InputStream getUnicodeStream(final int index)
-        throws SQLException {
-        return (InputStream) this.getObject(index);
-    }
-
-    @Override
-    public InputStream getBinaryStream(final int index)
-        throws SQLException {
-        return (InputStream) this.getObject(index);
     }
 
     @Override
     public String getString(final String column) throws SQLException {
-        final String value;
-        final Object object = this.getObject(column);
-        if (object != null) {
-            value = object.toString();
-        } else {
-            value = null;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                String.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public boolean getBoolean(final String column) throws SQLException {
-        final Object value = this.getObject(column);
-        return value != null && (Boolean) value;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            final Boolean value = this.rows.row(this.cursor.get()).value(
+                column,
+                Boolean.class
+            );
+            return value != null && value;
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public byte getByte(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final byte value;
-        if (object != null) {
-            value = ((Number) object).byteValue();
-        } else {
-            value = (byte) 0;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Byte value = this.rows.row(this.cursor.get()).value(
+                column,
+                Byte.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> (byte) 0
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public short getShort(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final short value;
-        if (object != null) {
-            value = ((Number) object).shortValue();
-        } else {
-            value = (short) 0;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Short value = this.rows.row(this.cursor.get()).value(
+                column,
+                Short.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> (short) 0
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public int getInt(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final int value;
-        if (object != null) {
-            value = ((Number) object).intValue();
-        } else {
-            value = 0;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Integer value = this.rows.row(this.cursor.get()).value(
+                column,
+                Integer.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> 0
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public long getLong(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final long value;
-        if (object != null) {
-            value = ((Number) object).longValue();
-        } else {
-            value = 0L;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Long value = this.rows.row(this.cursor.get()).value(
+                column,
+                Long.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> 0L
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public float getFloat(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final float value;
-        if (object != null) {
-            value = ((Number) object).floatValue();
-        } else {
-            value = 0f;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Float value = this.rows.row(this.cursor.get()).value(
+                column,
+                Float.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> 0f
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public double getDouble(final String column) throws SQLException {
-        final Object object = this.getObject(column);
-        final double value;
-        if (object != null) {
-            value = ((Number) object).doubleValue();
-        } else {
-            value = 0d;
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
         }
-        return value;
+        try {
+            final Double value = this.rows.row(this.cursor.get()).value(
+                column,
+                Double.class
+            );
+            return new Ternary<>(
+                value != null,
+                () -> value,
+                () -> 0.0
+            ).value();
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                BigDecimal.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Deprecated
     @Override
     public BigDecimal getBigDecimal(final String column, final int scale)
         throws SQLException {
-        return (BigDecimal) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                BigDecimal.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public byte[] getBytes(final String column) throws SQLException {
-        return (byte[]) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                byte[].class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public Date getDate(final String column) throws SQLException {
-        return (Date) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Date.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public Time getTime(final String column) throws SQLException {
-        return (Time) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Time.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
-    public Timestamp getTimestamp(final String column)
+    public Timestamp getTimestamp(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Timestamp.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Ref getRef(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Ref.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Blob getBlob(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Blob.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Clob getClob(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Clob.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Array getArray(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Array.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Date getDate(final String column, final Calendar cal)
         throws SQLException {
-        return (Timestamp) this.getObject(column);
+        throw new UnsupportedOperationException(
+            "#getDate(String, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public Time getTime(final int index, final Calendar cal)
+        throws SQLException {
+        throw new UnsupportedOperationException(
+            "#getTime(int, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public Time getTime(final String column, final Calendar cal)
+        throws SQLException {
+        throw new UnsupportedOperationException(
+            "#getTime(String, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public Timestamp getTimestamp(final int index, final Calendar cal)
+        throws SQLException {
+        throw new UnsupportedOperationException(
+            "#getTimestamp(int, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public Timestamp getTimestamp(final String column, final Calendar cal)
+        throws SQLException {
+        throw new UnsupportedOperationException(
+            "#getTimestamp(String, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public URL getURL(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                URL.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Object getObject(
+        final String column,
+        final Map<String, Class<?>> map
+    ) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            final Class<?> type = map.values().iterator().next();
+            return this.rows.row(this.cursor.get()).value(column, type);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public <T> T getObject(final String column, final Class<T> type)
+        throws SQLException {
+        return type.cast(this.getObject(column));
+    }
+
+    @Override
+    public String getNString(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                String.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Reader getNCharacterStream(final String column)
+        throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Reader.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public InputStream getAsciiStream(final String column)
         throws SQLException {
-        return (InputStream) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                InputStream.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Deprecated
     @Override
     public InputStream getUnicodeStream(final String column)
         throws SQLException {
-        return (InputStream) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                InputStream.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
     public InputStream getBinaryStream(final String column)
         throws SQLException {
-        return (InputStream) this.getObject(column);
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                InputStream.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Reader getCharacterStream(final String column)
+        throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                Reader.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public NClob getNClob(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                NClob.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public SQLXML getSQLXML(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                SQLXML.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public RowId getRowId(final String column) throws SQLException {
+        if (this.closed.get()) {
+            throw new SQLException("ResultSet is already closed");
+        }
+        try {
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                RowId.class
+            );
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Object getObject(final int index) throws SQLException {
+        try {
+            return this.getObject(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public String getString(final int index) throws SQLException {
+        try {
+            return this.getString(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public boolean getBoolean(final int index) throws SQLException {
+        try {
+            return this.getBoolean(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public byte getByte(final int index) throws SQLException {
+        try {
+            return this.getByte(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public short getShort(final int index) throws SQLException {
+        try {
+            return this.getShort(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public int getInt(final int index) throws SQLException {
+        try {
+            return this.getInt(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public long getLong(final int index) throws SQLException {
+        try {
+            return this.getLong(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public float getFloat(final int index) throws SQLException {
+        try {
+            return this.getFloat(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public double getDouble(final int index) throws SQLException {
+        try {
+            return this.getDouble(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(final int index) throws SQLException {
+        try {
+            return this.getBigDecimal(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Deprecated
+    @Override
+    public BigDecimal getBigDecimal(final int index, final int scale)
+        throws SQLException {
+        try {
+            return this.getBigDecimal(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public byte[] getBytes(final int index) throws SQLException {
+        try {
+            return this.getBytes(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Date getDate(final int index) throws SQLException {
+        try {
+            return this.getDate(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Time getTime(final int index) throws SQLException {
+        try {
+            return this.getTime(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Timestamp getTimestamp(final int index) throws SQLException {
+        try {
+            return this.getTimestamp(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Date getDate(final int index, final Calendar cal)
+        throws SQLException {
+        throw new UnsupportedOperationException(
+            "#getDate(int, Calendar): read-only in memory ResultSet"
+        );
+    }
+
+    @Override
+    public URL getURL(final int index) throws SQLException {
+        try {
+            return this.getURL(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Ref getRef(final int index) throws SQLException {
+        try {
+            return this.getRef(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Blob getBlob(final int index) throws SQLException {
+        try {
+            return this.getBlob(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Clob getClob(final int index) throws SQLException {
+        try {
+            return this.getClob(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Array getArray(final int index) throws SQLException {
+        try {
+            return this.getArray(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Object getObject(
+        final int index,
+        final Map<String, Class<?>> map
+    ) throws SQLException {
+        try {
+            return this.getObject(this.columns.name(index), map);
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public <T> T getObject(final int index, final Class<T> type)
+        throws SQLException {
+        return type.cast(this.getObject(index));
+    }
+
+    @Override
+    public InputStream getAsciiStream(final int index)
+        throws SQLException {
+        try {
+            return this.getAsciiStream(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Deprecated
+    @Override
+    public InputStream getUnicodeStream(final int index)
+        throws SQLException {
+        try {
+            return this.getUnicodeStream(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public InputStream getBinaryStream(final int index)
+        throws SQLException {
+        try {
+            return this.getBinaryStream(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Reader getCharacterStream(final int index)
+        throws SQLException {
+        try {
+            return this.getCharacterStream(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public String getNString(final int index) throws SQLException {
+        try {
+            return this.getNString(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public Reader getNCharacterStream(final int index)
+        throws SQLException {
+        try {
+            return this.getNCharacterStream(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public NClob getNClob(final int index) throws SQLException {
+        try {
+            return this.getNClob(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public SQLXML getSQLXML(final int index) throws SQLException {
+        try {
+            return this.getSQLXML(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    @Override
+    public RowId getRowId(final int index) throws SQLException {
+        try {
+            return this.getRowId(this.columns.name(index));
+        } catch (final Exception ex) {
+            throw new SQLException(ex);
+        }
     }
 
     @Override
@@ -414,59 +1016,6 @@ public final class MemoryResultSet implements ResultSet {
         throw new UnsupportedOperationException(
             "#getCursorName(): read-only in memory ResultSet"
         );
-    }
-
-    @Override
-    public ResultSetMetaData getMetaData() throws SQLException {
-        return new MemoryResultSetMetaData(this.columns);
-    }
-
-    @Override
-    public int findColumn(final String column) throws SQLException {
-        return new ArrayList<>(this.columns.keySet()).indexOf(column);
-    }
-
-    @Override
-    public Reader getCharacterStream(final int index)
-        throws SQLException {
-        return (Reader) this.getObject(index);
-    }
-
-    @Override
-    public Reader getCharacterStream(final String column)
-        throws SQLException {
-        return (Reader) this.getObject(column);
-    }
-
-    @Override
-    public BigDecimal getBigDecimal(final int index) throws SQLException {
-        return (BigDecimal) this.getObject(index);
-    }
-
-    @Override
-    public BigDecimal getBigDecimal(final String column)
-        throws SQLException {
-        return (BigDecimal) this.getObject(column);
-    }
-
-    @Override
-    public boolean isBeforeFirst() throws SQLException {
-        return this.cursor.get() == -1;
-    }
-
-    @Override
-    public boolean isAfterLast() throws SQLException {
-        return this.cursor.get() > this.rows.size() - 1;
-    }
-
-    @Override
-    public boolean isFirst() throws SQLException {
-        return this.cursor.get() == 0;
-    }
-
-    @Override
-    public boolean isLast() throws SQLException {
-        return this.cursor.get() == this.rows.size() - 1;
     }
 
     @Override
@@ -495,11 +1044,6 @@ public final class MemoryResultSet implements ResultSet {
         throw new SQLException(
             "#last(): operation not allowed for a forward-only ResultSet"
         );
-    }
-
-    @Override
-    public int getRow() throws SQLException {
-        return this.cursor.get();
     }
 
     @Override
@@ -549,16 +1093,6 @@ public final class MemoryResultSet implements ResultSet {
         throw new UnsupportedOperationException(
             "#getFetchSize(): read-only in memory ResultSet"
         );
-    }
-
-    @Override
-    public int getType() throws SQLException {
-        return ResultSet.TYPE_FORWARD_ONLY;
-    }
-
-    @Override
-    public int getConcurrency() throws SQLException {
-        return ResultSet.CONCUR_READ_ONLY;
     }
 
     @Override
@@ -965,112 +1499,6 @@ public final class MemoryResultSet implements ResultSet {
     }
 
     @Override
-    public Object getObject(
-        final int index,
-        final Map<String, Class<?>> map
-    ) throws SQLException {
-        throw new UnsupportedOperationException(
-            "#getObject(int, Map<String, Class<?>): read-only in memory ResultSet"
-        );
-    }
-
-    @Override
-    public Ref getRef(final int index) throws SQLException {
-        return (Ref) this.getObject(index);
-    }
-
-    @Override
-    public Blob getBlob(final int index) throws SQLException {
-        return (Blob) this.getObject(index);
-    }
-
-    @Override
-    public Clob getClob(final int index) throws SQLException {
-        return (Clob) this.getObject(index);
-    }
-
-    @Override
-    public Array getArray(final int index) throws SQLException {
-        return (Array) this.getObject(index);
-    }
-
-    @Override
-    public Object getObject(
-        final String column,
-        final Map<String, Class<?>> map
-    ) throws SQLException {
-        throw new UnsupportedOperationException(
-            "#getObject(String, Map<String, Class<?>): read-only in memory ResultSet"
-        );
-    }
-
-    @Override
-    public Ref getRef(final String column) throws SQLException {
-        return (Ref) this.getObject(column);
-    }
-
-    @Override
-    public Blob getBlob(final String column) throws SQLException {
-        return (Blob) this.getObject(column);
-    }
-
-    @Override
-    public Clob getClob(final String column) throws SQLException {
-        return (Clob) this.getObject(column);
-    }
-
-    @Override
-    public Array getArray(final String column) throws SQLException {
-        return (Array) this.getObject(column);
-    }
-
-    @Override
-    public Date getDate(final int index, final Calendar cal)
-        throws SQLException {
-        return (Date) this.getObject(index);
-    }
-
-    @Override
-    public Date getDate(final String column, final Calendar cal)
-        throws SQLException {
-        return (Date) this.getObject(column);
-    }
-
-    @Override
-    public Time getTime(final int index, final Calendar cal)
-        throws SQLException {
-        return (Time) this.getObject(index);
-    }
-
-    @Override
-    public Time getTime(final String column, final Calendar cal)
-        throws SQLException {
-        return (Time) this.getObject(column);
-    }
-
-    @Override
-    public Timestamp getTimestamp(final int index, final Calendar cal)
-        throws SQLException {
-        return (Timestamp) this.getObject(index);
-    }
-
-    @Override
-    public Timestamp getTimestamp(final String column, final Calendar cal)
-        throws SQLException {
-        return (Timestamp) this.getObject(column);
-    }
-
-    @Override
-    public URL getURL(final int index) throws SQLException {
-        return (URL) this.getObject(index);
-    }
-
-    @Override
-    public URL getURL(final String column) throws SQLException {
-        return (URL) this.getObject(column);
-    }
-
-    @Override
     public void updateRef(final int index, final Ref value)
         throws SQLException {
         throw new UnsupportedOperationException(
@@ -1135,16 +1563,6 @@ public final class MemoryResultSet implements ResultSet {
     }
 
     @Override
-    public RowId getRowId(final int index) throws SQLException {
-        return (RowId) this.getObject(index);
-    }
-
-    @Override
-    public RowId getRowId(final String column) throws SQLException {
-        return (RowId) this.getObject(column);
-    }
-
-    @Override
     public void updateRowId(final int index, final RowId value)
         throws SQLException {
         throw new UnsupportedOperationException(
@@ -1165,11 +1583,6 @@ public final class MemoryResultSet implements ResultSet {
         throw new UnsupportedOperationException(
             "#getHoldability(): read-only in memory ResultSet"
         );
-    }
-
-    @Override
-    public boolean isClosed() throws SQLException {
-        return this.closed.get();
     }
 
     @Override
@@ -1205,26 +1618,6 @@ public final class MemoryResultSet implements ResultSet {
     }
 
     @Override
-    public NClob getNClob(final int index) throws SQLException {
-        return (NClob) this.getObject(index);
-    }
-
-    @Override
-    public NClob getNClob(final String column) throws SQLException {
-        return (NClob) this.getObject(column);
-    }
-
-    @Override
-    public SQLXML getSQLXML(final int index) throws SQLException {
-        return (SQLXML) this.getObject(index);
-    }
-
-    @Override
-    public SQLXML getSQLXML(final String column) throws SQLException {
-        return (SQLXML) this.getObject(column);
-    }
-
-    @Override
     public void updateSQLXML(final int index, final SQLXML value)
         throws SQLException {
         throw new UnsupportedOperationException(
@@ -1238,28 +1631,6 @@ public final class MemoryResultSet implements ResultSet {
         throw new UnsupportedOperationException(
             "#updateSQLXML(String, SQLXML): read-only in memory ResultSet"
         );
-    }
-
-    @Override
-    public String getNString(final int index) throws SQLException {
-        return (String) this.getObject(index);
-    }
-
-    @Override
-    public String getNString(final String column) throws SQLException {
-        return (String) this.getObject(column);
-    }
-
-    @Override
-    public Reader getNCharacterStream(final int index)
-        throws SQLException {
-        return (Reader) this.getObject(index);
-    }
-
-    @Override
-    public Reader getNCharacterStream(final String column)
-        throws SQLException {
-        return (Reader) this.getObject(column);
     }
 
     @Override
@@ -1534,30 +1905,5 @@ public final class MemoryResultSet implements ResultSet {
         throw new UnsupportedOperationException(
             "#updateNClob(String, Reader): read-only in memory ResultSet"
         );
-    }
-
-    @Override
-    public <T> T getObject(final int index, final Class<T> type)
-        throws SQLException {
-        return type.cast(this.getObject(index));
-    }
-
-    @Override
-    public <T> T getObject(final String column, final Class<T> type)
-        throws SQLException {
-        return type.cast(this.getObject(column));
-    }
-
-    @Override
-    public <T> T unwrap(final Class<T> iface) throws SQLException {
-        if (iface.isInstance(this)) {
-            return iface.cast(this);
-        }
-        throw new SQLException("#unwrap(Class<T>): unable to wrap");
-    }
-
-    @Override
-    public boolean isWrapperFor(final Class<?> iface) throws SQLException {
-        return iface.isInstance(this);
     }
 }

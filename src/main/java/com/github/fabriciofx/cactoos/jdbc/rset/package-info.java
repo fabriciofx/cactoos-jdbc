@@ -4,8 +4,8 @@
  */
 
 /**
- * Memory.
+ * An immutable, disconnected, in memory {@link java.sql.ResultSet}.
  *
  * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.mem;
+package com.github.fabriciofx.cactoos.jdbc.rset;
