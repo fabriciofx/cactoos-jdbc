@@ -78,10 +78,7 @@ public final class Cached extends PreparedStatementEnvelope {
             } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
                     final Table table = new LinkedTable(rset);
-                    result = new CachedResultSet(
-                        table.rows(),
-                        table.columns()
-                    );
+                    result = new CachedResultSet(table.rows(), table.columns());
                     this.cache.store(key, table);
                 }
             }
