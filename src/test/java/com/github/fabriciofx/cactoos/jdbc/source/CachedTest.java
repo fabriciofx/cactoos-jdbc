@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.hash.Murmur3Hash;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -47,7 +48,8 @@ final class CachedTest {
                     new TableCache(),
                     "cache",
                     logger
-                )
+                ),
+                new Murmur3Hash(() -> 123)
             ),
             "cache",
             logger
@@ -110,8 +112,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key 'SELECT * FROM ",
-                    "`PERSON` WHERE `ID` = 1': false"
+                    "Checking if cache has a value for key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -120,8 +122,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Storing in cache with key 'SELECT * FROM `PERSON` WHERE ",
-                    "`ID` = 1' and value"
+                    "Storing in cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -130,8 +132,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
-                    "WHERE `ID` = 1' and value"
+                    "Retrieving from cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -140,8 +142,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key 'SELECT * FROM ",
-                    "`PERSON` WHERE `ID` = 1': true"
+                    "Checking if cache has a value for key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -150,8 +152,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
-                    "WHERE `ID` = 1' and value"
+                    "Retrieving from cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -168,7 +170,8 @@ final class CachedTest {
                     new TableCache(),
                     "cache",
                     logger
-                )
+                ),
+                new Murmur3Hash(() -> 123)
             ),
             "cache",
             logger
@@ -254,8 +257,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key 'SELECT * FROM ",
-                    "`PERSON` WHERE `ID` = 1': false"
+                    "Checking if cache has a value for key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -264,8 +267,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Storing in cache with key 'SELECT * FROM `PERSON` WHERE ",
-                    "`ID` = 1' and value"
+                    "Storing in cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -274,8 +277,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
-                    "WHERE `ID` = 1' and value"
+                    "Retrieving from cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -284,8 +287,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key 'SELECT * FROM ",
-                    "`PERSON` WHERE `ID` = 1': true"
+                    "Checking if cache has a value for key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -294,8 +297,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key 'SELECT * FROM `PERSON` ",
-                    "WHERE `ID` = 1' and value"
+                    "Retrieving from cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -304,8 +307,8 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Deleting into cache with key 'SELECT * FROM `PERSON` ",
-                    "WHERE `ID` = 1' and returning value"
+                    "Deleting into cache with key ",
+                    "'baa9f4bea3260d127d56f5732d4c604c' and returning value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))

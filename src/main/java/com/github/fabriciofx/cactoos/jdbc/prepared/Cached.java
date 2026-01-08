@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
@@ -12,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.cactoos.Func;
 
 /**
  * Cached.
@@ -38,31 +40,40 @@ public final class Cached extends PreparedStatementEnvelope {
     private final Cache<String, Table> cache;
 
     /**
+     * Hash function.
+     */
+    private final Func<Query, String> hash;
+
+    /**
      * Ctor.
      *
      * @param origin Decorated PreparedStatement
      * @param stored PreparedStatement to normalized SQL select
      * @param normalized The normalized select SQL
      * @param cache The cache
+     * @param hash The hash function
      */
     public Cached(
         final PreparedStatement origin,
         final PreparedStatement stored,
         final Normalized normalized,
-        final Cache<String, Table> cache
+        final Cache<String, Table> cache,
+        final Func<Query, String> hash
     ) {
         super(origin);
         this.stored = stored;
         this.normalized = normalized;
         this.cache = cache;
+        this.hash = hash;
     }
 
     @Override
     public ResultSet executeQuery() throws SQLException {
         try {
             final ResultSet result;
-            if (this.cache.contains(this.normalized.sql())) {
-                final Table table = this.cache.retrieve(this.normalized.sql());
+            final String key = this.hash.apply(this.normalized);
+            if (this.cache.contains(key)) {
+                final Table table = this.cache.retrieve(key);
                 result = new CachedResultSet(table.rows(), table.columns());
             } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
@@ -71,7 +82,7 @@ public final class Cached extends PreparedStatementEnvelope {
                         table.rows(),
                         table.columns()
                     );
-                    this.cache.store(this.normalized.sql(), table);
+                    this.cache.store(key, table);
                 }
             }
             return result;

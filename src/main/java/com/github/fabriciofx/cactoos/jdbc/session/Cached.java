@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
@@ -15,6 +16,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.Symmetric;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import org.cactoos.Func;
 
 /**
  * Cached. A decorator for Session that allows caching results.
@@ -34,17 +36,25 @@ public final class Cached implements Session {
     private final Cache<String, Table> cache;
 
     /**
+     * Hash function.
+     */
+    private final Func<Query, String> hash;
+
+    /**
      * Ctor.
      *
      * @param session A session
      * @param cache The cache
+     * @param hash The hash function
      */
     public Cached(
         final Session session,
-        final Cache<String, Table> cache
+        final Cache<String, Table> cache,
+        final Func<Query, String> hash
     ) {
         this.origin = session;
         this.cache = cache;
+        this.hash = hash;
     }
 
     @Override
@@ -62,16 +72,18 @@ public final class Cached implements Session {
                             )
                         ),
                         new Normalized(new Merged(plan.query())),
-                        this.cache
+                        this.cache,
+                        this.hash
                     );
                 break;
             case DELETE:
                 prepared = this.origin.prepared(plan);
-                this.cache.delete(
+                final String key = this.hash.apply(
                     new Symmetric(
                         new Merged(plan.query())
-                    ).sql()
+                    )
                 );
+                this.cache.delete(key);
                 break;
             default:
                 prepared = this.origin.prepared(plan);
