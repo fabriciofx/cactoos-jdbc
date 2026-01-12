@@ -85,7 +85,7 @@ final class CachedTest {
                 ResultSet rset = new Select(
                     session,
                     new NamedQuery(
-                        "SELECT name FROM person WHERE id = :id",
+                        "SELECT id, name FROM person WHERE id = :id",
                         new IntParam("id", 1)
                     )
                 ).execute()
@@ -98,13 +98,13 @@ final class CachedTest {
                 ResultSet rset = new Select(
                     session,
                     new NamedQuery(
-                        "SELECT city FROM person WHERE id = :id",
+                        "SELECT name, id FROM person WHERE id = :id",
                         new IntParam("id", 1)
                     )
                 ).execute()
             ) {
                 if (rset.next()) {
-                    rset.getString("city");
+                    rset.getString("name");
                 }
             }
         }
@@ -113,7 +113,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c': false"
+                    "'73be3e0959c6e6da5b3542701762537d': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -123,17 +123,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
-                )
-            ),
-            new Matches<>(new TextOf(logger.toString()))
-        ).affirm();
-        new Assertion<>(
-            "must log a cache store and retrieve",
-            new HasString(
-                new Concatenated(
-                    "Retrieving from cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
+                    "'73be3e0959c6e6da5b3542701762537d' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -143,7 +133,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c': true"
+                    "'73be3e0959c6e6da5b3542701762537d': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -153,7 +143,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
+                    "'73be3e0959c6e6da5b3542701762537d' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -236,13 +226,13 @@ final class CachedTest {
                 ResultSet rset = new Select(
                     session,
                     new NamedQuery(
-                        "SELECT city FROM person WHERE id = :id",
+                        "SELECT name FROM person WHERE id = :id",
                         new IntParam("id", 1)
                     )
                 ).execute()
             ) {
                 if (rset.next()) {
-                    rset.getString("city");
+                    rset.getString("name");
                 }
             }
             new Update(
@@ -258,7 +248,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c': false"
+                    "'746e5106734005a04cbba929133f9291': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -268,17 +258,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
-                )
-            ),
-            new Matches<>(new TextOf(logger.toString()))
-        ).affirm();
-        new Assertion<>(
-            "must log a cache store and retrieve",
-            new HasString(
-                new Concatenated(
-                    "Retrieving from cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
+                    "'746e5106734005a04cbba929133f9291' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -288,7 +268,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c': true"
+                    "'746e5106734005a04cbba929133f9291': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -298,19 +278,14 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and value"
+                    "'746e5106734005a04cbba929133f9291' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must log a cache store and retrieve",
-            new HasString(
-                new Concatenated(
-                    "Deleting into cache with key ",
-                    "'baa9f4bea3260d127d56f5732d4c604c' and returning value"
-                )
-            ),
+            new HasString("Cleaning the cache."),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
     }

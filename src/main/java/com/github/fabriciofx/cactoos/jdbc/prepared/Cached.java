@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.prepared;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
+import com.github.fabriciofx.cactoos.jdbc.query.normalized.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;

@@ -9,11 +9,14 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.cactoos.Text;
+import org.cactoos.text.Replaced;
 import org.cactoos.text.Sticky;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.Trimmed;
 
 /**
- * Pretty.
- * Print a pretty SQL from a {@link SqlNode}.
+ * Pretty. Print a pretty SQL from a {@link SqlNode}.
+ *
  * @since 0.9.0
  */
 public final class Pretty implements Text {
@@ -24,6 +27,7 @@ public final class Pretty implements Text {
 
     /**
      * Ctor.
+     *
      * @param node A {@link SqlNode}
      */
     public Pretty(final SqlNode node) {
@@ -39,7 +43,13 @@ public final class Pretty implements Text {
                     .withClauseStartsLine(false)
                     .withSelectListItemsOnSeparateLines(false);
                 final SqlPrettyWriter writer = new SqlPrettyWriter(config);
-                return writer.format(node).replaceAll("\\s+", " ").trim();
+                return new Trimmed(
+                    new Replaced(
+                        new TextOf(writer.format(node)),
+                        "\\s+",
+                        " "
+                    )
+                ).asString();
             }
         );
     }

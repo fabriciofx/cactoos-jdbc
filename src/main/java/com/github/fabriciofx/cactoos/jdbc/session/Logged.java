@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
-import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
+import com.github.fabriciofx.cactoos.jdbc.query.normalized.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;

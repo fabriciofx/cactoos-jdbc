@@ -11,8 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Merged;
-import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
-import com.github.fabriciofx.cactoos.jdbc.query.Symmetric;
+import com.github.fabriciofx.cactoos.jdbc.query.normalized.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -78,12 +77,7 @@ public final class Cached implements Session {
                 break;
             case DELETE:
                 prepared = this.origin.prepared(plan);
-                final String key = this.hash.apply(
-                    new Symmetric(
-                        new Merged(plan.query())
-                    )
-                );
-                this.cache.delete(key);
+                this.cache.clear();
                 break;
             default:
                 prepared = this.origin.prepared(plan);
