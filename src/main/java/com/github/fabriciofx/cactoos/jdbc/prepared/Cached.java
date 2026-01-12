@@ -23,7 +23,7 @@ import org.cactoos.Func;
  * @checkstyle IllegalCatchCheck (500 lines)
  */
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
-public final class Cached extends PreparedStatementEnvelope {
+public final class Cached extends PreparedEnvelope {
     /**
      * A normalized PreparedStatement to be stored into cache.
      */

@@ -44,7 +44,7 @@ import java.util.Calendar;
         "PMD.ReplaceJavaUtilCalendar"
     }
 )
-public abstract class PreparedStatementEnvelope implements PreparedStatement {
+public abstract class PreparedEnvelope implements PreparedStatement {
     /**
      * The PreparedStatement.
      */
@@ -54,7 +54,7 @@ public abstract class PreparedStatementEnvelope implements PreparedStatement {
      * Ctor.
      * @param prepared Decorated PreparedStatement
      */
-    public PreparedStatementEnvelope(final PreparedStatement prepared) {
+    public PreparedEnvelope(final PreparedStatement prepared) {
         this.origin = prepared;
     }
 
