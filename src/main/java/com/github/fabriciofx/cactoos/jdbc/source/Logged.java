@@ -46,6 +46,11 @@ public final class Logged implements Source {
     private final AtomicInteger sessions;
 
     /**
+     * The connections counter.
+     */
+    private final AtomicInteger connections;
+
+    /**
      * The statements counter.
      */
     private final AtomicInteger statements;
@@ -89,6 +94,7 @@ public final class Logged implements Source {
             )
         );
         this.sessions = new AtomicInteger(-1);
+        this.connections = new AtomicInteger(-1);
         this.statements = new AtomicInteger(-1);
     }
 
@@ -100,6 +106,7 @@ public final class Logged implements Source {
             this.logger,
             this.level.value(),
             this.sessions.incrementAndGet(),
+            this.connections.incrementAndGet(),
             this.statements
         );
         this.logger.log(

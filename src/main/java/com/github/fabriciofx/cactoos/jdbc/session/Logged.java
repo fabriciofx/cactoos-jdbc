@@ -6,18 +6,12 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.query.merged.Merged;
-import com.github.fabriciofx.cactoos.jdbc.query.normalized.Normalized;
-import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.calcite.sql.SqlKind;
-import org.cactoos.scalar.Ternary;
 import org.cactoos.text.FormattedText;
-import org.cactoos.text.Joined;
 import org.cactoos.text.UncheckedText;
 
 /**
@@ -53,6 +47,11 @@ public final class Logged implements Session {
     private final int id;
 
     /**
+     * Connection id.
+     */
+    private final int connection;
+
+    /**
      * Statements counter.
      */
     private final AtomicInteger statements;
@@ -65,6 +64,7 @@ public final class Logged implements Session {
      * @param logger A logger
      * @param level A level
      * @param id Session id
+     * @param connection Connection id
      * @param statements Statements counter
      */
     public Logged(
@@ -73,6 +73,7 @@ public final class Logged implements Session {
         final Logger logger,
         final Level level,
         final int id,
+        final int connection,
         final AtomicInteger statements
     ) {
         this.origin = session;
@@ -80,41 +81,29 @@ public final class Logged implements Session {
         this.logger = logger;
         this.level = level;
         this.id = id;
+        this.connection = connection;
         this.statements = statements;
     }
 
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
-        final PreparedStatement prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
-            this.origin.prepared(plan),
-            this.from,
-            this.logger,
-            this.level,
-            this.statements.incrementAndGet()
+        final PreparedStatement prepared = this.origin.prepared(
+            new com.github.fabriciofx.cactoos.jdbc.plan.Logged(
+                plan,
+                this.from,
+                this.logger,
+                this.level,
+                this.connection,
+                this.statements
+            )
         );
-        final SqlKind kind = new QueryKind(plan.query()).value();
         this.logger.log(
             this.level,
             new FormattedText(
-                new Joined(
-                    "\n",
-                    "[%s] PreparedStatement[#%d] created using query: '%s'.",
-                    "    Stored query: '%s'",
-                    "       Cache key: '%s'"
-                ),
+                "[%s] Session[#%d] prepared PreparedStatement[#%d].",
                 this.from,
-                this.statements.get(),
-                plan.query().sql(),
-                new Ternary<>(
-                    kind == SqlKind.SELECT || kind == SqlKind.WITH,
-                    () -> new Normalized(plan.query()).sql(),
-                    () -> plan.query().sql()
-                ).value(),
-                new Ternary<>(
-                    kind == SqlKind.SELECT || kind == SqlKind.WITH,
-                    () -> new Normalized(new Merged(plan.query())).sql(),
-                    () -> plan.query().sql()
-                ).value()
+                this.id,
+                this.statements.get()
             ).asString()
         );
         return prepared;
@@ -141,7 +130,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] commit.",
+                "[%s] Session[#%d] commited.",
                 this.from,
                 this.id
             ).asString()
@@ -154,7 +143,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] rollback.",
+                "[%s] Session[#%d] rolled back.",
                 this.from,
                 this.id
             ).asString()
@@ -168,7 +157,7 @@ public final class Logged implements Session {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Session[#%d] closing.",
+                    "[%s] Session[#%d] closed.",
                     this.from,
                     this.id
                 )
