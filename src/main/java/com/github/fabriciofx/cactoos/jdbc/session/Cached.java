@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
-import com.github.fabriciofx.cactoos.jdbc.query.Merged;
+import com.github.fabriciofx.cactoos.jdbc.query.merged.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.normalized.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
 import java.io.IOException;

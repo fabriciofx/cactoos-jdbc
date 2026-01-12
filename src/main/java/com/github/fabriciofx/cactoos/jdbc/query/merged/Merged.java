@@ -2,11 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
+package com.github.fabriciofx.cactoos.jdbc.query.merged;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.MergeShuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
@@ -47,7 +46,7 @@ public final class Merged implements Query {
                     .withQuoting(Quoting.BACK_TICK);
                 final SqlParser parser = SqlParser.create(query.sql(), config);
                 final SqlNode stmt = parser.parseStmt();
-                final SqlNode replaced = stmt.accept(new MergeShuttle(query));
+                final SqlNode replaced = stmt.accept(new Shuttle(query));
                 return new Pretty(replaced).asString();
             }
         );

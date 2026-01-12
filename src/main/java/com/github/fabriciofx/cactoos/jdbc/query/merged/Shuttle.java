@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.query.merged;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
@@ -16,7 +16,7 @@ import org.apache.calcite.sql.util.SqlShuttle;
  * A shuttle that change dynamic parameters for parameters values.
  * @since 0.9.0
  */
-public final class MergeShuttle extends SqlShuttle {
+public final class Shuttle extends SqlShuttle {
     /**
      * Query.
      */
@@ -26,7 +26,7 @@ public final class MergeShuttle extends SqlShuttle {
      * Ctor.
      * @param query A {@link Query}
      */
-    public MergeShuttle(final Query query) {
+    public Shuttle(final Query query) {
         this.query = query;
     }
 
