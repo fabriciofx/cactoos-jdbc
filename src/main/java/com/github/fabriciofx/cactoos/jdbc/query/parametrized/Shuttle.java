@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.query.parametrized;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.calcite.sql.SqlDynamicParam;
@@ -16,7 +16,7 @@ import org.apache.calcite.sql.util.SqlShuttle;
  * A shuttle that change literals for question marks (dynamic parameters).
  * @since 0.9.0
  */
-public final class ParameterShuttle extends SqlShuttle {
+public final class Shuttle extends SqlShuttle {
     /**
      * Index.
      */
@@ -25,7 +25,7 @@ public final class ParameterShuttle extends SqlShuttle {
     /**
      * Ctor.
      */
-    public ParameterShuttle() {
+    public Shuttle() {
         this.index = new AtomicInteger(0);
     }
 

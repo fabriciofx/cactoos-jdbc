@@ -2,11 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.query;
+package com.github.fabriciofx.cactoos.jdbc.query.parametrized;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.ParameterShuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
@@ -45,7 +44,7 @@ public final class Parametrized implements Query {
                     .withQuoting(Quoting.BACK_TICK);
                 final SqlParser parser = SqlParser.create(query.sql(), config);
                 final SqlNode stmt = parser.parseStmt();
-                final SqlNode replaced = stmt.accept(new ParameterShuttle());
+                final SqlNode replaced = stmt.accept(new Shuttle());
                 return new Pretty(replaced).asString();
             }
         );
