@@ -7,15 +7,22 @@ package com.github.fabriciofx.cactoos.jdbc.cache;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.cactoos.Text;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Ternary;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
+import org.cactoos.text.Joined;
+import org.cactoos.text.Repeated;
+import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
  * Logged.
+ q* <p>
  * A {@link Cache} decorator to logging caching operations.
+ *
  * @param <K> The key type
  * @param <V> The value type
  * @since 0.9.0
@@ -44,6 +51,7 @@ public final class Logged<K, V> implements Cache<K, V> {
 
     /**
      * Ctor.
+     *
      * @param origin The cache to be logged
      * @param from Where the data comes from
      */
@@ -53,6 +61,7 @@ public final class Logged<K, V> implements Cache<K, V> {
 
     /**
      * Ctor.
+     *
      * @param origin The cache to be logged
      * @param from Where the data comes from
      * @param logger The logger
@@ -86,6 +95,7 @@ public final class Logged<K, V> implements Cache<K, V> {
 
     /**
      * Ctor.
+     *
      * @param origin The cache to be logged
      * @param from Where the data comes from
      * @param logger The logger
@@ -179,21 +189,26 @@ public final class Logged<K, V> implements Cache<K, V> {
     @Override
     public Statistics statistics() {
         final Statistics stats = this.origin.statistics();
-        final StringBuilder text = new StringBuilder();
-        for (final Statistic stat : stats) {
-            text.append('\t');
-            text.append(stat.name());
-            text.append(": ");
-            text.append(stat.value());
-            text.append('\n');
-        }
         this.logger.log(
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
                     "[%s] Cache statistics:\n%s",
                     this.from,
-                    text.toString()
+                    new UncheckedText(
+                        new Joined(
+                            new TextOf("\n"),
+                            new Mapped<Text>(
+                                stat -> new FormattedText(
+                                    "%s %s: %d",
+                                    new Repeated(" ", this.from.length() + 2),
+                                    stat.name(),
+                                    stat.value()
+                                ),
+                                stats
+                            )
+                        )
+                    ).asString()
                 )
             ).asString()
         );
