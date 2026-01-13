@@ -236,7 +236,7 @@ mvn clean install -Pqulice
 
 The MIT License (MIT)
 
-Copyright (C) 2018-2025 Fabrício Barros Cabral
+Copyright (C) 2018-2026 Fabrício Barros Cabral
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

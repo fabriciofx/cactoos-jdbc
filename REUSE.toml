@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (C) 2018-2025 Fabrício Barros Cabral
+# SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 version = 1
 [[annotations]]
@@ -46,5 +46,5 @@ path = [
     "rc",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "Copyright (c) 2018-2025 Fabrício Barros Cabral"
+SPDX-FileCopyrightText = "Copyright (C) 2018-2026 Fabrício Barros Cabral"
 SPDX-License-Identifier = "MIT"
