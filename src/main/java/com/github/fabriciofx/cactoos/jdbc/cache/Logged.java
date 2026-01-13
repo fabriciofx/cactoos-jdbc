@@ -8,6 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Cache;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Ternary;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.UncheckedText;
@@ -20,7 +21,6 @@ import org.cactoos.text.UncheckedText;
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (500 lines)
  */
-@SuppressWarnings("PMD.UnnecessaryFullyQualifiedName")
 public final class Logged<K, V> implements Cache<K, V> {
     /**
      * Cache to be logged.
@@ -104,13 +104,76 @@ public final class Logged<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Store<K, V> store() {
-        return new com.github.fabriciofx.cactoos.jdbc.cache.store.Logged<>(
-            this.origin.store(),
-            this.from,
-            this.logger,
-            this.level
+    public V retrieve(final K key) {
+        final V value = this.origin.retrieve(key);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Retrieving from cache with key '%s' and value '%s'.",
+                    this.from,
+                    key.toString(),
+                    value.toString()
+                )
+            ).asString()
         );
+        return value;
+    }
+
+    @Override
+    public void store(final K key, final V value) {
+        this.origin.store(key, value);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Storing in cache with key '%s' and value '%s'.",
+                    this.from,
+                    key.toString(),
+                    value.toString()
+                )
+            ).asString()
+        );
+    }
+
+    @Override
+    public V delete(final K key) {
+        final V value = this.origin.delete(key);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Deleting into cache with key '%s' and returning value '%s'.",
+                    this.from,
+                    key.toString(),
+                    new Unchecked<>(
+                        new Ternary<>(
+                            value != null,
+                            () -> value.toString(),
+                            () -> "(null)"
+                        )
+                    ).value()
+                )
+            ).asString()
+        );
+        return value;
+    }
+
+    @Override
+    public boolean contains(final K key) {
+        final boolean exists = this.origin.contains(key);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Checking if cache has a value for key '%s': %s.",
+                    this.from,
+                    key.toString(),
+                    exists
+                )
+            ).asString()
+        );
+        return exists;
     }
 
     @Override
@@ -144,7 +207,7 @@ public final class Logged<K, V> implements Cache<K, V> {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Cleaning the cache store and resetting statistics.",
+                    "[%s] Cleaning the cache and resetting statistics.",
                     this.from
                 )
             ).asString()

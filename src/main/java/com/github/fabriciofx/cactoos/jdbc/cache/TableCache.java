@@ -12,7 +12,8 @@ import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Invalidation;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Lookups;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Misses;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
-import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TableCache.
@@ -20,9 +21,14 @@ import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
  */
 public final class TableCache implements Cache<String, Table> {
     /**
-     * Store.
+     * The Results.
      */
-    private final Store<String, Table> str;
+    private final Map<String, Table> results;
+
+    /**
+     * Maximum cache size.
+     */
+    private final int size;
 
     /**
      * Statistics.
@@ -46,16 +52,65 @@ public final class TableCache implements Cache<String, Table> {
 
     /**
      * Ctor.
-     * @param statistics Statistics
+     * @param statistics The statistics
      */
     public TableCache(final Statistics statistics) {
-        this.str = new TableStore(statistics);
+        this(new HashMap<>(), Integer.MAX_VALUE, statistics);
+    }
+
+    /**
+     * Ctor.
+     * @param results Data to initialize the cache
+     * @param max Maximum cache size
+     * @param statistics The statistics
+     */
+    public TableCache(
+        final Map<String, Table> results,
+        final int max,
+        final Statistics statistics
+    ) {
+        this.results = results;
+        this.size = max;
         this.stats = statistics;
     }
 
     @Override
-    public Store<String, Table> store() {
-        return this.str;
+    public Table retrieve(final String key) {
+        return this.results.get(key);
+    }
+
+    @Override
+    public void store(final String key, final Table value) {
+        final Statistic eviction = this.stats.statistic("eviction");
+        while (this.results.size() > this.size) {
+            this.results.remove(this.results.keySet().iterator().next());
+            eviction.increment();
+        }
+        this.results.put(key, value);
+    }
+
+    @Override
+    public Table delete(final String key) {
+        final Statistic invalidation = this.stats.statistic(
+            "invalidation"
+        );
+        invalidation.increment();
+        return this.results.remove(key);
+    }
+
+    @Override
+    public boolean contains(final String key) {
+        final boolean exists = this.results.containsKey(key);
+        if (exists) {
+            final Statistic hits = this.stats.statistic("hits");
+            hits.increment();
+        } else {
+            final Statistic misses = this.stats.statistic("misses");
+            misses.increment();
+        }
+        final Statistic lookups = this.stats.statistic("lookups");
+        lookups.increment();
+        return exists;
     }
 
     @Override
@@ -65,7 +120,7 @@ public final class TableCache implements Cache<String, Table> {
 
     @Override
     public void clear() {
-        this.str.clear();
+        this.results.clear();
         this.stats.reset();
     }
 }
