@@ -4,6 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import com.github.fabriciofx.cactoos.jdbc.cache.Statistics;
+import com.github.fabriciofx.cactoos.jdbc.cache.Store;
+
 /**
  * Cache.
  * @param <K> The key type
@@ -12,35 +15,19 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 public interface Cache<K, V> {
     /**
-     * Retrieve a data from cache.
-     * @param key The key
-     * @return The value associated with the key
+     * Store.
+     * @return The store
      */
-    V retrieve(K key);
+    Store<K, V> store();
 
     /**
-     * Store a data into cache.
-     * @param key The key associated to the value
-     * @param value The value
+     * Statistics.
+     * @return Cache statistics
      */
-    void store(K key, V value);
+    Statistics statistics();
 
     /**
-     * Delete a value into cache.
-     * @param key The key associated to the value
-     * @return The value associated with the key
-     */
-    V delete(K key);
-
-    /**
-     * Checks if the cache has a value associated with the key.
-     * @param key The key
-     * @return True if there is, false otherwise
-     */
-    boolean contains(K key);
-
-    /**
-     * Cleanup the cache.
+     * Clear cache data and statistic.
      */
     void clear();
 }

@@ -6,71 +6,66 @@ package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Eviction;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Hits;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Invalidation;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Lookups;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Misses;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
+import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
 
 /**
  * TableCache.
- * Store a {@link ResultSet} associated with a SQL query.
  * @since 0.9.0
  */
 public final class TableCache implements Cache<String, Table> {
     /**
-     * The ResultSets.
+     * Store.
      */
-    private final Map<String, Table> results;
+    private final Store<String, Table> str;
 
     /**
-     * Maximum cache size.
+     * Statistics.
      */
-    private final int size;
+    private final Statistics stats;
 
     /**
      * Ctor.
      */
     public TableCache() {
-        this(new HashMap<>(), Integer.MAX_VALUE);
+        this(
+            new StatisticsOf(
+                new Hits(),
+                new Misses(),
+                new Lookups(),
+                new Eviction(),
+                new Invalidation()
+            )
+        );
     }
 
     /**
      * Ctor.
-     * @param results Data to initialize the cache
-     * @param max Maximum cache size
+     * @param statistics Statistics
      */
-    public TableCache(
-        final Map<String, Table> results,
-        final int max
-    ) {
-        this.results = results;
-        this.size = max;
+    public TableCache(final Statistics statistics) {
+        this.str = new TableStore(statistics);
+        this.stats = statistics;
     }
 
     @Override
-    public Table retrieve(final String key) {
-        return this.results.get(key);
+    public Store<String, Table> store() {
+        return this.str;
     }
 
     @Override
-    public void store(final String key, final Table value) {
-        while (this.results.size() > this.size) {
-            this.results.remove(this.results.keySet().iterator().next());
-        }
-        this.results.put(key, value);
-    }
-
-    @Override
-    public Table delete(final String key) {
-        return this.results.remove(key);
-    }
-
-    @Override
-    public boolean contains(final String key) {
-        return this.results.containsKey(key);
+    public Statistics statistics() {
+        return this.stats;
     }
 
     @Override
     public void clear() {
-        this.results.clear();
+        this.str.clear();
+        this.stats.reset();
     }
 }

@@ -112,7 +112,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key ",
+                    "Checking if cache store has a value for key ",
                     "'73be3e0959c6e6da5b3542701762537d': false"
                 )
             ),
@@ -122,7 +122,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Storing in cache with key ",
+                    "Saving in cache store with key ",
                     "'73be3e0959c6e6da5b3542701762537d' and value"
                 )
             ),
@@ -132,7 +132,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key ",
+                    "Checking if cache store has a value for key ",
                     "'73be3e0959c6e6da5b3542701762537d': true"
                 )
             ),
@@ -142,7 +142,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key ",
+                    "Retrieving from cache store with key ",
                     "'73be3e0959c6e6da5b3542701762537d' and value"
                 )
             ),
@@ -247,7 +247,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key ",
+                    "Checking if cache store has a value for key ",
                     "'746e5106734005a04cbba929133f9291': false"
                 )
             ),
@@ -257,7 +257,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Storing in cache with key ",
+                    "Saving in cache store with key ",
                     "'746e5106734005a04cbba929133f9291' and value"
                 )
             ),
@@ -267,7 +267,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Checking if cache has a value for key ",
+                    "Checking if cache store has a value for key ",
                     "'746e5106734005a04cbba929133f9291': true"
                 )
             ),
@@ -277,7 +277,7 @@ final class CachedTest {
             "must log a cache store and retrieve",
             new HasString(
                 new Concatenated(
-                    "Retrieving from cache with key ",
+                    "Retrieving from cache store with key ",
                     "'746e5106734005a04cbba929133f9291' and value"
                 )
             ),
@@ -285,7 +285,7 @@ final class CachedTest {
         ).affirm();
         new Assertion<>(
             "must log a cache store and retrieve",
-            new HasString("Cleaning the cache."),
+            new HasString("Cleaning the cache store and resetting statistics."),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
     }
