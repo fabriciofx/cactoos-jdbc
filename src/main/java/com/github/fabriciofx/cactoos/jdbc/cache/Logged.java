@@ -20,7 +20,7 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged.
- q* <p>
+ * <p>
  * A {@link Cache} decorator to logging caching operations.
  *
  * @param <K> The key type
