@@ -76,6 +76,8 @@ public final class TableCache implements Cache<String, Table> {
 
     @Override
     public Table retrieve(final String key) {
+        final Statistic lookups = this.stats.statistic("lookups");
+        lookups.increment();
         return this.results.get(key);
     }
 
