@@ -76,8 +76,7 @@ public final class TableCache implements Cache<String, Table> {
 
     @Override
     public Table retrieve(final String key) {
-        final Statistic lookups = this.stats.statistic("lookups");
-        lookups.increment();
+        this.stats.statistic("lookups").increment();
         return this.results.get(key);
     }
 
@@ -93,10 +92,7 @@ public final class TableCache implements Cache<String, Table> {
 
     @Override
     public Table delete(final String key) {
-        final Statistic invalids = this.stats.statistic(
-            "invalidations"
-        );
-        invalids.increment();
+        this.stats.statistic("invalidations").increment();
         return this.results.remove(key);
     }
 
@@ -104,14 +100,11 @@ public final class TableCache implements Cache<String, Table> {
     public boolean contains(final String key) {
         final boolean exists = this.results.containsKey(key);
         if (exists) {
-            final Statistic hits = this.stats.statistic("hits");
-            hits.increment();
+            this.stats.statistic("hits").increment();
         } else {
-            final Statistic misses = this.stats.statistic("misses");
-            misses.increment();
+            this.stats.statistic("misses").increment();
         }
-        final Statistic lookups = this.stats.statistic("lookups");
-        lookups.increment();
+        this.stats.statistic("lookups").increment();
         return exists;
     }
 
