@@ -2,31 +2,34 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.query.normalized;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.query.merged.Shuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
 
 /**
- * Normalized.
- * <p>Normalize a {@link Query}, i.e. converts the query to canonical form.
+ * Merged.
+ * <p>
+ * A decorator for {@link Query} that inlines parameter values into a query.
  *
  * @since 0.9.0
  */
-public final class Normalized implements Query {
+public final class Merged implements Query {
     /**
-     * The query.
+     * Query.
      */
     private final Query origin;
 
     /**
-     * Normalized SQL code.
+     * SQL code.
      */
     private final Text code;
 
@@ -35,17 +38,17 @@ public final class Normalized implements Query {
      *
      * @param query A {@link Query}
      */
-    public Normalized(final Query query) {
+    public Merged(final Query query) {
         this.origin = query;
         this.code = new Sticky(
             () -> {
                 final SqlParser.Config config = SqlParser.config()
-                    .withCaseSensitive(false)
+                    .withConformance(SqlConformanceEnum.DEFAULT)
                     .withQuoting(Quoting.BACK_TICK);
                 final SqlParser parser = SqlParser.create(query.sql(), config);
-                final SqlNode stmt = parser.parseQuery();
-                final SqlNode canonical = stmt.accept(new Shuttle());
-                return new Pretty(canonical).asString();
+                final SqlNode stmt = parser.parseStmt();
+                final SqlNode replaced = stmt.accept(new Shuttle(query));
+                return new Pretty(replaced).asString();
             }
         );
     }

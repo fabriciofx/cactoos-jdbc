@@ -2,11 +2,9 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.query.normalized;
+package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
-import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
-import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
