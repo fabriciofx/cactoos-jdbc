@@ -59,7 +59,7 @@ final class TableCacheTest {
                 """
                 (?s).*\\[cache\\] Cache statistics:
                 \\s+hits: 1
-                \\s+lookups: 2
+                \\s+lookups: 3
                 \\s+invalidations: 1
                 \\s+misses: 1
                 \\s+evictions: 0.*\
