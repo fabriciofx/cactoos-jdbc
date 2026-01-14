@@ -6,9 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Eviction;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Evictions;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Hits;
-import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Invalidation;
+import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Invalidations;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Lookups;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistic.Misses;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
@@ -44,8 +44,8 @@ public final class TableCache implements Cache<String, Table> {
                 new Hits(),
                 new Misses(),
                 new Lookups(),
-                new Eviction(),
-                new Invalidation()
+                new Evictions(),
+                new Invalidations()
             )
         );
     }
@@ -81,20 +81,20 @@ public final class TableCache implements Cache<String, Table> {
 
     @Override
     public void store(final String key, final Table value) {
-        final Statistic eviction = this.stats.statistic("eviction");
+        final Statistic evictions = this.stats.statistic("evictions");
         while (this.results.size() > this.size) {
             this.results.remove(this.results.keySet().iterator().next());
-            eviction.increment();
+            evictions.increment();
         }
         this.results.put(key, value);
     }
 
     @Override
     public Table delete(final String key) {
-        final Statistic invalidation = this.stats.statistic(
-            "invalidation"
+        final Statistic invalids = this.stats.statistic(
+            "invalidations"
         );
-        invalidation.increment();
+        invalids.increment();
         return this.results.remove(key);
     }
 

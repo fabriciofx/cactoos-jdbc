@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>Explicit removals.</p>
  * @since 0.9.0
  */
-public final class Invalidation implements Statistic {
+public final class Invalidations implements Statistic {
     /**
      * Count.
      */
@@ -21,7 +21,7 @@ public final class Invalidation implements Statistic {
     /**
      * Ctor.
      */
-    public Invalidation() {
+    public Invalidations() {
         this(new AtomicInteger(0));
     }
 
@@ -29,13 +29,13 @@ public final class Invalidation implements Statistic {
      * Ctor.
      * @param count Count
      */
-    public Invalidation(final AtomicInteger count) {
+    public Invalidations(final AtomicInteger count) {
         this.count = count;
     }
 
     @Override
     public String name() {
-        return "invalidation";
+        return "invalidations";
     }
 
     @Override
