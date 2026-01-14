@@ -8,6 +8,7 @@ import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.pretty.SqlPrettyWriter;
+import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.text.Replaced;
 import org.cactoos.text.Sticky;
@@ -31,6 +32,15 @@ public final class Pretty implements Text {
      * @param node A {@link SqlNode}
      */
     public Pretty(final SqlNode node) {
+        this(() -> node);
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param node A Scalar of {@link SqlNode}
+     */
+    public Pretty(final Scalar<SqlNode> node) {
         this.sql = new Sticky(
             () -> {
                 final SqlDialect dialect = SqlDialect
@@ -45,7 +55,7 @@ public final class Pretty implements Text {
                 final SqlPrettyWriter writer = new SqlPrettyWriter(config);
                 return new Trimmed(
                     new Replaced(
-                        new TextOf(writer.format(node)),
+                        new TextOf(writer.format(node.value())),
                         "\\s+",
                         " "
                     )
