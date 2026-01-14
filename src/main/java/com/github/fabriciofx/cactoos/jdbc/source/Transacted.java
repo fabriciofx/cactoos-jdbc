@@ -10,7 +10,7 @@ import org.cactoos.Scalar;
 
 /**
  * Transacted source.
- * A decorator for {@link Source}. Produces a unique not auto commited
+ * A decorator for {@link Source}. Produces a unique not auto committed
  * {@link Session} that must be used in a
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}. This
  * connection only can be closed after a commit() or rollback() provided by
@@ -24,7 +24,7 @@ public final class Transacted implements Source {
     private final Source origin;
 
     /**
-     * Unique not auto commited connection.
+     * Unique not auto committed connection.
      */
     private final Scalar<Session> cnnx;
 

@@ -36,14 +36,14 @@ public final class OrderedWith implements Scalar<SqlNode> {
 
     @Override
     public SqlNode value() throws Exception {
-        final SqlNodeList withs = new SortedWith(
+        final SqlNodeList list = new SortedWith(
             this.shuttle,
             this.with.withList
         ).value();
         final SqlNode body = this.with.body.accept(this.shuttle);
         return new SqlWith(
             this.with.getParserPosition(),
-            withs,
+            list,
             body
         );
     }

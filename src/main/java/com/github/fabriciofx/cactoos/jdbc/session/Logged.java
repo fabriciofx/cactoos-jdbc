@@ -130,7 +130,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] commited.",
+                "[%s] Session[#%d] committed.",
                 this.from,
                 this.id
             ).asString()

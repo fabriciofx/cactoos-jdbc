@@ -109,8 +109,8 @@ public final class Comparison {
     }
 
     private static boolean column(final SqlNode node) {
-        return node instanceof final SqlBasicCall cll
-            && ".".equals(cll.getOperator().getName());
+        return node instanceof final SqlBasicCall basic
+            && ".".equals(basic.getOperator().getName());
     }
 
     private static SqlOperator invert(final SqlOperator operator) {
