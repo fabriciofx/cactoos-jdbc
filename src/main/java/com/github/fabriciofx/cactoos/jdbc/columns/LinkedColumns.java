@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.table;
+package com.github.fabriciofx.cactoos.jdbc.columns;
 
 import com.github.fabriciofx.cactoos.jdbc.Columns;
 import java.util.LinkedHashMap;
