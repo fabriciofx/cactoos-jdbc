@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Store;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
@@ -37,7 +37,7 @@ public final class Cached extends PreparedEnvelope {
     /**
      * The cache.
      */
-    private final Cache<String, Table> cache;
+    private final Store<String, Table> cache;
 
     /**
      * Hash function.
@@ -57,7 +57,7 @@ public final class Cached extends PreparedEnvelope {
         final PreparedStatement origin,
         final PreparedStatement stored,
         final Normalized normalized,
-        final Cache<String, Table> cache,
+        final Store<String, Table> cache,
         final Func<Query, String> hash
     ) {
         super(origin);
@@ -79,7 +79,7 @@ public final class Cached extends PreparedEnvelope {
                 try (ResultSet rset = this.stored.executeQuery()) {
                     final Table table = new LinkedTable(rset);
                     result = new CachedResultSet(table.rows(), table.columns());
-                    this.cache.store(key, table);
+                    this.cache.save(key, table);
                 }
             }
             return result;

@@ -4,11 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Store;
 import com.github.fabriciofx.cactoos.jdbc.Columns;
 import com.github.fabriciofx.cactoos.jdbc.Row;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.store.Logged;
+import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
 import com.github.fabriciofx.cactoos.jdbc.columns.LinkedColumns;
 import com.github.fabriciofx.cactoos.jdbc.row.LinkedRow;
 import com.github.fabriciofx.cactoos.jdbc.rows.LinkedRows;
@@ -25,13 +27,13 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
  * TableCache tests.
  * @since 0.9.0
  */
-final class TableCacheTest {
+final class TableStoreTest {
     @Test
-    void showStatistics() {
+    void storeAndRetrieve() {
         final FakeLogger logger = new FakeLogger();
-        final Cache<String, Table> cache = new Logged<>(
-            new TableCache(),
-            "cache",
+        final Store<String, Table> store = new Logged<>(
+            new TableStore(),
+            "store",
             logger
         );
         final Row rowa = new LinkedRow();
@@ -46,13 +48,12 @@ final class TableCacheTest {
         final Columns columns = new LinkedColumns();
         columns.add("name", Types.VARCHAR);
         columns.add("age", Types.INTEGER);
-        cache.store("a", new FakeTable(rows, columns));
-        cache.contains("a");
-        cache.contains("b");
-        cache.retrieve("a");
-        cache.delete("a");
-        cache.statistics();
-        cache.clear();
+        store.save("a", new FakeTable(rows, columns));
+        store.contains("a");
+        store.contains("b");
+        store.retrieve("a");
+        store.delete("a");
+        store.clear();
         new Assertion<>(
             "must log cache statistics",
             new MatchesRegex(

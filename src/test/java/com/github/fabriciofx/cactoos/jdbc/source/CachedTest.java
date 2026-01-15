@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
 import com.github.fabriciofx.cactoos.jdbc.hash.Murmur3Hash;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
@@ -44,8 +44,8 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
-                    new TableCache(),
+                new com.github.fabriciofx.cactoos.jdbc.cache.store.Logged<>(
+                    new TableStore(),
                     "cache",
                     logger
                 ),
@@ -156,8 +156,8 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
-                    new TableCache(),
+                new com.github.fabriciofx.cactoos.jdbc.cache.store.Logged<>(
+                    new TableStore(),
                     "cache",
                     logger
                 ),

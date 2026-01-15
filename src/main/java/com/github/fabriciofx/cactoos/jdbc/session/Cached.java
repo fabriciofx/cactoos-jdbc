@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Store;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
@@ -32,7 +32,7 @@ public final class Cached implements Session {
     /**
      * Cache.
      */
-    private final Cache<String, Table> cache;
+    private final Store<String, Table> cache;
 
     /**
      * Hash function.
@@ -48,7 +48,7 @@ public final class Cached implements Session {
      */
     public Cached(
         final Session session,
-        final Cache<String, Table> cache,
+        final Store<String, Table> cache,
         final Func<Query, String> hash
     ) {
         this.origin = session;

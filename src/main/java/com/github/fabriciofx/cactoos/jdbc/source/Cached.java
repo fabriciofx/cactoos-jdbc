@@ -4,12 +4,12 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Store;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
 import com.github.fabriciofx.cactoos.jdbc.hash.Murmur3Hash;
 import org.cactoos.Func;
 
@@ -27,7 +27,7 @@ public final class Cached implements Source {
     /**
      * Cache.
      */
-    private final Cache<String, Table> cache;
+    private final Store<String, Table> cache;
 
     /**
      * Hash Function.
@@ -39,7 +39,7 @@ public final class Cached implements Source {
      * @param source The source
      */
     public Cached(final Source source) {
-        this(source, new TableCache(), new Murmur3Hash());
+        this(source, new TableStore(), new Murmur3Hash());
     }
 
     /**
@@ -49,7 +49,7 @@ public final class Cached implements Source {
      */
     public Cached(
         final Source source,
-        final Cache<String, Table> cache
+        final Store<String, Table> cache
     ) {
         this(source, cache, new Murmur3Hash());
     }
@@ -62,7 +62,7 @@ public final class Cached implements Source {
      */
     public Cached(
         final Source source,
-        final Cache<String, Table> cache,
+        final Store<String, Table> cache,
         final Func<Query, String> hash
     ) {
         this.origin = source;
