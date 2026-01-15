@@ -17,8 +17,9 @@ public interface Statistic {
 
     /**
      * Increments the statistic.
+     * @param num Amount to increment the statistic
      */
-    void increment();
+    void increment(int num);
 
     /**
      * Resets the statistic.

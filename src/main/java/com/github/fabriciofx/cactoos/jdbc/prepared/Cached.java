@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.prepared;
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
@@ -72,14 +73,15 @@ public final class Cached extends PreparedEnvelope {
         try {
             final ResultSet result;
             final String key = this.hash.apply(this.normalized);
-            if (this.cache.contains(key)) {
-                final Table table = this.cache.retrieve(key);
+            final Store<String, Table> store = this.cache.store();
+            if (store.contains(key)) {
+                final Table table = store.retrieve(key);
                 result = new CachedResultSet(table.rows(), table.columns());
             } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
                     final Table table = new LinkedTable(rset);
                     result = new CachedResultSet(table.rows(), table.columns());
-                    this.cache.store(key, table);
+                    store.save(key, table);
                 }
             }
             return result;

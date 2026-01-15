@@ -39,8 +39,8 @@ public final class Invalidations implements Statistic {
     }
 
     @Override
-    public void increment() {
-        this.count.incrementAndGet();
+    public void increment(final int num) {
+        this.count.addAndGet(num);
     }
 
     @Override

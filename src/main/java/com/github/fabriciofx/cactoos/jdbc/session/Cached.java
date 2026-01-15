@@ -77,7 +77,7 @@ public final class Cached implements Session {
                 break;
             case DELETE:
                 prepared = this.origin.prepared(plan);
-                this.cache.clear();
+                this.cache.store().clear();
                 break;
             default:
                 prepared = this.origin.prepared(plan);

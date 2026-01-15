@@ -22,15 +22,17 @@ import org.llorllale.cactoos.matchers.Matches;
 import org.llorllale.cactoos.matchers.MatchesRegex;
 
 /**
- * TableCache tests.
+ * Instrumented tests.
  * @since 0.9.0
  */
-final class TableCacheTest {
+final class InstrumentedTest {
     @Test
-    void showStatistics() {
+    void logStatistics() throws Exception {
         final FakeLogger logger = new FakeLogger();
         final Cache<String, Table> cache = new Logged<>(
-            new TableCache(),
+            new Instrumented<>(
+                new TableCache()
+            ),
             "cache",
             logger
         );
@@ -46,13 +48,13 @@ final class TableCacheTest {
         final Columns columns = new LinkedColumns();
         columns.add("name", Types.VARCHAR);
         columns.add("age", Types.INTEGER);
-        cache.store("a", new FakeTable(rows, columns));
-        cache.contains("a");
-        cache.contains("b");
-        cache.retrieve("a");
-        cache.delete("a");
+        cache.store().save("a", new FakeTable(rows, columns));
+        cache.store().contains("a");
+        cache.store().contains("b");
+        cache.store().retrieve("a");
+        cache.store().delete("a");
         cache.statistics();
-        cache.clear();
+        cache.store().clear();
         new Assertion<>(
             "must log cache statistics",
             new MatchesRegex(
