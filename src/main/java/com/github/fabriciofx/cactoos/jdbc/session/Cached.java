@@ -18,7 +18,9 @@ import java.sql.PreparedStatement;
 import org.cactoos.Func;
 
 /**
- * Cached. A decorator for Session that allows caching results.
+ * Cached.
+ * <p>
+ * A decorator for Session that allows caching results.
  *
  * @since 0.9.0
  */
@@ -62,13 +64,12 @@ public final class Cached implements Session {
         switch (new QueryKind(plan.query()).value()) {
             case SELECT:
             case WITH:
+            case ORDER_BY:
                 prepared =
                     new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                         this.origin.prepared(plan),
                         this.origin.prepared(
-                            new Simple(
-                                new Normalized(plan.query())
-                            )
+                            new Simple(new Normalized(plan.query()))
                         ),
                         new Normalized(new Merged(plan.query())),
                         this.cache,
