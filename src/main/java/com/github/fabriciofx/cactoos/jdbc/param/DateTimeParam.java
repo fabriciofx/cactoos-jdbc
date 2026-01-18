@@ -7,7 +7,9 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
@@ -53,5 +55,26 @@ public final class DateTimeParam implements Param {
     @Override
     public SqlNode value(final SqlParserPos from) {
         return null;
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final long seconds = this.datetime.toEpochSecond(ZoneOffset.UTC);
+        final int nanos = this.datetime.getNano();
+        return new byte[] {
+            (byte) Types.TIMESTAMP,
+            (byte) seconds,
+            (byte) (seconds >>> 8),
+            (byte) (seconds >>> 16),
+            (byte) (seconds >>> 24),
+            (byte) (seconds >>> 32),
+            (byte) (seconds >>> 40),
+            (byte) (seconds >>> 48),
+            (byte) (seconds >>> 56),
+            (byte) nanos,
+            (byte) (nanos >>> 8),
+            (byte) (nanos >>> 16),
+            (byte) (nanos >>> 24),
+        };
     }
 }

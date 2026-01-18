@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
@@ -24,14 +25,14 @@ public final class BoolParam implements Param {
     /**
      * Value.
      */
-    private final Boolean bool;
+    private final boolean bool;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public BoolParam(final String name, final Boolean value) {
+    public BoolParam(final String name, final boolean value) {
         this.id = name;
         this.bool = value;
     }
@@ -52,5 +53,15 @@ public final class BoolParam implements Param {
     @Override
     public SqlNode value(final SqlParserPos from) {
         return SqlLiteral.createBoolean(this.bool, from);
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final byte[] bytes = new byte[2];
+        bytes[0] = (byte) Types.BOOLEAN;
+        if (this.bool) {
+            bytes[1] = (byte) 1;
+        }
+        return bytes;
     }
 }

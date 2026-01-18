@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
@@ -24,14 +25,14 @@ public final class DoubleParam implements Param {
     /**
      * Value.
      */
-    private final Double num;
+    private final double num;
 
     /**
      * Ctor.
      * @param name The id
      * @param value The data
      */
-    public DoubleParam(final String name, final Double value) {
+    public DoubleParam(final String name, final double value) {
         this.id = name;
         this.num = value;
     }
@@ -51,6 +52,22 @@ public final class DoubleParam implements Param {
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createExactNumeric(this.num.toString(), from);
+        return SqlLiteral.createExactNumeric(String.valueOf(this.num), from);
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final long bits = Double.doubleToLongBits(this.num);
+        return new byte[] {
+            (byte) Types.DOUBLE,
+            (byte) bits,
+            (byte) (bits >>> 8),
+            (byte) (bits >>> 16),
+            (byte) (bits >>> 24),
+            (byte) (bits >>> 32),
+            (byte) (bits >>> 40),
+            (byte) (bits >>> 48),
+            (byte) (bits >>> 56),
+        };
     }
 }

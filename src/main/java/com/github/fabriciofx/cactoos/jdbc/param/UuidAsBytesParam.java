@@ -5,9 +5,10 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
-import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.UUID;
+import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
 
@@ -47,15 +48,56 @@ public final class UuidAsBytesParam implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        // @checkstyle MagicNumber (1 line)
-        final ByteBuffer bytes = ByteBuffer.wrap(new byte[16]);
-        bytes.putLong(this.uuid.getMostSignificantBits());
-        bytes.putLong(this.uuid.getLeastSignificantBits());
-        stmt.setBytes(index, bytes.array());
+        final long most = this.uuid.getMostSignificantBits();
+        final long least = this.uuid.getLeastSignificantBits();
+        final byte[] bytes = {
+            (byte) (most >>> 56),
+            (byte) (most >>> 48),
+            (byte) (most >>> 40),
+            (byte) (most >>> 32),
+            (byte) (most >>> 24),
+            (byte) (most >>> 16),
+            (byte) (most >>> 8),
+            (byte) most,
+            (byte) (least >>> 56),
+            (byte) (least >>> 48),
+            (byte) (least >>> 40),
+            (byte) (least >>> 32),
+            (byte) (least >>> 24),
+            (byte) (least >>> 16),
+            (byte) (least >>> 8),
+            (byte) least,
+        };
+        stmt.setBytes(index, bytes);
     }
 
     @Override
     public SqlNode value(final SqlParserPos from) {
-        return null;
+        return SqlLiteral.createUuid(this.uuid, from);
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final long most = this.uuid.getMostSignificantBits();
+        final long least = this.uuid.getLeastSignificantBits();
+        return new byte[] {
+            (byte) Types.OTHER,
+            (byte) most,
+            (byte) (most >>> 8),
+            (byte) (most >>> 16),
+            (byte) (most >>> 24),
+            (byte) (most >>> 32),
+            (byte) (most >>> 40),
+            (byte) (most >>> 48),
+            (byte) (most >>> 56),
+            (byte) least,
+            (byte) (least >>> 8),
+            (byte) (least >>> 16),
+            (byte) (least >>> 24),
+            (byte) (least >>> 32),
+            (byte) (least >>> 40),
+            (byte) (least >>> 48),
+            (byte) (least >>> 56),
+        };
     }
 }

@@ -6,7 +6,10 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
@@ -62,5 +65,17 @@ public final class DecimalParam implements Param {
     @Override
     public SqlNode value(final SqlParserPos from) {
         return SqlLiteral.createExactNumeric(this.decimal.toString(), from);
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final BigInteger unscaled = this.decimal.unscaledValue();
+        final byte[] magnitude = unscaled.toByteArray();
+        final byte[] result = new byte[1 + Integer.BYTES + magnitude.length];
+        final ByteBuffer buffer = ByteBuffer.wrap(result);
+        buffer.put((byte) Types.DECIMAL);
+        buffer.putInt(this.decimal.scale());
+        buffer.put(magnitude);
+        return result;
     }
 }

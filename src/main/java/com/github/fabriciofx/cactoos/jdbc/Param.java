@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 import java.sql.PreparedStatement;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParserPos;
+import org.cactoos.Bytes;
 
 /**
  * A named data.
@@ -15,7 +16,7 @@ import org.apache.calcite.sql.parser.SqlParserPos;
  *
  * @since 0.1
  */
-public interface Param {
+public interface Param extends Bytes {
     /**
      * Get the data name.
      * @return The name

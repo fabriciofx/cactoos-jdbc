@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.calcite.sql.SqlLiteral;
@@ -69,5 +70,21 @@ public final class DateParam implements Param {
             ),
             from
         );
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final long epoch = this.date.toEpochDay();
+        return new byte[] {
+            (byte) Types.DATE,
+            (byte) epoch,
+            (byte) (epoch >>> 8),
+            (byte) (epoch >>> 16),
+            (byte) (epoch >>> 24),
+            (byte) (epoch >>> 32),
+            (byte) (epoch >>> 40),
+            (byte) (epoch >>> 48),
+            (byte) (epoch >>> 56),
+        };
     }
 }
