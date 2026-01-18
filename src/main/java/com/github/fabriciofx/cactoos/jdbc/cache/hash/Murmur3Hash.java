@@ -2,13 +2,9 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.hash;
+package com.github.fabriciofx.cactoos.jdbc.cache.hash;
 
-import com.github.fabriciofx.cactoos.jdbc.Query;
-import java.util.concurrent.ThreadLocalRandom;
-import org.cactoos.Func;
-import org.cactoos.Scalar;
-import org.cactoos.bytes.BytesOf;
+import org.cactoos.Bytes;
 
 /**
  * Murmur3Hash function.
@@ -26,38 +22,45 @@ import org.cactoos.bytes.BytesOf;
     "PMD.ImplicitSwitchFallThrough",
     "PMD.NcssCount"
 })
-public final class Murmur3Hash implements Func<Query, String> {
+public final class Murmur3Hash implements Bytes {
+    /**
+     * Bytes.
+     */
+    private final Bytes bytes;
+
     /**
      * Seed.
      */
-    private final Scalar<Integer> seed;
+    private final int seed;
 
     /**
      * Ctor.
+     * @param bytes Bytes
      */
-    public Murmur3Hash() {
-        this(() -> ThreadLocalRandom.current().nextInt());
+    public Murmur3Hash(final Bytes bytes) {
+        this(bytes, 0);
     }
 
     /**
      * Ctor.
-     *
-     * @param seed Seed
+     * @param bytes Bytes
+     * @param seed The seed
      */
-    public Murmur3Hash(final Scalar<Integer> seed) {
+    public Murmur3Hash(final Bytes bytes, final int seed) {
+        this.bytes = bytes;
         this.seed = seed;
     }
 
     @SuppressWarnings("fallthrough")
     @Override
-    public String apply(final Query query) throws Exception {
-        final byte[] data = new BytesOf(query.sql()).asBytes();
+    public byte[] asBytes() throws Exception {
+        final byte[] data = this.bytes.asBytes();
         final int length = data.length;
         final int blocks = length >> 4;
         final long ctsa = 0x87c37b91114253d5L;
         final long ctsb = 0x4cf5ad432745937fL;
-        long hasha = this.seed.value() & 0xffffffffL;
-        long hashb = this.seed.value() & 0xffffffffL;
+        long hasha = this.seed & 0xffffffffL;
+        long hashb = this.seed & 0xffffffffL;
         for (int num = 0; num < blocks; ++num) {
             final int index = num << 4;
             long keia = littleEndian(data, index);
@@ -131,7 +134,12 @@ public final class Murmur3Hash implements Func<Query, String> {
         hashb = fmix(hashb);
         hasha += hashb;
         hashb += hasha;
-        return String.format("%016x%016x", hasha, hashb);
+        final byte[] out = new byte[16];
+        for (int idx = 0; idx < 8; ++idx) {
+            out[idx] = (byte) (hasha >>> (idx * 8));
+            out[idx + 8] = (byte) (hashb >>> (idx * 8));
+        }
+        return out;
     }
 
     private static long littleEndian(final byte[] data, final int index) {

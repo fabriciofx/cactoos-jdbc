@@ -4,8 +4,8 @@
  */
 
 /**
- * HashFunc.
+ * Hash.
  *
  * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.hash;
+package com.github.fabriciofx.cactoos.jdbc.cache.hash;
