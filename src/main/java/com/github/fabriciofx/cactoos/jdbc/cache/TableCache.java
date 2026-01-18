@@ -5,7 +5,6 @@
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
-import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
 import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
 import org.cactoos.Scalar;
@@ -16,11 +15,11 @@ import org.cactoos.scalar.Unchecked;
  * TableCache.
  * @since 0.9.0
  */
-public final class TableCache implements Cache<String, Table> {
+public final class TableCache implements Cache {
     /**
      * Keep only one Store.
      */
-    private final Scalar<Store<String, Table>> scalar;
+    private final Scalar<Store> scalar;
 
     /**
      * Ctor.
@@ -33,12 +32,12 @@ public final class TableCache implements Cache<String, Table> {
      * Ctor.
      * @param scalar The store
      */
-    public TableCache(final Scalar<Store<String, Table>> scalar) {
+    public TableCache(final Scalar<Store> scalar) {
         this.scalar = scalar;
     }
 
     @Override
-    public Store<String, Table> store() {
+    public Store store() {
         return new Unchecked<>(this.scalar).value();
     }
 

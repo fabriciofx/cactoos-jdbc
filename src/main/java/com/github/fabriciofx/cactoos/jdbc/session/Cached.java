@@ -6,16 +6,13 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
-import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
-import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
-import com.github.fabriciofx.cactoos.jdbc.query.Merged;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
+import com.github.fabriciofx.cactoos.jdbc.sql.TableNames;
 import java.io.IOException;
 import java.sql.PreparedStatement;
-import org.cactoos.Func;
 
 /**
  * Cached.
@@ -34,28 +31,20 @@ public final class Cached implements Session {
     /**
      * Cache.
      */
-    private final Cache<String, Table> cache;
-
-    /**
-     * Hash function.
-     */
-    private final Func<Query, String> hash;
+    private final Cache cache;
 
     /**
      * Ctor.
      *
      * @param session A session
      * @param cache The cache
-     * @param hash The hash function
      */
     public Cached(
         final Session session,
-        final Cache<String, Table> cache,
-        final Func<Query, String> hash
+        final Cache cache
     ) {
         this.origin = session;
         this.cache = cache;
-        this.hash = hash;
     }
 
     @Override
@@ -65,20 +54,22 @@ public final class Cached implements Session {
             case SELECT:
             case WITH:
             case ORDER_BY:
+                final Normalized normalized = new Normalized(plan.query());
                 prepared =
                     new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                         this.origin.prepared(plan),
-                        this.origin.prepared(
-                            new Simple(new Normalized(plan.query()))
-                        ),
-                        new Normalized(new Merged(plan.query())),
-                        this.cache,
-                        this.hash
+                        this.origin.prepared(new Simple(normalized)),
+                        normalized,
+                        this.cache
                     );
                 break;
+            case INSERT:
+            case UPDATE:
             case DELETE:
+                this.cache.store().invalidate(
+                    new TableNames(plan.query()).value()
+                );
                 prepared = this.origin.prepared(plan);
-                this.cache.store().clear();
                 break;
             default:
                 prepared = this.origin.prepared(plan);

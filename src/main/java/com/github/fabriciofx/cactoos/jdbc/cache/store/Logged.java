@@ -4,31 +4,34 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache.store;
 
+import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
+import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.cactoos.Text;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Ternary;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.FormattedText;
+import org.cactoos.text.Joined;
+import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
  * Logged.
- * <p>
- * A {@link Store} decorator to logging store operations.
- *
- * @param <K> The key type
- * @param <V> The value type
+ * <p>A {@link Store} decorator to logging store operations.
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (500 lines)
  */
-public final class Logged<K, V> implements Store<K, V> {
+public final class Logged implements Store {
     /**
-     * Cache to be logged.
+     * Store.
      */
-    private final Store<K, V> origin;
+    private final Store origin;
 
     /**
      * Where the logs come from.
@@ -48,27 +51,27 @@ public final class Logged<K, V> implements Store<K, V> {
     /**
      * Ctor.
      *
-     * @param origin The cache to be logged
+     * @param store The cache to be logged
      * @param from Where the data comes from
      */
-    public Logged(final Store<K, V> origin, final String from) {
-        this(origin, from, Logger.getLogger(from));
+    public Logged(final Store store, final String from) {
+        this(store, from, Logger.getLogger(from));
     }
 
     /**
      * Ctor.
      *
-     * @param origin The cache to be logged
+     * @param store The cache to be logged
      * @param from Where the data comes from
      * @param logger The logger
      */
     public Logged(
-        final Store<K, V> origin,
+        final Store store,
         final String from,
         final Logger logger
     ) {
         this(
-            origin,
+            store,
             from,
             logger,
             new Unchecked<>(
@@ -92,51 +95,51 @@ public final class Logged<K, V> implements Store<K, V> {
     /**
      * Ctor.
      *
-     * @param cache The cache to be logged
+     * @param store The cache to be logged
      * @param from Where the data comes from
      * @param logger The logger
      * @param level The logger level
      */
     public Logged(
-        final Store<K, V> cache,
+        final Store store,
         final String from,
         final Logger logger,
         final Unchecked<Level> level
     ) {
-        this.origin = cache;
+        this.origin = store;
         this.from = from;
         this.logger = logger;
         this.level = level;
     }
 
     @Override
-    public V retrieve(final K key) {
-        final V value = this.origin.retrieve(key);
+    public Entry retrieve(final Key key) {
+        final Entry entry = this.origin.retrieve(key);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
                     "[%s] Retrieving from cache with key '%s' and value '%s'.",
                     this.from,
-                    key.toString(),
-                    value.toString()
+                    key.hash(),
+                    entry.value().toString()
                 )
             ).asString()
         );
-        return value;
+        return entry;
     }
 
     @Override
-    public List<V> save(final K key, final V value) throws Exception {
-        final List<V> removed = this.origin.save(key, value);
+    public List<Entry> save(final Key key, final Entry entry) throws Exception {
+        final List<Entry> removed = this.origin.save(key, entry);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
                     "[%s] Storing in cache with key '%s' and value '%s'.",
                     this.from,
-                    key.toString(),
-                    value.toString()
+                    key.hash(),
+                    entry.value().toString()
                 )
             ).asString()
         );
@@ -144,30 +147,30 @@ public final class Logged<K, V> implements Store<K, V> {
     }
 
     @Override
-    public V delete(final K key) {
-        final V value = this.origin.delete(key);
+    public Entry delete(final Key key) {
+        final Entry entry = this.origin.delete(key);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
                     "[%s] Deleting into cache with key '%s' and returning value '%s'.",
                     this.from,
-                    key.toString(),
+                    key.hash(),
                     new Unchecked<>(
                         new Ternary<>(
-                            value != null,
-                            () -> value.toString(),
+                            entry != null,
+                            () -> entry.value().toString(),
                             () -> "(null)"
                         )
                     ).value()
                 )
             ).asString()
         );
-        return value;
+        return entry;
     }
 
     @Override
-    public boolean contains(final K key) {
+    public boolean contains(final Key key) {
         final boolean exists = this.origin.contains(key);
         this.logger.log(
             this.level.value(),
@@ -175,12 +178,35 @@ public final class Logged<K, V> implements Store<K, V> {
                 new FormattedText(
                     "[%s] Checking if cache has a value for key '%s': %s.",
                     this.from,
-                    key.toString(),
+                    key.hash(),
                     exists
                 )
             ).asString()
         );
         return exists;
+    }
+
+    @Override
+    public List<Entry> invalidate(final Set<String> tables) {
+        final List<Entry> removed = this.origin.invalidate(tables);
+        this.logger.log(
+            this.level.value(),
+            new UncheckedText(
+                new FormattedText(
+                    "[%s] Invalidating %d cache entries with keys: '%s'",
+                    this.from,
+                    removed.size(),
+                    new Joined(
+                        new TextOf(", "),
+                        new Mapped<Text>(
+                            entry -> new TextOf(entry.key().hash()),
+                            removed
+                        )
+                    )
+                )
+            ).asString()
+        );
+        return removed;
     }
 
     @Override

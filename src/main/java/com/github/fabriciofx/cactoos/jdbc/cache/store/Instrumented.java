@@ -4,21 +4,22 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache.store;
 
+import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
+import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Statistics;
 import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Instrumented Store.
- * @param <K> The key type
- * @param <V> The value type
  * @since 0.9.0
  */
-public final class Instrumented<K, V> implements Store<K, V> {
+public final class Instrumented implements Store {
     /**
-     * Cache.
+     * Store.
      */
-    private final Store<K, V> origin;
+    private final Store origin;
 
     /**
      * Statistics.
@@ -30,32 +31,32 @@ public final class Instrumented<K, V> implements Store<K, V> {
      * @param cache The cache
      * @param statistics The statistics
      */
-    public Instrumented(final Store<K, V> cache, final Statistics statistics) {
+    public Instrumented(final Store cache, final Statistics statistics) {
         this.origin = cache;
         this.stats = statistics;
     }
 
     @Override
-    public V retrieve(final K key) {
+    public Entry retrieve(final Key key) {
         this.stats.statistic("lookups").increment(1);
         return this.origin.retrieve(key);
     }
 
     @Override
-    public List<V> save(final K key, final V value) throws Exception {
-        final List<V> removed = this.origin.save(key, value);
+    public List<Entry> save(final Key key, final Entry entry) throws Exception {
+        final List<Entry> removed = this.origin.save(key, entry);
         this.stats.statistic("evictions").increment(removed.size());
         return removed;
     }
 
     @Override
-    public V delete(final K key) {
+    public Entry delete(final Key key) {
         this.stats.statistic("invalidations").increment(1);
         return this.origin.delete(key);
     }
 
     @Override
-    public boolean contains(final K key) {
+    public boolean contains(final Key key) {
         final boolean exists = this.origin.contains(key);
         if (exists) {
             this.stats.statistic("hits").increment(1);
@@ -64,6 +65,13 @@ public final class Instrumented<K, V> implements Store<K, V> {
         }
         this.stats.statistic("lookups").increment(1);
         return exists;
+    }
+
+    @Override
+    public List<Entry> invalidate(final Set<String> tables) {
+        final List<Entry> removed = this.origin.invalidate(tables);
+        this.stats.statistic("invalidations").increment(removed.size());
+        return removed;
     }
 
     @Override

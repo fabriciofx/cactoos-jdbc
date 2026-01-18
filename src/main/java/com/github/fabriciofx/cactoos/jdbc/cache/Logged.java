@@ -19,17 +19,15 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged Cache.
- * @param <K> The key type
- * @param <V> The value type
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (200 lines)
  */
 @SuppressWarnings("PMD.UnnecessaryFullyQualifiedName")
-public final class Logged<K, V> implements Cache<K, V> {
+public final class Logged implements Cache {
     /**
      * Cache.
      */
-    private final Cache<K, V> origin;
+    private final Cache origin;
 
     /**
      * Where the data comes from.
@@ -52,7 +50,7 @@ public final class Logged<K, V> implements Cache<K, V> {
      * @param cache The cache to be logged
      * @param from Where the data comes from
      */
-    public Logged(final Cache<K, V> cache, final String from) {
+    public Logged(final Cache cache, final String from) {
         this(cache, from, Logger.getLogger(from));
     }
 
@@ -64,7 +62,7 @@ public final class Logged<K, V> implements Cache<K, V> {
      * @param logger The logger
      */
     public Logged(
-        final Cache<K, V> cache,
+        final Cache cache,
         final String from,
         final Logger logger
     ) {
@@ -91,7 +89,7 @@ public final class Logged<K, V> implements Cache<K, V> {
     }
 
     public Logged(
-        final Cache<K, V> cache,
+        final Cache cache,
         final String from,
         final Logger logger,
         final Unchecked<Level> level
@@ -103,8 +101,8 @@ public final class Logged<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Store<K, V> store() {
-        return new com.github.fabriciofx.cactoos.jdbc.cache.store.Logged<>(
+    public Store store() {
+        return new com.github.fabriciofx.cactoos.jdbc.cache.store.Logged(
             this.origin.store(),
             this.from,
             this.logger,

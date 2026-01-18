@@ -4,7 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache.policy;
 
-import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
+import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Policy;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.Map;
 
 /**
  * MaxSizePolicy.
+ *
  * @since 0.9.0
  */
-public final class MaxSizePolicy implements Policy<Map<String, Table>, Table> {
+public final class MaxSizePolicy implements Policy {
     /**
      * Max size.
      */
@@ -29,6 +31,7 @@ public final class MaxSizePolicy implements Policy<Map<String, Table>, Table> {
 
     /**
      * Ctor.
+     *
      * @param max Maximum size
      */
     public MaxSizePolicy(final int max) {
@@ -36,10 +39,10 @@ public final class MaxSizePolicy implements Policy<Map<String, Table>, Table> {
     }
 
     @Override
-    public List<Table> apply(final Map<String, Table> results) {
-        final List<Table> removed = new LinkedList<>();
-        while (results.size() > this.max) {
-            removed.add(results.remove(results.keySet().iterator().next()));
+    public List<Entry> apply(final Map<Key, Entry> input) throws Exception {
+        final List<Entry> removed = new LinkedList<>();
+        while (input.size() > this.max) {
+            removed.add(input.remove(input.keySet().iterator().next()));
         }
         return removed;
     }

@@ -14,16 +14,14 @@ import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
 
 /**
  * Instrumented Cache.
- * @param <K> The key type
- * @param <V> The value type
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnnecessaryFullyQualifiedName")
-public final class Instrumented<K, V> implements Cache<K, V> {
+public final class Instrumented implements Cache {
     /**
      * Cache.
      */
-    private final Cache<K, V> origin;
+    private final Cache origin;
 
     /**
      * Statistics.
@@ -34,7 +32,7 @@ public final class Instrumented<K, V> implements Cache<K, V> {
      * Ctor.
      * @param cache The cache
      */
-    public Instrumented(final Cache<K, V> cache) {
+    public Instrumented(final Cache cache) {
         this(
             cache,
             new StatisticsOf(
@@ -52,14 +50,14 @@ public final class Instrumented<K, V> implements Cache<K, V> {
      * @param cache The cache
      * @param statistics The statistics
      */
-    public Instrumented(final Cache<K, V> cache, final Statistics statistics) {
+    public Instrumented(final Cache cache, final Statistics statistics) {
         this.origin = cache;
         this.stats = statistics;
     }
 
     @Override
-    public Store<K, V> store() {
-        return new com.github.fabriciofx.cactoos.jdbc.cache.store.Instrumented<>(
+    public Store store() {
+        return new com.github.fabriciofx.cactoos.jdbc.cache.store.Instrumented(
             this.origin.store(),
             this.stats
         );

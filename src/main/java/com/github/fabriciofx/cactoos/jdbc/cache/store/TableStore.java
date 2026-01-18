@@ -4,76 +4,108 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache.store;
 
-import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
+import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Policy;
 import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import com.github.fabriciofx.cactoos.jdbc.cache.policy.MaxSizePolicy;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * TableStore.
  *
  * @since 0.9.0
  */
-public final class TableStore implements Store<String, Table> {
+public final class TableStore implements Store {
     /**
-     * The Results.
+     * Entries.
      */
-    private final Map<String, Table> results;
+    private final Map<Key, Entry> entries;
+
+    /**
+     * Keys.
+     */
+    private final Map<String, Set<Key>> keys;
 
     /**
      * Policy.
      */
-    private final Policy<Map<String, Table>, Table> policy;
+    private final Policy policy;
 
     /**
      * Ctor.
      */
     public TableStore() {
-        this(new HashMap<>(), new MaxSizePolicy());
+        this(new HashMap<>(), new HashMap<>(), new MaxSizePolicy());
     }
 
     /**
      * Ctor.
      *
-     * @param results Data to initialize the cache
+     * @param entries Data to initialize the cache
+     * @param keys Keys associated to a table
      * @param policy Policy that will remove automatically old cache entries
      */
     public TableStore(
-        final Map<String, Table> results,
-        final Policy<Map<String, Table>, Table> policy
+        final Map<Key, Entry> entries,
+        final Map<String, Set<Key>> keys,
+        final Policy policy
     ) {
-        this.results = results;
+        this.entries = entries;
+        this.keys = keys;
         this.policy = policy;
     }
 
     @Override
-    public Table retrieve(final String key) {
-        return this.results.get(key);
+    public Entry retrieve(final Key key) {
+        return this.entries.get(key);
     }
 
     @Override
-    public List<Table> save(final String key, final Table value)
+    public List<Entry> save(final Key key, final Entry entry)
         throws Exception {
-        final List<Table> removed = this.policy.apply(this.results);
-        this.results.put(key, value);
+        final List<Entry> removed = this.policy.apply(this.entries);
+        removed.forEach(element -> element.tables().forEach(this.keys::remove));
+        entry.tables().forEach(
+            table -> this.keys
+                .computeIfAbsent(table, tbl -> new HashSet<>())
+                .add(key)
+        );
+        this.entries.put(key, entry);
         return removed;
     }
 
     @Override
-    public Table delete(final String key) {
-        return this.results.remove(key);
+    public Entry delete(final Key key) {
+        this.keys.values().forEach(element -> element.remove(key));
+        return this.entries.remove(key);
     }
 
     @Override
-    public boolean contains(final String key) {
-        return this.results.containsKey(key);
+    public boolean contains(final Key key) {
+        return this.entries.containsKey(key);
+    }
+
+    @Override
+    public List<Entry> invalidate(final Set<String> tables) {
+        return tables.stream()
+            .map(this.keys::remove)
+            .filter(Objects::nonNull)
+            .flatMap(Set::stream)
+            .distinct()
+            .map(this.entries::remove)
+            .filter(Objects::nonNull)
+            .toList();
     }
 
     @Override
     public void clear() {
-        this.results.clear();
+        this.entries.clear();
+        this.keys.clear();
     }
 }

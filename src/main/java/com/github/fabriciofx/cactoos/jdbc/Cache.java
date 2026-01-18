@@ -9,16 +9,14 @@ import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 
 /**
  * Cache.
- * @param <K> The key type
- * @param <V> The value type
  * @since 0.9.0
  */
-public interface Cache<K, V> {
+public interface Cache {
     /**
      * Store.
      * @return The store.
      */
-    Store<K, V> store();
+    Store store();
 
     /**
      * Statistics.

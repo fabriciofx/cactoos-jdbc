@@ -7,7 +7,6 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
-import com.github.fabriciofx.cactoos.jdbc.hash.Murmur3Hash;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -44,12 +43,11 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                new com.github.fabriciofx.cactoos.jdbc.cache.Logged(
                     new TableCache(),
                     "cache",
                     logger
-                ),
-                new Murmur3Hash(() -> 123)
+                )
             ),
             "cache",
             logger
@@ -113,7 +111,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'73be3e0959c6e6da5b3542701762537d': false"
+                    "'eea4b833fac6f4e321611e2a66529376': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -123,7 +121,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
-                    "'73be3e0959c6e6da5b3542701762537d' and value"
+                    "'eea4b833fac6f4e321611e2a66529376' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -133,7 +131,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'73be3e0959c6e6da5b3542701762537d': true"
+                    "'eea4b833fac6f4e321611e2a66529376': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -143,7 +141,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
-                    "'73be3e0959c6e6da5b3542701762537d' and value"
+                    "'eea4b833fac6f4e321611e2a66529376' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -156,12 +154,11 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                new com.github.fabriciofx.cactoos.jdbc.cache.Logged(
                     new TableCache(),
                     "cache",
                     logger
-                ),
-                new Murmur3Hash(() -> 123)
+                )
             ),
             "cache",
             logger
@@ -248,7 +245,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'746e5106734005a04cbba929133f9291': false"
+                    "'fa3a631bc0523744e743bf276a57a7a8': false"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -258,7 +255,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
-                    "'746e5106734005a04cbba929133f9291' and value"
+                    "'fa3a631bc0523744e743bf276a57a7a8' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -268,7 +265,7 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
-                    "'746e5106734005a04cbba929133f9291': true"
+                    "'fa3a631bc0523744e743bf276a57a7a8': true"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -278,14 +275,19 @@ final class CachedTest {
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
-                    "'746e5106734005a04cbba929133f9291' and value"
+                    "'fa3a631bc0523744e743bf276a57a7a8' and value"
                 )
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must log a cache store and retrieve",
-            new HasString("Cleaning the cache and resetting statistics."),
+            new HasString(
+                """
+                Invalidating 1 cache entries with keys: \
+                'fa3a631bc0523744e743bf276a57a7a8'\
+                """
+            ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
     }
