@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
+import org.cactoos.Bytes;
 
 /**
  * Query Params.
@@ -13,7 +14,7 @@ import java.sql.PreparedStatement;
  *
  * @since 0.1
  */
-public interface Params extends Iterable<Param> {
+public interface Params extends Iterable<Param>, Bytes {
     /**
      * Set the PreparedStatement with all query parameters.
      * @param stmt The PreparedStatement

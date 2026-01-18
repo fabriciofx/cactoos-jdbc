@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.params;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
+import java.io.ByteArrayOutputStream;
 import java.sql.PreparedStatement;
 import java.util.Iterator;
 import java.util.List;
@@ -86,5 +87,28 @@ public final class ParamsOf implements Params {
     @Override
     public Iterator<Param> iterator() {
         return this.parameters.value().iterator();
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        for (final Param param : this.parameters.value()) {
+            stream.write(param.asBytes());
+        }
+        stream.flush();
+        return stream.toByteArray();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        return other instanceof ParamsOf
+            && this.parameters.value().equals(
+                ParamsOf.class.cast(other).parameters.value()
+            );
+    }
+
+    @Override
+    public int hashCode() {
+        return this.parameters.value().hashCode();
     }
 }
