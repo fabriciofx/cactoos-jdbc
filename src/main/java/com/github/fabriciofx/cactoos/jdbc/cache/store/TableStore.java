@@ -4,6 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache.store;
 
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
 import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Policy;
@@ -15,33 +17,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 /**
  * TableStore.
  *
  * @since 0.9.0
  */
-public final class TableStore implements Store {
+public final class TableStore implements Store<Query, Table> {
     /**
      * Entries.
      */
-    private final Map<Key, Entry> entries;
+    private final Map<Key<Query>, Entry<Query, Table>> entries;
 
     /**
      * Keys.
      */
-    private final Map<String, Set<Key>> keys;
+    private final Map<String, Set<Key<Query>>> keys;
 
     /**
      * Policy.
      */
-    private final Policy policy;
+    private final Policy<Query, Table> policy;
 
     /**
      * Ctor.
      */
     public TableStore() {
-        this(new HashMap<>(), new HashMap<>(), new MaxSizePolicy());
+        this(
+            new HashMap<>(),
+            new HashMap<>(),
+            new MaxSizePolicy<>()
+        );
     }
 
     /**
@@ -52,9 +59,9 @@ public final class TableStore implements Store {
      * @param policy Policy that will remove automatically old cache entries
      */
     public TableStore(
-        final Map<Key, Entry> entries,
-        final Map<String, Set<Key>> keys,
-        final Policy policy
+        final Map<Key<Query>, Entry<Query, Table>> entries,
+        final Map<String, Set<Key<Query>>> keys,
+        final Policy<Query, Table> policy
     ) {
         this.entries = entries;
         this.keys = keys;
@@ -62,16 +69,22 @@ public final class TableStore implements Store {
     }
 
     @Override
-    public Entry retrieve(final Key key) {
+    public Entry<Query, Table> retrieve(final Key<Query> key) {
         return this.entries.get(key);
     }
 
     @Override
-    public List<Entry> save(final Key key, final Entry entry)
-        throws Exception {
-        final List<Entry> removed = this.policy.apply(this.entries);
-        removed.forEach(element -> element.tables().forEach(this.keys::remove));
-        entry.tables().forEach(
+    public List<Entry<Query, Table>> save(
+        final Key<Query> key,
+        final Entry<Query, Table> entry
+    ) throws Exception {
+        final List<Entry<Query, Table>> removed = this.policy.apply(
+            this.entries
+        );
+        removed.forEach(
+            element -> element.metadata("tables").forEach(this.keys::remove)
+        );
+        entry.metadata("tables").forEach(
             table -> this.keys
                 .computeIfAbsent(table, tbl -> new HashSet<>())
                 .add(key)
@@ -81,19 +94,20 @@ public final class TableStore implements Store {
     }
 
     @Override
-    public Entry delete(final Key key) {
+    public Entry<Query, Table> delete(final Key<Query> key) {
         this.keys.values().forEach(element -> element.remove(key));
         return this.entries.remove(key);
     }
 
     @Override
-    public boolean contains(final Key key) {
+    public boolean contains(final Key<Query> key) {
         return this.entries.containsKey(key);
     }
 
     @Override
-    public List<Entry> invalidate(final Set<String> tables) {
-        return tables.stream()
+    public List<Entry<Query, Table>> invalidate(final Iterable<String> entity) {
+        return StreamSupport
+            .stream(entity.spliterator(), false)
             .map(this.keys::remove)
             .filter(Objects::nonNull)
             .flatMap(Set::stream)

@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
@@ -19,13 +20,13 @@ import org.llorllale.cactoos.matchers.IsTrue;
 final class CacheKeyTest {
     @Test
     void producesSameHashesForSameContent() {
-        final Key keya = new CacheKey(
+        final Key<Query> keya = new CacheKey(
             new NamedQuery(
                 "SELECT id, name FROM person WHERE id = :id",
                 new IntParam("id", 1)
             )
         );
-        final Key keyb = new CacheKey(
+        final Key<Query> keyb = new CacheKey(
             new NamedQuery(
                 "SELECT id, name FROM person WHERE id = :id",
                 new IntParam("id", 1)
@@ -40,13 +41,13 @@ final class CacheKeyTest {
 
     @Test
     void producesDifferentHashesForDifferentContentTypes() {
-        final Key keya = new CacheKey(
+        final Key<Query> keya = new CacheKey(
             new NamedQuery(
                 "SELECT * FROM person WHERE active = :active",
                 new IntParam("active", 1)
             )
         );
-        final Key keyb = new CacheKey(
+        final Key<Query> keyb = new CacheKey(
             new NamedQuery(
                 "SELECT * FROM person WHERE active = :active",
                 new BoolParam("active", true)

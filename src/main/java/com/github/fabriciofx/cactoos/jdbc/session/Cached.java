@@ -6,7 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
@@ -31,7 +33,7 @@ public final class Cached implements Session {
     /**
      * Cache.
      */
-    private final Cache cache;
+    private final Cache<Query, Table> cache;
 
     /**
      * Ctor.
@@ -41,7 +43,7 @@ public final class Cached implements Session {
      */
     public Cached(
         final Session session,
-        final Cache cache
+        final Cache<Query, Table> cache
     ) {
         this.origin = session;
         this.cache = cache;

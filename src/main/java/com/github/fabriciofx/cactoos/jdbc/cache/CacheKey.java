@@ -16,7 +16,7 @@ import org.cactoos.text.UncheckedText;
  * CacheKey.
  * @since 0.9.0
  */
-public final class CacheKey implements Key {
+public final class CacheKey implements Key<Query> {
     /**
      * Query.
      */
@@ -58,7 +58,7 @@ public final class CacheKey implements Key {
     }
 
     @Override
-    public Query query() {
+    public Query domain() {
         return this.qry;
     }
 

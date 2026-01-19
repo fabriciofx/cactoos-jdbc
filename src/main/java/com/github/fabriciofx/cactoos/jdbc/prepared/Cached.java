@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
 import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheEntry;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheKey;
@@ -41,7 +42,7 @@ public final class Cached extends PreparedEnvelope {
     /**
      * The cache.
      */
-    private final Cache cache;
+    private final Cache<Query, Table> cache;
 
     /**
      * Ctor.
@@ -55,7 +56,7 @@ public final class Cached extends PreparedEnvelope {
         final PreparedStatement origin,
         final PreparedStatement stored,
         final Normalized normalized,
-        final Cache cache
+        final Cache<Query, Table> cache
     ) {
         super(origin);
         this.stored = stored;
@@ -67,10 +68,10 @@ public final class Cached extends PreparedEnvelope {
     public ResultSet executeQuery() throws SQLException {
         try {
             final ResultSet result;
-            final Key key = new CacheKey(this.normalized);
-            final Store store = this.cache.store();
+            final Key<Query> key = new CacheKey(this.normalized);
+            final Store<Query, Table> store = this.cache.store();
             if (store.contains(key)) {
-                final Entry entry = store.retrieve(key);
+                final Entry<Query, Table> entry = store.retrieve(key);
                 result = new CachedResultSet(
                     entry.value().rows(),
                     entry.value().columns()

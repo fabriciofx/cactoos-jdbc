@@ -13,10 +13,11 @@ import java.util.Map;
 
 /**
  * MaxSizePolicy.
- *
+ * @param <D> The domain key type
+ * @param <V> The value type stored
  * @since 0.9.0
  */
-public final class MaxSizePolicy implements Policy {
+public final class MaxSizePolicy<D, V> implements Policy<D, V> {
     /**
      * Max size.
      */
@@ -39,8 +40,9 @@ public final class MaxSizePolicy implements Policy {
     }
 
     @Override
-    public List<Entry> apply(final Map<Key, Entry> input) throws Exception {
-        final List<Entry> removed = new LinkedList<>();
+    public List<Entry<D, V>> apply(final Map<Key<D>, Entry<D, V>> input)
+        throws Exception {
+        final List<Entry<D, V>> removed = new LinkedList<>();
         while (input.size() > this.max) {
             removed.add(input.remove(input.keySet().iterator().next()));
         }

@@ -5,52 +5,53 @@
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import java.util.List;
-import java.util.Set;
 
 /**
- * Cache.
+ * Store.
+ * @param <D> The domain key type
+ * @param <V> The value type stored
  * @since 0.9.0
  */
-public interface Store {
+public interface Store<D, V> {
     /**
-     * Retrieve a data from cache.
+     * Retrieve an entry from store.
      * @param key The key
-     * @return The value associated with the key
+     * @return The entry associated with the key
      */
-    Entry retrieve(Key key);
+    Entry<D, V> retrieve(Key<D> key);
 
     /**
-     * Save a data into cache.
-     * @param key The key associated to the value
-     * @param entry A Entry
+     * Save an entry into store.
+     * @param key The key associated to the entry
+     * @param entry An entry
      * @return Elements removed automatically
      * @throws Exception If something goes wrong
      */
-    List<Entry> save(Key key, Entry entry) throws Exception;
+    List<Entry<D, V>> save(Key<D> key, Entry<D, V> entry) throws Exception;
 
     /**
-     * Delete a value into cache.
-     * @param key The key associated to the value
-     * @return The value associated with the key
+     * Delete an entry into store.
+     * @param key The key associated to the entry
+     * @return The entry associated with the key
      */
-    Entry delete(Key key);
+    Entry<D, V> delete(Key<D> key);
 
     /**
-     * Checks if the cache has a value associated with the key.
+     * Checks if the store has an entry associated with the key.
      * @param key The key
      * @return True if there is, false otherwise
      */
-    boolean contains(Key key);
+    boolean contains(Key<D> key);
 
     /**
-     * Invalidate cache entries according a set of tables.
-     * @param tables A set of tables
-     * @return The keys associated to table
+     * Invalidate store entries according metadata.
+     * @param metadata The metadata
+     * @return The entries associated with this metadata
      */
-    List<Entry> invalidate(Set<String> tables);
+    List<Entry<D, V>> invalidate(Iterable<String> metadata);
 
     /**
-     * Clear cache data and statistic.
+     * Clear store.
      */
     void clear();
 }

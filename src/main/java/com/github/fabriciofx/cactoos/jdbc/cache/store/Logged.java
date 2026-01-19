@@ -8,7 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
 import com.github.fabriciofx.cactoos.jdbc.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.Text;
@@ -22,16 +21,18 @@ import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
- * Logged.
+ * Logged Store.
  * <p>A {@link Store} decorator to logging store operations.
+ * @param <D> The domain key type
+ * @param <V> The value type stored
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (500 lines)
  */
-public final class Logged implements Store {
+public final class Logged<D, V> implements Store<D, V> {
     /**
      * Store.
      */
-    private final Store origin;
+    private final Store<D, V> origin;
 
     /**
      * Where the logs come from.
@@ -54,7 +55,7 @@ public final class Logged implements Store {
      * @param store The cache to be logged
      * @param from Where the data comes from
      */
-    public Logged(final Store store, final String from) {
+    public Logged(final Store<D, V> store, final String from) {
         this(store, from, Logger.getLogger(from));
     }
 
@@ -66,7 +67,7 @@ public final class Logged implements Store {
      * @param logger The logger
      */
     public Logged(
-        final Store store,
+        final Store<D, V> store,
         final String from,
         final Logger logger
     ) {
@@ -101,7 +102,7 @@ public final class Logged implements Store {
      * @param level The logger level
      */
     public Logged(
-        final Store store,
+        final Store<D, V> store,
         final String from,
         final Logger logger,
         final Unchecked<Level> level
@@ -113,8 +114,8 @@ public final class Logged implements Store {
     }
 
     @Override
-    public Entry retrieve(final Key key) {
-        final Entry entry = this.origin.retrieve(key);
+    public Entry<D, V> retrieve(final Key<D> key) {
+        final Entry<D, V> entry = this.origin.retrieve(key);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
@@ -130,8 +131,11 @@ public final class Logged implements Store {
     }
 
     @Override
-    public List<Entry> save(final Key key, final Entry entry) throws Exception {
-        final List<Entry> removed = this.origin.save(key, entry);
+    public List<Entry<D, V>> save(
+        final Key<D> key,
+        final Entry<D, V> entry
+    ) throws Exception {
+        final List<Entry<D, V>> removed = this.origin.save(key, entry);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
@@ -147,8 +151,8 @@ public final class Logged implements Store {
     }
 
     @Override
-    public Entry delete(final Key key) {
-        final Entry entry = this.origin.delete(key);
+    public Entry<D, V> delete(final Key<D> key) {
+        final Entry<D, V> entry = this.origin.delete(key);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
@@ -170,7 +174,7 @@ public final class Logged implements Store {
     }
 
     @Override
-    public boolean contains(final Key key) {
+    public boolean contains(final Key<D> key) {
         final boolean exists = this.origin.contains(key);
         this.logger.log(
             this.level.value(),
@@ -187,8 +191,8 @@ public final class Logged implements Store {
     }
 
     @Override
-    public List<Entry> invalidate(final Set<String> tables) {
-        final List<Entry> removed = this.origin.invalidate(tables);
+    public List<Entry<D, V>> invalidate(final Iterable<String> metadata) {
+        final List<Entry<D, V>> removed = this.origin.invalidate(metadata);
         this.logger.log(
             this.level.value(),
             new UncheckedText(
@@ -216,7 +220,7 @@ public final class Logged implements Store {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Cleaning the cache and resetting statistics.",
+                    "[%s] Cleaning the cache.",
                     this.from
                 )
             ).asString()
