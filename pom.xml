@@ -314,48 +314,6 @@
       </build>
     </profile>
     <profile>
-      <id>docs</id>
-      <activation>
-        <property>
-          <name>env.GRAPHVIZ_DOT</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.jeluard</groupId>
-            <artifactId>plantuml-maven-plugin</artifactId>
-            <version>7954</version>
-            <executions>
-              <execution>
-                <id>plantuml-site</id>
-                <goals>
-                  <goal>generate</goal>
-                </goals>
-                <phase>generate-sources</phase>
-                <configuration>
-                  <sourceFiles>
-                    <directory>${basedir}</directory>
-                    <includes>
-                      <include>docs/*.puml</include>
-                    </includes>
-                  </sourceFiles>
-                  <outputDirectory>${basedir}</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
-            <dependencies>
-              <dependency>
-                <groupId>net.sourceforge.plantuml</groupId>
-                <artifactId>plantuml-mit</artifactId>
-                <version>1.2026.1</version>
-              </dependency>
-            </dependencies>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>it</id>
       <build>
         <plugins>
