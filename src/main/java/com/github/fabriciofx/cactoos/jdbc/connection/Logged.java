@@ -31,8 +31,6 @@ import org.cactoos.iterable.IterableOf;
 import org.cactoos.iterable.Mapped;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
-import org.cactoos.text.Replaced;
-import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
@@ -118,7 +116,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created Statement[#%d] in %dns.",
+                    "[%s] Connection[#%d] created Statement[#%d] in %dns",
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
@@ -140,11 +138,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     nanos
                 )
             ).asString()
@@ -168,11 +169,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created CallableStatement[#%d] using SQL '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created CallableStatement[#%d] \
+                    using SQL '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     nanos
                 )
             ).asString()
@@ -190,10 +194,13 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] converted SQL '%s' to native '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] converted SQL '%s' to \
+                    native '%s' in %dns
+                    """,
                     this.from,
                     this.id,
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     result,
                     nanos
                 )
@@ -212,7 +219,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed auto commit to '%s' in %dns.",
+                    "[%s] Connection[#%d] changed auto commit to '%s' in %dns",
                     this.from,
                     this.id,
                     autoCommit,
@@ -232,7 +239,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved auto commit (%s) in %dns.",
+                    "[%s] Connection[#%d] retrieved auto commit (%s) in %dns",
                     this.from,
                     this.id,
                     result,
@@ -253,7 +260,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] executed commit in %dns.",
+                    "[%s] Connection[#%d] executed commit in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -272,7 +279,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] executed rollback in %dns.",
+                    "[%s] Connection[#%d] executed rollback in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -291,7 +298,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] closed in %dns.",
+                    "[%s] Connection[#%d] closed in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -310,7 +317,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] checked if is closed (%s) in %dns.",
+                    "[%s] Connection[#%d] checked if is closed (%s) in %dns",
                     this.from,
                     this.id,
                     result,
@@ -331,7 +338,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved DatabaseMetaData in %dns.",
+                    "[%s] Connection[#%d] retrieved DatabaseMetaData in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -351,7 +358,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed read only to '%s' in %dns.",
+                    "[%s] Connection[#%d] changed read only to '%s' in %dns",
                     this.from,
                     this.id,
                     readOnly,
@@ -371,7 +378,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] checked if is read only (%s) in %dns. ",
+                    "[%s] Connection[#%d] checked if is read only (%s) in %dns",
                     this.from,
                     this.id,
                     result,
@@ -392,7 +399,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed catalog to '%s' in %dns. ",
+                    "[%s] Connection[#%d] changed catalog to '%s' in %dns",
                     this.from,
                     this.id,
                     catalog,
@@ -412,7 +419,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved catalog '%s' in %dns. ",
+                    "[%s] Connection[#%d] retrieved catalog '%s' in %dns",
                     this.from,
                     this.id,
                     catalog,
@@ -433,7 +440,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed transaction isolation to level '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] changed transaction isolation \
+                    to level '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     lvl,
@@ -453,7 +463,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved transaction isolation (%d) in %dns.",
+                    """
+                    [%s] Connection[#%d] retrieved transaction \
+                    isolation (%d) in %dns\
+                    """,
                     this.from,
                     this.id,
                     result,
@@ -474,7 +487,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] generated warning due '%s' in %dns.",
+                    "[%s] Connection[#%d] generated warning due '%s' in %dns",
                     this.from,
                     this.id,
                     warning.getMessage(),
@@ -495,7 +508,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] cleaned warnings in %dns.",
+                    "[%s] Connection[#%d] cleaned warnings in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -520,7 +533,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created Statement[#%d] with type '%d' and concurrency '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created Statement[#%d] with \
+                    type '%d' and concurrency '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.get(),
@@ -551,11 +567,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s', type '%d' and concurrency '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s', type '%d' and concurrency '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     resultSetType,
                     resultSetConcurrency,
                     nanos
@@ -583,11 +602,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created CallableStatement[#%d] using SQL '%s', type '%d' and concurrency '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created CallableStatement[#%d] \
+                    using SQL '%s', type '%d' and concurrency '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     resultSetType,
                     resultSetConcurrency,
                     nanos
@@ -607,7 +629,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved type maps in %dns.",
+                    "[%s] Connection[#%d] retrieved type maps in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -629,7 +651,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed type maps in %dns.",
+                    "[%s] Connection[#%d] changed type maps in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -648,7 +670,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed holdability to '%d' in %dns.",
+                    "[%s] Connection[#%d] changed holdability to '%d' in %dns",
                     this.from,
                     this.id,
                     holdability,
@@ -668,7 +690,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved holdability (%d) in %dns.",
+                    "[%s] Connection[#%d] retrieved holdability (%d) in %dns",
                     this.from,
                     this.id,
                     holdability,
@@ -689,7 +711,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved save point in %dns.",
+                    "[%s] Connection[#%d] retrieved save point in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -709,7 +731,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved save point '%s' in %dns.",
+                    "[%s] Connection[#%d] retrieved save point '%s' in %dns",
                     this.from,
                     this.id,
                     name,
@@ -730,7 +752,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] rollback from save point in %dns.",
+                    "[%s] Connection[#%d] rollback from save point in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -751,7 +773,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] released save point in %dns.",
+                    "[%s] Connection[#%d] released save point in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -778,7 +800,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created Statement[#%d] with type '%d', concurrency '%d' and holdability '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created Statement[#%d] with type \
+                    '%d', concurrency '%d' and holdability '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
@@ -812,11 +837,15 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s', type '%d', concurrency '%d' and holdability '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s', type '%d', concurrency '%d' and \
+                    holdability '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     resultSetType,
                     resultSetConcurrency,
                     resultSetHoldability,
@@ -847,11 +876,15 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created CallableStatement[#%d] using SQL '%s', type '%d', concurrency '%d' and holdability '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] created CallableStatement[#%d] \
+                    using SQL '%s', type '%d', concurrency '%d' and \
+                    holdability '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     resultSetType,
                     resultSetConcurrency,
                     resultSetHoldability,
@@ -884,11 +917,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s' and %s in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s' and %s in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     msg,
                     nanos
                 )
@@ -913,11 +949,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s' and columns indexes '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s' and columns indexes '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     new Joined(
                         ", ",
                         new Mapped<>(
@@ -948,11 +987,14 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created PreparedStatement[#%d] using SQL '%s' and columns names '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created PreparedStatement[#%d] \
+                    using SQL '%s' and columns names '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     this.statements.incrementAndGet(),
-                    new UncheckedText(new Replaced(new TextOf(sql), "\\s+", " ")).asString(),
+                    sql,
                     new Joined(", ", columnNames),
                     nanos
                 )
@@ -971,7 +1013,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created clob in %dns.",
+                    "[%s] Connection[#%d] created clob in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -991,7 +1033,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created blob in %dns.",
+                    "[%s] Connection[#%d] created blob in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -1011,7 +1053,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created nclob in %dns.",
+                    "[%s] Connection[#%d] created nclob in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -1031,7 +1073,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created SQLXML in %dns.",
+                    "[%s] Connection[#%d] created SQLXML in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -1051,7 +1093,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] checked if is valid with timeout '%d' in %dns.",
+                    """
+                    [%s] Connection[#%d] checked if is valid with \
+                    timeout '%d' in %dns\
+                    """,
                     this.from,
                     this.id,
                     timeout,
@@ -1075,7 +1120,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed client info '%s' with '%s' value in %dns.",
+                    """
+                    [%s] Connection[#%d] changed client info '%s' with \
+                    '%s' value in %dns\
+                    """,
                     this.from,
                     this.id,
                     name,
@@ -1098,7 +1146,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed client info with properties in %dns.",
+                    """
+                    [%s] Connection[#%d] changed client info with \
+                    properties in %dns\
+                    """,
                     this.from,
                     this.id,
                     nanos
@@ -1117,7 +1168,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved client info '%s' with '%s' value in %dns.",
+                    """
+                    [%s] Connection[#%d] retrieved client info '%s' with \
+                    '%s' value in %dns\
+                    """,
                     this.from,
                     this.id,
                     name,
@@ -1139,7 +1193,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved client info properties in %dns.",
+                    """
+                    [%s] Connection[#%d] retrieved client info properties \
+                    in %dns\
+                    """,
                     this.from,
                     this.id,
                     nanos
@@ -1162,7 +1219,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created an array which type '%s' and elements '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created an array which type '%s' \
+                    and elements '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     typeName,
@@ -1193,7 +1253,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] created a struct which type '%s' and attributes '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] created a struct which type '%s' \
+                    and attributes '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     typeName,
@@ -1221,7 +1284,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed schema with '%s' in %dns.",
+                    "[%s] Connection[#%d] changed schema with '%s' in %dns",
                     this.from,
                     this.id,
                     schema,
@@ -1241,7 +1304,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved schema (%s) in %dns.",
+                    "[%s] Connection[#%d] retrieved schema (%s) in %dns",
                     this.from,
                     this.id,
                     schema,
@@ -1262,7 +1325,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] aborted executor in %dns.",
+                    "[%s] Connection[#%d] aborted executor in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -1284,7 +1347,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] changed network timeout to '%d'ms in %dns.",
+                    """
+                    [%s] Connection[#%d] changed network timeout to \
+                    '%d'ms in %dns\
+                    """,
                     this.from,
                     this.id,
                     milliseconds,
@@ -1304,7 +1370,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] retrieved network timeout (%dms) in %dns.",
+                    """
+                    [%s] Connection[#%d] retrieved network timeout \
+                    (%dms) in %dns\
+                    """,
                     this.from,
                     this.id,
                     milliseconds,
@@ -1325,7 +1394,7 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] unwrap with '%s' in %dns.",
+                    "[%s] Connection[#%d] unwrap with '%s' in %dns",
                     this.from,
                     this.id,
                     iface.toString(),
@@ -1346,7 +1415,10 @@ public final class Logged implements Connection {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Connection[#%d] checked if is wrapper for (%s) with '%s' in %dns.",
+                    """
+                    [%s] Connection[#%d] checked if is wrapper for (%s) \
+                    with '%s' in %dns\
+                    """,
                     this.from,
                     this.id,
                     wrapped,

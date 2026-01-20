@@ -112,7 +112,7 @@ public final class Logged implements Source {
         this.logger.log(
             this.level.value(),
             new FormattedText(
-                "[%s] Session[#%d] opened.",
+                "[%s] Session[#%d] opened",
                 this.from,
                 this.sessions.get()
             ).asString()
@@ -126,7 +126,7 @@ public final class Logged implements Source {
         this.logger.log(
             this.level.value(),
             new FormattedText(
-                "[%s] Source retrieve url: '%s'.",
+                "[%s] Source retrieve url: '%s'",
                 this.from,
                 location
             ).asString()
@@ -141,7 +141,7 @@ public final class Logged implements Source {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Source retrieve username: '%s'.",
+                    "[%s] Source retrieve username: '%s'",
                     this.from,
                     user
                 )
@@ -157,7 +157,7 @@ public final class Logged implements Source {
             this.level.value(),
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Source retrieve password: '********'.",
+                    "[%s] Source retrieve password: '********'",
                     this.from
                 )
             ).asString()

@@ -100,7 +100,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] prepared PreparedStatement[#%d].",
+                "[%s] Session[#%d] prepared PreparedStatement[#%d]",
                 this.from,
                 this.id,
                 this.statements.get()
@@ -114,9 +114,9 @@ public final class Logged implements Session {
         this.origin.autocommit(enabled);
         final String msg;
         if (enabled) {
-            msg = "[%s] Session[#%d] autocommit enabled.";
+            msg = "[%s] Session[#%d] autocommit enabled";
         } else {
-            msg = "[%s] Session[#%d] autocommit disabled.";
+            msg = "[%s] Session[#%d] autocommit disabled";
         }
         this.logger.log(
             this.level,
@@ -130,7 +130,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] committed.",
+                "[%s] Session[#%d] committed",
                 this.from,
                 this.id
             ).asString()
@@ -143,7 +143,7 @@ public final class Logged implements Session {
         this.logger.log(
             this.level,
             new FormattedText(
-                "[%s] Session[#%d] rolled back.",
+                "[%s] Session[#%d] rolled back",
                 this.from,
                 this.id
             ).asString()
@@ -157,7 +157,7 @@ public final class Logged implements Session {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] Session[#%d] closed.",
+                    "[%s] Session[#%d] closed",
                     this.from,
                     this.id
                 )

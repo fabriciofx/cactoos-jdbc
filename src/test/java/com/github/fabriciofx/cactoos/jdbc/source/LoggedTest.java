@@ -20,16 +20,17 @@ import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import org.cactoos.text.Joined;
+import org.cactoos.text.Replaced;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
-import org.llorllale.cactoos.matchers.IsText;
+import org.llorllale.cactoos.matchers.HasString;
 import org.llorllale.cactoos.matchers.Matches;
 import org.llorllale.cactoos.matchers.MatchesRegex;
 
 /**
  * Logged Source tests.
+ *
  * @since 0.9.0
  */
 final class LoggedTest {
@@ -51,18 +52,23 @@ final class LoggedTest {
         sessionb.close();
         new Assertion<>(
             "must log source and sessions",
-            new TextOf(logger.toString()),
-            new IsText(
-                new Joined(
-                    "\n",
-                    "[test] Source retrieve url: 'jdbc:h2:mem:testdb'.",
-                    "[test] Source retrieve password: '********'.",
-                    "[test] Session[#0] opened.",
-                    "[test] Session[#0] autocommit disabled.",
-                    "[test] Session[#1] opened.",
-                    "[test] Session[#1] autocommit enabled.",
-                    "[test] Session[#0] closed.",
-                    "[test] Session[#1] closed.\n"
+            new HasString(
+                """
+                [test] Source retrieve url: 'jdbc:h2:mem:testdb'
+                [test] Source retrieve password: '********'
+                [test] Session[#0] opened
+                [test] Session[#0] autocommit disabled
+                [test] Session[#1] opened
+                [test] Session[#1] autocommit enabled
+                [test] Session[#0] closed
+                [test] Session[#1] closed
+                """
+            ),
+            new Matches<>(
+                new Replaced(
+                    new TextOf(logger.toString()),
+                    "\r\n",
+                    "\n"
                 )
             )
         ).affirm();
@@ -81,9 +87,9 @@ final class LoggedTest {
                 session,
                 new QueryOf(
                     """
-                    CREATE TABLE person (id INT, name VARCHAR(30),
-                    created_at DATE, city VARCHAR(20), working
-                    BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))
+                    CREATE TABLE person (id INT, name VARCHAR(30), \
+                    created_at DATE, city VARCHAR(20), working \
+                    BOOLEAN, height DECIMAL(20,2), PRIMARY KEY (id))\
                     """
                 )
             ).execute();
@@ -91,9 +97,9 @@ final class LoggedTest {
                 session,
                 new NamedQuery(
                     """
-                    INSERT INTO person (id, name, created_at, city,
-                    working, height) VALUES (:id, :name, :created_at,
-                    :city, :working, :height)
+                    INSERT INTO person (id, name, created_at, city, \
+                    working, height) VALUES (:id, :name, :created_at, \
+                    :city, :working, :height)\
                     """,
                     new IntParam("id", 1),
                     new TextParam("name", "Rob Pike"),
@@ -118,11 +124,11 @@ final class LoggedTest {
             }
         }
         new Assertion<>(
-            "must log if session opens and closes",
+            "must log if session has been opened and closed",
             new MatchesRegex(
                 """
-                (?s)\\[test\\] Session\\[#0\\] opened\\..*\
-                \\[test\\] Session\\[#0\\] closed\\.\\s+\
+                (?s)\\[test\\] Session\\[#0\\] opened.*\
+                \\[test\\] Session\\[#0\\] closed\\s+\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
