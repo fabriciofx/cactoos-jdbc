@@ -1,6 +1,7 @@
-.vscode/
 target/
-.idea
+.vscode/
+.idea/
+.mvn/
 .DS_Store
 *.iml
 .project
