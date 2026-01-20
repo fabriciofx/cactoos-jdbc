@@ -4,12 +4,15 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.cache.Key;
+import com.github.fabriciofx.cactoos.cache.entry.EntryEnvelope;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.cactoos.Scalar;
+import org.cactoos.list.ListOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.cactoos.scalar.Unchecked;
@@ -18,22 +21,7 @@ import org.cactoos.scalar.Unchecked;
  * CacheEntry.
  * @since 0.9.0
  */
-public final class CacheEntry implements Entry<Query, Table> {
-    /**
-     * Key.
-     */
-    private final Key<Query> id;
-
-    /**
-     * Table to be stored in the cache.
-     */
-    private final Table table;
-
-    /**
-     * Metadata (tables names).
-     */
-    private final Map<String, Set<String>> meta;
-
+public final class CacheEntry extends EntryEnvelope<Query, Table> {
     /**
      * Ctor.
      * @param key The key
@@ -51,7 +39,7 @@ public final class CacheEntry implements Entry<Query, Table> {
             new MapOf<>(
                 new MapEntry<>(
                     "tables",
-                    new Unchecked<>(tables).value()
+                    new ListOf<>(new Unchecked<>(tables).value())
                 )
             )
         );
@@ -60,31 +48,14 @@ public final class CacheEntry implements Entry<Query, Table> {
     /**
      * Ctor.
      * @param key The key
-     * @param table The table to be stored
-     * @param meta Metadata associated with this entry.
+     * @param table The Table
+     * @param metadata Metadata (table names)
      */
     public CacheEntry(
         final Key<Query> key,
         final Table table,
-        final Map<String, Set<String>> meta
+        final Map<String, List<String>> metadata
     ) {
-        this.id = key;
-        this.table = table;
-        this.meta = meta;
-    }
-
-    @Override
-    public Key<Query> key() {
-        return this.id;
-    }
-
-    @Override
-    public Table value() {
-        return this.table;
-    }
-
-    @Override
-    public Iterable<String> metadata(final String entity) {
-        return this.meta.getOrDefault(entity, new HashSet<>());
+        super(key, table, metadata);
     }
 }

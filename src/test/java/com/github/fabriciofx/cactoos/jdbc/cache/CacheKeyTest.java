@@ -4,6 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.cache.Key;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
@@ -59,5 +60,4 @@ final class CacheKeyTest {
             new IsNot<>(new IsTrue())
         ).affirm();
     }
-
 }

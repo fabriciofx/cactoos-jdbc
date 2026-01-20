@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.session;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.cache.Cache;
 import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
@@ -68,7 +68,7 @@ public final class Cached implements Session {
             case INSERT:
             case UPDATE:
             case DELETE:
-                this.cache.store().invalidate(
+                this.cache.store().entries().invalidate(
                     new TableNames(plan.query()).value()
                 );
                 prepared = this.origin.prepared(plan);

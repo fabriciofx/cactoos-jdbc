@@ -43,7 +43,7 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                new com.github.fabriciofx.cactoos.cache.cache.Logged<>(
                     new TableCache(),
                     "cache",
                     logger
@@ -154,7 +154,7 @@ final class CachedTest {
         final Source source = new Logged(
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
-                new com.github.fabriciofx.cactoos.jdbc.cache.Logged<>(
+                new com.github.fabriciofx.cactoos.cache.cache.Logged<>(
                     new TableCache(),
                     "cache",
                     logger

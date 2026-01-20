@@ -4,47 +4,28 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.cache.Store;
+import com.github.fabriciofx.cactoos.cache.cache.CacheEnvelope;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.cache.statistics.StatisticsOf;
-import com.github.fabriciofx.cactoos.jdbc.cache.store.TableStore;
-import org.cactoos.Scalar;
-import org.cactoos.scalar.Sticky;
-import org.cactoos.scalar.Unchecked;
 
 /**
  * TableCache.
  * @since 0.9.0
  */
-public final class TableCache implements Cache<Query, Table> {
-    /**
-     * Keep only one Store.
-     */
-    private final Scalar<Store<Query, Table>> scalar;
-
+public final class TableCache extends CacheEnvelope<Query, Table> {
     /**
      * Ctor.
      */
     public TableCache() {
-        this(new Sticky<>(TableStore::new));
+        this(new TableStore());
     }
 
     /**
      * Ctor.
-     * @param scalar The store
+     * @param store A store
      */
-    public TableCache(final Scalar<Store<Query, Table>> scalar) {
-        this.scalar = scalar;
-    }
-
-    @Override
-    public Store<Query, Table> store() {
-        return new Unchecked<>(this.scalar).value();
-    }
-
-    @Override
-    public Statistics statistics() {
-        return new StatisticsOf();
+    public TableCache(final Store<Query, Table> store) {
+        super(store);
     }
 }

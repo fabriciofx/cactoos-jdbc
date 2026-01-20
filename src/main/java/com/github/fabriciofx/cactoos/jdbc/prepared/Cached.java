@@ -4,14 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.prepared;
 
-import com.github.fabriciofx.cactoos.jdbc.Cache;
+import com.github.fabriciofx.cactoos.cache.Cache;
+import com.github.fabriciofx.cactoos.cache.Entry;
+import com.github.fabriciofx.cactoos.cache.Key;
+import com.github.fabriciofx.cactoos.cache.Store;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheEntry;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheKey;
-import com.github.fabriciofx.cactoos.jdbc.cache.Entry;
-import com.github.fabriciofx.cactoos.jdbc.cache.Key;
-import com.github.fabriciofx.cactoos.jdbc.cache.Store;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.sql.TableNames;
