@@ -10,9 +10,6 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.Types;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * DecimalParam.
@@ -60,11 +57,6 @@ public final class DecimalParam implements Param {
         final int index
     ) throws Exception {
         stmt.setBigDecimal(index, this.decimal);
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createExactNumeric(this.decimal.toString(), from);
     }
 
     @Override

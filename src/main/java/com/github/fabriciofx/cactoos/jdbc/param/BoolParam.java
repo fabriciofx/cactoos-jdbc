@@ -7,9 +7,6 @@ package com.github.fabriciofx.cactoos.jdbc.param;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Types;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * BoolParam.
@@ -48,11 +45,6 @@ public final class BoolParam implements Param {
         final int index
     ) throws Exception {
         stmt.setBoolean(index, this.bool);
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createBoolean(this.bool, from);
     }
 
     @Override

@@ -8,9 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.UUID;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * UuidParam.
@@ -49,11 +46,6 @@ public final class UuidParam implements Param {
         final int index
     ) throws Exception {
         stmt.setObject(index, this.uuid);
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createUuid(this.uuid, from);
     }
 
     @Override

@@ -10,8 +10,6 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * DateTimeParam.
@@ -50,11 +48,6 @@ public final class DateTimeParam implements Param {
         final int index
     ) throws Exception {
         stmt.setTimestamp(index, Timestamp.valueOf(this.datetime));
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return null;
     }
 
     @Override

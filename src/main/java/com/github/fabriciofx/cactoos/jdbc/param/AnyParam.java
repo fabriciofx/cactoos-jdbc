@@ -8,9 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.Types;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * AnyParam.
@@ -49,11 +46,6 @@ public final class AnyParam implements Param {
         final int index
     ) throws Exception {
         stmt.setObject(index, this.object);
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createCharString(this.object.toString(), from);
     }
 
     @Override

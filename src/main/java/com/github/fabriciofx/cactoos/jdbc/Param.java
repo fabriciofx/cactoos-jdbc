@@ -5,8 +5,6 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 import java.sql.PreparedStatement;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 import org.cactoos.Bytes;
 
 /**
@@ -30,11 +28,4 @@ public interface Param extends Bytes {
      * @throws Exception If fails
      */
     void prepare(PreparedStatement stmt, int index) throws Exception;
-
-    /**
-     * Returns the value.
-     * @param from From which point
-     * @return The converted value
-     */
-    SqlNode value(SqlParserPos from);
 }

@@ -8,9 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.UUID;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
 
 /**
  * UuidAsBytesParam.
@@ -69,11 +66,6 @@ public final class UuidAsBytesParam implements Param {
             (byte) least,
         };
         stmt.setBytes(index, bytes);
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createUuid(this.uuid, from);
     }
 
     @Override

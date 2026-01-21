@@ -8,11 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import org.apache.calcite.sql.SqlLiteral;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParserPos;
-import org.apache.calcite.util.DateString;
 
 /**
  * DateParam.
@@ -60,16 +55,6 @@ public final class DateParam implements Param {
         final int index
     ) throws Exception {
         stmt.setDate(index, java.sql.Date.valueOf(this.date));
-    }
-
-    @Override
-    public SqlNode value(final SqlParserPos from) {
-        return SqlLiteral.createDate(
-            new DateString(
-                this.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            ),
-            from
-        );
     }
 
     @Override
