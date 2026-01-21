@@ -19,9 +19,9 @@ import org.cactoos.text.Sticky;
 import org.cactoos.text.TextOf;
 
 /**
- * NamedQuery.
- * A {@link Query} that transform a named query, changing named parameters for
- * question marks.
+ * NamedQuery. A {@link Query} that transform a named query, changing named
+ * parameters for question marks.
+ *
  * @since 0.9.0
  */
 public final class NamedQuery implements Query {
@@ -37,6 +37,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public NamedQuery(final String sql) {
@@ -45,6 +46,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public NamedQuery(final Text sql) {
@@ -53,6 +55,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -62,6 +65,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -71,6 +75,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -80,6 +85,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -89,6 +95,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -104,8 +111,9 @@ public final class NamedQuery implements Query {
                     names.add(matcher.group().substring(1));
                 }
                 for (int idx = 0; idx < names.size(); ++idx) {
-                    final Params prms = params.iterator().next();
-                    if (!prms.contains(names.get(idx), idx)) {
+                    if (
+                        !params.iterator().next().contains(names.get(idx), idx)
+                    ) {
                         throw new IllegalArgumentException(
                             new FormattedText(
                                 "SQL parameter #%d is wrong or out of order",

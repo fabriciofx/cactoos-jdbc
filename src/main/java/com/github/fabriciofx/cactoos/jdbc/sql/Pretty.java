@@ -43,19 +43,21 @@ public final class Pretty implements Text {
     public Pretty(final Scalar<SqlNode> node) {
         this.sql = new Sticky(
             () -> {
-                final SqlDialect dialect = SqlDialect
-                    .DatabaseProduct
-                    .UNKNOWN
-                    .getDialect();
                 final SqlWriterConfig config = SqlPrettyWriter.config()
-                    .withDialect(dialect)
+                    .withDialect(
+                        SqlDialect
+                            .DatabaseProduct
+                            .UNKNOWN
+                            .getDialect()
+                    )
                     .withIndentation(0)
                     .withClauseStartsLine(false)
                     .withSelectListItemsOnSeparateLines(false);
-                final SqlPrettyWriter writer = new SqlPrettyWriter(config);
                 return new Trimmed(
                     new Replaced(
-                        new TextOf(writer.format(node.value())),
+                        new TextOf(
+                            new SqlPrettyWriter(config).format(node.value())
+                        ),
                         "\\s+",
                         " "
                     )

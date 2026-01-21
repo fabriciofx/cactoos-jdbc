@@ -1,3 +1,4 @@
+// @checkstyle FileLengthCheck disabled
 /*
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
@@ -46,8 +47,9 @@ import org.cactoos.scalar.Ternary;
         "PMD.ExcessivePublicCount",
         "PMD.AvoidCatchingGenericException",
         "PMD.CouplingBetweenObjects",
-        "PMD.GodClass",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "PMD.ReplaceJavaUtilCalendar",
+        "PMD.ReplaceJavaUtilDate"
     }
 )
 public final class CachedResultSet implements ResultSet {
@@ -548,8 +550,10 @@ public final class CachedResultSet implements ResultSet {
             throw new SQLException("ResultSet is already closed");
         }
         try {
-            final Class<?> type = map.values().iterator().next();
-            return this.rows.row(this.cursor.get()).value(column, type);
+            return this.rows.row(this.cursor.get()).value(
+                column,
+                map.values().iterator().next()
+            );
         } catch (final Exception ex) {
             throw new SQLException(ex);
         }

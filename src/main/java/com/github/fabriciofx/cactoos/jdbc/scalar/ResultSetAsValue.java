@@ -15,7 +15,6 @@ import org.cactoos.Scalar;
  * @param <T> Type of the result
  * @since 0.1
  */
-@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class ResultSetAsValue<T> implements Scalar<T> {
     /**
      * Statement that returns a ResultSet.

@@ -5,7 +5,6 @@
 package com.github.fabriciofx.cactoos.jdbc.query.normalized;
 
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlWith;
 import org.cactoos.Scalar;
 
@@ -36,14 +35,13 @@ public final class OrderedWith implements Scalar<SqlNode> {
 
     @Override
     public SqlNode value() throws Exception {
-        final SqlNodeList list = new SortedWith(
-            this.shuttle,
-            this.with.withList
-        ).value();
         final SqlNode body = this.with.body.accept(this.shuttle);
         return new SqlWith(
             this.with.getParserPosition(),
-            list,
+            new SortedWith(
+                this.shuttle,
+                this.with.withList
+            ).value(),
             body
         );
     }

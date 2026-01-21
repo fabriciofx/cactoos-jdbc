@@ -25,7 +25,6 @@ import org.cactoos.text.Concatenated;
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContact implements Contact {
     /**
      * Source.

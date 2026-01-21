@@ -54,25 +54,23 @@ public final class UngroupedSelect implements Scalar<SqlNode> {
             this.select.getParserPosition()
         );
         list.addAll(this.select.getSelectList());
-        final SqlNode count = SqlStdOperatorTable.COUNT.createCall(
-            this.select.getParserPosition(),
-            SqlIdentifier.star(this.select.getParserPosition())
-        );
-        final SqlNode over = SqlStdOperatorTable.OVER.createCall(
-            this.select.getParserPosition(),
-            count,
-            SqlNodeList.EMPTY
-        );
-        final SqlNode alias = SqlStdOperatorTable.AS.createCall(
-            this.select.getParserPosition(),
-            over,
-            new SqlIdentifier(
-                "__total_count__",
-                this.select.getParserPosition()
+        list.add(
+            SqlStdOperatorTable.AS.createCall(
+                this.select.getParserPosition(),
+                SqlStdOperatorTable.OVER.createCall(
+                    this.select.getParserPosition(),
+                    SqlStdOperatorTable.COUNT.createCall(
+                        this.select.getParserPosition(),
+                        SqlIdentifier.star(this.select.getParserPosition())
+                    ),
+                    SqlNodeList.EMPTY
+                ),
+                new SqlIdentifier(
+                    "__total_count__",
+                    this.select.getParserPosition()
+                )
             )
         );
-        list.add(alias);
-        final int offset = (this.page - 1) * this.size;
         return new SqlSelect(
             this.select.getParserPosition(),
             new SqlNodeList(this.select.getParserPosition()),
@@ -85,7 +83,7 @@ public final class UngroupedSelect implements Scalar<SqlNode> {
             this.select.getQualify(),
             this.select.getOrderList(),
             SqlLiteral.createExactNumeric(
-                String.valueOf(offset),
+                String.valueOf((this.page - 1) * this.size),
                 this.select.getParserPosition()
             ),
             SqlLiteral.createExactNumeric(

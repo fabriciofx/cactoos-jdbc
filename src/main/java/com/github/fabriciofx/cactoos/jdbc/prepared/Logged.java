@@ -1,3 +1,4 @@
+// @checkstyle FileLengthCheck disabled
 /*
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
@@ -47,10 +48,11 @@ import org.cactoos.text.UncheckedText;
 @SuppressWarnings(
     {
         "PMD.TooManyMethods",
-        "PMD.AvoidDuplicateLiterals",
         "PMD.UnnecessaryLocalRule",
         "PMD.ReplaceJavaUtilDate",
-        "PMD.ExcessivePublicCount"
+        "PMD.ExcessivePublicCount",
+        "PMD.CouplingBetweenObjects",
+        "PMD.ReplaceJavaUtilCalendar"
     }
 )
 public final class Logged implements PreparedStatement {
@@ -534,16 +536,8 @@ public final class Logged implements PreparedStatement {
         );
     }
 
-    /**
-     * Set a stream to Unicode.
-     *
-     * @param index Parameter index
-     * @param stream InputStream
-     * @param length Data length
-     * @throws SQLException If fails
-     * @deprecated It not should be used
-     */
     @Deprecated
+    @Override
     public void setUnicodeStream(
         final int index,
         final InputStream stream,

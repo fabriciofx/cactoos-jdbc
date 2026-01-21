@@ -13,6 +13,7 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * @since 0.8.0
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginatedTest {
     @Test
     void paginatedOnlyStart() {

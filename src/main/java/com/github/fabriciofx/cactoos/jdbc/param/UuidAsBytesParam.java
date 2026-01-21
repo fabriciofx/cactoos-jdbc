@@ -27,6 +27,7 @@ public final class UuidAsBytesParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The apply
      */
@@ -47,32 +48,34 @@ public final class UuidAsBytesParam implements Param {
     ) throws Exception {
         final long most = this.uuid.getMostSignificantBits();
         final long least = this.uuid.getLeastSignificantBits();
-        final byte[] bytes = {
-            (byte) (most >>> 56),
-            (byte) (most >>> 48),
-            (byte) (most >>> 40),
-            (byte) (most >>> 32),
-            (byte) (most >>> 24),
-            (byte) (most >>> 16),
-            (byte) (most >>> 8),
-            (byte) most,
-            (byte) (least >>> 56),
-            (byte) (least >>> 48),
-            (byte) (least >>> 40),
-            (byte) (least >>> 32),
-            (byte) (least >>> 24),
-            (byte) (least >>> 16),
-            (byte) (least >>> 8),
-            (byte) least,
-        };
-        stmt.setBytes(index, bytes);
+        stmt.setBytes(
+            index,
+            new byte[]{
+                (byte) (most >>> 56),
+                (byte) (most >>> 48),
+                (byte) (most >>> 40),
+                (byte) (most >>> 32),
+                (byte) (most >>> 24),
+                (byte) (most >>> 16),
+                (byte) (most >>> 8),
+                (byte) most,
+                (byte) (least >>> 56),
+                (byte) (least >>> 48),
+                (byte) (least >>> 40),
+                (byte) (least >>> 32),
+                (byte) (least >>> 24),
+                (byte) (least >>> 16),
+                (byte) (least >>> 8),
+                (byte) least,
+            }
+        );
     }
 
     @Override
     public byte[] asBytes() throws Exception {
         final long most = this.uuid.getMostSignificantBits();
         final long least = this.uuid.getLeastSignificantBits();
-        return new byte[] {
+        return new byte[]{
             (byte) Types.OTHER,
             (byte) most,
             (byte) (most >>> 8),

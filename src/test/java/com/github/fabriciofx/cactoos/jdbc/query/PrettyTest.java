@@ -13,9 +13,10 @@ import org.llorllale.cactoos.matchers.Matches;
  * Pretty tests.
  * @since 0.9.0
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PrettyTest {
     @Test
-    void pretty() throws Exception {
+    void pretty() {
         new Assertion<>(
             "must eliminate new lines and duplicated white space",
             new HasString(

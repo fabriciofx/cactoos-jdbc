@@ -27,6 +27,7 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class ResultSetAsValueTest {
     @Test
     void value() throws Exception {

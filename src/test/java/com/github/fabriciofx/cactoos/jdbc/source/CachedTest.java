@@ -35,7 +35,7 @@ import org.llorllale.cactoos.matchers.Matches;
  * @since 0.9.0
  * @checkstyle MethodLengthCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.AvoidDuplicateLiterals"})
 final class CachedTest {
     @Test
     void cacheASelect() throws Exception {
@@ -107,7 +107,7 @@ final class CachedTest {
             }
         }
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must check if cache has a value",
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
@@ -117,7 +117,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must store a cache value",
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
@@ -127,7 +127,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must check if cache has a value already stored",
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
@@ -137,7 +137,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must retrieve a cached value",
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
@@ -241,7 +241,7 @@ final class CachedTest {
             ).execute();
         }
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must check if cache has a value",
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
@@ -251,7 +251,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must store a cache value",
             new HasString(
                 new Concatenated(
                     "Storing in cache with key ",
@@ -261,7 +261,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must check if cache has a value already stored",
             new HasString(
                 new Concatenated(
                     "Checking if cache has a value for key ",
@@ -271,7 +271,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must retrieve a cached value",
             new HasString(
                 new Concatenated(
                     "Retrieving from cache with key ",
@@ -281,7 +281,7 @@ final class CachedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log a cache store and retrieve",
+            "must invalidate a cached value",
             new HasString(
                 """
                 Invalidating 1 cache entries with keys: \

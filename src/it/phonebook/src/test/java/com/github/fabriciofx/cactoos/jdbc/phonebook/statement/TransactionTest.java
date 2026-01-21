@@ -35,7 +35,8 @@ import org.llorllale.cactoos.matchers.HasValue;
 @SuppressWarnings({
     "PMD.UnnecessaryLocalRule",
     "PMD.EmptyCatchBlock",
-    "PMD.ExceptionAsFlowControl"
+    "PMD.ExceptionAsFlowControl",
+    "PMD.UnitTestShouldIncludeAssert"
 })
 final class TransactionTest {
     @Test

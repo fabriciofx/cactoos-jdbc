@@ -1,3 +1,4 @@
+// @checkstyle FileLengthCheck disabled
 /*
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
@@ -46,7 +47,7 @@ import org.cactoos.text.UncheckedText;
         "PMD.LongVariable",
         "PMD.UnnecessaryLocalRule",
         "PMD.ExcessivePublicCount",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.CouplingBetweenObjects"
     }
 )
 public final class Logged implements Connection {

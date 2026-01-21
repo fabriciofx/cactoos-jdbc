@@ -23,6 +23,7 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class InsertTest {
     @Test
     void insert() throws Exception {

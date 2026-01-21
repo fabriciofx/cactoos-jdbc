@@ -28,7 +28,7 @@ import org.llorllale.cactoos.matchers.Assertion;
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  * @checkstyle NestedTryDepthCheck (500 lines)
  */
-@SuppressWarnings("PMD.UnnecessaryLocalRule")
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class ResultSetAsXmlTest {
     @Test
     void xml() throws Exception {

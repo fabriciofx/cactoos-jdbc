@@ -18,6 +18,7 @@ import org.llorllale.cactoos.matchers.IsText;
  * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class JdbcUrlTest {
     @Test
     void url() {

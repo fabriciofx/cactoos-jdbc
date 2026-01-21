@@ -58,17 +58,16 @@ public final class OrderedSelect implements Scalar<SqlNode> {
                 ).value()
             );
         }
-        final SqlNodeList keywords = SqlNodeList.of(
-            SqlLiteral.createSymbol(
-                SqlSelectKeyword.DISTINCT,
-                SqlParserPos.ZERO
-            )
-        );
         final SqlNodeList group = this.select.getGroup();
         if (group != null && !group.isEmpty()) {
             ordered = new SqlSelect(
                 this.select.getParserPosition(),
-                keywords,
+                SqlNodeList.of(
+                    SqlLiteral.createSymbol(
+                        SqlSelectKeyword.DISTINCT,
+                        SqlParserPos.ZERO
+                    )
+                ),
                 this.select.getSelectList(),
                 this.select.getFrom(),
                 this.select.getWhere(),

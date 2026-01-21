@@ -51,8 +51,9 @@ public final class Paginated implements Query {
                 final SqlParser.Config config = SqlParser.config()
                     .withCaseSensitive(false)
                     .withQuoting(Quoting.BACK_TICK);
-                final SqlParser parser = SqlParser.create(query.sql(), config);
-                final SqlNode stmt = parser.parseQuery();
+                final SqlNode stmt = SqlParser
+                    .create(query.sql(), config)
+                    .parseQuery();
                 final SqlSelect select;
                 if (stmt instanceof SqlOrderBy rdr) {
                     select = (SqlSelect) rdr.query;

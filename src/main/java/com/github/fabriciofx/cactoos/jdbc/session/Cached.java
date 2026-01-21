@@ -23,7 +23,6 @@ import java.sql.PreparedStatement;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.CloseResource")
 public final class Cached implements Session {
     /**
      * Session.

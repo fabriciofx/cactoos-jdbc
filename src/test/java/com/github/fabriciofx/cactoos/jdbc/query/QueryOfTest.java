@@ -12,14 +12,14 @@ import org.llorllale.cactoos.matchers.IsText;
  * QueryOf tests.
  * @since 0.9.0
  */
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class QueryOfTest {
     @Test
     void withoutValues() {
-        final String sql = "SELECT * FROM employee";
         new Assertion<>(
             "must build a query without values",
-            () -> new QueryOf(sql).sql(),
-            new IsText(sql)
+            () -> new QueryOf("SELECT * FROM employee").sql(),
+            new IsText("SELECT * FROM employee")
         ).affirm();
     }
 }

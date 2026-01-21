@@ -26,12 +26,7 @@ import org.llorllale.cactoos.matchers.Assertion;
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidDuplicateLiterals",
-        "PMD.UnitTestShouldIncludeAssert"
-    }
-)
+@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PhonebookTest {
     @Test
     void mustCreateAContact() throws Exception {
@@ -43,8 +38,9 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Source source = new NoAuth(server.resource());
-            final Phonebook phonebook = new SqlPhonebook(source);
+            final Phonebook phonebook = new SqlPhonebook(
+                new NoAuth(server.resource())
+            );
             final Contact contact = phonebook.create("Donald Knuth");
             contact.phones().add("99991234", "TIM");
             contact.phones().add("98812564", "Oi");
@@ -72,11 +68,10 @@ final class PhonebookTest {
             )
         ) {
             server.start();
-            final Source source = new NoAuth(server.resource());
             new Assertion<>(
                 "must have contact name",
                 XhtmlMatchers.xhtml(
-                    new SqlPhonebook(source)
+                    new SqlPhonebook(new NoAuth(server.resource()))
                         .search("maria")
                         .get(0)
                         .about()

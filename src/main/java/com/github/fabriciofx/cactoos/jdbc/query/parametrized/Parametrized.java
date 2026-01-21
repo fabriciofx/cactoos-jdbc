@@ -8,7 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
@@ -42,10 +41,12 @@ public final class Parametrized implements Query {
                 final SqlParser.Config config = SqlParser.config()
                     .withConformance(SqlConformanceEnum.DEFAULT)
                     .withQuoting(Quoting.BACK_TICK);
-                final SqlParser parser = SqlParser.create(query.sql(), config);
-                final SqlNode stmt = parser.parseStmt();
-                final SqlNode replaced = stmt.accept(new Shuttle());
-                return new Pretty(replaced).asString();
+                return new Pretty(
+                    SqlParser
+                        .create(query.sql(), config)
+                        .parseStmt()
+                        .accept(new Shuttle())
+                ).asString();
             }
         );
     }

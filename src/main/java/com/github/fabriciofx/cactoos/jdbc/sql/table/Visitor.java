@@ -30,11 +30,13 @@ import org.cactoos.text.Upper;
  * @since 0.9.0
  * @checkstyle CyclomaticComplexityCheck (300 lines)
  */
-@SuppressWarnings({
-    "PMD.TooManyMethods",
-    "PMD.GodClass",
-    "PMD.CognitiveComplexity"
-})
+@SuppressWarnings(
+    {
+        "PMD.TooManyMethods",
+        "PMD.GodClass",
+        "PMD.CognitiveComplexity"
+    }
+)
 public final class Visitor extends SqlBasicVisitor<Void> {
     /**
      * Names.
@@ -50,11 +52,12 @@ public final class Visitor extends SqlBasicVisitor<Void> {
      * Ctor.
      */
     public Visitor() {
-        this(new LinkedHashSet<>(),  new HashMap<>());
+        this(new LinkedHashSet<>(), new HashMap<>());
     }
 
     /**
      * Ctor.
+     *
      * @param tables Table names
      * @param ctes CTEs
      */
@@ -65,6 +68,7 @@ public final class Visitor extends SqlBasicVisitor<Void> {
 
     /**
      * Return the tables names.
+     *
      * @return The table names
      */
     public Set<String> names() {
@@ -171,10 +175,13 @@ public final class Visitor extends SqlBasicVisitor<Void> {
     }
 
     private void visitBasicCall(final SqlBasicCall call) {
-        final String operator = new UncheckedText(
-            new Upper(call.getOperator().getName())
-        ).asString();
-        if ("AS".equals(operator)) {
+        if (
+            "AS".equals(
+                new UncheckedText(
+                    new Upper(call.getOperator().getName())
+                ).asString()
+            )
+        ) {
             if (call.operand(0) instanceof SqlIdentifier identifier) {
                 this.extractTableName(identifier);
             } else {

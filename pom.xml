@@ -216,9 +216,11 @@
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.25.0</version>
+            <version>0.25.1</version>
             <configuration>
               <excludes combine.children="append">
+                <exclude>dependencies:com.google.guava</exclude>
+                <exclude>dependencies:org.apache.calcite.avatica</exclude>
                 <exclude>checkstyle:/src/site/resources/.*</exclude>
                 <exclude>findbugs:.*</exclude>
                 <exclude>xml:.*</exclude>

@@ -4,7 +4,6 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.query.paginated;
 
-import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlIdentifier;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
@@ -52,44 +51,39 @@ public final class GroupedSelect implements Scalar<SqlNode> {
 
     @Override
     public SqlNode value() throws Exception {
-        final SqlIdentifier sub = new SqlIdentifier(
-            "__paginated_subquery__",
-            this.select.getParserPosition()
-        );
-        final SqlBasicCall from = (SqlBasicCall)
-            SqlStdOperatorTable.AS.createCall(
-                this.select.getParserPosition(),
-                this.select,
-                sub
-            );
         final SqlNodeList list = new SqlNodeList(
             this.select.getParserPosition()
         );
         list.add(SqlIdentifier.star(this.select.getParserPosition()));
-        final SqlNode count = SqlStdOperatorTable.COUNT.createCall(
-            this.select.getParserPosition(),
-            SqlIdentifier.star(this.select.getParserPosition())
-        );
-        final SqlNode over = SqlStdOperatorTable.OVER.createCall(
-            this.select.getParserPosition(),
-            count,
-            SqlNodeList.EMPTY
-        );
-        final SqlNode alias = SqlStdOperatorTable.AS.createCall(
-            this.select.getParserPosition(),
-            over,
-            new SqlIdentifier(
-                "__total_count__",
-                this.select.getParserPosition()
+        list.add(
+            SqlStdOperatorTable.AS.createCall(
+                this.select.getParserPosition(),
+                SqlStdOperatorTable.OVER.createCall(
+                    this.select.getParserPosition(),
+                    SqlStdOperatorTable.COUNT.createCall(
+                        this.select.getParserPosition(),
+                        SqlIdentifier.star(this.select.getParserPosition())
+                    ),
+                    SqlNodeList.EMPTY
+                ),
+                new SqlIdentifier(
+                    "__total_count__",
+                    this.select.getParserPosition()
+                )
             )
         );
-        list.add(alias);
-        final int off = (this.page - 1) * this.size;
         return new SqlSelect(
             this.select.getParserPosition(),
             null,
             list,
-            from,
+            SqlStdOperatorTable.AS.createCall(
+                this.select.getParserPosition(),
+                this.select,
+                new SqlIdentifier(
+                    "__paginated_subquery__",
+                    this.select.getParserPosition()
+                )
+            ),
             null,
             null,
             null,
@@ -97,7 +91,7 @@ public final class GroupedSelect implements Scalar<SqlNode> {
             null,
             null,
             SqlLiteral.createExactNumeric(
-                String.valueOf(off),
+                String.valueOf((this.page - 1) * this.size),
                 this.select.getParserPosition()
             ),
             SqlLiteral.createExactNumeric(

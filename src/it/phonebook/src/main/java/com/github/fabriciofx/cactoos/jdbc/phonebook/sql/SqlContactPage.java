@@ -27,7 +27,6 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.8.0
  * @checkstyle IllegalCatchCheck (1500 lines)
  */
-@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class SqlContactPage implements Page<Contact> {
     /**
      * The page's elements.

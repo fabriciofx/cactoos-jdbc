@@ -9,7 +9,6 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.query.normalized.Shuttle;
 import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
@@ -43,10 +42,12 @@ public final class Normalized implements Query {
                 final SqlParser.Config config = SqlParser.config()
                     .withCaseSensitive(false)
                     .withQuoting(Quoting.BACK_TICK);
-                final SqlParser parser = SqlParser.create(query.sql(), config);
-                final SqlNode stmt = parser.parseQuery();
-                final SqlNode canonical = stmt.accept(new Shuttle());
-                return new Pretty(canonical).asString();
+                return new Pretty(
+                    SqlParser
+                        .create(query.sql(), config)
+                        .parseQuery()
+                        .accept(new Shuttle())
+                ).asString();
             }
         );
     }

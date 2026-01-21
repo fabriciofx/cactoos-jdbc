@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * @checkstyle ParameterNumberCheck (500 lines)
  * @checkstyle IllegalCatchCheck (500 lines)
  */
-@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.CloseResource"})
+@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.UnnecessaryLocalRule"})
 public final class Cached extends PreparedEnvelope {
     /**
      * A normalized PreparedStatement to be stored into cache.

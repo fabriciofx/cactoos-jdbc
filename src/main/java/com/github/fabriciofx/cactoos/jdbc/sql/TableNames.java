@@ -8,7 +8,6 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.sql.table.Visitor;
 import java.util.Set;
 import org.apache.calcite.avatica.util.Quoting;
-import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
@@ -44,11 +43,9 @@ public final class TableNames implements Scalar<Set<String>> {
                     );
                     final Visitor visitor = new Visitor();
                     try {
-                        final SqlNode stmt = parser.parseStmt();
-                        stmt.accept(visitor);
+                        parser.parseStmt().accept(visitor);
                     } catch (final SqlParseException ex) {
-                        final SqlNode stmt = parser.parseQuery();
-                        stmt.accept(visitor);
+                        parser.parseQuery().accept(visitor);
                     }
                     return visitor.names();
                 }

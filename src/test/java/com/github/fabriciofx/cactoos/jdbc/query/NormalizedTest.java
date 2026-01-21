@@ -14,7 +14,7 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.TooManyMethods"})
 final class NormalizedTest {
     @Test
     void normalizeWithStart() throws Exception {

@@ -152,7 +152,6 @@ public final class Logged implements Source {
 
     @Override
     public String password() {
-        final String pass = this.origin.password();
         this.logger.log(
             this.level.value(),
             new UncheckedText(
@@ -162,6 +161,6 @@ public final class Logged implements Source {
                 )
             ).asString()
         );
-        return pass;
+        return this.origin.password();
     }
 }
