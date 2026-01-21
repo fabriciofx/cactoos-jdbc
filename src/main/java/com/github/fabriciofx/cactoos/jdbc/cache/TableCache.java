@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.cache.Store;
-import com.github.fabriciofx.cactoos.cache.cache.CacheEnvelope;
+import com.github.fabriciofx.cactoos.cache.base.CacheEnvelope;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 
