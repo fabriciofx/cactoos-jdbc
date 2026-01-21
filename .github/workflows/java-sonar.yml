@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: Copyright (C) 2018-2016 Fabrício Barros Cabral
+# SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
 # yamllint disable rule:line-length
-name: any-sonar
+name: java-sonar-test
 'on':
   push:
     branches:
@@ -11,8 +11,8 @@ name: any-sonar
 permissions:
   contents: read
 jobs:
-  any-sonar:
-    uses: fabriciofx/github-workflows/.github/workflows/any-sonar-template.yml@main
+  java-sonar-test:
+    uses: fabriciofx/github-workflows/.github/workflows/java-sonar-template.yml@main
     secrets:
       gh_token: ${{ secrets.GITHUB_TOKEN }}
       sr_token: ${{ secrets.SONAR_TOKEN }}
