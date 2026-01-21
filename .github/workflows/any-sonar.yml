@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
+# SPDX-FileCopyrightText: Copyright (C) 2018-2016 Fabrício Barros Cabral
 # SPDX-License-Identifier: MIT
 ---
 # yamllint disable rule:line-length
@@ -16,3 +16,5 @@ jobs:
     secrets:
       gh_token: ${{ secrets.GITHUB_TOKEN }}
       sr_token: ${{ secrets.SONAR_TOKEN }}
+      sr_organization: ${{ secrets.SONAR_ORGANIZATION }}
+      sr_project_key: ${{ secrets.SONAR_PROJECT_KEY }}
