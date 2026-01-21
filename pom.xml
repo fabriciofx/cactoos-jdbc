@@ -15,7 +15,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>cactoos-jdbc</name>
-  <description>A true object-oriented implementation of the JDBC API
+  <description>A truly object-oriented implementation of the JDBC API
   </description>
   <url>https://github.com/fabriciofx/cactoos-jdbc</url>
   <inceptionYear>2018</inceptionYear>
