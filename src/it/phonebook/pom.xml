@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.71.2</version>
+    <version>0.72.0</version>
   </parent>
   <groupId>com.github.fabriciofx</groupId>
   <artifactId>phonebook</artifactId>
@@ -107,7 +107,7 @@
       <plugin>
         <groupId>com.qulice</groupId>
         <artifactId>qulice-maven-plugin</artifactId>
-        <version>0.25.0</version>
+        <version>0.25.1</version>
         <configuration>
           <excludes combine.children="append">
             <exclude>checkstyle:/src/site/resources/.*</exclude>
