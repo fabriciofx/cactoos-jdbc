@@ -12,7 +12,6 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.util.logging.Logger;
-import org.cactoos.text.Joined;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
