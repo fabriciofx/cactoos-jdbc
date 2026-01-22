@@ -45,12 +45,12 @@ final class LoggedTest {
         );
         source.url();
         source.password();
-        final Session sessiona = source.session();
-        sessiona.autocommit(false);
-        final Session sessionb = source.session();
-        sessionb.autocommit(true);
-        sessiona.close();
-        sessionb.close();
+        final Session first = source.session();
+        first.autocommit(false);
+        final Session second = source.session();
+        second.autocommit(true);
+        first.close();
+        second.close();
         new Assertion<>(
             "must log source and sessions",
             new HasString(
