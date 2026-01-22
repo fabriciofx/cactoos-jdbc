@@ -4,11 +4,14 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.cache.Entries;
 import com.github.fabriciofx.cactoos.cache.Entry;
 import com.github.fabriciofx.cactoos.cache.Key;
+import com.github.fabriciofx.cactoos.cache.Keys;
 import com.github.fabriciofx.cactoos.cache.Policy;
+import com.github.fabriciofx.cactoos.cache.Store;
 import com.github.fabriciofx.cactoos.cache.policy.MaxSizePolicy;
-import com.github.fabriciofx.cactoos.cache.store.StoreEnvelope;
+import com.github.fabriciofx.cactoos.cache.store.StoreOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import java.util.HashSet;
@@ -22,7 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 0.9.0
  */
-public final class TableStore extends StoreEnvelope<Query, Table> {
+public final class TableStore implements Store<Query, Table> {
+    /**
+     * Store.
+     */
+    private final Store<Query, Table> store;
+
     /**
      * Table name (String) -> Queries (Keys) association.
      */
@@ -51,8 +59,25 @@ public final class TableStore extends StoreEnvelope<Query, Table> {
         final Map<String, Set<Key<Query>>> keys,
         final Policy<Query, Table> policy
     ) {
-        super(entries, policy);
+        this(new StoreOf<>(entries, policy), keys);
+    }
+
+    /**
+     * Ctor.
+     * @param store A store
+     * @param keys Keys associated to a table
+     */
+    public TableStore(
+        final Store<Query, Table> store,
+        final Map<String, Set<Key<Query>>> keys
+    ) {
+        this.store = store;
         this.tables = keys;
+    }
+
+    @Override
+    public Entry<Query, Table> retrieve(final Key<Query> key) {
+        return this.store.retrieve(key);
     }
 
     @Override
@@ -71,12 +96,12 @@ public final class TableStore extends StoreEnvelope<Query, Table> {
                 keys.add(key);
             }
         }
-        return super.save(key, entry);
+        return this.store.save(key, entry);
     }
 
     @Override
     public Entry<Query, Table> delete(final Key<Query> key) {
-        final Entry<Query, Table> entry = super.delete(key);
+        final Entry<Query, Table> entry = this.store.delete(key);
         if (entry.valid()) {
             final List<String> tbls = entry.metadata().get("tables");
             for (final String table : tbls) {
@@ -91,5 +116,20 @@ public final class TableStore extends StoreEnvelope<Query, Table> {
             }
         }
         return entry;
+    }
+
+    @Override
+    public boolean contains(final Key<Query> key) {
+        return this.store.contains(key);
+    }
+
+    @Override
+    public Keys<Query> keys() {
+        return this.store.keys();
+    }
+
+    @Override
+    public Entries<Query, Table> entries() {
+        return this.store.entries();
     }
 }

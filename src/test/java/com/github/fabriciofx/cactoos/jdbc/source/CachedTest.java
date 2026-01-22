@@ -4,9 +4,10 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.source;
 
+import com.github.fabriciofx.cactoos.cache.base.CacheOf;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
 import com.github.fabriciofx.cactoos.jdbc.param.BoolParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DateParam;
 import com.github.fabriciofx.cactoos.jdbc.param.DecimalParam;
@@ -44,7 +45,7 @@ final class CachedTest {
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
                 new com.github.fabriciofx.cactoos.cache.base.Logged<>(
-                    new TableCache(),
+                    new CacheOf<>(new TableStore()),
                     "cache",
                     logger
                 )
@@ -155,7 +156,7 @@ final class CachedTest {
             new Cached(
                 new NoAuth(new H2Source(new RandomName().asString())),
                 new com.github.fabriciofx.cactoos.cache.base.Logged<>(
-                    new TableCache(),
+                    new CacheOf<>(new TableStore()),
                     "cache",
                     logger
                 )

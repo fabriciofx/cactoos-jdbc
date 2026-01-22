@@ -4,8 +4,9 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.cache;
 
+import com.github.fabriciofx.cactoos.cache.Entry;
 import com.github.fabriciofx.cactoos.cache.Key;
-import com.github.fabriciofx.cactoos.cache.entry.EntryEnvelope;
+import com.github.fabriciofx.cactoos.cache.entry.EntryOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import java.util.List;
@@ -21,7 +22,12 @@ import org.cactoos.scalar.Unchecked;
  * CacheEntry.
  * @since 0.9.0
  */
-public final class CacheEntry extends EntryEnvelope<Query, Table> {
+public final class CacheEntry implements Entry<Query, Table> {
+    /**
+     * Entry.
+     */
+    private final Entry<Query, Table> entry;
+
     /**
      * Ctor.
      * @param key The key
@@ -56,6 +62,34 @@ public final class CacheEntry extends EntryEnvelope<Query, Table> {
         final Table table,
         final Map<String, List<String>> metadata
     ) {
-        super(key, table, metadata);
+        this(new EntryOf<>(key, table, metadata));
+    }
+
+    /**
+     * Ctor.
+     * @param entry An entry
+     */
+    public CacheEntry(final Entry<Query, Table> entry) {
+        this.entry = entry;
+    }
+
+    @Override
+    public Key<Query> key() {
+        return this.entry.key();
+    }
+
+    @Override
+    public Table value() {
+        return this.entry.value();
+    }
+
+    @Override
+    public Map<String, List<String>> metadata() {
+        return this.entry.metadata();
+    }
+
+    @Override
+    public boolean valid() {
+        return true;
     }
 }

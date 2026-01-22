@@ -5,11 +5,12 @@
 package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.cache.Cache;
+import com.github.fabriciofx.cactoos.cache.base.CacheOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.cache.TableCache;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
 
 /**
  * Cached.
@@ -32,7 +33,7 @@ public final class Cached implements Source {
      * @param source The source
      */
     public Cached(final Source source) {
-        this(source, new TableCache());
+        this(source, new CacheOf<>(new TableStore()));
     }
 
     /**
