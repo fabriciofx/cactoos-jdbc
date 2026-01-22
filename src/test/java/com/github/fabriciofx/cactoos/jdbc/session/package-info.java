@@ -8,4 +8,4 @@
  *
  * @since 0.1
  */
-package com.github.fabriciofx.cactoos.jdbc.connection;
+package com.github.fabriciofx.cactoos.jdbc.session;
