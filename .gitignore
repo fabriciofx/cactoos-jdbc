@@ -8,3 +8,4 @@ target/
 .settings
 .classpath
 .recommenders
+sonar-project.properties
