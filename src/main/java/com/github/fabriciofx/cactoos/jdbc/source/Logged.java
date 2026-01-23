@@ -46,16 +46,6 @@ public final class Logged implements Source {
     private final AtomicInteger sessions;
 
     /**
-     * The connections counter.
-     */
-    private final AtomicInteger connections;
-
-    /**
-     * The statements counter.
-     */
-    private final AtomicInteger statements;
-
-    /**
      * Ctor.
      * @param source A Source
      * @param from Where the logs come from
@@ -94,8 +84,6 @@ public final class Logged implements Source {
             )
         );
         this.sessions = new AtomicInteger(-1);
-        this.connections = new AtomicInteger(-1);
-        this.statements = new AtomicInteger(-1);
     }
 
     @Override
@@ -105,9 +93,7 @@ public final class Logged implements Source {
             this.from,
             this.logger,
             this.level.value(),
-            this.sessions.incrementAndGet(),
-            this.connections.incrementAndGet(),
-            this.statements
+            this.sessions.incrementAndGet()
         );
         this.logger.log(
             this.level.value(),

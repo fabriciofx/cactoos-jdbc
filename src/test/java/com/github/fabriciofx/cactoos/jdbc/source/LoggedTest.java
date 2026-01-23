@@ -135,34 +135,64 @@ final class LoggedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log if PreparedStatement #0 is created and closed",
+            "must log if PreparedStatement[#0] has been prepared and closed",
             new MatchesRegex(
                 """
-                (?s).*\\[test\\] Connection\\[#0\\] created \
-                PreparedStatement\\[#0\\].*\\[test\\] \
-                PreparedStatement\\[#0\\] closed.*\
+                (?s).*\\[test\\] Session\\[#0\\] prepared \
+                PreparedStatement\\[#0\\].*\
+                \\[test\\] PreparedStatement\\[#0\\] closed.*\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log if PreparedStatement #1 is created and closed",
+            "must log if PreparedStatement[#0] executed an update",
             new MatchesRegex(
                 """
-                (?s).*\\[test\\] Connection\\[#0\\] created \
-                PreparedStatement\\[#1\\].*\\[test\\] \
-                PreparedStatement\\[#1\\] closed.*\
+                (?s).*\\[test\\] PreparedStatement\\[#0\\] executed an update \
+                and returned '0'.*\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log if PreparedStatement #2 is created and closed",
+            "must log if PreparedStatement[#1] has been prepared and closed",
             new MatchesRegex(
                 """
-                (?s).*\\[test\\] Connection\\[#0\\] created \
-                PreparedStatement\\[#2\\].*\\[test\\] \
-                PreparedStatement\\[#2\\] closed.*\
+                (?s).*\\[test\\] Session\\[#0\\] prepared \
+                PreparedStatement\\[#1\\].*\
+                \\[test\\] PreparedStatement\\[#1\\] closed.*\
+                """
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log if PreparedStatement[#1] executed an insert",
+            new MatchesRegex(
+                """
+                (?s).*\\[test\\] PreparedStatement\\[#1\\] executed \
+                and returned 'false'.*\
+                """
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log if PreparedStatement[#2] has been prepared and closed",
+            new MatchesRegex(
+                """
+                (?s).*\\[test\\] Session\\[#0\\] prepared \
+                PreparedStatement\\[#2\\].*\
+                \\[test\\] PreparedStatement\\[#2\\] closed.*\
+                """
+            ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log if PreparedStatement[#2] retrieved a ResultSet",
+            new MatchesRegex(
+                """
+                (?s).*\\[test\\] PreparedStatement\\[#2\\] retrieved a \
+                ResultSet.*\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))

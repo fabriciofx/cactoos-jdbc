@@ -59,22 +59,25 @@ final class LoggedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must check if a connection created a prepared statement",
+            "must check if Session[#0] prepared a statement",
             new HasString(
-                "[test] Connection[#0] created PreparedStatement[#0] using SQL"
+                "[test] Session[#0] prepared PreparedStatement[#0]"
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must check if the prepared statement executed an update",
             new HasString(
-                "[test] PreparedStatement[#0] executed an update and returned '0'"
+                """
+                [test] PreparedStatement[#0] executed an update and \
+                returned '0'\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must check if the prepared is closed",
-            new HasString("[test] PreparedStatement[#0] closed in"),
+            new HasString("[test] PreparedStatement[#0] closed"),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
     }

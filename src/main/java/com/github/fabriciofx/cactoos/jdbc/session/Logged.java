@@ -47,11 +47,6 @@ public final class Logged implements Session {
     private final int id;
 
     /**
-     * Connection id.
-     */
-    private final int connection;
-
-    /**
      * Statements counter.
      */
     private final AtomicInteger statements;
@@ -64,38 +59,30 @@ public final class Logged implements Session {
      * @param logger A logger
      * @param level A level
      * @param id Session id
-     * @param connection Connection id
-     * @param statements Statements counter
      */
     public Logged(
         final Session session,
         final String from,
         final Logger logger,
         final Level level,
-        final int id,
-        final int connection,
-        final AtomicInteger statements
+        final int id
     ) {
         this.origin = session;
         this.from = from;
         this.logger = logger;
         this.level = level;
         this.id = id;
-        this.connection = connection;
-        this.statements = statements;
+        this.statements = new AtomicInteger(-1);
     }
 
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
-        final PreparedStatement prepared = this.origin.prepared(
-            new com.github.fabriciofx.cactoos.jdbc.plan.Logged(
-                plan,
-                this.from,
-                this.logger,
-                this.level,
-                this.connection,
-                this.statements
-            )
+        final PreparedStatement prepared = new com.github.fabriciofx.cactoos.jdbc.prepared.Logged(
+            this.origin.prepared(plan),
+            this.from,
+            this.logger,
+            this.level,
+            this.statements.incrementAndGet()
         );
         this.logger.log(
             this.level,
