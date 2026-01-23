@@ -23,7 +23,6 @@ import com.github.fabriciofx.fake.server.RandomName;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import org.cactoos.text.Concatenated;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -110,40 +109,40 @@ final class CachedTest {
         new Assertion<>(
             "must check if cache has a value",
             new HasString(
-                new Concatenated(
-                    "Checking if cache has a value for key ",
-                    "'eea4b833fac6f4e321611e2a66529376': false"
-                )
+                """
+                Checking if cache has a value for key \
+                'eea4b833fac6f4e321611e2a66529376': false\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must store a cache value",
             new HasString(
-                new Concatenated(
-                    "Storing in cache with key ",
-                    "'eea4b833fac6f4e321611e2a66529376' and value"
-                )
+                """
+                Storing in cache with key \
+                'eea4b833fac6f4e321611e2a66529376' and value\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must check if cache has a value already stored",
             new HasString(
-                new Concatenated(
-                    "Checking if cache has a value for key ",
-                    "'eea4b833fac6f4e321611e2a66529376': true"
-                )
+                """
+                Checking if cache has a value for key \
+                'eea4b833fac6f4e321611e2a66529376': true\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must retrieve a cached value",
             new HasString(
-                new Concatenated(
-                    "Retrieving from cache with key ",
-                    "'eea4b833fac6f4e321611e2a66529376' and value"
-                )
+                """
+                Retrieving from cache with key \
+                'eea4b833fac6f4e321611e2a66529376' and value\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
@@ -244,40 +243,40 @@ final class CachedTest {
         new Assertion<>(
             "must check if cache has a value",
             new HasString(
-                new Concatenated(
-                    "Checking if cache has a value for key ",
-                    "'fa3a631bc0523744e743bf276a57a7a8': false"
-                )
+                """
+                Checking if cache has a value for key \
+                'fa3a631bc0523744e743bf276a57a7a8': false\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must store a cache value",
             new HasString(
-                new Concatenated(
-                    "Storing in cache with key ",
-                    "'fa3a631bc0523744e743bf276a57a7a8' and value"
-                )
+                """
+                Storing in cache with key \
+                'fa3a631bc0523744e743bf276a57a7a8' and value\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must check if cache has a value already stored",
             new HasString(
-                new Concatenated(
-                    "Checking if cache has a value for key ",
-                    "'fa3a631bc0523744e743bf276a57a7a8': true"
-                )
+                """
+                Checking if cache has a value for key \
+                'fa3a631bc0523744e743bf276a57a7a8': true\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
             "must retrieve a cached value",
             new HasString(
-                new Concatenated(
-                    "Retrieving from cache with key ",
-                    "'fa3a631bc0523744e743bf276a57a7a8' and value"
-                )
+                """
+                Retrieving from cache with key \
+                'fa3a631bc0523744e743bf276a57a7a8' and value\
+                """
             ),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();

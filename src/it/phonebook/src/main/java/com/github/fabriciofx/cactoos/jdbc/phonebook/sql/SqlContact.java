@@ -15,7 +15,6 @@ import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
 import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import java.util.UUID;
-import org.cactoos.text.Concatenated;
 
 /**
  * Contact for SQL.
@@ -54,10 +53,11 @@ public final class SqlContact implements Contact {
                 new Select(
                     session,
                     new NamedQuery(
-                        new Concatenated(
-                            "SELECT name, number, carrier FROM contact INNER JOIN ",
-                            "phone ON contact.id = phone.contact_id WHERE contact.id = :id"
-                        ),
+                        """
+                        SELECT name, number, carrier FROM contact INNER JOIN \
+                        phone ON contact.id = phone.contact_id \
+                        WHERE contact.id = :id\
+                        """,
                         new UuidParam("id", this.id)
                     )
                 )
