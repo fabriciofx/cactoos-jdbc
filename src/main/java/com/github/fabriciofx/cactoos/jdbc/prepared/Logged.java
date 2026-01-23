@@ -114,13 +114,7 @@ public final class Logged implements PreparedStatement {
     @Override
     public ResultSet executeQuery() throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
-            this.origin.executeQuery(),
-            this.from,
-            this.logger,
-            this.level,
-            this.resultsets.incrementAndGet()
-        );
+        final ResultSet rset = this.origin.executeQuery();
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
@@ -133,12 +127,18 @@ public final class Logged implements PreparedStatement {
                     """,
                     this.from,
                     this.id,
-                    this.resultsets.get(),
+                    this.resultsets.incrementAndGet(),
                     nanos
                 )
             ).asString()
         );
-        return rset;
+        return new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            rset,
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.get()
+        );
     }
 
     @Override
@@ -1556,13 +1556,7 @@ public final class Logged implements PreparedStatement {
     @Override
     public ResultSet executeQuery(final String sql) throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
-            this.origin.executeQuery(sql),
-            this.from,
-            this.logger,
-            this.level,
-            this.resultsets.incrementAndGet()
-        );
+        final ResultSet rset = this.origin.executeQuery(sql);
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
@@ -1576,12 +1570,18 @@ public final class Logged implements PreparedStatement {
                     this.from,
                     this.id,
                     sql,
-                    this.resultsets.get(),
+                    this.resultsets.incrementAndGet(),
                     nanos
                 )
             ).asString()
         );
-        return rset;
+        return new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            rset,
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.get()
+        );
     }
 
     @Override
@@ -2226,13 +2226,7 @@ public final class Logged implements PreparedStatement {
     @Override
     public ResultSet getGeneratedKeys() throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
-            this.origin.getGeneratedKeys(),
-            this.from,
-            this.logger,
-            this.level,
-            this.resultsets.incrementAndGet()
-        );
+        final ResultSet rset = this.origin.getGeneratedKeys();
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
@@ -2245,12 +2239,18 @@ public final class Logged implements PreparedStatement {
                     """,
                     this.from,
                     this.id,
-                    this.resultsets.get(),
+                    this.resultsets.incrementAndGet(),
                     nanos
                 )
             ).asString()
         );
-        return rset;
+        return new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            rset,
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.get()
+        );
     }
 
     @Override
