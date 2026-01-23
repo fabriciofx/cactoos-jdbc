@@ -36,8 +36,8 @@ public final class CacheKey implements Key<Query> {
     }
 
     @Override
-    public Query domain() {
-        return this.key.domain();
+    public Query value() {
+        return this.key.value();
     }
 
     @Override
