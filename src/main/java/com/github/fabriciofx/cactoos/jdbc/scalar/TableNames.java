@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.scalar;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.table.Visitor;
+import com.github.fabriciofx.cactoos.jdbc.scalar.table.Visitor;
 import java.util.Set;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.parser.SqlParseException;

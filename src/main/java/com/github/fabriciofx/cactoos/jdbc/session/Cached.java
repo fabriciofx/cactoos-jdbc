@@ -11,8 +11,8 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
-import com.github.fabriciofx.cactoos.jdbc.sql.QueryKind;
-import com.github.fabriciofx.cactoos.jdbc.sql.TableNames;
+import com.github.fabriciofx.cactoos.jdbc.scalar.KindOfQuery;
+import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 
@@ -51,7 +51,7 @@ public final class Cached implements Session {
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
         final PreparedStatement prepared;
-        switch (new QueryKind(plan.query()).value()) {
+        switch (new KindOfQuery(plan.query()).value()) {
             case SELECT:
             case WITH:
             case ORDER_BY:

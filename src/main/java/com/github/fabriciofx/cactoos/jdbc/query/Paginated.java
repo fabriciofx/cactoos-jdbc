@@ -9,7 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedOrder;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedSelect;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.UngroupedSelect;
-import com.github.fabriciofx.cactoos.jdbc.sql.Pretty;
+import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOrderBy;

@@ -14,7 +14,7 @@ import com.github.fabriciofx.cactoos.jdbc.cache.CacheEntry;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheKey;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
-import com.github.fabriciofx.cactoos.jdbc.sql.TableNames;
+import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
 import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

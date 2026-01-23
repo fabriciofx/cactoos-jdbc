@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.scalar;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import org.apache.calcite.avatica.util.Quoting;
@@ -17,14 +17,14 @@ import org.cactoos.text.Trimmed;
 import org.cactoos.text.Upper;
 
 /**
- * QueryKind.
+ * KindOfQuery.
  *
  * @since 0.9.0
  * @checkstyle CyclomaticComplexityCheck (200 lines)
  * @checkstyle JavaNCSSCheck (200 lines)
  */
 @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.NcssCount"})
-public final class QueryKind implements Scalar<SqlKind> {
+public final class KindOfQuery implements Scalar<SqlKind> {
     /**
      * Query.
      */
@@ -35,7 +35,7 @@ public final class QueryKind implements Scalar<SqlKind> {
      *
      * @param query A {@link Query}
      */
-    public QueryKind(final Query query) {
+    public KindOfQuery(final Query query) {
         this.query = query;
     }
 

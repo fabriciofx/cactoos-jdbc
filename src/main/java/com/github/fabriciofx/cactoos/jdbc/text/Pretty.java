@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.text;
 
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlNode;

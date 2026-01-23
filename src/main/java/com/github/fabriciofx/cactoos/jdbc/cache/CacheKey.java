@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.cache;
 import com.github.fabriciofx.cactoos.cache.Key;
 import com.github.fabriciofx.cactoos.cache.key.KeyOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.sql.BytesQuery;
+import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 
 /**
  * CacheKey.
@@ -24,7 +24,7 @@ public final class CacheKey implements Key<Query> {
      * @param query A query
      */
     public CacheKey(final Query query) {
-        this(new KeyOf<>(query, new BytesQuery(query)));
+        this(new KeyOf<>(query, new QueryAsBytes(query)));
     }
 
     /**

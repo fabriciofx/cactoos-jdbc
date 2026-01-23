@@ -2,8 +2,9 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql.table;
+package com.github.fabriciofx.cactoos.jdbc.scalar.table;
 
+import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -26,7 +27,7 @@ import org.cactoos.text.Upper;
 
 /**
  * Visitor.
- * <p>Visitor for {@link com.github.fabriciofx.cactoos.jdbc.sql.TableNames}.
+ * <p>Visitor for {@link TableNames}.
  * @since 0.9.0
  * @checkstyle CyclomaticComplexityCheck (300 lines)
  */

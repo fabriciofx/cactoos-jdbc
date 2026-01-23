@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.scalar;
 
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import org.apache.calcite.sql.SqlKind;
@@ -16,12 +16,12 @@ import org.llorllale.cactoos.matchers.HasValue;
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
-final class QueryKindTest {
+final class KindOfQueryTest {
     @Test
     void checkIfAStatementIsASelect() {
         new Assertion<>(
             "must check if statement is a select",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf("SELECT id, name FROM person")
             ).value(),
             new HasValue<>(SqlKind.SELECT)
@@ -32,7 +32,7 @@ final class QueryKindTest {
     void checkIfAStatementIsACreateTable() {
         new Assertion<>(
             "must check if statement is a create table",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     """
                     CREATE TABLE person (id INT, name VARCHAR(30) ,
@@ -48,7 +48,7 @@ final class QueryKindTest {
     void checkIfAStatementIsSimpleCreateTable() {
         new Assertion<>(
             "must check if statement is a simple create table",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     "CREATE TABLE emp (id INT)"
                 )
@@ -61,7 +61,7 @@ final class QueryKindTest {
     void checkIfAStatementIsUpdate() {
         new Assertion<>(
             "must check if statement is an update",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     "UPDATE emp SET salary = 5000 WHERE id = 1"
                 )
@@ -74,7 +74,7 @@ final class QueryKindTest {
     void checkIfIsASelectWithCommonTableExpression() {
         new Assertion<>(
             "must check if statement is a select with common table expression",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     """
                     WITH recent_users AS (SELECT * FROM users WHERE
@@ -91,7 +91,7 @@ final class QueryKindTest {
     void checkIfIsAInsertWithCommonTableExpression() {
         new Assertion<>(
             "must check if statement is an insert with common table expression",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     """
                     INSERT INTO users (name, email) SELECT name, email
@@ -107,7 +107,7 @@ final class QueryKindTest {
     void checkIfIsADelete() {
         new Assertion<>(
             "must check if statement is a delete",
-            () -> new QueryKind(
+            () -> new KindOfQuery(
                 new QueryOf(
                     """
                     DELETE FROM orders

@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.sql;
+package com.github.fabriciofx.cactoos.jdbc.bytes;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
@@ -11,11 +11,11 @@ import org.cactoos.Bytes;
 import org.cactoos.bytes.BytesOf;
 
 /**
- * BytesQuery.
+ * QueryAsBytes.
  * <p>Convert a {@link Query} into bytes.
  * @since 0.9.0
  */
-public final class BytesQuery implements Bytes {
+public final class QueryAsBytes implements Bytes {
     /**
      * Query.
      */
@@ -25,7 +25,7 @@ public final class BytesQuery implements Bytes {
      * Ctor.
      * @param query The query
      */
-    public BytesQuery(final Query query) {
+    public QueryAsBytes(final Query query) {
         this.query = query;
     }
 

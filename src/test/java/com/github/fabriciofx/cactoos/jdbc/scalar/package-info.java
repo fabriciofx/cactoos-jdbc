@@ -4,8 +4,8 @@
  */
 
 /**
- * SQL Table.
+ * Scalar tests.
  *
  * @since 0.9.0
  */
-package com.github.fabriciofx.cactoos.jdbc.sql.table;
+package com.github.fabriciofx.cactoos.jdbc.scalar;
