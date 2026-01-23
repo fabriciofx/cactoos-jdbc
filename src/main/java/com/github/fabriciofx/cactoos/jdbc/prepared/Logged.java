@@ -83,7 +83,7 @@ public final class Logged implements PreparedStatement {
     private final int id;
 
     /**
-     * ResulSet counter.
+     * ResultSet counter.
      */
     private final AtomicInteger resultsets;
 
