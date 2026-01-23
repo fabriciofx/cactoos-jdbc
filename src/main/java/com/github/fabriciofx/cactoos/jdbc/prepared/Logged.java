@@ -29,6 +29,7 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cactoos.iterable.IterableOf;
@@ -82,6 +83,11 @@ public final class Logged implements PreparedStatement {
     private final int id;
 
     /**
+     * ResulSet counter.
+     */
+    private final AtomicInteger resultsets;
+
+    /**
      * Ctor.
      *
      * @param stmt Decorated PreparedStatement
@@ -102,21 +108,32 @@ public final class Logged implements PreparedStatement {
         this.logger = lggr;
         this.level = lvl;
         this.id = id;
+        this.resultsets = new AtomicInteger(-1);
     }
 
     @Override
     public ResultSet executeQuery() throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = this.origin.executeQuery();
+        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            this.origin.executeQuery(),
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.incrementAndGet()
+        );
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] retrieved a ResultSet in %dns",
+                    """
+                    [%s] PreparedStatement[#%d] retrieved a ResultSet[#%d] \
+                    in %dns\
+                    """,
                     this.from,
                     this.id,
+                    this.resultsets.get(),
                     nanos
                 )
             ).asString()
@@ -1539,7 +1556,13 @@ public final class Logged implements PreparedStatement {
     @Override
     public ResultSet executeQuery(final String sql) throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = this.origin.executeQuery(sql);
+        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            this.origin.executeQuery(sql),
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.incrementAndGet()
+        );
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
@@ -1548,11 +1571,12 @@ public final class Logged implements PreparedStatement {
                 new FormattedText(
                     """
                     [%s] PreparedStatement[#%d] executed SQL '%s' and \
-                    retrieved a ResultSet in %dns\
+                    retrieved a ResultSet[#%d] in %dns\
                     """,
                     this.from,
                     this.id,
                     sql,
+                    this.resultsets.get(),
                     nanos
                 )
             ).asString()
@@ -1886,7 +1910,7 @@ public final class Logged implements PreparedStatement {
             this.level,
             new UncheckedText(
                 new FormattedText(
-                    "[%s] PreparedStatement[#%d] retrieved a ResultSet in %dns",
+                    "[%s] PreparedStatement[#%d] get a ResultSet in %dns",
                     this.from,
                     this.id,
                     nanos
@@ -2202,7 +2226,13 @@ public final class Logged implements PreparedStatement {
     @Override
     public ResultSet getGeneratedKeys() throws SQLException {
         final Instant begin = Instant.now();
-        final ResultSet rset = this.origin.getGeneratedKeys();
+        final ResultSet rset = new com.github.fabriciofx.cactoos.jdbc.rset.Logged(
+            this.origin.getGeneratedKeys(),
+            this.from,
+            this.logger,
+            this.level,
+            this.resultsets.incrementAndGet()
+        );
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
@@ -2210,11 +2240,12 @@ public final class Logged implements PreparedStatement {
             new UncheckedText(
                 new FormattedText(
                     """
-                    [%s] PreparedStatement[#%d] retrieved a ResultSet with \
-                    generated keys in %dns\
+                    [%s] PreparedStatement[#%d] retrieved a ResultSet[#%d] \
+                    with generated keys in %dns\
                     """,
                     this.from,
                     this.id,
+                    this.resultsets.get(),
                     nanos
                 )
             ).asString()

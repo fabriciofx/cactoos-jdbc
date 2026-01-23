@@ -188,13 +188,18 @@ final class LoggedTest {
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
         new Assertion<>(
-            "must log if PreparedStatement[#2] retrieved a ResultSet",
+            "must log if PreparedStatement[#2] retrieved a ResultSet[#0]",
             new MatchesRegex(
                 """
                 (?s).*\\[test\\] PreparedStatement\\[#2\\] retrieved a \
-                ResultSet.*\
+                ResultSet\\[#0\\].*\
                 """
             ),
+            new Matches<>(new TextOf(logger.toString()))
+        ).affirm();
+        new Assertion<>(
+            "must log if ResultSet[#0] has been closed",
+            new HasString("[test] ResultSet[#0] closed"),
             new Matches<>(new TextOf(logger.toString()))
         ).affirm();
     }
