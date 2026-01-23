@@ -6,6 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 import com.github.fabriciofx.cactoos.jdbc.query.normalized.Shuttle;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
@@ -60,5 +61,10 @@ public final class Normalized implements Query {
     @Override
     public String sql() throws Exception {
         return this.code.asString();
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        return new QueryAsBytes(this).asBytes();
     }
 }

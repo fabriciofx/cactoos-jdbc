@@ -4,6 +4,8 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import org.cactoos.Bytes;
+
 /**
  * Query.
  *
@@ -11,7 +13,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  *
  * @since 0.1
  */
-public interface Query {
+public interface Query extends Bytes {
     /**
      * Return the Query params.
      * @return The query parameters

@@ -97,4 +97,9 @@ public final class Paginated implements Query {
     public String sql() throws Exception {
         return this.code.asString();
     }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        return new QueryOf(this.sql()).asBytes();
+    }
 }

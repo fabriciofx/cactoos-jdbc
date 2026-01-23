@@ -8,10 +8,10 @@ import com.github.fabriciofx.cactoos.cache.Cache;
 import com.github.fabriciofx.cactoos.cache.Entry;
 import com.github.fabriciofx.cactoos.cache.Key;
 import com.github.fabriciofx.cactoos.cache.Store;
+import com.github.fabriciofx.cactoos.cache.key.KeyOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.CacheEntry;
-import com.github.fabriciofx.cactoos.jdbc.cache.CacheKey;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
@@ -68,7 +68,7 @@ public final class Cached extends PreparedEnvelope {
     public ResultSet executeQuery() throws SQLException {
         try {
             final ResultSet result;
-            final Key<Query> key = new CacheKey(this.normalized);
+            final Key<Query> key = new KeyOf<>(this.normalized);
             final Store<Query, Table> store = this.cache.store();
             if (store.contains(key)) {
                 final Entry<Query, Table> entry = store.retrieve(key);

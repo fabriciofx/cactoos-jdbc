@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 import com.github.fabriciofx.cactoos.jdbc.Param;
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import java.util.LinkedList;
 import java.util.List;
@@ -136,5 +137,10 @@ public final class NamedQuery implements Query {
     @Override
     public String sql() throws Exception {
         return this.code.asString();
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        return new QueryAsBytes(this).asBytes();
     }
 }
