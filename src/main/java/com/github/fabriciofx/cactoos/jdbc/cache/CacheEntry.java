@@ -6,16 +6,14 @@ package com.github.fabriciofx.cactoos.jdbc.cache;
 
 import com.github.fabriciofx.cactoos.cache.Entry;
 import com.github.fabriciofx.cactoos.cache.Key;
+import com.github.fabriciofx.cactoos.cache.Metadata;
 import com.github.fabriciofx.cactoos.cache.entry.EntryOf;
+import com.github.fabriciofx.cactoos.cache.metadata.MetadataOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.cactoos.Scalar;
-import org.cactoos.list.ListOf;
 import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapOf;
 import org.cactoos.scalar.Unchecked;
 
 /**
@@ -42,11 +40,8 @@ public final class CacheEntry implements Entry<Query, Table> {
         this(
             key,
             table,
-            new MapOf<>(
-                new MapEntry<>(
-                    "tables",
-                    new ListOf<>(new Unchecked<>(tables).value())
-                )
+            new MetadataOf(
+                new MapEntry<>("tables", new Unchecked<>(tables).value())
             )
         );
     }
@@ -60,7 +55,7 @@ public final class CacheEntry implements Entry<Query, Table> {
     public CacheEntry(
         final Key<Query> key,
         final Table table,
-        final Map<String, List<String>> metadata
+        final Metadata metadata
     ) {
         this(new EntryOf<>(key, table, metadata));
     }
@@ -84,7 +79,7 @@ public final class CacheEntry implements Entry<Query, Table> {
     }
 
     @Override
-    public Map<String, List<String>> metadata() {
+    public Metadata metadata() {
         return this.entry.metadata();
     }
 

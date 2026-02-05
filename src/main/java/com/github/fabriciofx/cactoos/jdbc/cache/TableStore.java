@@ -8,9 +8,8 @@ import com.github.fabriciofx.cactoos.cache.Entries;
 import com.github.fabriciofx.cactoos.cache.Entry;
 import com.github.fabriciofx.cactoos.cache.Key;
 import com.github.fabriciofx.cactoos.cache.Keys;
-import com.github.fabriciofx.cactoos.cache.Policy;
 import com.github.fabriciofx.cactoos.cache.Store;
-import com.github.fabriciofx.cactoos.cache.policy.MaxSizePolicy;
+import com.github.fabriciofx.cactoos.cache.metadata.TypeOf;
 import com.github.fabriciofx.cactoos.cache.store.StoreOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Table;
@@ -24,7 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * TableStore.
  *
  * @since 0.9.0
+ * @checkstyle NestedIfDepthCheck (200 lines)
  */
+@SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
 public final class TableStore implements Store<Query, Table> {
     /**
      * Store.
@@ -40,11 +41,7 @@ public final class TableStore implements Store<Query, Table> {
      * Ctor.
      */
     public TableStore() {
-        this(
-            new ConcurrentHashMap<>(),
-            new ConcurrentHashMap<>(),
-            new MaxSizePolicy<>()
-        );
+        this(new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
     }
 
     /**
@@ -52,14 +49,12 @@ public final class TableStore implements Store<Query, Table> {
      *
      * @param entries Data to initialize the cache
      * @param keys Keys associated to a table
-     * @param policy Policy that will remove automatically old cache entries
      */
     public TableStore(
         final Map<Key<Query>, Entry<Query, Table>> entries,
-        final Map<String, Set<Key<Query>>> keys,
-        final Policy<Query, Table> policy
+        final Map<String, Set<Key<Query>>> keys
     ) {
-        this(new StoreOf<>(entries, policy), keys);
+        this(new StoreOf<>(entries), keys);
     }
 
     /**
@@ -85,15 +80,20 @@ public final class TableStore implements Store<Query, Table> {
         final Key<Query> key,
         final Entry<Query, Table> entry
     ) throws Exception {
-        final List<String> tbls = entry.metadata().get("tables");
-        for (final String table : tbls) {
-            final Set<Key<Query>> keys = this.tables.get(table);
-            if (keys == null) {
-                final Set<Key<Query>> kys = new HashSet<>();
-                kys.add(key);
-                this.tables.put(table, kys);
-            } else {
-                keys.add(key);
+        final List<Set<String>> tbls = entry.metadata().value(
+            "tables",
+            new TypeOf<>() { }
+        );
+        if (!tbls.isEmpty()) {
+            for (final String table : tbls.get(0)) {
+                final Set<Key<Query>> keys = this.tables.get(table);
+                if (keys == null) {
+                    final Set<Key<Query>> kys = new HashSet<>();
+                    kys.add(key);
+                    this.tables.put(table, kys);
+                } else {
+                    keys.add(key);
+                }
             }
         }
         return this.store.save(key, entry);
@@ -103,15 +103,20 @@ public final class TableStore implements Store<Query, Table> {
     public Entry<Query, Table> delete(final Key<Query> key) {
         final Entry<Query, Table> entry = this.store.delete(key);
         if (entry.valid()) {
-            final List<String> tbls = entry.metadata().get("tables");
-            for (final String table : tbls) {
-                final Set<Key<Query>> keys = this.tables.getOrDefault(
-                    table,
-                    new HashSet<>()
-                );
-                keys.remove(key);
-                if (keys.isEmpty()) {
-                    this.tables.remove(table);
+            final List<Set<String>> tbls = entry.metadata().value(
+                "tables",
+                new TypeOf<>() { }
+            );
+            if (!tbls.isEmpty()) {
+                for (final String table : tbls.get(0)) {
+                    final Set<Key<Query>> keys = this.tables.getOrDefault(
+                        table,
+                        new HashSet<>()
+                    );
+                    keys.remove(key);
+                    if (keys.isEmpty()) {
+                        this.tables.remove(table);
+                    }
                 }
             }
         }
