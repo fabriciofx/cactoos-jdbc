@@ -35,7 +35,7 @@ public final class TableStore implements Store<Query, Table> {
     /**
      * Table name (String) -> Queries (Keys) association.
      */
-    private final Map<String, Set<Key<Query>>> tables;
+    private final Map<String, Set<Key<Query>>> index;
 
     /**
      * Ctor.
@@ -67,7 +67,7 @@ public final class TableStore implements Store<Query, Table> {
         final Map<String, Set<Key<Query>>> keys
     ) {
         this.store = store;
-        this.tables = keys;
+        this.index = keys;
     }
 
     @Override
@@ -80,20 +80,18 @@ public final class TableStore implements Store<Query, Table> {
         final Key<Query> key,
         final Entry<Query, Table> entry
     ) throws Exception {
-        final List<Set<String>> tbls = entry.metadata().value(
+        final List<Set<String>> tables = entry.metadata().value(
             "tables",
             new TypeOf<>() { }
         );
-        if (!tbls.isEmpty()) {
-            for (final String table : tbls.get(0)) {
-                final Set<Key<Query>> keys = this.tables.get(table);
-                if (keys == null) {
-                    final Set<Key<Query>> kys = new HashSet<>();
-                    kys.add(key);
-                    this.tables.put(table, kys);
-                } else {
-                    keys.add(key);
-                }
+        if (!tables.isEmpty()) {
+            for (final String table : tables.get(0)) {
+                final Set<Key<Query>> keys = this.index.getOrDefault(
+                    table,
+                    new HashSet<>()
+                );
+                keys.add(key);
+                this.index.put(table, keys);
             }
         }
         return this.store.save(key, entry);
@@ -103,19 +101,19 @@ public final class TableStore implements Store<Query, Table> {
     public Entry<Query, Table> delete(final Key<Query> key) {
         final Entry<Query, Table> entry = this.store.delete(key);
         if (entry.valid()) {
-            final List<Set<String>> tbls = entry.metadata().value(
+            final List<Set<String>> tables = entry.metadata().value(
                 "tables",
                 new TypeOf<>() { }
             );
-            if (!tbls.isEmpty()) {
-                for (final String table : tbls.get(0)) {
-                    final Set<Key<Query>> keys = this.tables.getOrDefault(
+            if (!tables.isEmpty()) {
+                for (final String table : tables.get(0)) {
+                    final Set<Key<Query>> keys = this.index.getOrDefault(
                         table,
                         new HashSet<>()
                     );
                     keys.remove(key);
                     if (keys.isEmpty()) {
-                        this.tables.remove(table);
+                        this.index.remove(table);
                     }
                 }
             }
