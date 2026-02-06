@@ -76,10 +76,10 @@ public final class TableStore implements Store<Query, Table> {
     }
 
     @Override
-    public List<Entry<Query, Table>> save(
+    public Entry<Query, Table> save(
         final Key<Query> key,
         final Entry<Query, Table> entry
-    ) throws Exception {
+    ) {
         final List<Set<String>> tables = entry.metadata().value(
             "tables",
             new TypeOf<>() { }
