@@ -87,4 +87,9 @@ public final class CacheEntry implements Entry<Query, Table> {
     public boolean valid() {
         return true;
     }
+
+    @Override
+    public int size() {
+        return this.entry.size();
+    }
 }
