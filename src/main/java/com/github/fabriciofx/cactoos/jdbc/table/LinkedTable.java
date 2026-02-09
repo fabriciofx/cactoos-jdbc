@@ -78,4 +78,9 @@ public final class LinkedTable implements Table {
     public Columns columns() throws Exception {
         return this.labels.value();
     }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        return this.records.value().asBytes();
+    }
 }

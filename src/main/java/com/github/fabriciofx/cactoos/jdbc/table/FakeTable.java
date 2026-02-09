@@ -42,4 +42,9 @@ public final class FakeTable implements Table {
     public Columns columns() throws Exception {
         return this.labels;
     }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        return this.records.asBytes();
+    }
 }

@@ -4,11 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import org.cactoos.Bytes;
+
 /**
  * Table.
  * @since 0.9.0
  */
-public interface Table {
+public interface Table extends Bytes {
     /**
      * Return the {@link Rows} of a table.
      * @return The rows

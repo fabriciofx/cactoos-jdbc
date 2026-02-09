@@ -4,11 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import org.cactoos.Bytes;
+
 /**
  * Rows.
  * @since 0.9.0
  */
-public interface Rows {
+public interface Rows extends Bytes {
     /**
      * Return the amount of rows.
      * @return The amount of rows

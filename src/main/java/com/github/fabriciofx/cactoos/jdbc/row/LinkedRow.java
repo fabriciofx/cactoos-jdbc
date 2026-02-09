@@ -5,6 +5,8 @@
 package com.github.fabriciofx.cactoos.jdbc.row;
 
 import com.github.fabriciofx.cactoos.jdbc.Row;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.cactoos.text.FormattedText;
@@ -51,5 +53,19 @@ public final class LinkedRow implements Row {
             );
         }
         return klass.cast(this.items.get(column));
+    }
+
+    @Override
+    public byte[] asBytes() throws Exception {
+        try (
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(stream)
+        ) {
+            for (final Map.Entry<String, Object> item : this.items.entrySet()) {
+                out.writeObject(item.getKey());
+                out.writeObject(item.getValue());
+            }
+            return stream.toByteArray();
+        }
     }
 }

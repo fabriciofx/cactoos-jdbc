@@ -4,11 +4,13 @@
  */
 package com.github.fabriciofx.cactoos.jdbc;
 
+import org.cactoos.Bytes;
+
 /**
  * Row.
  * @since 0.9.0
  */
-public interface Row {
+public interface Row extends Bytes {
     /**
      * Adds a value to a column.
      * @param column The column name
