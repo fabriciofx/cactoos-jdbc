@@ -10,10 +10,13 @@ import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
 import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.RandomName;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
+import com.jcabi.matchers.XhtmlMatchers;
 import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
 
 /**
  * Batch tests.
@@ -68,6 +71,30 @@ final class BatchTest {
                     )
                 )
             ).execute();
+            new Assertion<>(
+                "must batch clients records",
+                XhtmlMatchers.xhtml(
+                    new ResultSetAsXml(
+                        new Select(
+                            session,
+                            new QueryOf("SELECT * FROM client")
+                        ),
+                        "clients",
+                        "client"
+                    ).value()
+                ),
+                XhtmlMatchers.hasXPaths(
+                    "/clients/client/id[text()='1']",
+                    "/clients/client/name[text()='Jeff Bridges']",
+                    "/clients/client/age[text()='34']",
+                    "/clients/client/id[text()='2']",
+                    "/clients/client/name[text()='Anna Miller']",
+                    "/clients/client/age[text()='26']",
+                    "/clients/client/id[text()='3']",
+                    "/clients/client/name[text()='Michal Douglas']",
+                    "/clients/client/age[text()='32']"
+                )
+            ).affirm();
         }
     }
 }
