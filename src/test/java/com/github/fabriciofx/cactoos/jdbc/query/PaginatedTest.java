@@ -73,7 +73,7 @@ final class PaginatedTest {
                 OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY\
                 """
             )
-        );
+        ).affirm();
     }
 
     @Test
