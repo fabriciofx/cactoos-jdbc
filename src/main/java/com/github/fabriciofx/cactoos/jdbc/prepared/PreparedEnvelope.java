@@ -588,7 +588,7 @@ public abstract class PreparedEnvelope implements PreparedStatement {
 
     @Override
     public void setFetchDirection(final int direction) throws SQLException {
-        this.origin.setFetchSize(direction);
+        this.origin.setFetchDirection(direction);
     }
 
     @Override

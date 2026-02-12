@@ -1971,7 +1971,7 @@ public final class Logged implements PreparedStatement {
     @Override
     public void setFetchDirection(final int direction) throws SQLException {
         final Instant begin = Instant.now();
-        this.origin.setFetchSize(direction);
+        this.origin.setFetchDirection(direction);
         final Instant end = Instant.now();
         final long nanos = Duration.between(begin, end).toNanos();
         this.logger.log(
