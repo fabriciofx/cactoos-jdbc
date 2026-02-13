@@ -42,7 +42,7 @@ public final class LinkedRow implements Row {
     }
 
     @Override
-    public <T> T value(final String column, final Class<T> klass)
+    public <T> T value(final String column, final Class<T> type)
         throws Exception {
         if (!this.items.containsKey(column)) {
             throw new IllegalArgumentException(
@@ -52,7 +52,7 @@ public final class LinkedRow implements Row {
                 ).asString()
             );
         }
-        return klass.cast(this.items.get(column));
+        return type.cast(this.items.get(column));
     }
 
     @Override

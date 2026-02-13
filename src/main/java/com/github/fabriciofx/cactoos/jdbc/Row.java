@@ -21,10 +21,10 @@ public interface Row extends Bytes {
     /**
      * Retrieve a value of a column.
      * @param column The column name
-     * @param klass The class of the value
+     * @param type The type of the value
      * @return The value
      * @param <T> The type of value
      * @throws Exception if something goes wrong
      */
-    <T> T value(String column, Class<T> klass) throws Exception;
+    <T> T value(String column, Class<T> type) throws Exception;
 }

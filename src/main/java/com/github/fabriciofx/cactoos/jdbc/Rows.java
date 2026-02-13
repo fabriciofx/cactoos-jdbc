@@ -24,7 +24,7 @@ public interface Rows extends Bytes {
     void add(Row row);
 
     /**
-     * Return a {@link Row} according a index.
+     * Return a {@link Row} according an index.
      * @param index The index of row
      * @return A row
      * @throws Exception if something goes wrong
