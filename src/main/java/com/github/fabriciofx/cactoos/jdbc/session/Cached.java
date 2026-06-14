@@ -51,35 +51,26 @@ public final class Cached implements Session {
 
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
-        final PreparedStatement prepared;
-        switch (new KindOfQuery(plan.query()).value()) {
-            case SELECT:
-            case WITH:
-            case ORDER_BY:
+        return switch (new KindOfQuery(plan.query()).value()) {
+            case SELECT, WITH, ORDER_BY -> {
                 final Normalized normalized = new Normalized(plan.query());
-                prepared =
-                    new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
-                        this.origin.prepared(plan),
-                        this.origin.prepared(new Simple(normalized)),
-                        normalized,
-                        this.cache
-                    );
-                break;
-            case INSERT:
-            case UPDATE:
-            case DELETE:
+                yield new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
+                    this.origin.prepared(plan),
+                    this.origin.prepared(new Simple(normalized)),
+                    normalized,
+                    this.cache
+                );
+            }
+            case INSERT, UPDATE, DELETE -> {
                 this.cache.store().entries().invalidate(
                     new MetadataInvalidate<>(
                         new TableNames(plan.query()).value()
                     )
                 );
-                prepared = this.origin.prepared(plan);
-                break;
-            default:
-                prepared = this.origin.prepared(plan);
-                break;
-        }
-        return prepared;
+                yield this.origin.prepared(plan);
+            }
+            default -> this.origin.prepared(plan);
+        };
     }
 
     @Override
