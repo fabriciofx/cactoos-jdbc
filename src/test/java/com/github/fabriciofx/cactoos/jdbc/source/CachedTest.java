@@ -23,6 +23,7 @@ import com.github.fabriciofx.fake.server.RandomName;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -73,7 +74,10 @@ final class CachedTest {
                     """,
                     new IntParam("id", 1),
                     new TextParam("name", "Rob Pike"),
-                    new DateParam("created_at", LocalDate.now()),
+                    new DateParam(
+                        "created_at",
+                        LocalDate.now(ZoneId.systemDefault())
+                    ),
                     new TextParam("city", "San Francisco"),
                     new BoolParam("working", true),
                     new DecimalParam("height", "1.86")
@@ -182,7 +186,10 @@ final class CachedTest {
                     """,
                     new IntParam("id", 1),
                     new TextParam("name", "Rob Pike"),
-                    new DateParam("created_at", LocalDate.now()),
+                    new DateParam(
+                        "created_at",
+                        LocalDate.now(ZoneId.systemDefault())
+                    ),
                     new TextParam("city", "San Francisco"),
                     new BoolParam("working", true),
                     new DecimalParam("height", "1.86")
@@ -198,7 +205,10 @@ final class CachedTest {
                     """,
                     new IntParam("id", 2),
                     new TextParam("name", "Maria Souza"),
-                    new DateParam("created_at", LocalDate.now()),
+                    new DateParam(
+                        "created_at",
+                        LocalDate.now(ZoneId.systemDefault())
+                    ),
                     new TextParam("city", "New York"),
                     new BoolParam("working", false),
                     new DecimalParam("height", "1.62")

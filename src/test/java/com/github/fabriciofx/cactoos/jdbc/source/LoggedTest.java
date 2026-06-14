@@ -20,6 +20,7 @@ import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import org.cactoos.text.Replaced;
 import org.cactoos.text.TextOf;
 import org.junit.jupiter.api.Test;
@@ -104,7 +105,10 @@ final class LoggedTest {
                     """,
                     new IntParam("id", 1),
                     new TextParam("name", "Rob Pike"),
-                    new DateParam("created_at", LocalDate.now()),
+                    new DateParam(
+                        "created_at",
+                        LocalDate.now(ZoneId.systemDefault())
+                    ),
                     new TextParam("city", "San Francisco"),
                     new BoolParam("working", true),
                     new DecimalParam("height", "1.86")

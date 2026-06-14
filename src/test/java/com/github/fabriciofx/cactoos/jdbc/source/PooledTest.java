@@ -21,6 +21,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.server.RandomName;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
@@ -65,7 +66,10 @@ final class PooledTest {
                     new ParamsOf(
                         new IntParam("id", 1),
                         new TextParam("name", "Rob Pike"),
-                        new DateParam("created_at", LocalDate.now()),
+                        new DateParam(
+                            "created_at",
+                            LocalDate.now(ZoneId.systemDefault())
+                        ),
                         new TextParam("city", "San Francisco"),
                         new BoolParam("working", true),
                         new DecimalParam("height", "1.86")
@@ -73,7 +77,10 @@ final class PooledTest {
                     new ParamsOf(
                         new IntParam("id", 2),
                         new TextParam("name", "Ana Pivot"),
-                        new DateParam("created_at", LocalDate.now()),
+                        new DateParam(
+                            "created_at",
+                            LocalDate.now(ZoneId.systemDefault())
+                        ),
                         new TextParam("city", "Washington"),
                         new BoolParam("working", false),
                         new DecimalParam("height", "1.62")
