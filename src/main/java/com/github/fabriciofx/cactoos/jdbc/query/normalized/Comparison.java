@@ -87,12 +87,12 @@ public final class Comparison {
      * @checkstyle BooleanExpressionComplexityCheck (10 lines)
      */
     public boolean operator() {
-        return this.call.getOperator() == SqlStdOperatorTable.EQUALS
-            || this.call.getOperator() == SqlStdOperatorTable.NOT_EQUALS
-            || this.call.getOperator() == SqlStdOperatorTable.LESS_THAN
-            || this.call.getOperator() == SqlStdOperatorTable.LESS_THAN_OR_EQUAL
-            || this.call.getOperator() == SqlStdOperatorTable.GREATER_THAN
-            || this.call.getOperator() == SqlStdOperatorTable.GREATER_THAN_OR_EQUAL;
+        return this.call.getOperator().equals(SqlStdOperatorTable.EQUALS)
+            || this.call.getOperator().equals(SqlStdOperatorTable.NOT_EQUALS)
+            || this.call.getOperator().equals(SqlStdOperatorTable.LESS_THAN)
+            || this.call.getOperator().equals(SqlStdOperatorTable.LESS_THAN_OR_EQUAL)
+            || this.call.getOperator().equals(SqlStdOperatorTable.GREATER_THAN)
+            || this.call.getOperator().equals(SqlStdOperatorTable.GREATER_THAN_OR_EQUAL);
     }
 
     private static boolean literal(final SqlNode node) {
@@ -115,17 +115,17 @@ public final class Comparison {
 
     private static SqlOperator invert(final SqlOperator operator) {
         final SqlOperator inverted;
-        if (operator == SqlStdOperatorTable.EQUALS) {
+        if (operator.equals(SqlStdOperatorTable.EQUALS)) {
             inverted = SqlStdOperatorTable.EQUALS;
-        } else if (operator == SqlStdOperatorTable.NOT_EQUALS) {
+        } else if (operator.equals(SqlStdOperatorTable.NOT_EQUALS)) {
             inverted = SqlStdOperatorTable.NOT_EQUALS;
-        } else if (operator == SqlStdOperatorTable.LESS_THAN) {
+        } else if (operator.equals(SqlStdOperatorTable.LESS_THAN)) {
             inverted = SqlStdOperatorTable.GREATER_THAN;
-        } else if (operator == SqlStdOperatorTable.LESS_THAN_OR_EQUAL) {
+        } else if (operator.equals(SqlStdOperatorTable.LESS_THAN_OR_EQUAL)) {
             inverted = SqlStdOperatorTable.GREATER_THAN_OR_EQUAL;
-        } else if (operator == SqlStdOperatorTable.GREATER_THAN) {
+        } else if (operator.equals(SqlStdOperatorTable.GREATER_THAN)) {
             inverted = SqlStdOperatorTable.LESS_THAN;
-        } else if (operator == SqlStdOperatorTable.GREATER_THAN_OR_EQUAL) {
+        } else if (operator.equals(SqlStdOperatorTable.GREATER_THAN_OR_EQUAL)) {
             inverted = SqlStdOperatorTable.LESS_THAN_OR_EQUAL;
         } else {
             inverted = operator;

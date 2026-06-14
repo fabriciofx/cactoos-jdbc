@@ -141,8 +141,8 @@ public final class SortedExpression implements Scalar<SqlNode> {
     }
 
     private static boolean commutative(final SqlBasicCall call) {
-        return call.getOperator() == SqlStdOperatorTable.AND
-            || call.getOperator() == SqlStdOperatorTable.OR;
+        return call.getOperator().equals(SqlStdOperatorTable.AND)
+            || call.getOperator().equals(SqlStdOperatorTable.OR);
     }
 
     private static List<SqlNode> flatten(
@@ -160,7 +160,7 @@ public final class SortedExpression implements Scalar<SqlNode> {
         final List<SqlNode> operands
     ) {
         if (node instanceof SqlBasicCall call
-            && call.getOperator() == operator) {
+            && call.getOperator().equals(operator)) {
             for (final SqlNode operand : call.getOperandList()) {
                 SortedExpression.flattenOperators(operand, operator, operands);
             }

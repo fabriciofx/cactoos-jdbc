@@ -60,7 +60,7 @@ public final class OrderBy {
     private static boolean containsWindow(final SqlNode node) {
         boolean found = false;
         if (node instanceof SqlBasicCall call) {
-            found = call.getOperator() == SqlStdOperatorTable.OVER;
+            found = call.getOperator().equals(SqlStdOperatorTable.OVER);
             for (final SqlNode operand : call.getOperandList()) {
                 found = found || containsWindow(operand);
             }
