@@ -99,7 +99,7 @@ public final class KindOfQuery implements Scalar<SqlKind> {
             kind = SqlKind.DROP_FUNCTION;
         } else if (normalized.startsWith("DROP PROCEDURE")) {
             kind = SqlKind.DROP_FUNCTION;
-        } else if (normalized.startsWith("CREATE TRIGGER")) {
+        } else if (normalized.startsWith("DROP TRIGGER")) {
             kind = SqlKind.DROP_FUNCTION;
         } else if (normalized.startsWith("TRUNCATE")) {
             kind = SqlKind.TRUNCATE_TABLE;
