@@ -57,8 +57,8 @@ public final class Paginated implements Query {
                 final SqlSelect select;
                 if (stmt instanceof SqlOrderBy rdr) {
                     select = (SqlSelect) rdr.query;
-                } else if (stmt instanceof SqlSelect) {
-                    select = (SqlSelect) stmt;
+                } else if (stmt instanceof SqlSelect slct) {
+                    select = slct;
                 } else {
                     throw new IllegalArgumentException(
                         "The query MUST be a SELECT"
