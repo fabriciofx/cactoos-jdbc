@@ -49,8 +49,8 @@ public final class Comparison {
         if (this.call.getOperandList().size() == 2) {
             final SqlNode left = this.call.getOperandList().get(0);
             final SqlNode right = this.call.getOperandList().get(1);
-            if (Comparison.literal(left) || Comparison.expression(left)
-                && Comparison.identifier(right) || Comparison.column(right)) {
+            if ((Comparison.literal(left) || Comparison.expression(left))
+                && (Comparison.identifier(right) || Comparison.column(right))) {
                 final SqlOperator inverted = Comparison.invert(
                     this.call.getOperator()
                 );
