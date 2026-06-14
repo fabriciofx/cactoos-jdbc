@@ -5,11 +5,13 @@
 package com.github.fabriciofx.cactoos.jdbc.query.normalized;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 import org.cactoos.Scalar;
 import org.cactoos.text.ComparableText;
+import org.cactoos.text.UncheckedText;
 
 /**
  * SortedWith.
@@ -43,9 +45,9 @@ public final class SortedWith implements Scalar<SqlNodeList> {
             nodes.add(node.accept(this.shuttle));
         }
         nodes.sort(
-            (left, right) -> new ComparableText(
-                new NodeName(left)
-            ).compareTo(new NodeName(right))
+            Comparator.comparing(
+                left -> new UncheckedText(new NodeName(left)).asString()
+            )
         );
         return new SqlNodeList(nodes, this.list.getParserPosition());
     }
