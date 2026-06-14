@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Rows;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.columns.LinkedColumns;
 import com.github.fabriciofx.cactoos.jdbc.row.LinkedRow;
-import com.github.fabriciofx.cactoos.jdbc.rows.LinkedRows;
+import com.github.fabriciofx.cactoos.jdbc.rows.ArrayedRows;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import org.cactoos.Scalar;
@@ -21,7 +21,7 @@ import org.cactoos.text.Lowered;
  * LinkedTable.
  * @since 0.9.0
  */
-public final class LinkedTable implements Table {
+public final class ArrayedTable implements Table {
     /**
      * Rows.
      */
@@ -36,10 +36,10 @@ public final class LinkedTable implements Table {
      * Ctor.
      * @param rset A {@link ResultSet}
      */
-    public LinkedTable(final ResultSet rset) {
+    public ArrayedTable(final ResultSet rset) {
         this.records = new Sticky<>(
             () -> {
-                final Rows rows = new LinkedRows();
+                final Rows rows = new ArrayedRows();
                 final ResultSetMetaData meta = rset.getMetaData();
                 while (rset.next()) {
                     final Row row = new LinkedRow();

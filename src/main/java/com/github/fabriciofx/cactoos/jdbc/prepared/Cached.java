@@ -15,7 +15,7 @@ import com.github.fabriciofx.cactoos.jdbc.cache.CacheEntry;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
 import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
-import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
+import com.github.fabriciofx.cactoos.jdbc.table.ArrayedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,7 +78,7 @@ public final class Cached extends PreparedEnvelope {
                 );
             } else {
                 try (ResultSet rset = this.stored.executeQuery()) {
-                    final Table table = new LinkedTable(rset);
+                    final Table table = new ArrayedTable(rset);
                     result = new CachedResultSet(table.rows(), table.columns());
                     store.save(
                         key,

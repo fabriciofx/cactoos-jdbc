@@ -10,7 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Statement;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.rset.CachedResultSet;
-import com.github.fabriciofx.cactoos.jdbc.table.LinkedTable;
+import com.github.fabriciofx.cactoos.jdbc.table.ArrayedTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -47,7 +47,7 @@ public final class Select implements Statement<ResultSet> {
             PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
-                final Table table = new LinkedTable(rset);
+                final Table table = new ArrayedTable(rset);
                 return new CachedResultSet(table.rows(), table.columns());
             }
         }

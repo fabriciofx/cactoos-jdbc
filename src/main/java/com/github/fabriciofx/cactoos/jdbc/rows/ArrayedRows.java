@@ -7,15 +7,15 @@ package com.github.fabriciofx.cactoos.jdbc.rows;
 import com.github.fabriciofx.cactoos.jdbc.Row;
 import com.github.fabriciofx.cactoos.jdbc.Rows;
 import java.io.ByteArrayOutputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import org.cactoos.text.FormattedText;
 
 /**
- * LinkedRows.
+ * ArrayRows.
  * @since 0.9.0
  */
-public final class LinkedRows implements Rows {
+public final class ArrayedRows implements Rows {
     /**
      * The rows.
      */
@@ -24,15 +24,15 @@ public final class LinkedRows implements Rows {
     /**
      * Ctor.
      */
-    public LinkedRows() {
-        this(new LinkedList<>());
+    public ArrayedRows() {
+        this(new ArrayList<>());
     }
 
     /**
      * Ctor.
      * @param items Data to initialize the columns
      */
-    public LinkedRows(final List<Row> items) {
+    public ArrayedRows(final List<Row> items) {
         this.items = items;
     }
 
