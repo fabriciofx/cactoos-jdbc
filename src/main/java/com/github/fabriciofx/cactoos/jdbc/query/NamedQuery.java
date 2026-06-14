@@ -9,7 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 import com.github.fabriciofx.cactoos.jdbc.params.ParamsOf;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,7 +103,7 @@ public final class NamedQuery implements Query {
     public NamedQuery(final Text sql, final Iterable<Params> params) {
         this.code = new Sticky(
             () -> {
-                final List<String> names = new LinkedList<>();
+                final List<String> names = new ArrayList<>();
                 final Pattern find = Pattern.compile(
                     ":(\\p{Alpha}[\\p{Alnum}_]*)"
                 );
