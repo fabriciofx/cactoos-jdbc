@@ -51,12 +51,12 @@ public final class Paginated implements Query {
         this.origin = query;
         this.code = new Sticky(
             () -> {
-                final SqlParser.Config config = SqlParser.config()
-                    .withCaseSensitive(false)
-                    .withQuoting(Quoting.BACK_TICK);
-                final SqlNode stmt = SqlParser
-                    .create(query.sql(), config)
-                    .parseQuery();
+                final SqlNode stmt = SqlParser.create(
+                    query.sql(),
+                    SqlParser.config()
+                        .withCaseSensitive(false)
+                        .withQuoting(Quoting.BACK_TICK)
+                ).parseQuery();
                 final SqlSelect select;
                 if (stmt instanceof SqlOrderBy rdr) {
                     select = (SqlSelect) rdr.query;

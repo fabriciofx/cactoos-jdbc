@@ -105,10 +105,12 @@ public final class KindOfQuery implements Scalar<SqlKind> {
         } else if (normalized.startsWith("TRUNCATE")) {
             kind = SqlKind.TRUNCATE_TABLE;
         } else {
-            final SqlParser.Config config = SqlParser.config()
-                .withConformance(SqlConformanceEnum.DEFAULT)
-                .withQuoting(Quoting.BACK_TICK);
-            final SqlParser parser = SqlParser.create(normalized, config);
+            final SqlParser parser = SqlParser.create(
+                normalized,
+                SqlParser.config()
+                    .withConformance(SqlConformanceEnum.DEFAULT)
+                    .withQuoting(Quoting.BACK_TICK)
+            );
             final SqlNode stmt = parser.parseStmt();
             kind = stmt.getKind();
             if (kind == SqlKind.WITH) {

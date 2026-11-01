@@ -41,17 +41,14 @@ public final class Normalized implements Query {
     public Normalized(final Query query) {
         this.origin = query;
         this.code = new Sticky(
-            () -> {
-                final SqlParser.Config config = SqlParser.config()
-                    .withCaseSensitive(false)
-                    .withQuoting(Quoting.BACK_TICK);
-                return new Pretty(
-                    SqlParser
-                        .create(query.sql(), config)
-                        .parseQuery()
-                        .accept(new Shuttle())
-                ).asString();
-            }
+            () -> new Pretty(
+                SqlParser.create(
+                    query.sql(),
+                    SqlParser.config()
+                        .withCaseSensitive(false)
+                        .withQuoting(Quoting.BACK_TICK)
+                ).parseQuery().accept(new Shuttle())
+            ).asString()
         );
     }
 

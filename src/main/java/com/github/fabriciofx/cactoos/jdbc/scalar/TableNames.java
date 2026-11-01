@@ -37,13 +37,12 @@ public final class TableNames implements Scalar<Set<String>> {
         this(
             new Sticky<>(
                 () -> {
-                    final SqlParser.Config config = SqlParser.config()
-                        .withCaseSensitive(false)
-                        .withQuoting(Quoting.BACK_TICK)
-                        .withConformance(SqlConformanceEnum.LENIENT);
                     final SqlParser parser = SqlParser.create(
                         query.sql(),
-                        config
+                        SqlParser.config()
+                            .withCaseSensitive(false)
+                            .withQuoting(Quoting.BACK_TICK)
+                            .withConformance(SqlConformanceEnum.LENIENT)
                     );
                     final Visitor visitor = new Visitor();
                     try {

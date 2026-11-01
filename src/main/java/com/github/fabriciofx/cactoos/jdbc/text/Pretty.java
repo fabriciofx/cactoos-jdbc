@@ -6,7 +6,6 @@ package com.github.fabriciofx.cactoos.jdbc.text;
 
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.SqlWriterConfig;
 import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.cactoos.Scalar;
 import org.cactoos.Text;
@@ -43,26 +42,23 @@ public final class Pretty implements Text {
      */
     public Pretty(final Scalar<SqlNode> node) {
         this.sql = new Sticky(
-            () -> {
-                final SqlWriterConfig config = SqlPrettyWriter.config().withDialect(
-                    SqlDialect
-                        .DatabaseProduct
-                        .UNKNOWN
-                        .getDialect()
-                    )
-                    .withIndentation(0)
-                    .withClauseStartsLine(false)
-                    .withSelectListItemsOnSeparateLines(false);
-                return new Trimmed(
-                    new Replaced(
-                        new TextOf(
-                            new SqlPrettyWriter(config).format(node.value())
-                        ),
-                        "\\s+",
-                        " "
-                    )
-                ).asString();
-            }
+            () -> new Trimmed(
+                new Replaced(
+                    new TextOf(
+                        new SqlPrettyWriter(
+                            SqlPrettyWriter.config()
+                                .withIndentation(0)
+                                .withSelectListItemsOnSeparateLines(false)
+                                .withClauseStartsLine(false).withDialect(
+                                    SqlDialect.DatabaseProduct.UNKNOWN
+                                        .getDialect()
+                                )
+                        ).format(node.value())
+                    ),
+                    "\\s+",
+                    " "
+                )
+            ).asString()
         );
     }
 
