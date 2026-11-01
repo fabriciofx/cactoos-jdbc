@@ -35,7 +35,6 @@ import org.cactoos.text.Upper;
  */
 @SuppressWarnings(
     {
-        "PMD.TooManyMethods",
         "PMD.GodClass",
         "PMD.CognitiveComplexity"
     }

@@ -14,12 +14,7 @@ import java.util.concurrent.Callable;
  * @param <T> Type of the result
  * @since 0.1
  */
-@SuppressWarnings(
-    {
-        "PMD.AvoidCatchingGenericException",
-        "PMD.UnnecessaryLocalRule"
-    }
-)
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class Transaction<T> implements Statement<T> {
 
     /**

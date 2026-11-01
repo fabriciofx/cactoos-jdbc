@@ -15,7 +15,6 @@ import java.sql.PreparedStatement;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Update implements Statement<Integer> {
 
     /**

@@ -18,7 +18,6 @@ import org.llorllale.cactoos.matchers.IsText;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class JdbcUrlTest {
 
     @Test

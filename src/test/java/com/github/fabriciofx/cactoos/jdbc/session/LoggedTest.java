@@ -26,7 +26,6 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class LoggedTest {
 
     @Test

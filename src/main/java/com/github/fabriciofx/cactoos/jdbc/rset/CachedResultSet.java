@@ -43,11 +43,9 @@ import org.cactoos.scalar.Ternary;
  */
 @SuppressWarnings(
     {
-        "PMD.TooManyMethods",
         "PMD.ExcessivePublicCount",
         "PMD.AvoidCatchingGenericException",
         "PMD.CouplingBetweenObjects",
-        "PMD.AvoidDuplicateLiterals",
         "PMD.ReplaceJavaUtilCalendar",
         "PMD.ReplaceJavaUtilDate"
     }

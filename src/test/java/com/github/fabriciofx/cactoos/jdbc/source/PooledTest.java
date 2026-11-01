@@ -31,7 +31,6 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PooledTest {
 
     @Test

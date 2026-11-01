@@ -39,7 +39,6 @@ import org.cactoos.text.UncheckedText;
  * @checkstyle MethodCountCheck (2000 lines)
  */
 @SuppressWarnings({
-    "PMD.TooManyMethods",
     "PMD.ExcessivePublicCount",
     "PMD.CouplingBetweenObjects",
     "PMD.ReplaceJavaUtilDate",

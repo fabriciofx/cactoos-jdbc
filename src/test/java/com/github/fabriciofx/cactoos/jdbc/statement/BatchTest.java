@@ -23,7 +23,6 @@ import org.llorllale.cactoos.matchers.Assertion;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class BatchTest {
 
     @Test

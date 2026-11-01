@@ -22,7 +22,6 @@ import org.llorllale.cactoos.matchers.HasValue;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class InsertTest {
 
     @Test

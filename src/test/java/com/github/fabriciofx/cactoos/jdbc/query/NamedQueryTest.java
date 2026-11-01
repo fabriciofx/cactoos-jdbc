@@ -22,7 +22,6 @@ import org.llorllale.cactoos.matchers.Throws;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class NamedQueryTest {
 
     @Test

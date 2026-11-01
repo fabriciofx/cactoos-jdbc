@@ -47,7 +47,6 @@ import org.cactoos.text.UncheckedText;
  */
 @SuppressWarnings(
     {
-        "PMD.TooManyMethods",
         "PMD.UnnecessaryLocalRule",
         "PMD.ReplaceJavaUtilDate",
         "PMD.ExcessivePublicCount",

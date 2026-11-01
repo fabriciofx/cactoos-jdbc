@@ -36,7 +36,6 @@ import java.util.Calendar;
  */
 @SuppressWarnings(
     {
-        "PMD.TooManyMethods",
         "PMD.ExcessivePublicCount",
         "PMD.CouplingBetweenObjects",
         "PMD.ReplaceJavaUtilDate",

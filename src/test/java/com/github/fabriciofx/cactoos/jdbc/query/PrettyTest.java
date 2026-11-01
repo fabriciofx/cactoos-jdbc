@@ -14,7 +14,6 @@ import org.llorllale.cactoos.matchers.Matches;
  *
  * @since 0.9.0
  */
-@SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PrettyTest {
 
     @Test

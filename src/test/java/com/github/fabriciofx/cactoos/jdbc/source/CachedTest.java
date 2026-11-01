@@ -35,7 +35,6 @@ import org.llorllale.cactoos.matchers.Matches;
  *
  * @since 0.9.0
  */
-@SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.AvoidDuplicateLiterals"})
 final class CachedTest {
 
     @Test
