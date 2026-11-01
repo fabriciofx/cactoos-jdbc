@@ -19,6 +19,13 @@ import org.cactoos.scalar.Unchecked;
  */
 public final class Shuttle extends SqlShuttle {
 
+    /**
+     * Ctor.
+     */
+    public Shuttle() {
+        super();
+    }
+
     @Override
     public SqlNode visit(final SqlCall call) {
         final SqlNode ordered;
