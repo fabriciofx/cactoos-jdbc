@@ -23,6 +23,7 @@ public interface Source {
      * Source JDBC URL.
      *
      * @return The JDBC URL
+     * @throws Exception If fails
      */
     String url() throws Exception;
 
