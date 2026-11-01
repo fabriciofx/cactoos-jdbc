@@ -96,7 +96,7 @@ public final class SortedExpression implements Scalar<SqlNode> {
         final Comparison comparison = new Comparison(shutt, call);
         if (comparison.operator()) {
             final SqlNode normalized = comparison.normalize();
-            if (normalized != call) {
+            if (!normalized.equals(call)) {
                 result = normalized;
             }
         }
