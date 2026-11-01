@@ -32,7 +32,7 @@ import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.cactoos.iterable.IterableOf;
+import org.cactoos.iterable.IterableOfInts;
 import org.cactoos.iterable.Mapped;
 import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
@@ -2306,7 +2306,7 @@ public final class Logged implements PreparedStatement {
                         ", ",
                         new Mapped<>(
                             Object::toString,
-                            new IterableOf<>(columns)
+                            new IterableOfInts(columns)
                         )
                     ),
                     nanos
@@ -2396,7 +2396,7 @@ public final class Logged implements PreparedStatement {
                         ", ",
                         new Mapped<>(
                             Object::toString,
-                            new IterableOf<>(columns)
+                            new IterableOfInts(columns)
                         )
                     ),
                     nanos
