@@ -69,6 +69,7 @@
   <properties>
     <maven.plugin.validation>VERBOSE</maven.plugin.validation>
     <maven.compiler.release>21</maven.compiler.release>
+    <github.repo>fabriciofx/cactoos-jdbc</github.repo>
   </properties>
   <dependencyManagement>
     <dependencies>
