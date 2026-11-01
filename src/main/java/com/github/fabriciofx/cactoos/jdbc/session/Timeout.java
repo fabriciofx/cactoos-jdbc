@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
  * @since 0.9.0
  */
 public final class Timeout implements Session {
+
     /**
      * Session.
      */

@@ -15,6 +15,7 @@ import org.cactoos.Bytes;
  * @since 0.1
  */
 public interface Param extends Bytes {
+
     /**
      * Get the data name.
      * @return The name

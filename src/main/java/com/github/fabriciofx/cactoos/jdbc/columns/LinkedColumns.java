@@ -15,6 +15,7 @@ import org.cactoos.text.FormattedText;
  * @since 0.9.0
  */
 public final class LinkedColumns implements Columns {
+
     /**
      * Columns' items.
      */

@@ -14,6 +14,7 @@ import org.cactoos.Bytes;
  * @since 0.1
  */
 public interface Query extends Bytes {
+
     /**
      * Return the Query params.
      * @return The query parameters

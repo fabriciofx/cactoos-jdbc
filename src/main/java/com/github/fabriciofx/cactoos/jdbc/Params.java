@@ -15,6 +15,7 @@ import org.cactoos.Bytes;
  * @since 0.1
  */
 public interface Params extends Iterable<Param>, Bytes {
+
     /**
      * Set the PreparedStatement with all query parameters.
      * @param stmt The PreparedStatement

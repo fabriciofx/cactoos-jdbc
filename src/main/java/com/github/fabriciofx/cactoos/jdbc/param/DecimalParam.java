@@ -13,10 +13,10 @@ import java.sql.Types;
 
 /**
  * DecimalParam.
- *
  * @since 0.2
  */
 public final class DecimalParam implements Param {
+
     /**
      * Name.
      */

@@ -29,6 +29,7 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class LoggedTest {
+
     @Test
     void logAnUpdate() throws Exception {
         final Logger logger = new FakeLogger();

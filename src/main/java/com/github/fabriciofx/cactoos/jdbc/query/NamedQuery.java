@@ -22,10 +22,10 @@ import org.cactoos.text.TextOf;
 /**
  * NamedQuery. A {@link Query} that transform a named query, changing named
  * parameters for question marks.
- *
  * @since 0.9.0
  */
 public final class NamedQuery implements Query {
+
     /**
      * SQL code.
      */
@@ -38,7 +38,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      */
     public NamedQuery(final String sql) {
@@ -47,7 +46,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      */
     public NamedQuery(final Text sql) {
@@ -56,7 +54,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -66,7 +63,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -76,7 +72,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -86,7 +81,6 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -96,14 +90,14 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
-     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
+     * @checkstyle LambdaBodyLengthCheck (30 lines)
      */
     public NamedQuery(final Text sql, final Iterable<Params> params) {
         this.code = new Sticky(
             () -> {
-                final List<String> names = new ArrayList<>();
+                final List<String> names = new ArrayList<>(20);
                 final Pattern find = Pattern.compile(
                     ":(\\p{Alpha}[\\p{Alnum}_]*)"
                 );

@@ -17,10 +17,10 @@ import org.cactoos.text.Trimmed;
 
 /**
  * Pretty. Print a pretty SQL from a {@link SqlNode}.
- *
  * @since 0.9.0
  */
 public final class Pretty implements Text {
+
     /**
      * SQL.
      */
@@ -28,7 +28,6 @@ public final class Pretty implements Text {
 
     /**
      * Ctor.
-     *
      * @param node A {@link SqlNode}
      */
     public Pretty(final SqlNode node) {
@@ -37,18 +36,17 @@ public final class Pretty implements Text {
 
     /**
      * Ctor.
-     *
      * @param node A Scalar of {@link SqlNode}
+     * @checkstyle LambdaBodyLengthCheck (21 lines)
      */
     public Pretty(final Scalar<SqlNode> node) {
         this.sql = new Sticky(
             () -> {
-                final SqlWriterConfig config = SqlPrettyWriter.config()
-                    .withDialect(
-                        SqlDialect
-                            .DatabaseProduct
-                            .UNKNOWN
-                            .getDialect()
+                final SqlWriterConfig config = SqlPrettyWriter.config().withDialect(
+                    SqlDialect
+                        .DatabaseProduct
+                        .UNKNOWN
+                        .getDialect()
                     )
                     .withIndentation(0)
                     .withClauseStartsLine(false)

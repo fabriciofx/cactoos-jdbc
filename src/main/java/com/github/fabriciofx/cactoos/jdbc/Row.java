@@ -11,6 +11,7 @@ import org.cactoos.Bytes;
  * @since 0.9.0
  */
 public interface Row extends Bytes {
+
     /**
      * Adds a value to a column.
      * @param column The column name

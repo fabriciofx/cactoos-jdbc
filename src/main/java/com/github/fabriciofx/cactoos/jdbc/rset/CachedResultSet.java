@@ -53,6 +53,7 @@ import org.cactoos.scalar.Ternary;
     }
 )
 public final class CachedResultSet implements ResultSet {
+
     /**
      * Rows.
      */
@@ -75,7 +76,6 @@ public final class CachedResultSet implements ResultSet {
 
     /**
      * Ctor.
-     *
      * @param rows The {@link Rows}
      * @param columns The {@link Columns}
      */
@@ -581,8 +581,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public Reader getNCharacterStream(final String column)
-        throws SQLException {
+    public Reader getNCharacterStream(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
@@ -597,8 +596,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public InputStream getAsciiStream(final String column)
-        throws SQLException {
+    public InputStream getAsciiStream(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
@@ -614,8 +612,7 @@ public final class CachedResultSet implements ResultSet {
 
     @Deprecated
     @Override
-    public InputStream getUnicodeStream(final String column)
-        throws SQLException {
+    public InputStream getUnicodeStream(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
@@ -630,8 +627,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public InputStream getBinaryStream(final String column)
-        throws SQLException {
+    public InputStream getBinaryStream(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
@@ -646,8 +642,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public Reader getCharacterStream(final String column)
-        throws SQLException {
+    public Reader getCharacterStream(final String column) throws SQLException {
         if (this.closed.get()) {
             throw new SQLException("ResultSet is already closed");
         }
@@ -915,8 +910,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public InputStream getAsciiStream(final int index)
-        throws SQLException {
+    public InputStream getAsciiStream(final int index) throws SQLException {
         try {
             return this.getAsciiStream(this.columns.name(index));
         } catch (final Exception ex) {
@@ -926,8 +920,7 @@ public final class CachedResultSet implements ResultSet {
 
     @Deprecated
     @Override
-    public InputStream getUnicodeStream(final int index)
-        throws SQLException {
+    public InputStream getUnicodeStream(final int index) throws SQLException {
         try {
             return this.getUnicodeStream(this.columns.name(index));
         } catch (final Exception ex) {
@@ -936,8 +929,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public InputStream getBinaryStream(final int index)
-        throws SQLException {
+    public InputStream getBinaryStream(final int index) throws SQLException {
         try {
             return this.getBinaryStream(this.columns.name(index));
         } catch (final Exception ex) {
@@ -946,8 +938,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public Reader getCharacterStream(final int index)
-        throws SQLException {
+    public Reader getCharacterStream(final int index) throws SQLException {
         try {
             return this.getCharacterStream(this.columns.name(index));
         } catch (final Exception ex) {
@@ -965,8 +956,7 @@ public final class CachedResultSet implements ResultSet {
     }
 
     @Override
-    public Reader getNCharacterStream(final int index)
-        throws SQLException {
+    public Reader getNCharacterStream(final int index) throws SQLException {
         try {
             return this.getNCharacterStream(this.columns.name(index));
         } catch (final Exception ex) {

@@ -27,12 +27,12 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Select tests.
- *
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class SelectTest {
+
     @Test
     void select() throws Exception {
         try (

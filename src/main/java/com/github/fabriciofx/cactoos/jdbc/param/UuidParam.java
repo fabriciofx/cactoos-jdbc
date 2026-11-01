@@ -11,10 +11,10 @@ import java.util.UUID;
 
 /**
  * UuidParam.
- *
  * @since 0.2
  */
 public final class UuidParam implements Param {
+
     /**
      * Name.
      */

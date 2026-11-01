@@ -17,6 +17,7 @@ import org.cactoos.text.Sticky;
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class JdbcUrl implements Text {
+
     /**
      * DataSource.
      */

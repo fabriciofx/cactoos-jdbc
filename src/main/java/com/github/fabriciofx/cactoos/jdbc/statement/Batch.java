@@ -12,11 +12,11 @@ import java.sql.PreparedStatement;
 
 /**
  * Batch statement.
- *
  * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Batch implements Statement<int[]> {
+
     /**
      * Session.
      */

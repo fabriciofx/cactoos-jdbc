@@ -15,6 +15,7 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.9.0
  */
 public final class OrderedOrderBy implements Scalar<SqlNode> {
+
     /**
      * Shuttle.
      */

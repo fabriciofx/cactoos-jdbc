@@ -15,9 +15,9 @@ import java.util.List;
  * @since 0.9.0
  */
 public interface Page<T> {
+
     /**
      * Get the items of this page.
-     *
      * @return An item's list
      */
     List<T> items();

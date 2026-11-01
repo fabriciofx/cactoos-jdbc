@@ -16,11 +16,11 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged. A decorator for session that logged all activities.
- *
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (150 lines)
  */
 public final class Logged implements Session {
+
     /**
      * Session.
      */
@@ -53,7 +53,6 @@ public final class Logged implements Session {
 
     /**
      * Ctor.
-     *
      * @param session A Session
      * @param from Where the logs come from
      * @param logger A logger

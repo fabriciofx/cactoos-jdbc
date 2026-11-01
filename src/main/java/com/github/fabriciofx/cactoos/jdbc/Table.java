@@ -11,6 +11,7 @@ import org.cactoos.Bytes;
  * @since 0.9.0
  */
 public interface Table extends Bytes {
+
     /**
      * Return the {@link Rows} of a table.
      * @return The rows

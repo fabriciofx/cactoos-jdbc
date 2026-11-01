@@ -19,6 +19,7 @@ import org.llorllale.cactoos.matchers.IsTrue;
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class QueryOfTest {
+
     @Test
     void withoutValues() {
         new Assertion<>(

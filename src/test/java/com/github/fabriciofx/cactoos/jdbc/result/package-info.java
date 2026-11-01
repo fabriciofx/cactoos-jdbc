@@ -5,7 +5,6 @@
 
 /**
  * ResultSetAs tests.
- *
  * @since 0.3
  */
 package com.github.fabriciofx.cactoos.jdbc.result;

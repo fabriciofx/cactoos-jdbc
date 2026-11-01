@@ -22,6 +22,7 @@ import org.cactoos.text.Lowered;
  * @since 0.9.0
  */
 public final class ArrayedTable implements Table {
+
     /**
      * Rows.
      */

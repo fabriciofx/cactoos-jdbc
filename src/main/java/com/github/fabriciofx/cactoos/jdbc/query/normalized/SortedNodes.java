@@ -17,6 +17,7 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.9.0
  */
 public final class SortedNodes implements Scalar<SqlNodeList> {
+
     /**
      * Shuttle.
      */

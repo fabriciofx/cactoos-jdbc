@@ -13,10 +13,10 @@ import org.cactoos.Text;
 
 /**
  * Authenticated Source.
- *
  * @since 0.1
  */
 public final class Auth implements Source {
+
     /**
      * DataSource.
      */

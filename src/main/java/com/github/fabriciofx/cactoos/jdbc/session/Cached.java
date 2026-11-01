@@ -21,10 +21,10 @@ import java.sql.PreparedStatement;
  * Cached.
  * <p>
  * A decorator for Session that allows caching results.
- *
  * @since 0.9.0
  */
 public final class Cached implements Session {
+
     /**
      * Session.
      */
@@ -37,14 +37,10 @@ public final class Cached implements Session {
 
     /**
      * Ctor.
-     *
      * @param session A session
      * @param cache The cache
      */
-    public Cached(
-        final Session session,
-        final Cache<Query, Table> cache
-    ) {
+    public Cached(final Session session, final Cache<Query, Table> cache) {
         this.origin = session;
         this.cache = cache;
     }

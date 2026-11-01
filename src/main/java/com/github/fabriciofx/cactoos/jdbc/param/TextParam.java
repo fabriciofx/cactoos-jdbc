@@ -14,10 +14,10 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * TextParam.
- *
  * @since 0.2
  */
 public final class TextParam implements Param {
+
     /**
      * Name.
      */
@@ -30,7 +30,6 @@ public final class TextParam implements Param {
 
     /**
      * Ctor.
-     *
      * @param name The id
      * @param value The data
      */
@@ -40,7 +39,6 @@ public final class TextParam implements Param {
 
     /**
      * Ctor.
-     *
      * @param name The id
      * @param value The data
      */
@@ -50,7 +48,6 @@ public final class TextParam implements Param {
 
     /**
      * Ctor.
-     *
      * @param name The id
      * @param value The data
      */
@@ -60,7 +57,6 @@ public final class TextParam implements Param {
 
     /**
      * Ctor.
-     *
      * @param name The id
      * @param value The data
      */

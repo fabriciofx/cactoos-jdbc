@@ -27,6 +27,7 @@ import org.cactoos.text.TextOf;
  * @since 0.8.0
  */
 public final class Paginated implements Query {
+
     /**
      * The query.
      */
@@ -39,10 +40,10 @@ public final class Paginated implements Query {
 
     /**
      * Ctor.
-     *
      * @param query A select query that retrieves all elements
      * @param page The page number
      * @param size The amount of elements in this page
+     * @checkstyle LambdaBodyLengthCheck (50 lines)
      */
     public Paginated(final Query query, final int page, final int size) {
         this.origin = query;

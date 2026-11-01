@@ -21,6 +21,7 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.9.0
  */
 public final class CacheEntry implements Entry<Query, Table> {
+
     /**
      * Entry.
      */
@@ -31,6 +32,7 @@ public final class CacheEntry implements Entry<Query, Table> {
      * @param key The key
      * @param table The Table
      * @param tables Table names
+     * @checkstyle ConstructorsCodeFreeCheck (15 lines)
      */
     public CacheEntry(
         final Key<Query> key,

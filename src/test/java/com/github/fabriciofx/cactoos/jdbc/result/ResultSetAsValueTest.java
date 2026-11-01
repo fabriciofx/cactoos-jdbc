@@ -23,12 +23,12 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * ResultSetAsValue tests.
- *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class ResultSetAsValueTest {
+
     @Test
     void value() throws Exception {
         final Source source = new NoAuth(

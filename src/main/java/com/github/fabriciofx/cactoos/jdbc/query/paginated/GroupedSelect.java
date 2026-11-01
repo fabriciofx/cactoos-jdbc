@@ -17,6 +17,7 @@ import org.cactoos.Scalar;
  * @since 0.9.0
  */
 public final class GroupedSelect implements Scalar<SqlNode> {
+
     /**
      * Select.
      */
@@ -34,7 +35,6 @@ public final class GroupedSelect implements Scalar<SqlNode> {
 
     /**
      * Ctor.
-     *
      * @param select A SqlSelect
      * @param page Page number
      * @param size Rows per page

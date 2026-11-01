@@ -13,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.Table;
  * @since 0.9.0
  */
 public final class FakeTable implements Table {
+
     /**
      * Rows.
      */

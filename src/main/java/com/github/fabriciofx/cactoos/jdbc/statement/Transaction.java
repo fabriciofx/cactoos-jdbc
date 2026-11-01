@@ -10,7 +10,6 @@ import java.util.concurrent.Callable;
 
 /**
  * Transaction statement.
- *
  * @param <T> Type of the result
  * @since 0.1
  */
@@ -21,6 +20,7 @@ import java.util.concurrent.Callable;
     }
 )
 public final class Transaction<T> implements Statement<T> {
+
     /**
      * Session.
      */
@@ -33,7 +33,6 @@ public final class Transaction<T> implements Statement<T> {
 
     /**
      * Ctor.
-     *
      * @param session A {@link Session}
      * @param call A Callable to be executed in a transaction
      */

@@ -10,10 +10,10 @@ import java.sql.Types;
 
 /**
  * IntParam.
- *
  * @since 0.2
  */
 public final class IntParam implements Param {
+
     /**
      * Name.
      */

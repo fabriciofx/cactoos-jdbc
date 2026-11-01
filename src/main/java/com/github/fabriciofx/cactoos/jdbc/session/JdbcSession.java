@@ -17,6 +17,7 @@ import java.sql.SQLException;
  * @since 0.9.0
  */
 public final class JdbcSession implements Session {
+
     /**
      * JDBC Connection.
      */

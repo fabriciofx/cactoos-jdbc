@@ -16,6 +16,7 @@ import org.cactoos.bytes.BytesOf;
  * @since 0.9.0
  */
 public final class QueryAsBytes implements Bytes {
+
     /**
      * Query.
      */

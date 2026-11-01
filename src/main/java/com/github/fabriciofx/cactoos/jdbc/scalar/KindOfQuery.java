@@ -18,13 +18,13 @@ import org.cactoos.text.Upper;
 
 /**
  * KindOfQuery.
- *
  * @since 0.9.0
  * @checkstyle CyclomaticComplexityCheck (200 lines)
  * @checkstyle JavaNCSSCheck (200 lines)
  */
 @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.NcssCount"})
 public final class KindOfQuery implements Scalar<SqlKind> {
+
     /**
      * Query.
      */
@@ -32,7 +32,6 @@ public final class KindOfQuery implements Scalar<SqlKind> {
 
     /**
      * Ctor.
-     *
      * @param query A {@link Query}
      */
     public KindOfQuery(final Query query) {

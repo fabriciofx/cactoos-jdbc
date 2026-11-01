@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 0.9.0
  */
 public final class Transacted implements Session {
+
     /**
      * Session.
      */

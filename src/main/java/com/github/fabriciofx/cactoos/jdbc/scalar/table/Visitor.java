@@ -39,6 +39,7 @@ import org.cactoos.text.Upper;
     }
 )
 public final class Visitor extends SqlBasicVisitor<Void> {
+
     /**
      * Names.
      */
@@ -58,7 +59,6 @@ public final class Visitor extends SqlBasicVisitor<Void> {
 
     /**
      * Ctor.
-     *
      * @param tables Table names
      * @param ctes CTEs
      */
@@ -69,7 +69,6 @@ public final class Visitor extends SqlBasicVisitor<Void> {
 
     /**
      * Return the tables names.
-     *
      * @return The table names
      */
     public Set<String> names() {

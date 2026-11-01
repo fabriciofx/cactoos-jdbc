@@ -31,11 +31,11 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
 
 /**
  * Logged Source tests.
- *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class LoggedTest {
+
     @Test
     void logSourceAndSessionsStatements() throws Exception {
         final FakeLogger logger = new FakeLogger();

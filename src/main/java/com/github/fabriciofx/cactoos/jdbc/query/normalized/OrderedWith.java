@@ -13,6 +13,7 @@ import org.cactoos.Scalar;
  * @since 0.9.0
  */
 public final class OrderedWith implements Scalar<SqlNode> {
+
     /**
      * Shuttle.
      */

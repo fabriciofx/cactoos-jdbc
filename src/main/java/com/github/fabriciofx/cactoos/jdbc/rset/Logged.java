@@ -33,8 +33,8 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged ResultSet.
- *
  * @since 0.9.0
+ *
  * @checkstyle MethodCountCheck (2000 lines)
  * @checkstyle ParameterNumberCheck (2000 lines)
  */
@@ -46,6 +46,7 @@ import org.cactoos.text.UncheckedText;
     "PMD.ReplaceJavaUtilCalendar"
 })
 public final class Logged implements ResultSet {
+
     /**
      * ResultSet.
      */
@@ -186,21 +187,18 @@ public final class Logged implements ResultSet {
     }
 
     @Override
-    public InputStream getAsciiStream(final int index)
-        throws SQLException {
+    public InputStream getAsciiStream(final int index) throws SQLException {
         return this.origin.getAsciiStream(index);
     }
 
     @Deprecated
     @Override
-    public InputStream getUnicodeStream(final int index)
-        throws SQLException {
+    public InputStream getUnicodeStream(final int index) throws SQLException {
         return this.origin.getUnicodeStream(index);
     }
 
     @Override
-    public InputStream getBinaryStream(final int index)
-        throws SQLException {
+    public InputStream getBinaryStream(final int index) throws SQLException {
         return this.origin.getBinaryStream(index);
     }
 
@@ -267,27 +265,23 @@ public final class Logged implements ResultSet {
     }
 
     @Override
-    public Timestamp getTimestamp(final String label)
-        throws SQLException {
+    public Timestamp getTimestamp(final String label) throws SQLException {
         return this.origin.getTimestamp(label);
     }
 
     @Override
-    public InputStream getAsciiStream(final String label)
-        throws SQLException {
+    public InputStream getAsciiStream(final String label) throws SQLException {
         return this.origin.getAsciiStream(label);
     }
 
     @Deprecated
     @Override
-    public InputStream getUnicodeStream(final String label)
-        throws SQLException {
+    public InputStream getUnicodeStream(final String label) throws SQLException {
         return this.origin.getUnicodeStream(label);
     }
 
     @Override
-    public InputStream getBinaryStream(final String label)
-        throws SQLException {
+    public InputStream getBinaryStream(final String label) throws SQLException {
         return this.origin.getBinaryStream(label);
     }
 
@@ -327,14 +321,12 @@ public final class Logged implements ResultSet {
     }
 
     @Override
-    public Reader getCharacterStream(final int index)
-        throws SQLException {
+    public Reader getCharacterStream(final int index) throws SQLException {
         return this.origin.getCharacterStream(index);
     }
 
     @Override
-    public Reader getCharacterStream(final String label)
-        throws SQLException {
+    public Reader getCharacterStream(final String label) throws SQLException {
         return this.origin.getCharacterStream(label);
     }
 
@@ -344,8 +336,7 @@ public final class Logged implements ResultSet {
     }
 
     @Override
-    public BigDecimal getBigDecimal(final String label)
-        throws SQLException {
+    public BigDecimal getBigDecimal(final String label) throws SQLException {
         return this.origin.getBigDecimal(label);
     }
 
@@ -993,14 +984,12 @@ public final class Logged implements ResultSet {
     }
 
     @Override
-    public Reader getNCharacterStream(final int index)
-        throws SQLException {
+    public Reader getNCharacterStream(final int index) throws SQLException {
         return this.origin.getNCharacterStream(index);
     }
 
     @Override
-    public Reader getNCharacterStream(final String label)
-        throws SQLException {
+    public Reader getNCharacterStream(final String label) throws SQLException {
         return this.origin.getNCharacterStream(label);
     }
 

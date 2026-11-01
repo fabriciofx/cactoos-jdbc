@@ -15,10 +15,10 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * Pooled source.
- *
  * @since 0.9.0
  */
 public final class Pooled implements Source {
+
     /**
      * Hikari DataSource.
      */

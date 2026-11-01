@@ -40,7 +40,6 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged PreparedStatement.
- *
  * @since 0.1
  * @checkstyle ParameterNameCheck (2500 lines)
  * @checkstyle ParameterNumberCheck (2500 lines)
@@ -57,6 +56,7 @@ import org.cactoos.text.UncheckedText;
     }
 )
 public final class Logged implements PreparedStatement {
+
     /**
      * The PreparedStatement.
      */
@@ -89,7 +89,6 @@ public final class Logged implements PreparedStatement {
 
     /**
      * Ctor.
-     *
      * @param stmt Decorated PreparedStatement
      * @param from Where the logs come from
      * @param lggr The logger

@@ -9,6 +9,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.9.0
  */
 public interface Source {
+
     /**
      * Create a {@link Session}.
      * @return A {@link Session}
@@ -30,7 +31,7 @@ public interface Source {
 
     /**
      * Source password.
-     * @return The password.
+     * @return The password
      */
     String password();
 }

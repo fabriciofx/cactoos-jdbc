@@ -11,10 +11,10 @@ import java.sql.DriverManager;
 
 /**
  * Driver Source.
- *
  * @since 0.1
  */
 public final class Driver implements Source {
+
     /**
      * JDBC URL.
      */
@@ -36,11 +36,7 @@ public final class Driver implements Source {
      * @param username User name
      * @param password User password
      */
-    public Driver(
-        final String url,
-        final String username,
-        final String password
-    ) {
+    public Driver(final String url, final String username, final String password) {
         this.jdbc = url;
         this.user = username;
         this.pass = password;

@@ -10,11 +10,11 @@ import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * Paginated tests.
- *
  * @since 0.8.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PaginatedTest {
+
     @Test
     void paginatedOnlyStart() {
         new Assertion<>(
@@ -143,6 +143,7 @@ final class PaginatedTest {
             must paginated a query with count, avg, subquery, window, left, \
             right, full join, group by and order by\
             """,
+            // @checkstyle LambdaBodyLengthCheck (50 lines)
             () -> new Paginated(
                 new QueryOf(
                     """

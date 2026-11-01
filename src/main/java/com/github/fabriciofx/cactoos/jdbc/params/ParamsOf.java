@@ -23,6 +23,7 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.4
  */
 public final class ParamsOf implements Params {
+
     /**
      * Params.
      */
@@ -32,6 +33,7 @@ public final class ParamsOf implements Params {
      * Ctor.
      * @param params Params
      * @param parameters Array of Param
+     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public ParamsOf(final Params params, final Param... parameters) {
         this(

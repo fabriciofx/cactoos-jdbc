@@ -17,6 +17,7 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.9.0
  */
 public final class Shuttle extends SqlShuttle {
+
     @Override
     public SqlNode visit(final SqlCall call) {
         final SqlNode ordered;

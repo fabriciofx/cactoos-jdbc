@@ -16,6 +16,7 @@ import org.cactoos.text.FormattedText;
  * @since 0.9.0
  */
 public final class LinkedRow implements Row {
+
     /**
      * Row's items.
      */

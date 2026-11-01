@@ -17,6 +17,7 @@ import org.cactoos.text.TextOf;
  * @since 0.1
  */
 public final class QueryOf implements Query {
+
     /**
      * SQL code.
      */

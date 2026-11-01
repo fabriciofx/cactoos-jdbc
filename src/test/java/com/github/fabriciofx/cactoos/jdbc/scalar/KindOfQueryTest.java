@@ -12,11 +12,11 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * QueryKind tests.
- *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class KindOfQueryTest {
+
     @Test
     void checkIfAStatementIsASelect() {
         new Assertion<>(
@@ -107,6 +107,7 @@ final class KindOfQueryTest {
     void checkIfIsADelete() {
         new Assertion<>(
             "must check if statement is a delete",
+            // @checkstyle LambdaBodyLengthCheck (30 lines)
             () -> new KindOfQuery(
                 new QueryOf(
                     """

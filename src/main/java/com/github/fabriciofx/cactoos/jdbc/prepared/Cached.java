@@ -29,6 +29,7 @@ import java.sql.SQLException;
  */
 @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.UnnecessaryLocalRule"})
 public final class Cached extends PreparedEnvelope {
+
     /**
      * A normalized PreparedStatement to be stored into cache.
      */
@@ -46,7 +47,6 @@ public final class Cached extends PreparedEnvelope {
 
     /**
      * Ctor.
-     *
      * @param origin Decorated PreparedStatement
      * @param stored PreparedStatement to normalized SQL select
      * @param normalized The normalized select SQL

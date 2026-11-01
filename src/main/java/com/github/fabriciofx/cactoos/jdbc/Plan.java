@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
  * @since 0.9.0
  */
 public interface Plan {
+
     /**
      * Prepares a {@link PreparedStatement}.
      * @param connection A {@link Connection}

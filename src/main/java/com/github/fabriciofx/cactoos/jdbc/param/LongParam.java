@@ -10,10 +10,10 @@ import java.sql.Types;
 
 /**
  * LongParam.
- *
  * @since 0.2
  */
 public final class LongParam implements Param {
+
     /**
      * Name.
      */

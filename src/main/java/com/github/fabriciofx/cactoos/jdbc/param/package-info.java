@@ -5,7 +5,6 @@
 
 /**
  * Query param.
- *
  * @since 0.2
  */
 package com.github.fabriciofx.cactoos.jdbc.param;

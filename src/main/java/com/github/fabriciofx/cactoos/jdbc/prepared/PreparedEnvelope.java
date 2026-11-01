@@ -29,7 +29,6 @@ import java.util.Calendar;
 
 /**
  * PreparedStatement Envelope.
- *
  * @since 0.4
  * @checkstyle ParameterNameCheck (1000 lines)
  * @checkstyle ParameterNumberCheck (1000 lines)
@@ -45,6 +44,7 @@ import java.util.Calendar;
     }
 )
 public abstract class PreparedEnvelope implements PreparedStatement {
+
     /**
      * The PreparedStatement.
      */

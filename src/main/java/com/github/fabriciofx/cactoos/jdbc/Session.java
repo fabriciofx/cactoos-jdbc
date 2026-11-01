@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
  * @since 0.9.0
  */
 public interface Session extends AutoCloseable {
+
     /**
      * Create a PreparedStatement from plan.
      * @param plan A Plan

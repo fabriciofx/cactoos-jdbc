@@ -9,6 +9,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.9.0
  */
 public interface Columns {
+
     /**
      * Return the amount of columns.
      * @return The amount of columns

@@ -20,6 +20,7 @@ import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
  * @since 0.9.0
  */
 public final class Cached implements Source {
+
     /**
      * Source.
      */
@@ -49,10 +50,7 @@ public final class Cached implements Source {
      * @param source The source
      * @param cache The cache
      */
-    public Cached(
-        final Source source,
-        final Cache<Query, Table> cache
-    ) {
+    public Cached(final Source source, final Cache<Query, Table> cache) {
         this.origin = source;
         this.cache = cache;
     }

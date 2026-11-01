@@ -20,6 +20,7 @@ import org.cactoos.scalar.Sticky;
  * @since 9.0.0
  */
 public final class TableNames implements Scalar<Set<String>> {
+
     /**
      * Table names.
      */

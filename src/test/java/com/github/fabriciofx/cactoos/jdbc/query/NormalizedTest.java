@@ -11,11 +11,11 @@ import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * Normalized tests.
- *
  * @since 0.9.0
  */
 @SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.TooManyMethods"})
 final class NormalizedTest {
+
     @Test
     void normalizeWithStart() throws Exception {
         new Assertion<>(
@@ -201,6 +201,7 @@ final class NormalizedTest {
     void normalizedAComplexQuery() throws Exception {
         new Assertion<>(
             "must normalize a complex query",
+            // @checkstyle LambdaBodyLengthCheck (50 lines)
             () -> new Normalized(
                 new QueryOf(
                     """
@@ -475,6 +476,7 @@ final class NormalizedTest {
     void normalizeWithInnerLeftRightFullJoins() {
         new Assertion<>(
             "must normalize a query with inner, left, right, full joins",
+            // @checkstyle LambdaBodyLengthCheck (50 lines)
             () -> new Normalized(
                 new QueryOf(
                     """
@@ -518,6 +520,7 @@ final class NormalizedTest {
     void normalizeWithAggregateFunctions() throws Exception {
         new Assertion<>(
             "must normalize a query with aggregate functions",
+            // @checkstyle LambdaBodyLengthCheck (50 lines)
             () -> new Normalized(
                 new QueryOf(
                     """

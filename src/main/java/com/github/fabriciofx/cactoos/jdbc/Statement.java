@@ -14,6 +14,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 @FunctionalInterface
 public interface Statement<T> {
+
     /**
      * Execute it and returns a single or set of data.
      * @return The result of statement execution

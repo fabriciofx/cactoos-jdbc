@@ -20,12 +20,12 @@ import org.llorllale.cactoos.matchers.Assertion;
 
 /**
  * Batch tests.
- *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class BatchTest {
+
     @Test
     void batch() throws Exception {
         try (

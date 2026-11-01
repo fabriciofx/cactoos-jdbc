@@ -18,6 +18,7 @@ import org.cactoos.Scalar;
  * @since 0.9.0
  */
 public final class Transacted implements Source {
+
     /**
      * Source.
      */

@@ -16,6 +16,7 @@ import org.cactoos.text.FormattedText;
  * @since 0.9.0
  */
 public final class ArrayedRows implements Rows {
+
     /**
      * The rows.
      */
@@ -25,7 +26,7 @@ public final class ArrayedRows implements Rows {
      * Ctor.
      */
     public ArrayedRows() {
-        this(new ArrayList<>());
+        this(new ArrayList<>(20));
     }
 
     /**

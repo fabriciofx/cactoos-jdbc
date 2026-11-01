@@ -21,6 +21,7 @@ import org.llorllale.cactoos.matchers.IsText;
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class JdbcUrlTest {
+
     @Test
     void url() {
         final String dbname = "testdb";

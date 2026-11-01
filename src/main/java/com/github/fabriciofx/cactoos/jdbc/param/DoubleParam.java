@@ -10,10 +10,10 @@ import java.sql.Types;
 
 /**
  * DoubleParam.
- *
  * @since 0.2
  */
 public final class DoubleParam implements Param {
+
     /**
      * Name.
      */

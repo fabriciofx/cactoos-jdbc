@@ -16,10 +16,10 @@ import org.cactoos.Scalar;
 
 /**
  * SortedExpression.
- *
  * @since 0.9.0
  */
 public final class SortedExpression implements Scalar<SqlNode> {
+
     /**
      * Shuttle.
      */
@@ -32,7 +32,6 @@ public final class SortedExpression implements Scalar<SqlNode> {
 
     /**
      * Ctor.
-     *
      * @param shuttle A Shuttle
      * @param expression An expression
      */

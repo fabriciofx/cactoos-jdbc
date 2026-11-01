@@ -14,6 +14,7 @@ import org.cactoos.Scalar;
  * @since 0.9.0
  */
 public final class SortedFrom implements Scalar<SqlNode> {
+
     /**
      * Shuttle.
      */

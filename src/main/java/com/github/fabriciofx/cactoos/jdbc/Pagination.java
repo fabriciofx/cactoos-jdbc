@@ -14,6 +14,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  */
 @FunctionalInterface
 public interface Pagination<T> {
+
     /**
      * Get the pages of data.
      * @param number The number of page

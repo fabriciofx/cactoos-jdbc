@@ -28,11 +28,11 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * Pooled tests.
- *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class PooledTest {
+
     @Test
     void pooled() throws Exception {
         final Source source = new Pooled(

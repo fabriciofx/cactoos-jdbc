@@ -16,10 +16,10 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged Source.
- *
  * @since 0.1
  */
 public final class Logged implements Source {
+
     /**
      * Source.
      */
@@ -49,6 +49,7 @@ public final class Logged implements Source {
      * Ctor.
      * @param source A Source
      * @param from Where the logs come from
+     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public Logged(final Source source, final String from) {
         this(source, from, Logger.getLogger(from));

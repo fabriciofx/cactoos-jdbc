@@ -12,11 +12,13 @@ import java.sql.SQLException;
  * CachedResultSetMetaData.
  *
  * <p>A disconnected, in memory {@link ResultSetMetaData}.
+ *
  * @since 0.9.0
  * @checkstyle IllegalCatchCheck (200 lines)
  */
 @SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class CachedResultSetMetaData implements ResultSetMetaData {
+
     /**
      * Columns.
      */

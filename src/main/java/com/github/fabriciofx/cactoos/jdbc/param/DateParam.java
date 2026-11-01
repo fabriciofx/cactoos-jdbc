@@ -11,10 +11,10 @@ import java.time.LocalDate;
 
 /**
  * DateParam.
- *
  * @since 0.2
  */
 public final class DateParam implements Param {
+
     /**
      * Name.
      */
@@ -29,6 +29,7 @@ public final class DateParam implements Param {
      * Ctor.
      * @param name The id
      * @param value The data
+     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public DateParam(final String name, final String value) {
         this(name, LocalDate.parse(value));

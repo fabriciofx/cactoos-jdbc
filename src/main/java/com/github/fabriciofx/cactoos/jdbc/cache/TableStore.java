@@ -21,12 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * TableStore.
- *
  * @since 0.9.0
  * @checkstyle NestedIfDepthCheck (200 lines)
  */
 @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
 public final class TableStore implements Store<Query, Table> {
+
     /**
      * Store.
      */
@@ -46,7 +46,6 @@ public final class TableStore implements Store<Query, Table> {
 
     /**
      * Ctor.
-     *
      * @param entries Data to initialize the cache
      * @param keys Keys associated to a table
      */

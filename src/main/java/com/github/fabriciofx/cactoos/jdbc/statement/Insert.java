@@ -12,11 +12,11 @@ import java.sql.PreparedStatement;
 
 /**
  * Insert statement.
- *
  * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Insert implements Statement<Boolean> {
+
     /**
      * Session.
      */

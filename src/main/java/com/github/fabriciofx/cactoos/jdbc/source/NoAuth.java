@@ -13,10 +13,10 @@ import org.cactoos.Text;
 
 /**
  * No authenticated source.
- *
  * @since 0.1
  */
 public final class NoAuth implements Source {
+
     /**
      * DataSource.
      */

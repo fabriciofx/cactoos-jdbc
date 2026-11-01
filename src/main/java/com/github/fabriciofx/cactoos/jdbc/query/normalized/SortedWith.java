@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 import org.cactoos.Scalar;
-import org.cactoos.text.ComparableText;
 import org.cactoos.text.UncheckedText;
 
 /**
@@ -18,6 +17,7 @@ import org.cactoos.text.UncheckedText;
  * @since 0.9.0
  */
 public final class SortedWith implements Scalar<SqlNodeList> {
+
     /**
      * Shuttle.
      */

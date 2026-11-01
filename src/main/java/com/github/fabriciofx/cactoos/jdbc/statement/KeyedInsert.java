@@ -14,11 +14,11 @@ import java.util.NoSuchElementException;
 
 /**
  * KeyedInsert. Insert statement which returns a key.
- *
  * @param <T> Type of the key
  * @since 0.9.0
  */
 public final class KeyedInsert<T> implements Statement<T> {
+
     /**
      * Session.
      */
@@ -31,7 +31,6 @@ public final class KeyedInsert<T> implements Statement<T> {
 
     /**
      * Ctor.
-     *
      * @param session A {@link Session}
      * @param query A SQL {@link Query}
      */

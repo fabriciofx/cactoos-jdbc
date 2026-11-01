@@ -16,11 +16,11 @@ import java.sql.ResultSet;
 
 /**
  * Select statement.
- *
  * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
 public final class Select implements Statement<ResultSet> {
+
     /**
      * Session.
      */

@@ -11,10 +11,10 @@ import java.sql.Types;
 
 /**
  * AnyParam.
- *
  * @since 0.8.1
  */
 public final class AnyParam implements Param {
+
     /**
      * Name.
      */

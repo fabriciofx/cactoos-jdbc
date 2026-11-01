@@ -11,10 +11,10 @@ import java.util.UUID;
 
 /**
  * UuidAsBytesParam.
- *
  * @since 0.2
  */
 public final class UuidAsBytesParam implements Param {
+
     /**
      * Name.
      */
@@ -27,7 +27,6 @@ public final class UuidAsBytesParam implements Param {
 
     /**
      * Ctor.
-     *
      * @param name The id
      * @param value The apply
      */

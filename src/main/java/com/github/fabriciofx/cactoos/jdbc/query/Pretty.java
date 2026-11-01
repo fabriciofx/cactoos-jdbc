@@ -18,6 +18,7 @@ import org.cactoos.text.Trimmed;
  * @since 0.9.0
  */
 public final class Pretty implements Query {
+
     /**
      * Query.
      */

@@ -15,6 +15,7 @@ import org.cactoos.Text;
  * @since 0.9.0
  */
 public final class NodeName implements Text {
+
     /**
      * Node.
      */
