@@ -51,7 +51,6 @@ public final class Logged implements Source {
      *
      * @param source A Source
      * @param from Where the logs come from
-     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public Logged(final Source source, final String from) {
         this(source, from, Logger.getLogger(from));

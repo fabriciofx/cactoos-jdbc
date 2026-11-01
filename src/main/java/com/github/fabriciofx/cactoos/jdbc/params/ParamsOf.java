@@ -34,7 +34,6 @@ public final class ParamsOf implements Params {
      *
      * @param params Params
      * @param parameters Array of Param
-     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public ParamsOf(final Params params, final Param... parameters) {
         this(

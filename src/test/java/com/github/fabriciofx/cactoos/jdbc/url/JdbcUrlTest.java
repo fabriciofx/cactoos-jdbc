@@ -17,7 +17,6 @@ import org.llorllale.cactoos.matchers.IsText;
  * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.9.0
- * @checkstyle JavadocMethodCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class JdbcUrlTest {

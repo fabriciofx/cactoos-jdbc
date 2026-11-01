@@ -43,7 +43,6 @@ import org.cactoos.text.UncheckedText;
  *
  * @since 0.1
  * @checkstyle ParameterNameCheck (2500 lines)
- * @checkstyle ParameterNumberCheck (2500 lines)
  * @checkstyle ClassFanOutComplexityCheck (2500 lines)
  */
 @SuppressWarnings(

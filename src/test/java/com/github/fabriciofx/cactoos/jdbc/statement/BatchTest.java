@@ -22,7 +22,6 @@ import org.llorllale.cactoos.matchers.Assertion;
  * Batch tests.
  *
  * @since 0.9.0
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class BatchTest {
@@ -55,17 +54,14 @@ final class BatchTest {
                     new ParamsOf(
                         new IntParam("id", 1),
                         new TextParam("name", "Jeff Bridges"),
-                        // @checkstyle MagicNumber (1 line)
                         new IntParam("age", 34)
                     ),
                     new ParamsOf(
                         new IntParam("id", 2),
                         new TextParam("name", "Anna Miller"),
-                        // @checkstyle MagicNumber (1 line)
                         new IntParam("age", 26)
                     ),
                     new ParamsOf(
-                        // @checkstyle MagicNumber (3 lines)
                         new IntParam("id", 3),
                         new TextParam("name", "Michal Douglas"),
                         new IntParam("age", 32)

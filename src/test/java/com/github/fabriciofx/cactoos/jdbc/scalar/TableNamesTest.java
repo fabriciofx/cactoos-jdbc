@@ -15,7 +15,6 @@ import org.llorllale.cactoos.matchers.Matches;
  * TableNames tests.
  *
  * @since 0.9.0
- * @checkstyle AvoidDuplicateLiterals (500 lines)
  */
 @SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.AvoidDuplicateLiterals"})
 final class TableNamesTest {

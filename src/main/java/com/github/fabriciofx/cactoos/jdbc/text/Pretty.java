@@ -40,7 +40,6 @@ public final class Pretty implements Text {
      * Ctor.
      *
      * @param node A Scalar of {@link SqlNode}
-     * @checkstyle LambdaBodyLengthCheck (21 lines)
      */
     public Pretty(final Scalar<SqlNode> node) {
         this.sql = new Sticky(

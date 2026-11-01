@@ -31,7 +31,6 @@ public final class DateParam implements Param {
      *
      * @param name The id
      * @param value The data
-     * @checkstyle ConstructorsCodeFreeCheck (10 lines)
      */
     public DateParam(final String name, final String value) {
         this(name, LocalDate.parse(value));

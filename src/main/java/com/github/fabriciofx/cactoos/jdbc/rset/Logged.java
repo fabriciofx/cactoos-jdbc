@@ -37,7 +37,6 @@ import org.cactoos.text.UncheckedText;
  * @since 0.9.0
  *
  * @checkstyle MethodCountCheck (2000 lines)
- * @checkstyle ParameterNumberCheck (2000 lines)
  */
 @SuppressWarnings({
     "PMD.TooManyMethods",

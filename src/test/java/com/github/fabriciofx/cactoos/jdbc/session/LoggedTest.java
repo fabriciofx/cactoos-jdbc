@@ -25,7 +25,6 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
  * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
- * @checkstyle JavadocMethodCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class LoggedTest {

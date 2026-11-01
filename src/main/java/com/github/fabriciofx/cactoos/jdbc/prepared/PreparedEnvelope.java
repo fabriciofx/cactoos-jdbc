@@ -32,7 +32,6 @@ import java.util.Calendar;
  *
  * @since 0.4
  * @checkstyle ParameterNameCheck (1000 lines)
- * @checkstyle ParameterNumberCheck (1000 lines)
  * @checkstyle DesignForExtensionCheck (1000 lines)
  */
 @SuppressWarnings(

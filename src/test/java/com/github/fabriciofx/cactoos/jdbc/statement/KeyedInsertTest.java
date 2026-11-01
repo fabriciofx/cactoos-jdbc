@@ -20,7 +20,6 @@ import org.llorllale.cactoos.matchers.HasValue;
  * KeyedInsert tests.
  *
  * @since 0.9.0
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
 final class KeyedInsertTest {

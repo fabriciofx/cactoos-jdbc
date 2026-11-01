@@ -34,7 +34,6 @@ import org.llorllale.cactoos.matchers.Matches;
  * Cached tests.
  *
  * @since 0.9.0
- * @checkstyle MethodLengthCheck (500 lines)
  */
 @SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.AvoidDuplicateLiterals"})
 final class CachedTest {

@@ -34,7 +34,6 @@ public final class CacheEntry implements Entry<Query, Table> {
      * @param key The key
      * @param table The Table
      * @param tables Table names
-     * @checkstyle ConstructorsCodeFreeCheck (15 lines)
      */
     public CacheEntry(
         final Key<Query> key,
