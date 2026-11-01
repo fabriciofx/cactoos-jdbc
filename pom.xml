@@ -68,6 +68,7 @@
   </distributionManagement>
   <properties>
     <maven.plugin.validation>VERBOSE</maven.plugin.validation>
+    <maven.compiler.release>21</maven.compiler.release>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -165,9 +166,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.16.0</version>
-        <configuration>
-          <release>21</release>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
