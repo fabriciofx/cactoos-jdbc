@@ -9,7 +9,7 @@ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.c
 [![Java
 Profiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.fabriciofx/cactoos-jdbc.svg)](https://search.maven.org/artifact/com.github.fabriciofx/cactoos-jdbc/0.2.1/jar)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.fabriciofx/cactoos-jdbc.svg)](https://search.maven.org/artifact/com.github.fabriciofx/cactoos-jdbc/1.0.0/jar)
 [![Javadoc](https://www.javadoc.io/badge/com.github.fabriciofx/cactoos-jdbc.svg)](http://www.javadoc.io/doc/com.github.fabriciofx/cactoos-jdbc)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/fabriciofx/cactoos-jdbc/blob/master/LICENSE.txt)
 [![Hits-of-Code](https://hitsofcode.com/github/fabriciofx/cactoos-jdbc)](https://hitsofcode.com/view/github/fabriciofx/cactoos-jdbc)
