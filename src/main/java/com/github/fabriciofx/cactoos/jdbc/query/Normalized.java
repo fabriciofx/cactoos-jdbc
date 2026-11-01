@@ -16,7 +16,9 @@ import org.cactoos.text.Sticky;
 
 /**
  * Normalized.
- * <p>Normalize a {@link Query}, i.e. converts the query to canonical form.
+ *
+ * <p>Normalize a {@link Query}, i.e. converts the query to canonical form.</p>
+ *
  * @since 0.9.0
  */
 public final class Normalized implements Query {
@@ -33,6 +35,7 @@ public final class Normalized implements Query {
 
     /**
      * Ctor.
+     *
      * @param query A {@link Query}
      */
     public Normalized(final Query query) {

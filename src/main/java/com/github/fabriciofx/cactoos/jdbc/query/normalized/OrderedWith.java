@@ -10,6 +10,7 @@ import org.cactoos.Scalar;
 
 /**
  * OrderedWith.
+ *
  * @since 0.9.0
  */
 public final class OrderedWith implements Scalar<SqlNode> {
@@ -26,6 +27,7 @@ public final class OrderedWith implements Scalar<SqlNode> {
 
     /**
      * Ctor.
+     *
      * @param shuttle A Shuttle
      * @param with A SqlWith
      */

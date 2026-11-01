@@ -13,6 +13,7 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 
 /**
  * OrderBy.
+ *
  * @since 0.9.0
  */
 public final class OrderBy {
@@ -24,6 +25,7 @@ public final class OrderBy {
 
     /**
      * Ctor.
+     *
      * @param order A SqlOrderBy
      */
     public OrderBy(final SqlOrderBy order) {
@@ -32,6 +34,7 @@ public final class OrderBy {
 
     /**
      * Checks if order by is semantic.
+     *
      * @param query An order by expression
      * @return True if order by is semantic, false otherwise
      */

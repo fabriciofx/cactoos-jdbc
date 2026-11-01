@@ -14,7 +14,7 @@ import org.llorllale.cactoos.matchers.IsText;
 /**
  * JdbcUrl tests.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.9.0
  * @checkstyle JavadocMethodCheck (500 lines)

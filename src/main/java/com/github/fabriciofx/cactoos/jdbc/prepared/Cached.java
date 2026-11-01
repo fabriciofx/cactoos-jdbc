@@ -23,6 +23,7 @@ import java.sql.SQLException;
 /**
  * Cached.
  * A {@link java.sql.PreparedStatement} decorator for cache query data.
+ *
  * @since 0.9.0
  * @checkstyle ParameterNumberCheck (500 lines)
  * @checkstyle IllegalCatchCheck (500 lines)
@@ -47,6 +48,7 @@ public final class Cached extends PreparedEnvelope {
 
     /**
      * Ctor.
+     *
      * @param origin Decorated PreparedStatement
      * @param stored PreparedStatement to normalized SQL select
      * @param normalized The normalized select SQL

@@ -15,6 +15,7 @@ import org.cactoos.Scalar;
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}. This
  * connection only can be closed after a commit() or rollback() provided by
  * {@link com.github.fabriciofx.cactoos.jdbc.statement.Transaction}.
+ *
  * @since 0.9.0
  */
 public final class Transacted implements Source {
@@ -31,6 +32,7 @@ public final class Transacted implements Source {
 
     /**
      * Ctor.
+     *
      * @param source The original source to be decorated
      */
     public Transacted(final Source source) {

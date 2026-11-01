@@ -11,6 +11,7 @@ import java.util.UUID;
 
 /**
  * UuidParam.
+ *
  * @since 0.2
  */
 public final class UuidParam implements Param {
@@ -27,6 +28,7 @@ public final class UuidParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The apply
      */

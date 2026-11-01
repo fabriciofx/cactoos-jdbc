@@ -10,6 +10,7 @@ import com.github.fabriciofx.cactoos.jdbc.Table;
 
 /**
  * FakeTable.
+ *
  * @since 0.9.0
  */
 public final class FakeTable implements Table {
@@ -26,6 +27,7 @@ public final class FakeTable implements Table {
 
     /**
      * Ctor.
+     *
      * @param rows Rows
      * @param columns Columns
      */

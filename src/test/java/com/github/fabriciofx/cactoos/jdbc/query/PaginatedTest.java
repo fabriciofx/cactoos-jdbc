@@ -10,6 +10,7 @@ import org.llorllale.cactoos.matchers.IsText;
 
 /**
  * Paginated tests.
+ *
  * @since 0.8.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")

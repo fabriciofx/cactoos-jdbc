@@ -7,13 +7,14 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
 /**
  * Phones.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  */
 public interface Phones {
     /**
      * Returns the quantity of contact's phones.
+     *
      * @return The quantity
      * @throws Exception If fails
      */
@@ -21,6 +22,7 @@ public interface Phones {
 
     /**
      * Returns the phone in the set.
+     *
      * @param index The phone (element) position in the set
      * @return The found phone
      * @throws Exception If fails
@@ -29,6 +31,7 @@ public interface Phones {
 
     /**
      * Add a new phone to contact's phones.
+     *
      * @param number The phone's number
      * @param carrier The phone's carrier
      * @throws Exception If fails

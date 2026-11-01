@@ -25,7 +25,7 @@ import org.llorllale.cactoos.matchers.IsText;
 /**
  * Pagination tests.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.8.0
  * @checkstyle JavadocMethodCheck (500 lines)

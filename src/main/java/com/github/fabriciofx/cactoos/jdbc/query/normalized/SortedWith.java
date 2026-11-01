@@ -14,6 +14,7 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * SortedWith.
+ *
  * @since 0.9.0
  */
 public final class SortedWith implements Scalar<SqlNodeList> {
@@ -30,6 +31,7 @@ public final class SortedWith implements Scalar<SqlNodeList> {
 
     /**
      * Ctor.
+     *
      * @param shuttle A Shuttle
      * @param list With nodes list
      */

@@ -10,12 +10,14 @@ import java.sql.PreparedStatement;
 /**
  * Plan.
  * Prepares a {@link PreparedStatement} from a {@link Connection}.
+ *
  * @since 0.9.0
  */
 public interface Plan {
 
     /**
      * Prepares a {@link PreparedStatement}.
+     *
      * @param connection A {@link Connection}
      * @return A {@link PreparedStatement}
      * @throws Exception if something goes wrong
@@ -24,6 +26,7 @@ public interface Plan {
 
     /**
      * Return the Plan's query.
+     *
      * @return A {@link Query}
      */
     Query query();

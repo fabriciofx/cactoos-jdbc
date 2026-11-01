@@ -11,6 +11,7 @@ import org.cactoos.Scalar;
 
 /**
  * SortedFrom.
+ *
  * @since 0.9.0
  */
 public final class SortedFrom implements Scalar<SqlNode> {
@@ -27,6 +28,7 @@ public final class SortedFrom implements Scalar<SqlNode> {
 
     /**
      * Ctor.
+     *
      * @param shuttle A Shuttle
      * @param from A select from
      */

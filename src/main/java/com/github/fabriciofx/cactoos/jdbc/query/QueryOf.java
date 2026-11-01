@@ -14,6 +14,7 @@ import org.cactoos.text.TextOf;
 /**
  * QueryOf.
  * A simple {@link Query} representation.
+ *
  * @since 0.1
  */
 public final class QueryOf implements Query {
@@ -25,6 +26,7 @@ public final class QueryOf implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public QueryOf(final String sql) {
@@ -33,6 +35,7 @@ public final class QueryOf implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public QueryOf(final Text sql) {

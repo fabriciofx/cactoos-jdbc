@@ -21,7 +21,7 @@ import org.llorllale.cactoos.matchers.Assertion;
 /**
  * ResultSetAsXml tests.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  * @checkstyle JavadocMethodCheck (500 lines)

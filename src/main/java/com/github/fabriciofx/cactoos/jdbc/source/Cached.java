@@ -17,6 +17,7 @@ import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
 /**
  * Cached.
  * A {@link Source} decorator to cache query data.
+ *
  * @since 0.9.0
  */
 public final class Cached implements Source {
@@ -33,6 +34,7 @@ public final class Cached implements Source {
 
     /**
      * Ctor.
+     *
      * @param source The source
      */
     public Cached(final Source source) {
@@ -47,6 +49,7 @@ public final class Cached implements Source {
 
     /**
      * Ctor.
+     *
      * @param source The source
      * @param cache The cache
      */

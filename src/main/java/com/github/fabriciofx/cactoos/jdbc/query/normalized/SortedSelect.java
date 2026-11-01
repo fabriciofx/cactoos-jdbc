@@ -14,6 +14,7 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * SortedSelect.
+ *
  * @since 0.9.0
  */
 public final class SortedSelect implements Scalar<SqlNodeList> {
@@ -25,6 +26,7 @@ public final class SortedSelect implements Scalar<SqlNodeList> {
 
     /**
      * Ctor.
+     *
      * @param list Select nodes
      */
     public SortedSelect(final SqlNodeList list) {

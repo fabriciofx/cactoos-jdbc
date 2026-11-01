@@ -10,6 +10,7 @@ import java.sql.Types;
 
 /**
  * IntParam.
+ *
  * @since 0.2
  */
 public final class IntParam implements Param {
@@ -26,6 +27,7 @@ public final class IntParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */

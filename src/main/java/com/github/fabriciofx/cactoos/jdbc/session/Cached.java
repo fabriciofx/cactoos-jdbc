@@ -19,8 +19,9 @@ import java.sql.PreparedStatement;
 
 /**
  * Cached.
- * <p>
- * A decorator for Session that allows caching results.
+ *
+ * <p>A decorator for Session that allows caching results.</p>
+ *
  * @since 0.9.0
  */
 public final class Cached implements Session {
@@ -37,6 +38,7 @@ public final class Cached implements Session {
 
     /**
      * Ctor.
+     *
      * @param session A session
      * @param cache The cache
      */

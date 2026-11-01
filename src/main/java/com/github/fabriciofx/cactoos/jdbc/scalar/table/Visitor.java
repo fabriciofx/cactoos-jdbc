@@ -27,7 +27,9 @@ import org.cactoos.text.Upper;
 
 /**
  * Visitor.
- * <p>Visitor for {@link TableNames}.
+ *
+ * <p>Visitor for {@link TableNames}.</p>
+ *
  * @since 0.9.0
  * @checkstyle CyclomaticComplexityCheck (300 lines)
  */
@@ -59,6 +61,7 @@ public final class Visitor extends SqlBasicVisitor<Void> {
 
     /**
      * Ctor.
+     *
      * @param tables Table names
      * @param ctes CTEs
      */
@@ -69,6 +72,7 @@ public final class Visitor extends SqlBasicVisitor<Void> {
 
     /**
      * Return the tables names.
+     *
      * @return The table names
      */
     public Set<String> names() {

@@ -17,7 +17,7 @@ import org.cactoos.text.FormattedText;
 /**
  * Contacts for SQL.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
@@ -30,6 +30,7 @@ public final class SqlContacts implements Contacts {
 
     /**
      * Ctor.
+     *
      * @param source A Source.
      */
     public SqlContacts(final Source source) {

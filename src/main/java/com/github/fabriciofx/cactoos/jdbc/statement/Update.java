@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Update statement.
+ *
  * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
@@ -29,6 +30,7 @@ public final class Update implements Statement<Integer> {
 
     /**
      * Ctor.
+     *
      * @param session A {@link Session}
      * @param query A SQL {@link Query}
      */

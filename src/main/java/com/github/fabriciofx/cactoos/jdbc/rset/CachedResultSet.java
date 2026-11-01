@@ -35,7 +35,7 @@ import org.cactoos.scalar.Ternary;
 /**
  * CachedResultSet.
  *
- * <p>A disconnected, in memory {@link ResultSet}.
+ * <p>A disconnected, in memory {@link ResultSet}.</p>
  *
  * @since 0.9.0
  * @checkstyle MethodCountCheck (2000 lines)
@@ -76,6 +76,7 @@ public final class CachedResultSet implements ResultSet {
 
     /**
      * Ctor.
+     *
      * @param rows The {@link Rows}
      * @param columns The {@link Columns}
      */

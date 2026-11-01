@@ -18,6 +18,7 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * CacheEntry.
+ *
  * @since 0.9.0
  */
 public final class CacheEntry implements Entry<Query, Table> {
@@ -29,6 +30,7 @@ public final class CacheEntry implements Entry<Query, Table> {
 
     /**
      * Ctor.
+     *
      * @param key The key
      * @param table The Table
      * @param tables Table names
@@ -50,6 +52,7 @@ public final class CacheEntry implements Entry<Query, Table> {
 
     /**
      * Ctor.
+     *
      * @param key The key
      * @param table The Table
      * @param metadata Metadata (table names)
@@ -64,6 +67,7 @@ public final class CacheEntry implements Entry<Query, Table> {
 
     /**
      * Ctor.
+     *
      * @param entry An entry
      */
     public CacheEntry(final Entry<Query, Table> entry) {

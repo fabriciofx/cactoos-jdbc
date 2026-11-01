@@ -17,6 +17,7 @@ import org.cactoos.text.Trimmed;
 
 /**
  * Pretty. Print a pretty SQL from a {@link SqlNode}.
+ *
  * @since 0.9.0
  */
 public final class Pretty implements Text {
@@ -28,6 +29,7 @@ public final class Pretty implements Text {
 
     /**
      * Ctor.
+     *
      * @param node A {@link SqlNode}
      */
     public Pretty(final SqlNode node) {
@@ -36,6 +38,7 @@ public final class Pretty implements Text {
 
     /**
      * Ctor.
+     *
      * @param node A Scalar of {@link SqlNode}
      * @checkstyle LambdaBodyLengthCheck (21 lines)
      */

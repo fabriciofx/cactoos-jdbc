@@ -14,6 +14,7 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * Normalized Shuttle.
+ *
  * @since 0.9.0
  */
 public final class Shuttle extends SqlShuttle {

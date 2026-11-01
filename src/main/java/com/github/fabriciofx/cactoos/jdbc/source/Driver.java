@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 
 /**
  * Driver Source.
+ *
  * @since 0.1
  */
 public final class Driver implements Source {
@@ -32,6 +33,7 @@ public final class Driver implements Source {
 
     /**
      * Ctor.
+     *
      * @param url JDBC URL
      * @param username User name
      * @param password User password

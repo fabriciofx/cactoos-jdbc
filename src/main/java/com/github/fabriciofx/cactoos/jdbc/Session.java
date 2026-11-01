@@ -9,12 +9,14 @@ import java.sql.PreparedStatement;
 
 /**
  * Session.
+ *
  * @since 0.9.0
  */
 public interface Session extends AutoCloseable {
 
     /**
      * Create a PreparedStatement from plan.
+     *
      * @param plan A Plan
      * @return A PreparedStatement
      * @throws Exception if something goes wrong
@@ -23,6 +25,7 @@ public interface Session extends AutoCloseable {
 
     /**
      * Turn on or off automatic commit.
+     *
      * @param enabled If true, enable automatic commit. If false, disable
      * @throws Exception if something goes wrong
      */
@@ -30,12 +33,14 @@ public interface Session extends AutoCloseable {
 
     /**
      * Commit a session.
+     *
      * @throws Exception if something goes wrong
      */
     void commit() throws Exception;
 
     /**
      * Rollback a session.
+     *
      * @throws Exception if something goes wrong
      */
     void rollback() throws Exception;

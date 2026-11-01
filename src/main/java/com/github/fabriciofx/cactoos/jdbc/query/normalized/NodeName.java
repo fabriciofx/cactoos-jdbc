@@ -12,6 +12,7 @@ import org.cactoos.Text;
 
 /**
  * NodeName.
+ *
  * @since 0.9.0
  */
 public final class NodeName implements Text {
@@ -23,6 +24,7 @@ public final class NodeName implements Text {
 
     /**
      * Ctor.
+     *
      * @param node A SqlNode
      */
     public NodeName(final SqlNode node) {

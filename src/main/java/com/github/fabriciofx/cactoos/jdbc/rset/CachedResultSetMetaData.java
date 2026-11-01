@@ -11,7 +11,7 @@ import java.sql.SQLException;
 /**
  * CachedResultSetMetaData.
  *
- * <p>A disconnected, in memory {@link ResultSetMetaData}.
+ * <p>A disconnected, in memory {@link ResultSetMetaData}.</p>
  *
  * @since 0.9.0
  * @checkstyle IllegalCatchCheck (200 lines)
@@ -26,6 +26,7 @@ public final class CachedResultSetMetaData implements ResultSetMetaData {
 
     /**
      * Ctor.
+     *
      * @param columns The columns
      */
     public CachedResultSetMetaData(final Columns columns) {

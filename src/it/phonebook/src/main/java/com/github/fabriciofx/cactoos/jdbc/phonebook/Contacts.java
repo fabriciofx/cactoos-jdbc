@@ -7,13 +7,14 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
 /**
  * Contacts.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  */
 public interface Contacts {
     /**
      * Returns the quantity of contacts.
+     *
      * @return The quantity
      * @throws Exception If fails
      */
@@ -21,6 +22,7 @@ public interface Contacts {
 
     /**
      * Returns the contact in the set.
+     *
      * @param index The contact (element) position in the set
      * @return The found contact
      * @throws Exception If fails

@@ -16,7 +16,9 @@ import org.cactoos.scalar.Sticky;
 
 /**
  * TableNames.
- * <p>Extract the table names from a SQL statement (select, delete, ...).
+ *
+ * <p>Extract the table names from a SQL statement (select, delete, ...).</p>
+ *
  * @since 9.0.0
  */
 public final class TableNames implements Scalar<Set<String>> {
@@ -28,6 +30,7 @@ public final class TableNames implements Scalar<Set<String>> {
 
     /**
      * Ctor.
+     *
      * @param query The query
      */
     public TableNames(final Query query) {
@@ -56,6 +59,7 @@ public final class TableNames implements Scalar<Set<String>> {
 
     /**
      * Ctor.
+     *
      * @param names Table names
      */
     public TableNames(final Scalar<Set<String>> names) {

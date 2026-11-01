@@ -13,6 +13,7 @@ import org.cactoos.text.Sticky;
 /**
  * JdbcUrl.
  * Get a JDBC URL from a DataSource
+ *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
@@ -25,6 +26,7 @@ public final class JdbcUrl implements Text {
 
     /**
      * Ctor.
+     *
      * @param source A DataSource
      */
     public JdbcUrl(final DataSource source) {

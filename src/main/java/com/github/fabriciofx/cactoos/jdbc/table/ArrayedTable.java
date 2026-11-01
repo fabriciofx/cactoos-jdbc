@@ -19,6 +19,7 @@ import org.cactoos.text.Lowered;
 
 /**
  * LinkedTable.
+ *
  * @since 0.9.0
  */
 public final class ArrayedTable implements Table {
@@ -35,6 +36,7 @@ public final class ArrayedTable implements Table {
 
     /**
      * Ctor.
+     *
      * @param rset A {@link ResultSet}
      */
     public ArrayedTable(final ResultSet rset) {

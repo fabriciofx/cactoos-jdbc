@@ -12,6 +12,7 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * OrderedOrderBy.
+ *
  * @since 0.9.0
  */
 public final class OrderedOrderBy implements Scalar<SqlNode> {
@@ -28,6 +29,7 @@ public final class OrderedOrderBy implements Scalar<SqlNode> {
 
     /**
      * Ctor.
+     *
      * @param shuttle A Shuttle
      * @param order A SqlOrderBy
      */

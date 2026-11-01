@@ -5,6 +5,7 @@
 
 /**
  * SQL Table.
+ *
  * @since 0.9.0
  */
 package com.github.fabriciofx.cactoos.jdbc.scalar.table;

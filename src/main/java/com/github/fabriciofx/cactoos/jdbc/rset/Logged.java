@@ -33,6 +33,7 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Logged ResultSet.
+ *
  * @since 0.9.0
  *
  * @checkstyle MethodCountCheck (2000 lines)
@@ -74,6 +75,7 @@ public final class Logged implements ResultSet {
 
     /**
      * Ctor.
+     *
      * @param rset A ResultSet
      * @param from Where the logs come from
      * @param logger The logger

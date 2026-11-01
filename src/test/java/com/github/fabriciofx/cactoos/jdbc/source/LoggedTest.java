@@ -31,6 +31,7 @@ import org.llorllale.cactoos.matchers.MatchesRegex;
 
 /**
  * Logged Source tests.
+ *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")

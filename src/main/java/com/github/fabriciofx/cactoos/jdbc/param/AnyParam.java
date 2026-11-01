@@ -11,6 +11,7 @@ import java.sql.Types;
 
 /**
  * AnyParam.
+ *
  * @since 0.8.1
  */
 public final class AnyParam implements Param {
@@ -27,6 +28,7 @@ public final class AnyParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */

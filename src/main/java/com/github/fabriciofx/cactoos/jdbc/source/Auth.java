@@ -13,6 +13,7 @@ import org.cactoos.Text;
 
 /**
  * Authenticated Source.
+ *
  * @since 0.1
  */
 public final class Auth implements Source {
@@ -39,6 +40,7 @@ public final class Auth implements Source {
 
     /**
      * Ctor.
+     *
      * @param src DataSource
      * @param username User name
      * @param password User password

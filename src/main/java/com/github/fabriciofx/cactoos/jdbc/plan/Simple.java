@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Simple.
+ *
  * @since 0.9.0
  */
 public final class Simple implements Plan {
@@ -23,6 +24,7 @@ public final class Simple implements Plan {
 
     /**
      * Ctor.
+     *
      * @param query A {@link Query}
      */
     public Simple(final Query query) {

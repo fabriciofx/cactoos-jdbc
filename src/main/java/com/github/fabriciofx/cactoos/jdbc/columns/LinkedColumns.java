@@ -12,6 +12,7 @@ import org.cactoos.text.FormattedText;
 
 /**
  * LinkedColumns.
+ *
  * @since 0.9.0
  */
 public final class LinkedColumns implements Columns {
@@ -30,6 +31,7 @@ public final class LinkedColumns implements Columns {
 
     /**
      * Ctor.
+     *
      * @param items Data to initialize the columns
      */
     public LinkedColumns(final Map<String, Integer> items) {

@@ -18,7 +18,7 @@ import org.cactoos.scalar.Unchecked;
 /**
  * NamedQuery Params.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.4
  */
@@ -31,6 +31,7 @@ public final class ParamsOf implements Params {
 
     /**
      * Ctor.
+     *
      * @param params Params
      * @param parameters Array of Param
      * @checkstyle ConstructorsCodeFreeCheck (10 lines)
@@ -46,6 +47,7 @@ public final class ParamsOf implements Params {
 
     /**
      * Ctor.
+     *
      * @param parameters Array of Param
      */
     public ParamsOf(final Param... parameters) {
@@ -54,6 +56,7 @@ public final class ParamsOf implements Params {
 
     /**
      * Ctor.
+     *
      * @param parameters List of Param
      */
     public ParamsOf(final List<Param> parameters) {

@@ -14,6 +14,7 @@ import org.cactoos.Scalar;
 
 /**
  * UngroupedSelect.
+ *
  * @since 0.9.0
  */
 public final class UngroupedSelect implements Scalar<SqlNode> {
@@ -35,6 +36,7 @@ public final class UngroupedSelect implements Scalar<SqlNode> {
 
     /**
      * Ctor.
+     *
      * @param select A SqlSelect
      * @param page Page number
      * @param size Rows per page

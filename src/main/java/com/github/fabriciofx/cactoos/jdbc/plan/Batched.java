@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Batched.
+ *
  * @since 0.9.0
  */
 public final class Batched implements Plan {
@@ -23,6 +24,7 @@ public final class Batched implements Plan {
 
     /**
      * Ctor.
+     *
      * @param query A {@link Query}
      */
     public Batched(final Query query) {

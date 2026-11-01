@@ -10,6 +10,7 @@ import java.sql.Types;
 
 /**
  * DoubleParam.
+ *
  * @since 0.2
  */
 public final class DoubleParam implements Param {
@@ -26,6 +27,7 @@ public final class DoubleParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */

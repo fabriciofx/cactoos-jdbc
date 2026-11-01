@@ -10,13 +10,14 @@ import java.util.List;
 /**
  * Phonebook.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.4
  */
 public interface Phonebook extends Pagination<Contact> {
     /**
      * Create a new {@link Contact}.
+     *
      * @param name Contact's name
      * @return A new {@link Contact}
      * @throws Exception Is something goes wrong
@@ -25,6 +26,7 @@ public interface Phonebook extends Pagination<Contact> {
 
     /**
      * Search for a {@link Contact}.
+     *
      * @param name Contact's name
      * @return A list of contacts
      * @throws Exception Is something goes wrong

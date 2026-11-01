@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 /**
  * MaxRows.
  * A decorator for Session that sets the max of rows.
+ *
  * @since 0.9.0
  */
 public final class MaxRows implements Session {
@@ -28,6 +29,7 @@ public final class MaxRows implements Session {
 
     /**
      * Ctor.
+     *
      * @param origin A session
      * @param max The max number of rows
      */

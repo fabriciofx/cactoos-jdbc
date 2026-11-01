@@ -22,6 +22,7 @@ import org.cactoos.text.TextOf;
 /**
  * NamedQuery. A {@link Query} that transform a named query, changing named
  * parameters for question marks.
+ *
  * @since 0.9.0
  */
 public final class NamedQuery implements Query {
@@ -38,6 +39,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public NamedQuery(final String sql) {
@@ -46,6 +48,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      */
     public NamedQuery(final Text sql) {
@@ -54,6 +57,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -63,6 +67,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -72,6 +77,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -81,6 +87,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      */
@@ -90,6 +97,7 @@ public final class NamedQuery implements Query {
 
     /**
      * Ctor.
+     *
      * @param sql The SQL query
      * @param params A list of SQL query parameters
      * @checkstyle LambdaBodyLengthCheck (30 lines)

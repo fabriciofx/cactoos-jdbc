@@ -12,6 +12,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * QueryKind tests.
+ *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")

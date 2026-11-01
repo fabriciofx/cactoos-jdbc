@@ -8,12 +8,14 @@ import org.cactoos.Bytes;
 
 /**
  * Table.
+ *
  * @since 0.9.0
  */
 public interface Table extends Bytes {
 
     /**
      * Return the {@link Rows} of a table.
+     *
      * @return The rows
      * @throws Exception if something goes wrong
      */
@@ -21,6 +23,7 @@ public interface Table extends Bytes {
 
     /**
      * Return the {@link Columns} of a table.
+     *
      * @return The columns
      * @throws Exception if something goes wrong
      */

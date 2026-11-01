@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Keyed.
+ *
  * @since 0.9.0
  */
 public final class Keyed implements Plan {
@@ -23,6 +24,7 @@ public final class Keyed implements Plan {
 
     /**
      * Ctor.
+     *
      * @param query A {@link Query}
      */
     public Keyed(final Query query) {

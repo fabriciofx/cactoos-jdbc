@@ -8,12 +8,14 @@ import org.cactoos.Bytes;
 
 /**
  * Row.
+ *
  * @since 0.9.0
  */
 public interface Row extends Bytes {
 
     /**
      * Adds a value to a column.
+     *
      * @param column The column name
      * @param value The value
      */
@@ -21,6 +23,7 @@ public interface Row extends Bytes {
 
     /**
      * Retrieve a value of a column.
+     *
      * @param column The column name
      * @param type The type of the value
      * @return The value

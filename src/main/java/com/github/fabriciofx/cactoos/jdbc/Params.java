@@ -10,7 +10,7 @@ import org.cactoos.Bytes;
 /**
  * Query Params.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  */
@@ -18,6 +18,7 @@ public interface Params extends Iterable<Param>, Bytes {
 
     /**
      * Set the PreparedStatement with all query parameters.
+     *
      * @param stmt The PreparedStatement
      * @return The set PreparedStatement
      * @throws Exception If fails
@@ -26,6 +27,7 @@ public interface Params extends Iterable<Param>, Bytes {
 
     /**
      * Check if Params contains a param at position.
+     *
      * @param name The name of the parameter
      * @param index The position of the parameter in the PreparedStatement
      * @return True if contains or false if don't
@@ -34,6 +36,7 @@ public interface Params extends Iterable<Param>, Bytes {
 
     /**
      * Get the Param at the position index.
+     *
      * @param index The parameter position in Params
      * @return The Param
      */

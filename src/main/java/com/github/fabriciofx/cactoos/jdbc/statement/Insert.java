@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Insert statement.
+ *
  * @since 0.1
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
@@ -29,6 +30,7 @@ public final class Insert implements Statement<Boolean> {
 
     /**
      * Ctor.
+     *
      * @param session A {@link Session}
      * @param query A SQL {@link Query}
      */

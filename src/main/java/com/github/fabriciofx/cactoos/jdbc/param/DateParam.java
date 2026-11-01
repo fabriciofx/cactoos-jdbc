@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 /**
  * DateParam.
+ *
  * @since 0.2
  */
 public final class DateParam implements Param {
@@ -27,6 +28,7 @@ public final class DateParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      * @checkstyle ConstructorsCodeFreeCheck (10 lines)
@@ -37,6 +39,7 @@ public final class DateParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */

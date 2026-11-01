@@ -15,6 +15,7 @@ import org.cactoos.text.Trimmed;
 
 /**
  * Pretty.
+ *
  * @since 0.9.0
  */
 public final class Pretty implements Query {
@@ -31,6 +32,7 @@ public final class Pretty implements Query {
 
     /**
      * Ctor.
+     *
      * @param query A query
      */
     public Pretty(final Query query) {

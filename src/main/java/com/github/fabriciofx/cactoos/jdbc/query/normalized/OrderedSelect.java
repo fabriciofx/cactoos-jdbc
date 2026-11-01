@@ -14,6 +14,7 @@ import org.cactoos.Scalar;
 
 /**
  * OrderedSelect.
+ *
  * @since 0.9.0
  */
 public final class OrderedSelect implements Scalar<SqlNode> {
@@ -30,6 +31,7 @@ public final class OrderedSelect implements Scalar<SqlNode> {
 
     /**
      * Ctor.
+     *
      * @param shuttle A Shuttle
      * @param select A SqlSelect
      */

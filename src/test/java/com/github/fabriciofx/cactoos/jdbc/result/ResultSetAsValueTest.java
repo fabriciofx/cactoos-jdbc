@@ -23,6 +23,7 @@ import org.llorllale.cactoos.matchers.HasValue;
 
 /**
  * ResultSetAsValue tests.
+ *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */

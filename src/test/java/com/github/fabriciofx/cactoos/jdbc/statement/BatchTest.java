@@ -20,6 +20,7 @@ import org.llorllale.cactoos.matchers.Assertion;
 
 /**
  * Batch tests.
+ *
  * @since 0.9.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */

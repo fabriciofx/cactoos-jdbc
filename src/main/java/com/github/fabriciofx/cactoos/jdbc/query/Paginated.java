@@ -21,9 +21,10 @@ import org.cactoos.text.TextOf;
 
 /**
  * Paginated.
- * <p>
- * A decorator for {@link Query} that encapsulate a query to
- * paginated form.
+ *
+ * <p>A decorator for {@link Query} that encapsulate a query to
+ * paginated form.</p>
+ *
  * @since 0.8.0
  */
 public final class Paginated implements Query {
@@ -40,6 +41,7 @@ public final class Paginated implements Query {
 
     /**
      * Ctor.
+     *
      * @param query A select query that retrieves all elements
      * @param page The page number
      * @param size The amount of elements in this page

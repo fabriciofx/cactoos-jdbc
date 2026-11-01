@@ -11,6 +11,7 @@ import org.cactoos.Scalar;
 
 /**
  * ResultSet as one value.
+ *
  * @param <T> Type of the result
  * @since 0.1
  */
@@ -23,6 +24,7 @@ public final class ResultSetAsValue<T> implements Scalar<T> {
 
     /**
      * Ctor.
+     *
      * @param stmt A statement
      */
     public ResultSetAsValue(final Statement<ResultSet> stmt) {

@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
 /**
  * Contact.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  *
@@ -16,6 +16,7 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
 public interface Contact {
     /**
      * Retrieve the Contact's data.
+     *
      * @return Contact's data
      * @throws Exception If fails
      */
@@ -23,6 +24,7 @@ public interface Contact {
 
     /**
      * Retrieve the Contact's phones.
+     *
      * @return Phones
      * @throws Exception If fails
      */
@@ -30,12 +32,14 @@ public interface Contact {
 
     /**
      * Delete a Contact.
+     *
      * @throws Exception I fails
      */
     void delete() throws Exception;
 
     /**
      * Update a Contact.
+     *
      * @param name New contact's name
      * @throws Exception If fails
      */

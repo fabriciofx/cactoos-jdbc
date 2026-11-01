@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Transacted.
  * A decorator for Session which allows transactions. This decorator only
  * close the JDBC connection after a commit or rollback.
+ *
  * @since 0.9.0
  */
 public final class Transacted implements Session {
@@ -30,6 +31,7 @@ public final class Transacted implements Session {
 
     /**
      * Ctor.
+     *
      * @param session A Session
      */
     public Transacted(final Session session) {

@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc;
 /**
  * Statement.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @param <T> Type of the result
  * @since 0.1
@@ -17,6 +17,7 @@ public interface Statement<T> {
 
     /**
      * Execute it and returns a single or set of data.
+     *
      * @return The result of statement execution
      * @throws Exception If fails
      */

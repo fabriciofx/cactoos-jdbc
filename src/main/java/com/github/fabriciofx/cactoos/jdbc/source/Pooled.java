@@ -15,6 +15,7 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * Pooled source.
+ *
  * @since 0.9.0
  */
 public final class Pooled implements Source {
@@ -26,6 +27,7 @@ public final class Pooled implements Source {
 
     /**
      * Ctor.
+     *
      * @param source Source to be pooled
      */
     public Pooled(final Source source) {

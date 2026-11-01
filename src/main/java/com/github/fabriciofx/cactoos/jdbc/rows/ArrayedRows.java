@@ -13,6 +13,7 @@ import org.cactoos.text.FormattedText;
 
 /**
  * ArrayRows.
+ *
  * @since 0.9.0
  */
 public final class ArrayedRows implements Rows {
@@ -31,6 +32,7 @@ public final class ArrayedRows implements Rows {
 
     /**
      * Ctor.
+     *
      * @param items Data to initialize the columns
      */
     public ArrayedRows(final List<Row> items) {

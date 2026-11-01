@@ -22,7 +22,7 @@ import org.cactoos.scalar.Unchecked;
 /**
  * SqlContactPage.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.8.0
  * @checkstyle IllegalCatchCheck (1500 lines)

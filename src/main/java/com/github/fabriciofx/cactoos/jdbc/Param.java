@@ -10,7 +10,7 @@ import org.cactoos.Bytes;
 /**
  * A named data.
  *
- * <p>There is no thread-safety guarantee.
+ * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.1
  */
@@ -18,12 +18,14 @@ public interface Param extends Bytes {
 
     /**
      * Get the data name.
+     *
      * @return The name
      */
     String name();
 
     /**
      * Set the PreparedStatement with data.
+     *
      * @param stmt The PreparedStatement
      * @param index The position of the parameter in the PreparedStatement
      * @throws Exception If fails

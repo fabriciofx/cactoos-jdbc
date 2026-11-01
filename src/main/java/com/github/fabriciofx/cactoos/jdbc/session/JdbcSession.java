@@ -14,6 +14,7 @@ import java.sql.SQLException;
 /**
  * JdbcSession.
  * Encapsulate the {@link java.sql.Connection}.
+ *
  * @since 0.9.0
  */
 public final class JdbcSession implements Session {
@@ -25,6 +26,7 @@ public final class JdbcSession implements Session {
 
     /**
      * Ctor.
+     *
      * @param connection A JDBC connection
      */
     public JdbcSession(final Connection connection) {

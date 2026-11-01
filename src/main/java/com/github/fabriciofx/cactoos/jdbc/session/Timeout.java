@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 /**
  * Timeout.
  * Decorator for Session that configures a timeout.
+ *
  * @since 0.9.0
  */
 public final class Timeout implements Session {
@@ -28,6 +29,7 @@ public final class Timeout implements Session {
 
     /**
      * Ctor.
+     *
      * @param session The session
      * @param seconds The time in seconds
      */

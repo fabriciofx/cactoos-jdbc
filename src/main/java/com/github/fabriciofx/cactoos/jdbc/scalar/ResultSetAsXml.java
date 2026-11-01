@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 
 /**
  * ResultSet as XML.
+ *
  * @since 0.4
  */
 @SuppressWarnings("PMD.UnnecessaryLocalRule")
@@ -45,6 +46,7 @@ public final class ResultSetAsXml implements Scalar<String> {
 
     /**
      * Ctor.
+     *
      * @param stmt A statement
      * @param root A root tag
      * @param child A child tag

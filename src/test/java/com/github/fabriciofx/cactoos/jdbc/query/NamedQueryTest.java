@@ -19,6 +19,7 @@ import org.llorllale.cactoos.matchers.Throws;
 
 /**
  * NamedQuery tests.
+ *
  * @since 0.9.0
  */
 @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")

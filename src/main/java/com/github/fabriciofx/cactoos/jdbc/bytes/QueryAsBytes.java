@@ -12,7 +12,9 @@ import org.cactoos.bytes.BytesOf;
 
 /**
  * QueryAsBytes.
- * <p>Convert a {@link Query} into bytes.
+ *
+ * <p>Convert a {@link Query} into bytes.</p>
+ *
  * @since 0.9.0
  */
 public final class QueryAsBytes implements Bytes {
@@ -24,6 +26,7 @@ public final class QueryAsBytes implements Bytes {
 
     /**
      * Ctor.
+     *
      * @param query The query
      */
     public QueryAsBytes(final Query query) {

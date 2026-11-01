@@ -13,6 +13,7 @@ import java.sql.Types;
 
 /**
  * DecimalParam.
+ *
  * @since 0.2
  */
 public final class DecimalParam implements Param {
@@ -29,6 +30,7 @@ public final class DecimalParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */
@@ -38,6 +40,7 @@ public final class DecimalParam implements Param {
 
     /**
      * Ctor.
+     *
      * @param name The id
      * @param value The data
      */

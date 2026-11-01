@@ -14,6 +14,7 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * Comparison.
+ *
  * @since 0.9.0
  */
 public final class Comparison {
@@ -30,6 +31,7 @@ public final class Comparison {
 
     /**
      * Ctor.
+     *
      * @param shuttle Shuttle
      * @param call Comparison expression
      */
@@ -40,6 +42,7 @@ public final class Comparison {
 
     /**
      * Normalize the comparison.
+     *
      * @return Normalized comparison
      */
     public SqlNode normalize() {
@@ -80,6 +83,7 @@ public final class Comparison {
 
     /**
      * Checks if expression operator is comparison.
+     *
      * @return True if operator is comparison, false otherwise
      * @checkstyle BooleanExpressionComplexityCheck (10 lines)
      */

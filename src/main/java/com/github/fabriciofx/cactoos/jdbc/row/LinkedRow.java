@@ -13,6 +13,7 @@ import org.cactoos.text.FormattedText;
 
 /**
  * LinkedRow.
+ *
  * @since 0.9.0
  */
 public final class LinkedRow implements Row {
@@ -31,6 +32,7 @@ public final class LinkedRow implements Row {
 
     /**
      * Ctor.
+     *
      * @param items Data to initialize the columns
      */
     public LinkedRow(final Map<String, Object> items) {

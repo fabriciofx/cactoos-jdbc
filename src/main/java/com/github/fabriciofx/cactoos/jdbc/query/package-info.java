@@ -5,6 +5,7 @@
 
 /**
  * Query.
+ *
  * @since 0.1
  */
 package com.github.fabriciofx.cactoos.jdbc.query;
