@@ -8,6 +8,7 @@ import com.github.fabriciofx.cactoos.jdbc.Param;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -54,8 +55,9 @@ public final class DateTimeParam implements Param {
 
     @Override
     public byte[] asBytes() throws Exception {
-        final long seconds = this.datetime.toEpochSecond(ZoneOffset.UTC);
-        final int nanos = this.datetime.getNano();
+        final Instant instant = this.datetime.toInstant(ZoneOffset.UTC);
+        final long seconds = instant.getEpochSecond();
+        final int nanos = instant.getNano();
         return new byte[] {
             (byte) Types.TIMESTAMP,
             (byte) seconds,
