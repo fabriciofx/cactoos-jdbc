@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.param;
 
 import com.github.fabriciofx.cactoos.jdbc.Param;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.LocalDate;
@@ -57,7 +58,7 @@ public final class DateParam implements Param {
         final PreparedStatement stmt,
         final int index
     ) throws Exception {
-        stmt.setDate(index, java.sql.Date.valueOf(this.date));
+        stmt.setDate(index, Date.valueOf(this.date));
     }
 
     @Override

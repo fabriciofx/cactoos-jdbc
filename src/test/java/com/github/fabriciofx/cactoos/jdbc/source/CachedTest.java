@@ -34,6 +34,7 @@ import org.llorllale.cactoos.matchers.Matches;
  * Cached tests.
  *
  * @since 0.9.0
+ * @checkstyle FullyQualifiedTypeCheck (500 lines)
  */
 final class CachedTest {
 

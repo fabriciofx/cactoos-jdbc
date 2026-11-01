@@ -7,6 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import org.cactoos.Scalar;
+import org.cactoos.scalar.Sticky;
 
 /**
  * Transacted source.
@@ -37,7 +38,7 @@ public final class Transacted implements Source {
      */
     public Transacted(final Source source) {
         this.origin = source;
-        this.cnnx = new org.cactoos.scalar.Sticky<>(
+        this.cnnx = new Sticky<>(
             () -> {
                 final Session session = source.session();
                 session.autocommit(false);

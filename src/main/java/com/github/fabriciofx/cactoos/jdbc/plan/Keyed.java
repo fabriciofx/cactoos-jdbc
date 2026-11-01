@@ -9,6 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  * Keyed.
@@ -37,7 +38,7 @@ public final class Keyed implements Plan {
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
             this.qry.sql(),
-            java.sql.Statement.RETURN_GENERATED_KEYS
+            Statement.RETURN_GENERATED_KEYS
         );
         for (final Params params : this.qry.params()) {
             params.prepare(stmt);
