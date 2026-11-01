@@ -69,8 +69,8 @@ final class LoggedTest {
             new Matches<>(
                 new Replaced(
                     new TextOf(logger.toString()),
-                    "\r\n",
-                    "\n"
+                    "\\r",
+                    ""
                 )
             )
         ).affirm();
