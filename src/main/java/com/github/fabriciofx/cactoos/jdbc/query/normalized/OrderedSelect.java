@@ -42,7 +42,6 @@ public final class OrderedSelect implements Scalar<SqlNode> {
 
     @Override
     public SqlNode value() throws Exception {
-        SqlSelect ordered = this.select;
         if (this.select.getSelectList() != null) {
             this.select.setSelectList(
                 new SortedSelect(this.select.getSelectList()).value()
@@ -61,6 +60,7 @@ public final class OrderedSelect implements Scalar<SqlNode> {
                 ).value()
             );
         }
+        SqlSelect ordered = this.select;
         final SqlNodeList group = this.select.getGroup();
         if (group != null && !group.isEmpty()) {
             ordered = new SqlSelect(
