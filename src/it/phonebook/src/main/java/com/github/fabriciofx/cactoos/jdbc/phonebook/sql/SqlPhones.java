@@ -72,7 +72,7 @@ public final class SqlPhones implements Phones {
                     session,
                     new NamedQuery(
                         new FormattedText(
-                            "SELECT number FROM phone WHERE contact_id = :contact_id FETCH FIRST %d ROWS ONLY",
+                            "SELECT number FROM phone WHERE contact_id = :contact_id ORDER BY number OFFSET %d ROWS FETCH FIRST 1 ROWS ONLY",
                             index
                         ),
                         new UuidParam("contact_id", this.id)
