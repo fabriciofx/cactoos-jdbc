@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
+import com.github.fabriciofx.cactoos.jdbc.session.Jdbc;
 import java.sql.DriverManager;
 
 /**
@@ -46,7 +46,7 @@ public final class Driver implements Source {
 
     @Override
     public Session session() throws Exception {
-        return new JdbcSession(
+        return new Jdbc(
             DriverManager.getConnection(
                 this.jdbc,
                 this.user,

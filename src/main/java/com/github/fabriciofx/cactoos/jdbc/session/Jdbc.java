@@ -12,12 +12,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * JdbcSession.
+ * Jdbc.
  * Encapsulate the {@link java.sql.Connection}.
  *
  * @since 0.9.0
  */
-public final class JdbcSession implements Session {
+public final class Jdbc implements Session {
 
     /**
      * JDBC Connection.
@@ -29,7 +29,7 @@ public final class JdbcSession implements Session {
      *
      * @param connection A JDBC connection
      */
-    public JdbcSession(final Connection connection) {
+    public Jdbc(final Connection connection) {
         this.connection = connection;
     }
 

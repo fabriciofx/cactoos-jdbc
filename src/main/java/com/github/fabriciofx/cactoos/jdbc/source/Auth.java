@@ -6,7 +6,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
-import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
+import com.github.fabriciofx.cactoos.jdbc.session.Jdbc;
 import com.github.fabriciofx.cactoos.jdbc.text.Url;
 import javax.sql.DataSource;
 import org.cactoos.Text;
@@ -58,7 +58,7 @@ public final class Auth implements Source {
 
     @Override
     public Session session() throws Exception {
-        return new JdbcSession(
+        return new Jdbc(
             this.src.getConnection(this.user, this.pass)
         );
     }
