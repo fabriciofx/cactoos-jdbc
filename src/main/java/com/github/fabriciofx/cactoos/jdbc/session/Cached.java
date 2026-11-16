@@ -59,12 +59,16 @@ public final class Cached implements Session {
                     this.cache
                 );
             }
-            case INSERT, UPDATE, DELETE -> {
+            case INSERT, UPDATE, DELETE, MERGE -> {
                 this.cache.store().entries().invalidate(
                     new MetadataInvalidate<>(
                         new TableNames(plan.query()).value()
                     )
                 );
+                yield this.origin.prepared(plan);
+            }
+            case TRUNCATE_TABLE -> {
+                this.cache.clear();
                 yield this.origin.prepared(plan);
             }
             default -> this.origin.prepared(plan);
@@ -84,6 +88,7 @@ public final class Cached implements Session {
     @Override
     public void rollback() throws Exception {
         this.origin.rollback();
+        this.cache.clear();
     }
 
     @Override
