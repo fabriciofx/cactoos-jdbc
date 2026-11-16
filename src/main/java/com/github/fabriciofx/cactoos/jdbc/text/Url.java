@@ -11,12 +11,12 @@ import org.cactoos.Text;
 import org.cactoos.text.Sticky;
 
 /**
- * JdbcUrl.
+ * Url.
  * Get a JDBC URL from a DataSource
  *
  * @since 0.9.0
  */
-public final class JdbcUrl implements Text {
+public final class Url implements Text {
 
     /**
      * DataSource.
@@ -28,7 +28,7 @@ public final class JdbcUrl implements Text {
      *
      * @param source A DataSource
      */
-    public JdbcUrl(final DataSource source) {
+    public Url(final DataSource source) {
         this.text = new Sticky(
             () -> {
                 try (Connection connection = source.getConnection()) {

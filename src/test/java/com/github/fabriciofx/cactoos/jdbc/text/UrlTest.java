@@ -2,9 +2,8 @@
  * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
  * SPDX-License-Identifier: MIT
  */
-package com.github.fabriciofx.cactoos.jdbc.url;
+package com.github.fabriciofx.cactoos.jdbc.text;
 
-import com.github.fabriciofx.cactoos.jdbc.text.JdbcUrl;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.cactoos.text.FormattedText;
 import org.junit.jupiter.api.Test;
@@ -12,20 +11,20 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
- * JdbcUrl tests.
+ * Url tests.
  *
  * <p>There is no thread-safety guarantee.</p>
  *
  * @since 0.9.0
  */
-final class JdbcUrlTest {
+final class UrlTest {
 
     @Test
     void url() {
         final String dbname = "testdb";
         new Assertion<>(
             "must get a JDBC url from source",
-            new JdbcUrl(new H2Source(dbname)),
+            new Url(new H2Source(dbname)),
             new IsText(new FormattedText("jdbc:h2:mem:%s", dbname))
         ).affirm();
     }

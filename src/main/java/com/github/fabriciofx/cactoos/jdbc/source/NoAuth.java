@@ -7,7 +7,7 @@ package com.github.fabriciofx.cactoos.jdbc.source;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.session.JdbcSession;
-import com.github.fabriciofx.cactoos.jdbc.text.JdbcUrl;
+import com.github.fabriciofx.cactoos.jdbc.text.Url;
 import javax.sql.DataSource;
 import org.cactoos.Text;
 
@@ -26,7 +26,7 @@ public final class NoAuth implements Source {
     /**
      * JDBC URL.
      */
-    private final Text jdbc;
+    private final Text url;
 
     /**
      * Ctor.
@@ -35,7 +35,7 @@ public final class NoAuth implements Source {
      */
     public NoAuth(final DataSource src) {
         this.src = src;
-        this.jdbc = new JdbcUrl(this.src);
+        this.url = new Url(this.src);
     }
 
     @Override
@@ -45,7 +45,7 @@ public final class NoAuth implements Source {
 
     @Override
     public String url() throws Exception {
-        return this.jdbc.asString();
+        return this.url.asString();
     }
 
     @Override
