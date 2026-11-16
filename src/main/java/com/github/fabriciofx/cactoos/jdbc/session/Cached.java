@@ -67,7 +67,7 @@ public final class Cached implements Session {
                 );
                 yield this.origin.prepared(plan);
             }
-            case TRUNCATE_TABLE -> {
+            case TRUNCATE_TABLE, DROP_TABLE, ALTER_TABLE -> {
                 this.cache.clear();
                 yield this.origin.prepared(plan);
             }

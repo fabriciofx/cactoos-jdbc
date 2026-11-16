@@ -22,6 +22,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
+import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsXml;
 import com.github.fabriciofx.cactoos.jdbc.statement.Batch;
 import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
 import com.github.fabriciofx.cactoos.jdbc.statement.Select;
@@ -29,6 +30,7 @@ import com.github.fabriciofx.cactoos.jdbc.statement.Update;
 import com.github.fabriciofx.fake.logger.FakeLogger;
 import com.github.fabriciofx.fake.server.RandomName;
 import com.github.fabriciofx.fake.server.db.source.H2Source;
+import com.jcabi.matchers.XhtmlMatchers;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -320,12 +322,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -356,12 +353,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -401,12 +393,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -455,12 +442,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -498,12 +480,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Batch(
                 session,
@@ -554,12 +531,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new ResultSetAsValue<>(
                 new Select(session, new QueryOf("SELECT COUNT(*) FROM pilot"))
@@ -605,12 +577,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -648,12 +615,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -758,12 +720,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Update(
                 session,
@@ -807,12 +764,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new ResultSetAsValue<>(
                 new Select(session, new QueryOf("select count(*) from pilot"))
@@ -843,12 +795,7 @@ final class CachedTest {
         try (Session first = source.session()) {
             new Update(
                 first,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new ResultSetAsValue<>(
                 new Select(first, new QueryOf("SELECT COUNT(*) FROM pilot"))
@@ -881,12 +828,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             session.autocommit(false);
             new Insert(
@@ -922,12 +864,7 @@ final class CachedTest {
         ) {
             new Update(
                 session,
-                new QueryOf(
-                    """
-                    CREATE TABLE pilot (id INT, name VARCHAR(30),
-                    PRIMARY KEY (id))
-                    """
-                )
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
             ).execute();
             new Insert(
                 session,
@@ -939,6 +876,89 @@ final class CachedTest {
                     new Select(session, new QueryOf("SELECT name FROM pilot"))
                 ),
                 new HasValue<>("Snap")
+            ).affirm();
+        }
+    }
+
+    @Test
+    void selectsRecreatedTableAfterDrop() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())),
+                new CacheOf<>(new TableStore())
+            ).session()
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf(
+                    "INSERT INTO pilot (id, name) VALUES (47, 'Iden Versio')"
+                )
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(session, new QueryOf("SELECT name FROM pilot"))
+            ).value();
+            new Update(session, new QueryOf("DROP TABLE pilot")).execute();
+            new Update(
+                session,
+                new QueryOf(
+                    "CREATE TABLE pilot AS SELECT 3 AS id, 'Del Meeko' AS name"
+                )
+            ).execute();
+            new Assertion<>(
+                "must not return rows of a dropped table from cache",
+                new ResultSetAsValue<>(
+                    new Select(session, new QueryOf("SELECT name FROM pilot"))
+                ),
+                new HasValue<>("Del Meeko")
+            ).affirm();
+        }
+    }
+
+    @Test
+    void selectsRenamedColumnAfterAlter() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())),
+                new CacheOf<>(new TableStore())
+            ).session()
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf(
+                    "INSERT INTO pilot (id, name) VALUES (66, 'Shara Bey')"
+                )
+            ).execute();
+            new ResultSetAsXml(
+                new Select(session, new QueryOf("SELECT * FROM pilot")),
+                "pilots",
+                "pilot"
+            ).value();
+            new Update(
+                session,
+                new QueryOf(
+                    "ALTER TABLE pilot ALTER COLUMN name RENAME TO callsign"
+                )
+            ).execute();
+            new Assertion<>(
+                "must not return columns of an altered table from cache",
+                XhtmlMatchers.xhtml(
+                    new ResultSetAsXml(
+                        new Select(session, new QueryOf("SELECT * FROM pilot")),
+                        "pilots",
+                        "pilot"
+                    ).value()
+                ),
+                XhtmlMatchers.hasXPath(
+                    "/pilots/pilot/callsign[text()='Shara Bey']"
+                )
             ).affirm();
         }
     }
