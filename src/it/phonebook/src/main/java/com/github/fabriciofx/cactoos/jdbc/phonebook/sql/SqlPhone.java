@@ -93,10 +93,10 @@ public final class SqlPhone implements Phone {
             new Update(
                 session,
                 new NamedQuery(
-                    "UPDATE phone SET number = :number WHERE (contact_id = :contact_id) AND (number = :number)",
+                    "UPDATE phone SET number = :number WHERE (contact_id = :contact_id) AND (number = :current)",
                     new TextParam("number", number),
                     new UuidParam("contact_id", this.id),
-                    new TextParam("number", this.num)
+                    new TextParam("current", this.num)
                 )
             ).execute();
         }
