@@ -67,12 +67,12 @@ public final class ParamsOf implements Params {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement initialize(
         final PreparedStatement stmt
     ) throws Exception {
         int idx = 1;
         for (final Param param : this.parameters.value()) {
-            param.prepare(stmt, idx);
+            param.initialize(stmt, idx);
             ++idx;
         }
         return stmt;

@@ -39,7 +39,7 @@ public final class Simple implements Plan {
             this.qry.sql()
         );
         for (final Params params : this.qry.params()) {
-            params.prepare(stmt);
+            params.initialize(stmt);
         }
         return stmt;
     }

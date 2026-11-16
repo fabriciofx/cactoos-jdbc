@@ -42,7 +42,7 @@ public final class IntParam implements Param {
     }
 
     @Override
-    public void prepare(
+    public void initialize(
         final PreparedStatement stmt,
         final int index
     ) throws Exception {

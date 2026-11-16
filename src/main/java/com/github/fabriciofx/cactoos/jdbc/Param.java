@@ -30,5 +30,5 @@ public interface Param extends Bytes {
      * @param index The position of the parameter in the PreparedStatement
      * @throws Exception If fails
      */
-    void prepare(PreparedStatement stmt, int index) throws Exception;
+    void initialize(PreparedStatement stmt, int index) throws Exception;
 }

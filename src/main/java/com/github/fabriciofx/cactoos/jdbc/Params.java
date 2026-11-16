@@ -23,7 +23,7 @@ public interface Params extends Iterable<Param>, Bytes {
      * @return The set PreparedStatement
      * @throws Exception If fails
      */
-    PreparedStatement prepare(PreparedStatement stmt) throws Exception;
+    PreparedStatement initialize(PreparedStatement stmt) throws Exception;
 
     /**
      * Check if Params contains a param at position.

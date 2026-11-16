@@ -41,7 +41,7 @@ public final class Keyed implements Plan {
             Statement.RETURN_GENERATED_KEYS
         );
         for (final Params params : this.qry.params()) {
-            params.prepare(stmt);
+            params.initialize(stmt);
         }
         return stmt;
     }
