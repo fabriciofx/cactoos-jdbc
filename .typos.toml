@@ -15,3 +15,4 @@ extend-exclude = [
 
 [default.extend-words]
 qury = "qury"
+schem = "schem"

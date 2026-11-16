@@ -895,7 +895,7 @@ final class CachedTest {
             new Insert(
                 session,
                 new QueryOf(
-                    "INSERT INTO pilot (id, name) VALUES (47, 'Iden Versio')"
+                    "INSERT INTO pilot (id, name) VALUES (47, 'Iden Garrick')"
                 )
             ).execute();
             new ResultSetAsValue<>(
