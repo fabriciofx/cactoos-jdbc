@@ -83,12 +83,12 @@ public final class Cached implements Session {
     @Override
     public void commit() throws Exception {
         this.origin.commit();
+        this.cache.clear();
     }
 
     @Override
     public void rollback() throws Exception {
         this.origin.rollback();
-        this.cache.clear();
     }
 
     @Override

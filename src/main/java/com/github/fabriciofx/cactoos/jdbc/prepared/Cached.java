@@ -72,7 +72,10 @@ public final class Cached extends PreparedEnvelope {
             final ResultSet result;
             final Key<Query> key = new KeyOf<>(this.normalized);
             final Store<Query, Table> store = this.cache.store();
-            if (store.contains(key)) {
+            final boolean transacted = !this.getConnection().getAutoCommit();
+            if (transacted) {
+                result = super.executeQuery();
+            } else if (store.contains(key)) {
                 final Entry<Query, Table> entry = store.retrieve(key);
                 result = new CachedResultSet(
                     entry.value().rows(),

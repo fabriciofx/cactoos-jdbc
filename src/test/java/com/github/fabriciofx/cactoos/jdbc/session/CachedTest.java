@@ -1,0 +1,106 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2018-2026 Fabrício Barros Cabral
+ * SPDX-License-Identifier: MIT
+ */
+package com.github.fabriciofx.cactoos.jdbc.session;
+
+import com.github.fabriciofx.cactoos.cache.Cache;
+import com.github.fabriciofx.cactoos.cache.base.CacheOf;
+import com.github.fabriciofx.cactoos.jdbc.Query;
+import com.github.fabriciofx.cactoos.jdbc.Session;
+import com.github.fabriciofx.cactoos.jdbc.Source;
+import com.github.fabriciofx.cactoos.jdbc.Table;
+import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
+import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
+import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
+import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
+import com.github.fabriciofx.cactoos.jdbc.statement.Insert;
+import com.github.fabriciofx.cactoos.jdbc.statement.Select;
+import com.github.fabriciofx.cactoos.jdbc.statement.Update;
+import com.github.fabriciofx.fake.server.RandomName;
+import com.github.fabriciofx.fake.server.db.source.H2Source;
+import org.junit.jupiter.api.Test;
+import org.llorllale.cactoos.matchers.Assertion;
+import org.llorllale.cactoos.matchers.HasValue;
+
+/**
+ * {@link Cached} tests.
+ *
+ * @since 0.9.0
+ */
+final class CachedTest {
+
+    @Test
+    void dontExposeUncommittedRowToAnotherSession() throws Exception {
+        final Source source = new NoAuth(
+            new H2Source(new RandomName().asString())
+        );
+        final Cache<Query, Table> cache = new CacheOf<>(new TableStore());
+        try (
+            Session first = new Cached(source.session(), cache);
+            Session second = new Cached(source.session(), cache)
+        ) {
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            first.autocommit(false);
+            new Insert(
+                first,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (14, 'Rook')")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(first, new QueryOf("SELECT COUNT(*) FROM pilot"))
+            ).value();
+            new Assertion<>(
+                "must not expose an uncommitted row to another session",
+                new ResultSetAsValue<>(
+                    new Select(
+                        second,
+                        new QueryOf("SELECT COUNT(*) FROM pilot")
+                    )
+                ),
+                new HasValue<>(0L)
+            ).affirm();
+        }
+    }
+
+    @Test
+    void selectsRowCommittedAfterAnotherSessionCached() throws Exception {
+        final Source source = new NoAuth(
+            new H2Source(new RandomName().asString())
+        );
+        final Cache<Query, Table> cache = new CacheOf<>(new TableStore());
+        try (
+            Session first = new Cached(source.session(), cache);
+            Session second = new Cached(source.session(), cache)
+        ) {
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            first.autocommit(false);
+            new Insert(
+                first,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (38, 'Bodhi')")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(
+                    second,
+                    new QueryOf("SELECT COUNT(*) FROM pilot")
+                )
+            ).value();
+            first.commit();
+            new Assertion<>(
+                "must not return a stale count after another session commit",
+                new ResultSetAsValue<>(
+                    new Select(
+                        second,
+                        new QueryOf("SELECT COUNT(*) FROM pilot")
+                    )
+                ),
+                new HasValue<>(1L)
+            ).affirm();
+        }
+    }
+}
