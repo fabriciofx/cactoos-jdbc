@@ -62,7 +62,7 @@ final class ResultSetAsXmlTest {
                         "/contacts/contact/number[text()='(87)99991-1234']",
                         "/contacts/contact/number[text()='(87)89234-9876']"
                     )
-                );
+                ).affirm();
             }
         }
     }
