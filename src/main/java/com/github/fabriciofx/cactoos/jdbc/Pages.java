@@ -5,7 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc;
 
 /**
- * Pagination.
+ * Pages.
  *
  * <p>There is no thread-safety guarantee.</p>
  *
@@ -13,7 +13,7 @@ package com.github.fabriciofx.cactoos.jdbc;
  * @since 0.8.0
  */
 @FunctionalInterface
-public interface Pagination<T> {
+public interface Pages<T> {
 
     /**
      * Get the pages of data.

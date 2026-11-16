@@ -287,11 +287,11 @@ try (
 }
 ```
 
-To expose pages in your domain, implement `Pagination<T>`, which returns a
+To expose pages in your domain, implement `Pages<T>`, which returns a
 `Page<T>` with its `items()`, `total()`, `number()` and `size()`:
 
 ```java
-public interface Phonebook extends Pagination<Contact> {
+public interface Phonebook extends Pages<Contact> {
     ...
 }
 

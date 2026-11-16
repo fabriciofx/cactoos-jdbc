@@ -4,7 +4,7 @@
  */
 package com.github.fabriciofx.cactoos.jdbc.phonebook;
 
-import com.github.fabriciofx.cactoos.jdbc.Pagination;
+import com.github.fabriciofx.cactoos.jdbc.Pages;
 import java.util.List;
 
 /**
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @since 0.4
  */
-public interface Phonebook extends Pagination<Contact> {
+public interface Phonebook extends Pages<Contact> {
     /**
      * Create a new {@link Contact}.
      *
