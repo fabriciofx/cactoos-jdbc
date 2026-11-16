@@ -54,7 +54,7 @@ public final class SqlContact implements Contact {
                     session,
                     new NamedQuery(
                         """
-                        SELECT name, number, carrier FROM contact INNER JOIN \
+                        SELECT name, number FROM contact INNER JOIN \
                         phone ON contact.id = phone.contact_id \
                         WHERE contact.id = :id\
                         """,

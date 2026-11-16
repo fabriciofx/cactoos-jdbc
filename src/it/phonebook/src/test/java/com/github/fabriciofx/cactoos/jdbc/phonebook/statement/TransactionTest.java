@@ -58,8 +58,8 @@ final class TransactionTest {
                     () -> {
                         final Phonebook phonebook = new SqlPhonebook(transacted);
                         final Contact contact = phonebook.create(name);
-                        contact.phones().add("99991234", "TIM");
-                        contact.phones().add("98812564", "Oi");
+                        contact.phones().add("99991234");
+                        contact.phones().add("98812564");
                         return true;
                     }
                 ).execute();
@@ -72,9 +72,7 @@ final class TransactionTest {
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Albert Einstein']",
                     "/contact/phones/phone/number[text()='99991234']",
-                    "/contact/phones/phone/carrier[text()='TIM']",
-                    "/contact/phones/phone/number[text()='98812564']",
-                    "/contact/phones/phone/carrier[text()='Oi']"
+                    "/contact/phones/phone/number[text()='98812564']"
                 )
             ).affirm();
         }
@@ -101,8 +99,8 @@ final class TransactionTest {
                             final Phonebook phonebook =
                                 new SqlPhonebook(transacted);
                             final Contact contact = phonebook.create(name);
-                            contact.phones().add("88884321", "Vivo");
-                            contact.phones().add("97824562", "Claro");
+                            contact.phones().add("88884321");
+                            contact.phones().add("97824562");
                             throw new IllegalStateException("Rollback");
                         }
                     ).execute();

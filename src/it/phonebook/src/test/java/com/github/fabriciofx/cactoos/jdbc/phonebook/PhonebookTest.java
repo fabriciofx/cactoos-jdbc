@@ -42,17 +42,15 @@ final class PhonebookTest {
                 new NoAuth(server.resource())
             );
             final Contact contact = phonebook.create("Donald Knuth");
-            contact.phones().add("99991234", "TIM");
-            contact.phones().add("98812564", "Oi");
+            contact.phones().add("99991234");
+            contact.phones().add("98812564");
             new Assertion<>(
                 "must contacts contain correct phone number",
                 XhtmlMatchers.xhtml(contact.xml()),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Donald Knuth']",
                     "/contact/phones/phone/number[text()='99991234']",
-                    "/contact/phones/phone/carrier[text()='TIM']",
-                    "/contact/phones/phone/number[text()='98812564']",
-                    "/contact/phones/phone/carrier[text()='Oi']"
+                    "/contact/phones/phone/number[text()='98812564']"
                 )
             ).affirm();
         }

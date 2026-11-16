@@ -28,11 +28,10 @@ public interface Phone {
     void delete() throws Exception;
 
     /**
-     * Update the contact's phone number and carrier.
+     * Update the contact's phone number.
      *
      * @param number The phone number
-     * @param carrier The phone carrier
      * @throws Exception If fails
      */
-    void update(String number, String carrier) throws Exception;
+    void update(String number) throws Exception;
 }

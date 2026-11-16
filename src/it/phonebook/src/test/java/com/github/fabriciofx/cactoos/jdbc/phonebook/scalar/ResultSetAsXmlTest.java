@@ -50,7 +50,7 @@ final class ResultSetAsXmlTest {
                             new Select(
                                 session,
                                 new QueryOf(
-                                    "SELECT name, number, carrier FROM contact JOIN phone ON contact.id = phone.contact_id"
+                                    "SELECT name, number FROM contact JOIN phone ON contact.id = phone.contact_id"
                                 )
                             ),
                             "contacts",
@@ -60,9 +60,7 @@ final class ResultSetAsXmlTest {
                     XhtmlMatchers.hasXPaths(
                         "/contacts/contact/name[text()='Joseph Klimber']",
                         "/contacts/contact/number[text()='(87)99991-1234']",
-                        "/contacts/contact/carrier[text()='TIM']",
-                        "/contacts/contact/number[text()='(87)89234-9876']",
-                        "/contacts/contact/carrier[text()='Oi']"
+                        "/contacts/contact/number[text()='(87)89234-9876']"
                     )
                 );
             }

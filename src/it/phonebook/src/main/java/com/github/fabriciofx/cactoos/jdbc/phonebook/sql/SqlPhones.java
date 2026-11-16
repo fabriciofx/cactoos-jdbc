@@ -84,18 +84,14 @@ public final class SqlPhones implements Phones {
     }
 
     @Override
-    public void add(
-        final String number,
-        final String carrier
-    ) throws Exception {
+    public void add(final String number) throws Exception {
         try (Session session = this.source.session()) {
             new Insert(
                 session,
                 new NamedQuery(
-                    "INSERT INTO phone (contact_id, number, carrier) VALUES (:contact_id, :number, :carrier)",
+                    "INSERT INTO phone (contact_id, number) VALUES (:contact_id, :number)",
                     new UuidParam("contact_id", this.id),
-                    new TextParam("number", number),
-                    new TextParam("carrier", carrier)
+                    new TextParam("number", number)
                 )
             ).execute();
         }

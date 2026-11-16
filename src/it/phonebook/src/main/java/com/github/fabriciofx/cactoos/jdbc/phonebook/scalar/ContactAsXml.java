@@ -61,9 +61,6 @@ public final class ContactAsXml implements Scalar<String> {
                     final Element number = doc.createElement("number");
                     number.setTextContent(rset.getString("number"));
                     phone.appendChild(number);
-                    final Element carrier = doc.createElement("carrier");
-                    carrier.setTextContent(rset.getString("carrier"));
-                    phone.appendChild(carrier);
                     phones.appendChild(phone);
                 } while (rset.next());
             }

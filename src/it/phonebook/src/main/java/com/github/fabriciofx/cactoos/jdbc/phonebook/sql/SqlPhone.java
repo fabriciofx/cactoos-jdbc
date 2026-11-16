@@ -63,7 +63,7 @@ public final class SqlPhone implements Phone {
                 new Select(
                     session,
                     new NamedQuery(
-                        "SELECT carrier, number FROM phone WHERE contact_id = :contact_id",
+                        "SELECT number FROM phone WHERE contact_id = :contact_id",
                         new UuidParam("contact_id", this.id)
                     )
                 ),
@@ -88,17 +88,13 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public void update(
-        final String number,
-        final String carrier
-    ) throws Exception {
+    public void update(final String number) throws Exception {
         try (Session session = this.source.session()) {
             new Update(
                 session,
                 new NamedQuery(
-                    "UPDATE phone SET number = :number, carrier = :carrier WHERE (contact_id = :contact_id) AND (number = :number)",
+                    "UPDATE phone SET number = :number WHERE (contact_id = :contact_id) AND (number = :number)",
                     new TextParam("number", number),
-                    new TextParam("carrier", carrier),
                     new UuidParam("contact_id", this.id),
                     new TextParam("number", this.num)
                 )

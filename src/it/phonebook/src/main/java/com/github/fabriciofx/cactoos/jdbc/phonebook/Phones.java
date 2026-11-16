@@ -33,8 +33,7 @@ public interface Phones {
      * Add a new phone to contact's phones.
      *
      * @param number The phone's number
-     * @param carrier The phone's carrier
      * @throws Exception If fails
      */
-    void add(String number, String carrier) throws Exception;
+    void add(String number) throws Exception;
 }
