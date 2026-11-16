@@ -33,7 +33,7 @@ public final class Keyed implements Plan {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement build(
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(

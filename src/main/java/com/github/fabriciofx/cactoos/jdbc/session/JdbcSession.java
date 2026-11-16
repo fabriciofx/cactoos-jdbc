@@ -35,7 +35,7 @@ public final class JdbcSession implements Session {
 
     @Override
     public PreparedStatement prepared(final Plan plan) throws Exception {
-        return plan.prepare(this.connection);
+        return plan.build(this.connection);
     }
 
     @Override

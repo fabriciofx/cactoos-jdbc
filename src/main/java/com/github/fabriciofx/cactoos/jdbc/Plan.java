@@ -16,13 +16,13 @@ import java.sql.PreparedStatement;
 public interface Plan {
 
     /**
-     * Prepares a {@link PreparedStatement}.
+     * Builds a {@link PreparedStatement}.
      *
      * @param connection A {@link Connection}
      * @return A {@link PreparedStatement}
      * @throws Exception if something goes wrong
      */
-    PreparedStatement prepare(Connection connection) throws Exception;
+    PreparedStatement build(Connection connection) throws Exception;
 
     /**
      * Return the Plan's query.

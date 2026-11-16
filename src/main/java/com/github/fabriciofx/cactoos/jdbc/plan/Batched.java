@@ -32,7 +32,7 @@ public final class Batched implements Plan {
     }
 
     @Override
-    public PreparedStatement prepare(
+    public PreparedStatement build(
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
