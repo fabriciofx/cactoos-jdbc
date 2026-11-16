@@ -45,4 +45,29 @@ final class SqlPhoneTest {
             ).affirm();
         }
     }
+
+    @Test
+    void retrievesOnlyItsOwnNumberAsXml() throws Exception {
+        try (
+            Server<DataSource> server = new H2Server(
+                new SqlScript(
+                    new ResourceOf("phonebook/phonebook-h2.sql")
+                )
+            )
+        ) {
+            server.start();
+            final Contact contact = new SqlPhonebook(
+                new NoAuth(server.resource())
+            ).create("Barbara Liskov");
+            contact.phones().add("96660002");
+            contact.phones().add("94440001");
+            new Assertion<>(
+                "must not include numbers of other phones of the contact",
+                XhtmlMatchers.xhtml(contact.phones().get(0).xml()),
+                XhtmlMatchers.hasXPath(
+                    "/phones[count(phone)=1]/phone/number[text()='94440001']"
+                )
+            ).affirm();
+        }
+    }
 }

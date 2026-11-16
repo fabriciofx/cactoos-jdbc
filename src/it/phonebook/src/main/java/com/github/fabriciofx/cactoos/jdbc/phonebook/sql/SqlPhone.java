@@ -63,8 +63,9 @@ public final class SqlPhone implements Phone {
                 new Select(
                     session,
                     new NamedQuery(
-                        "SELECT number FROM phone WHERE contact_id = :contact_id",
-                        new UuidParam("contact_id", this.id)
+                        "SELECT number FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
+                        new UuidParam("contact_id", this.id),
+                        new TextParam("number", this.num)
                     )
                 ),
                 "phones",
