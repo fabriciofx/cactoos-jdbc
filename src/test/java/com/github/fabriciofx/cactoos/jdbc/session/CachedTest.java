@@ -6,11 +6,13 @@ package com.github.fabriciofx.cactoos.jdbc.session;
 
 import com.github.fabriciofx.cactoos.cache.Cache;
 import com.github.fabriciofx.cactoos.cache.base.CacheOf;
+import com.github.fabriciofx.cactoos.cache.key.KeyOf;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
+import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
@@ -22,6 +24,7 @@ import com.github.fabriciofx.fake.server.db.source.H2Source;
 import org.junit.jupiter.api.Test;
 import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.HasValue;
+import org.llorllale.cactoos.matchers.IsTrue;
 
 /**
  * {@link Cached} tests.
@@ -144,5 +147,88 @@ final class CachedTest {
                 new HasValue<>(2L)
             ).affirm();
         }
+    }
+
+    @Test
+    void keepsCachedSelectOfUntouchedTableAfterCommit() throws Exception {
+        final Source source = new NoAuth(
+            new H2Source(new RandomName().asString())
+        );
+        final Cache<Query, Table> cache = new CacheOf<>(new TableStore());
+        try (
+            Session first = new Cached(source.session(), cache);
+            Session second = new Cached(source.session(), cache)
+        ) {
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE ship (id INT, model VARCHAR(30))")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(second, new QueryOf("SELECT COUNT(*) FROM ship"))
+            ).value();
+            first.autocommit(false);
+            new Insert(
+                first,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (24, 'Kay')")
+            ).execute();
+            first.commit();
+        }
+        new Assertion<>(
+            "must keep a cached select of a table the commit did not change",
+            cache.store().contains(
+                new KeyOf<>(
+                    new Normalized(new QueryOf("SELECT COUNT(*) FROM ship"))
+                )
+            ),
+            new IsTrue()
+        ).affirm();
+    }
+
+    @Test
+    void forgetsRolledBackTablesOnNextCommit() throws Exception {
+        final Source source = new NoAuth(
+            new H2Source(new RandomName().asString())
+        );
+        final Cache<Query, Table> cache = new CacheOf<>(new TableStore());
+        try (
+            Session first = new Cached(source.session(), cache);
+            Session second = new Cached(source.session(), cache)
+        ) {
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Update(
+                first,
+                new QueryOf("CREATE TABLE ship (id INT, model VARCHAR(30))")
+            ).execute();
+            first.autocommit(false);
+            new Insert(
+                first,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (63, 'Zay')")
+            ).execute();
+            first.rollback();
+            new ResultSetAsValue<>(
+                new Select(second, new QueryOf("SELECT COUNT(*) FROM pilot"))
+            ).value();
+            new Insert(
+                first,
+                new QueryOf("INSERT INTO ship (id, model) VALUES (2, 'A-Wing')")
+            ).execute();
+            first.commit();
+        }
+        new Assertion<>(
+            "must not invalidate tables of a rolled back transaction on commit",
+            cache.store().contains(
+                new KeyOf<>(
+                    new Normalized(new QueryOf("SELECT COUNT(*) FROM pilot"))
+                )
+            ),
+            new IsTrue()
+        ).affirm();
     }
 }
