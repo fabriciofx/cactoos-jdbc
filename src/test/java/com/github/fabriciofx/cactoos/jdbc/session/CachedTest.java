@@ -103,4 +103,46 @@ final class CachedTest {
             ).affirm();
         }
     }
+
+    @Test
+    void selectsViewRowInsertedAfterCaching() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(
+                    new H2Source(new RandomName().asString())
+                ).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Update(
+                session,
+                new QueryOf("CREATE VIEW crew AS SELECT name FROM pilot")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (52, 'Andor')")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(session, new QueryOf("SELECT COUNT(*) FROM crew"))
+            ).value();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (9, 'Melshi')")
+            ).execute();
+            new Assertion<>(
+                "must not return a stale view after changing its table",
+                new ResultSetAsValue<>(
+                    new Select(
+                        session,
+                        new QueryOf("SELECT COUNT(*) FROM crew")
+                    )
+                ),
+                new HasValue<>(2L)
+            ).affirm();
+        }
+    }
 }
