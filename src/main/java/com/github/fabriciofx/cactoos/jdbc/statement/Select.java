@@ -29,7 +29,7 @@ public final class Select implements Statement<ResultSet> {
     /**
      * The SQL query.
      */
-    private final Query qry;
+    private final Query query;
 
     /**
      * Ctor.
@@ -39,13 +39,15 @@ public final class Select implements Statement<ResultSet> {
      */
     public Select(final Session session, final Query query) {
         this.session = session;
-        this.qry = query;
+        this.query = query;
     }
 
     @Override
     public ResultSet execute() throws Exception {
         try (
-            PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
+            PreparedStatement stmt = this.session.prepared(
+                new Simple(this.query)
+            )
         ) {
             try (ResultSet rset = stmt.executeQuery()) {
                 final Table table = new ArrayedTable(rset);

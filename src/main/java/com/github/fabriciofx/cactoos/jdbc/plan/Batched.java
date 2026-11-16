@@ -20,7 +20,7 @@ public final class Batched implements Plan {
     /**
      * Query.
      */
-    private final Query qry;
+    private final Query query;
 
     /**
      * Ctor.
@@ -28,7 +28,7 @@ public final class Batched implements Plan {
      * @param query A {@link Query}
      */
     public Batched(final Query query) {
-        this.qry = query;
+        this.query = query;
     }
 
     @Override
@@ -36,9 +36,9 @@ public final class Batched implements Plan {
         final Connection connection
     ) throws Exception {
         final PreparedStatement stmt = connection.prepareStatement(
-            this.qry.sql()
+            this.query.sql()
         );
-        for (final Params params : this.qry.params()) {
+        for (final Params params : this.query.params()) {
             params.initialize(stmt);
             stmt.addBatch();
         }
@@ -47,6 +47,6 @@ public final class Batched implements Plan {
 
     @Override
     public Query query() {
-        return this.qry;
+        return this.query;
     }
 }

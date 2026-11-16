@@ -25,7 +25,7 @@ public final class Update implements Statement<Integer> {
     /**
      * The SQL query.
      */
-    private final Query qry;
+    private final Query query;
 
     /**
      * Ctor.
@@ -35,13 +35,15 @@ public final class Update implements Statement<Integer> {
      */
     public Update(final Session session, final Query query) {
         this.session = session;
-        this.qry = query;
+        this.query = query;
     }
 
     @Override
     public Integer execute() throws Exception {
         try (
-            PreparedStatement stmt = this.session.prepared(new Simple(this.qry))
+            PreparedStatement stmt = this.session.prepared(
+                new Simple(this.query)
+            )
         ) {
             return stmt.executeUpdate();
         }

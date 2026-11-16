@@ -25,7 +25,7 @@ public final class Batch implements Statement<int[]> {
     /**
      * The SQL query.
      */
-    private final Query qry;
+    private final Query query;
 
     /**
      * Ctor.
@@ -35,14 +35,14 @@ public final class Batch implements Statement<int[]> {
      */
     public Batch(final Session session, final Query query) {
         this.session = session;
-        this.qry = query;
+        this.query = query;
     }
 
     @Override
     public int[] execute() throws Exception {
         try (
             PreparedStatement stmt = this.session.prepared(
-                new Batched(this.qry)
+                new Batched(this.query)
             )
         ) {
             return stmt.executeBatch();

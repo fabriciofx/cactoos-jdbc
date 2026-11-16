@@ -28,7 +28,7 @@ public final class KeyedInsert<T> implements Statement<T> {
     /**
      * Query.
      */
-    private final Query qry;
+    private final Query query;
 
     /**
      * Ctor.
@@ -38,14 +38,16 @@ public final class KeyedInsert<T> implements Statement<T> {
      */
     public KeyedInsert(final Session session, final Query query) {
         this.session = session;
-        this.qry = query;
+        this.query = query;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T execute() throws Exception {
         try (
-            PreparedStatement stmt = this.session.prepared(new Keyed(this.qry))
+            PreparedStatement stmt = this.session.prepared(
+                new Keyed(this.query)
+            )
         ) {
             stmt.executeUpdate();
             try (ResultSet rset = stmt.getGeneratedKeys()) {
