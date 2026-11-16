@@ -317,12 +317,24 @@ final Source logged = new Logged(source, "app");
 
 ### Caching
 
-To cache `Select` results, decorate a `Source` with `Cached`. Any `Insert`,
-`Update` or `Delete` on a table invalidates its cached entries:
+To cache `Select` results, decorate a `Source` with `Cached`. Any `INSERT`,
+`UPDATE`, `DELETE` or `MERGE` on a table invalidates its cached entries, while
+a `TRUNCATE`, `DROP TABLE` or `ALTER TABLE` clears the whole cache:
 
 ```java
 final Source cached = new Cached(source);
 ```
+
+The cache has some limitations:
+
+- **Transactions:** while a session has autocommit disabled, its `Select`s
+  bypass the cache and always go to the database, so uncommitted rows are
+  never exposed to other sessions. A `commit` clears the whole cache, even
+  the entries of tables the transaction did not change.
+- **Views:** a `Select` that reads a view is never cached, because writes to
+  the view's underlying tables cannot be tracked. Finding out whether a
+  `Select` reads a view requires a query to the database metadata whenever
+  its result is not cached.
 
 ### Connection pooling
 
