@@ -42,5 +42,5 @@ public interface Page<T> {
      *
      * @return The number of items in this page
      */
-    int size();
+    int count();
 }

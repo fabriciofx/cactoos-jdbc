@@ -84,12 +84,12 @@ public final class SqlPhonebook implements Phonebook {
     }
 
     @Override
-    public Page<Contact> page(final int number, final int size)
+    public Page<Contact> page(final int number, final int count)
         throws Exception {
         return new SqlContactPage(
             this.source,
             number,
-            size
+            count
         );
     }
 }

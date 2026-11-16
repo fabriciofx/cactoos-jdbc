@@ -48,12 +48,12 @@ public final class SqlContactPage implements Page<Contact> {
      *
      * @param source A Source
      * @param number The page number
-     * @param size The maximum number of elements per page
+     * @param count The maximum number of elements per page
      */
     public SqlContactPage(
         final Source source,
         final int number,
-        final int size
+        final int count
     ) {
         this.amount = new ArrayList<>(0);
         this.elements = new Unchecked<>(
@@ -66,7 +66,7 @@ public final class SqlContactPage implements Page<Contact> {
                             new Paginated(
                                 new QueryOf("SELECT id FROM contact"),
                                 number,
-                                size
+                                count
                             )
                         ).execute()
                     ) {
@@ -113,7 +113,7 @@ public final class SqlContactPage implements Page<Contact> {
     }
 
     @Override
-    public int size() {
+    public int count() {
         return this.elements.value().size();
     }
 }

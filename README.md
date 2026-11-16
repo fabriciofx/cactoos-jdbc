@@ -288,7 +288,7 @@ try (
 ```
 
 To expose pages in your domain, implement `Pages<T>`, which returns a
-`Page<T>` with its `items()`, `total()`, `number()` and `size()`:
+`Page<T>` with its `items()`, `total()`, `number()` and `count()`:
 
 ```java
 public interface Phonebook extends Pages<Contact> {
@@ -298,8 +298,8 @@ public interface Phonebook extends Pages<Contact> {
 public final class SqlPhonebook implements Phonebook {
     ...
     @Override
-    public Page<Contact> page(final int number, final int size) {
-        return new SqlContactPage(this.source, number, size);
+    public Page<Contact> page(final int number, final int count) {
+        return new SqlContactPage(this.source, number, count);
     }
 }
 ```
