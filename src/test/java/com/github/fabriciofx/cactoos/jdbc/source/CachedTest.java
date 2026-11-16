@@ -33,7 +33,6 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import org.cactoos.text.TextOf;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -913,7 +912,6 @@ final class CachedTest {
         }
     }
 
-    @Disabled("DelayedPolicies.apply() of cactoos-cache 0.0.14 never returns")
     @Test
     @Timeout(10)
     void selectsWithDefaultCache() throws Exception {
