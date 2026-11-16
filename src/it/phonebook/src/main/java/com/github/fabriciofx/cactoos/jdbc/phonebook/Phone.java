@@ -13,12 +13,12 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
  */
 public interface Phone {
     /**
-     * Retrieve the phone's data.
+     * Retrieve the phone's data as an XML document.
      *
-     * @return Phone's data
+     * @return Phone's data in XML format
      * @throws Exception If fails
      */
-    String about() throws Exception;
+    String xml() throws Exception;
 
     /**
      * Delete a contact's phone.

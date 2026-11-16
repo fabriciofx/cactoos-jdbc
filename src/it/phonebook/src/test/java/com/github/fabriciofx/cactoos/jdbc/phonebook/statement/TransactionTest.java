@@ -67,7 +67,7 @@ final class TransactionTest {
             new Assertion<>(
                 "must perform a transaction commit",
                 XhtmlMatchers.xhtml(
-                    new SqlPhonebook(source).search(name).get(0).about()
+                    new SqlPhonebook(source).search(name).get(0).xml()
                 ),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Albert Einstein']",

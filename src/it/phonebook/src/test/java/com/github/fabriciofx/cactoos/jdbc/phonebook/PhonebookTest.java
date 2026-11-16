@@ -46,7 +46,7 @@ final class PhonebookTest {
             contact.phones().add("98812564", "Oi");
             new Assertion<>(
                 "must contacts contain correct phone number",
-                XhtmlMatchers.xhtml(contact.about()),
+                XhtmlMatchers.xhtml(contact.xml()),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Donald Knuth']",
                     "/contact/phones/phone/number[text()='99991234']",
@@ -74,7 +74,7 @@ final class PhonebookTest {
                     new SqlPhonebook(new NoAuth(server.resource()))
                         .search("maria")
                         .get(0)
-                        .about()
+                        .xml()
                 ),
                 XhtmlMatchers.hasXPaths("/contact/name[text()='Maria Souza']")
             ).affirm();
@@ -101,7 +101,7 @@ final class PhonebookTest {
                     new SqlPhonebook(source)
                         .search("maria")
                         .get(0)
-                        .about()
+                        .xml()
                 ),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Maria Lima']"
@@ -124,7 +124,7 @@ final class PhonebookTest {
             Page<Contact> page = new SqlPhonebook(source).page(1, 2);
             new Assertion<>(
                 "must match Maria Souza phonebook contact",
-                XhtmlMatchers.xhtml(page.items().get(0).about()),
+                XhtmlMatchers.xhtml(page.items().get(0).xml()),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Maria Souza']"
                 )
@@ -132,7 +132,7 @@ final class PhonebookTest {
             new Assertion<>(
                 "must match Joseph Klimber phonebook contact",
                 XhtmlMatchers.xhtml(
-                    page.items().get(page.items().size() - 1).about()
+                    page.items().get(page.items().size() - 1).xml()
                 ),
                 XhtmlMatchers.hasXPaths(
                     "/contact/name[text()='Joseph Klimber']"
@@ -141,7 +141,7 @@ final class PhonebookTest {
             page = new SqlPhonebook(source).page(2, 2);
             new Assertion<>(
                 "must match Jeff Duham phonebook contact",
-                XhtmlMatchers.xhtml(page.items().get(0).about()),
+                XhtmlMatchers.xhtml(page.items().get(0).xml()),
                 XhtmlMatchers.hasXPaths("/contact/name[text()='Jeff Duham']")
             ).affirm();
         }

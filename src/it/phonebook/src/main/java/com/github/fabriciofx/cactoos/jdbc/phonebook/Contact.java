@@ -15,12 +15,12 @@ package com.github.fabriciofx.cactoos.jdbc.phonebook;
  */
 public interface Contact {
     /**
-     * Retrieve the Contact's data.
+     * Retrieve the contact's data as an XML document.
      *
-     * @return Contact's data
+     * @return Contact's data in XML format
      * @throws Exception If fails
      */
-    String about() throws Exception;
+    String xml() throws Exception;
 
     /**
      * Retrieve the Contact's phones.

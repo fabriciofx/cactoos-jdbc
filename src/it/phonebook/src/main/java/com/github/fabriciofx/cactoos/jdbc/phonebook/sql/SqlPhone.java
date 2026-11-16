@@ -57,7 +57,7 @@ public final class SqlPhone implements Phone {
     }
 
     @Override
-    public String about() throws Exception {
+    public String xml() throws Exception {
         try (Session session = this.source.session()) {
             return new ResultSetAsXml(
                 new Select(
