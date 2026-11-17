@@ -6,9 +6,9 @@ package com.github.fabriciofx.cactoos.jdbc.query;
 
 import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedOrder;
-import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedSelect;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.LimitDialect;
+import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedOrder;
+import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedSelect;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.UngroupedOrder;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.UngroupedSelect;
 import com.github.fabriciofx.cactoos.jdbc.scalar.HasLimit;
@@ -78,12 +78,12 @@ public final class Paginated implements Query {
                     paginated = new TextOf(query.sql());
                 } else if (nested && stmt instanceof SqlOrderBy order) {
                     paginated = new Pretty(
-                        new GroupedOrder(order, page, size),
+                        new NestedOrder(order, page, size),
                         new LimitDialect()
                     );
                 } else if (nested) {
                     paginated = new Pretty(
-                        new GroupedSelect(select, page, size),
+                        new NestedSelect(select, page, size),
                         new LimitDialect()
                     );
                 } else if (stmt instanceof SqlOrderBy order) {

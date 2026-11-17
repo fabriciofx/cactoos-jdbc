@@ -14,11 +14,15 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.cactoos.Scalar;
 
 /**
- * GroupedSelect.
+ * NestedOrder.
+ *
+ * <p>The page of an ordered select with GROUP BY or DISTINCT. The select goes
+ * into a subquery, so the total counts the rows it returns, and the ORDER BY
+ * applies to that subquery.</p>
  *
  * @since 0.9.0
  */
-public final class GroupedOrder implements Scalar<SqlNode> {
+public final class NestedOrder implements Scalar<SqlNode> {
 
     /**
      * Select.
@@ -42,7 +46,7 @@ public final class GroupedOrder implements Scalar<SqlNode> {
      * @param page Page number
      * @param size Rows per page
      */
-    public GroupedOrder(
+    public NestedOrder(
         final SqlOrderBy order,
         final int page,
         final int size
