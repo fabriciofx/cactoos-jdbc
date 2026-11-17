@@ -242,4 +242,42 @@ final class PaginatedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void paginatesDistinctSelectInSubquery() {
+        new Assertion<>(
+            "must keep DISTINCT and count only the distinct rows",
+            () -> new Paginated(
+                new QueryOf("SELECT DISTINCT city FROM client"),
+                3,
+                7
+            ).sql(),
+            new IsText(
+                """
+                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
+                (SELECT DISTINCT `CITY` FROM `CLIENT`) AS \
+                `__paginated_subquery__` LIMIT 7 OFFSET 14\
+                """
+            )
+        ).affirm();
+    }
+
+    @Test
+    void paginatesOrderedDistinctSelectInSubquery() {
+        new Assertion<>(
+            "must keep DISTINCT and ORDER BY and count only the distinct rows",
+            () -> new Paginated(
+                new QueryOf("SELECT DISTINCT city FROM client ORDER BY city"),
+                2,
+                4
+            ).sql(),
+            new IsText(
+                """
+                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
+                (SELECT DISTINCT `CITY` FROM `CLIENT`) AS \
+                `__paginated_subquery__` ORDER BY `CITY` LIMIT 4 OFFSET 4\
+                """
+            )
+        ).affirm();
+    }
 }

@@ -70,17 +70,18 @@ public final class Paginated implements Query {
                         "The query MUST be a SELECT"
                     );
                 }
-                final boolean grouped = select.getGroup() != null
+                final boolean nested = select.isDistinct()
+                    || select.getGroup() != null
                     && !select.getGroup().isEmpty();
                 final Text paginated;
                 if (new HasLimit(stmt).value()) {
                     paginated = new TextOf(query.sql());
-                } else if (grouped && stmt instanceof SqlOrderBy order) {
+                } else if (nested && stmt instanceof SqlOrderBy order) {
                     paginated = new Pretty(
                         new GroupedOrder(order, page, size),
                         new LimitDialect()
                     );
-                } else if (grouped) {
+                } else if (nested) {
                     paginated = new Pretty(
                         new GroupedSelect(select, page, size),
                         new LimitDialect()
