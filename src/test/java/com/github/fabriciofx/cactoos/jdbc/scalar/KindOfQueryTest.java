@@ -162,4 +162,15 @@ final class KindOfQueryTest {
             new HasValue<>(SqlKind.SELECT)
         ).affirm();
     }
+
+    @Test
+    void checkIfAStatementMixingQuotesIsASelect() {
+        new Assertion<>(
+            "must check if statement mixing quotes is a select",
+            () -> new KindOfQuery(
+                new QueryOf("SELECT `tide` FROM `sea` WHERE `name` = \"Red\"")
+            ).value(),
+            new HasValue<>(SqlKind.SELECT)
+        ).affirm();
+    }
 }

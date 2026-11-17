@@ -206,4 +206,17 @@ final class TableNamesTest {
             new Matches<>(new ListOf<>("Telescope"))
         ).affirm();
     }
+
+    @Test
+    void tableNamesMixingQuotes() throws Exception {
+        new Assertion<>(
+            "must get table names of a query mixing quotes",
+            new HasValues<>(
+                new TableNames(
+                    new QueryOf("SELECT `peak` FROM `Ridge` WHERE `id` = \"7\"")
+                ).value()
+            ),
+            new Matches<>(new ListOf<>("Ridge"))
+        ).affirm();
+    }
 }

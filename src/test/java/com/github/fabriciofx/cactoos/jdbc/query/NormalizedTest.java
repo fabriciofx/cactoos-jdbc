@@ -632,4 +632,15 @@ final class NormalizedTest {
             new IsText("SELECT \"Full Name\" FROM \"Person\" WHERE age > 3")
         ).affirm();
     }
+
+    @Test
+    void normalizesBackTicksMixedWithDoubleQuotedStrings() throws Exception {
+        new Assertion<>(
+            "must normalize back-ticked names mixed with double-quoted strings",
+            () -> new Normalized(
+                new QueryOf("SELECT `city` FROM `shop` WHERE \"Rio\" = `city`")
+            ).sql(),
+            new IsText("SELECT `city` FROM `shop` WHERE `city` = 'Rio'")
+        ).affirm();
+    }
 }

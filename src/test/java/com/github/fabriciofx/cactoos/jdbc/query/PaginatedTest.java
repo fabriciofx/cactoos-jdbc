@@ -329,4 +329,22 @@ final class PaginatedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void paginatesBackTicksMixedWithDoubleQuotedStrings() {
+        new Assertion<>(
+            "must paginate back-ticked names mixed with double-quoted strings",
+            () -> new Paginated(
+                new QueryOf("SELECT `name` FROM `client` WHERE `name` = \"Ana\""),
+                2,
+                6
+            ).sql(),
+            new IsText(
+                """
+                SELECT `name`, COUNT(*) OVER () AS __total_count__ FROM \
+                `client` WHERE `name` = 'Ana' LIMIT 6 OFFSET 6\
+                """
+            )
+        ).affirm();
+    }
 }

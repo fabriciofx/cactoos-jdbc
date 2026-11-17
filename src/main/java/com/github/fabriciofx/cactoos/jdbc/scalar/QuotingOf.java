@@ -15,6 +15,10 @@ import org.cactoos.Scalar;
  * PostgreSQL, H2, Oracle and SQLite do. Parsing and printing the query with
  * them keeps the SQL valid for the database it was written for.</p>
  *
+ * <p>A query with back ticks and double quotes mixes back-ticked names with
+ * double-quoted strings, as MySQL allows. Its strings then escape quotes with
+ * a backslash, also as MySQL does.</p>
+ *
  * @since 0.9.0
  */
 public final class QuotingOf implements Scalar<Quoting> {
@@ -36,7 +40,9 @@ public final class QuotingOf implements Scalar<Quoting> {
     @Override
     public Quoting value() {
         final Quoting quoting;
-        if (this.sql.indexOf('`') >= 0) {
+        if (this.sql.indexOf('`') >= 0 && this.sql.indexOf('"') >= 0) {
+            quoting = Quoting.BACK_TICK_BACKSLASH;
+        } else if (this.sql.indexOf('`') >= 0) {
             quoting = Quoting.BACK_TICK;
         } else {
             quoting = Quoting.DOUBLE_QUOTE;

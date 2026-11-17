@@ -42,4 +42,13 @@ final class QuotingOfTest {
             new HasValue<>(Quoting.DOUBLE_QUOTE)
         ).affirm();
     }
+
+    @Test
+    void readsBackTicksWithStringsInDoubleQuotes() {
+        new Assertion<>(
+            "must read back ticks with double-quoted strings, as in MySQL",
+            new QuotingOf("SELECT `rank` FROM `guild` WHERE lvl = \"x\""),
+            new HasValue<>(Quoting.BACK_TICK_BACKSLASH)
+        ).affirm();
+    }
 }
