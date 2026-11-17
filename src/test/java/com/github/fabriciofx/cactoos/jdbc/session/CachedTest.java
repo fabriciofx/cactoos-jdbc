@@ -293,4 +293,76 @@ final class CachedTest {
             ).affirm();
         }
     }
+
+    @Test
+    void doesNotShareCacheBetweenDistinctColumnOrders() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (9, 'Hobbie')")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(session, new QueryOf("SELECT name, id FROM pilot"))
+            ).value();
+            new Assertion<>(
+                "must not serve a cached select with another column order",
+                new ResultSetAsValue<>(
+                    new Select(session, new QueryOf("SELECT id, name FROM pilot"))
+                ),
+                new HasValue<>(9)
+            ).affirm();
+        }
+    }
+
+    @Test
+    void doesNotShareCacheBetweenSwappedParamConditions() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE grid (x INT, y INT)")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO grid (x, y) VALUES (3, 8), (8, 3)")
+            ).execute();
+            new ResultSetAsValue<>(
+                new Select(
+                    session,
+                    new NamedQuery(
+                        "SELECT x FROM grid WHERE x = :p AND y = :q",
+                        new IntParam("p", 3),
+                        new IntParam("q", 8)
+                    )
+                )
+            ).value();
+            new Assertion<>(
+                "must not serve a cached select whose params match other columns",
+                new ResultSetAsValue<>(
+                    new Select(
+                        session,
+                        new NamedQuery(
+                            "SELECT x FROM grid WHERE y = :p AND x = :q",
+                            new IntParam("p", 3),
+                            new IntParam("q", 8)
+                        )
+                    )
+                ),
+                new HasValue<>(8)
+            ).affirm();
+        }
+    }
 }

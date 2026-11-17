@@ -42,11 +42,6 @@ public final class OrderedSelect implements Scalar<SqlNode> {
 
     @Override
     public SqlNode value() throws Exception {
-        if (this.select.getSelectList() != null) {
-            this.select.setSelectList(
-                new SortedSelect(this.select.getSelectList()).value()
-            );
-        }
         if (this.select.getFrom() != null) {
             this.select.setFrom(
                 new SortedFrom(this.shuttle, this.select.getFrom()).value()

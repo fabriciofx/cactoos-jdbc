@@ -116,7 +116,9 @@ public final class SortedExpression implements Scalar<SqlNode> {
             for (final SqlNode operand : operands) {
                 sorted.add(new SortedExpression(shutt, operand).value());
             }
-            sorted.sort(Comparator.comparing(SqlNode::toString));
+            if (new Reorderable(operands).value()) {
+                sorted.sort(Comparator.comparing(SqlNode::toString));
+            }
             result = SortedExpression.tree(sorted, call.getOperator());
         }
         return result;

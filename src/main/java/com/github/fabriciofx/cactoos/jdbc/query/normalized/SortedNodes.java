@@ -50,7 +50,9 @@ public final class SortedNodes implements Scalar<SqlNodeList> {
                 ).value()
             );
         }
-        sorted.sort(Comparator.comparing(SqlNode::toString));
+        if (new Reorderable(this.list.getList()).value()) {
+            sorted.sort(Comparator.comparing(SqlNode::toString));
+        }
         return new SqlNodeList(sorted, this.list.getParserPosition());
     }
 }

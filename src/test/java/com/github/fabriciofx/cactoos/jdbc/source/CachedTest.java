@@ -114,7 +114,7 @@ final class CachedTest {
                 ResultSet rset = new Select(
                     session,
                     new NamedQuery(
-                        "SELECT name, id FROM person WHERE id = :id",
+                        "SELECT id, name FROM person WHERE id = :id",
                         new IntParam("id", 1)
                     )
                 ).execute()
