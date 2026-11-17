@@ -8,7 +8,9 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedOrder;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.GroupedSelect;
+import com.github.fabriciofx.cactoos.jdbc.query.paginated.LimitDialect;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.UngroupedSelect;
+import com.github.fabriciofx.cactoos.jdbc.scalar.HasLimit;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
@@ -68,22 +70,25 @@ public final class Paginated implements Query {
                     );
                 }
                 final Text paginated;
-                if (select.getFetch() != null || select.getOffset() != null) {
+                if (new HasLimit(stmt).value()) {
                     paginated = new TextOf(query.sql());
                 } else if (select.getGroup() != null && !select.getGroup()
                     .isEmpty()) {
                     if (stmt instanceof SqlOrderBy order) {
                         paginated = new Pretty(
-                            new GroupedOrder(order, page, size)
+                            new GroupedOrder(order, page, size),
+                            new LimitDialect()
                         );
                     } else {
                         paginated = new Pretty(
-                            new GroupedSelect(select, page, size)
+                            new GroupedSelect(select, page, size),
+                            new LimitDialect()
                         );
                     }
                 } else {
                     paginated = new Pretty(
-                        new UngroupedSelect(select, page, size)
+                        new UngroupedSelect(select, page, size),
+                        new LimitDialect()
                     );
                 }
                 return paginated.asString();

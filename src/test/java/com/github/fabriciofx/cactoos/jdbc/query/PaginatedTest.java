@@ -27,7 +27,7 @@ final class PaginatedTest {
             new IsText(
                 """
                 SELECT *, COUNT(*) OVER () AS `__total_count__` \
-                FROM `EMPLOYEE` OFFSET 120 ROWS FETCH NEXT 40 ROWS ONLY\
+                FROM `EMPLOYEE` LIMIT 40 OFFSET 120\
                 """
             )
         ).affirm();
@@ -45,8 +45,7 @@ final class PaginatedTest {
             new IsText(
                 """
                 SELECT `NAME`, `ADDRESS`, COUNT(*) OVER () AS \
-                `__total_count__` FROM `EMPLOYEE` OFFSET 120 ROWS FETCH NEXT \
-                30 ROWS ONLY\
+                `__total_count__` FROM `EMPLOYEE` LIMIT 30 OFFSET 120\
                 """
             )
         ).affirm();
@@ -70,7 +69,7 @@ final class PaginatedTest {
                 """
                 SELECT `ID`, `NAME`, `EMAIL`, COUNT(*) OVER () AS \
                 `__total_count__` FROM `USERS` WHERE `STATUS` = 'active' \
-                OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY\
+                LIMIT 10 OFFSET 0\
                 """
             )
         ).affirm();
@@ -99,7 +98,7 @@ final class PaginatedTest {
                 SELECT `U`.`ID`, `U`.`NAME`, `U`.`EMAIL`, `O`.`ORDER_DATE`, \
                 COUNT(*) OVER () AS `__total_count__` FROM `USERS` AS `U` \
                 LEFT JOIN `ORDERS` AS `O` ON `U`.`ID` = `O`.`USER_ID` WHERE \
-                `U`.`STATUS` = 'active' OFFSET 20 ROWS FETCH NEXT 20 ROWS ONLY\
+                `U`.`STATUS` = 'active' LIMIT 20 OFFSET 20\
                 """
             )
         ).affirm();
@@ -129,8 +128,8 @@ final class PaginatedTest {
                 (SELECT `DEPARTMENT`, COUNT(*) AS `EMP_COUNT`, AVG(`SALARY`) \
                 AS `AVG_SALARY` FROM `EMPLOYEES` WHERE \
                 `HIRE_DATE` > '2023-01-01' GROUP BY `DEPARTMENT`) AS \
-                `__paginated_subquery__` ORDER BY `EMP_COUNT` DESC OFFSET 0 \
-                ROWS FETCH NEXT 5 ROWS ONLY\
+                `__paginated_subquery__` ORDER BY `EMP_COUNT` DESC LIMIT 5 \
+                OFFSET 0\
                 """
             )
         ).affirm();
@@ -194,8 +193,51 @@ final class PaginatedTest {
                 JOIN `LOCATION` AS `L` ON `D`.`LOCATION_ID` = `L`.`ID` FULL \
                 JOIN `COMPANY` AS `C` ON `L`.`COMPANY_ID` = `C`.`ID` GROUP \
                 BY `D`.`ID`, `D`.`NAME`) AS `__paginated_subquery__` ORDER \
-                BY `AVG_SALARY` DESC OFFSET 30 ROWS FETCH NEXT 15 ROWS ONLY\
+                BY `AVG_SALARY` DESC LIMIT 15 OFFSET 30\
                 """
+            )
+        ).affirm();
+    }
+
+    @Test
+    void keepsSelectAlreadyLimited() {
+        new Assertion<>(
+            "must not paginate again a select that already has LIMIT",
+            () -> new Paginated(
+                new QueryOf("SELECT name FROM planet LIMIT 9 OFFSET 27"),
+                3,
+                11
+            ).sql(),
+            new IsText("SELECT name FROM planet LIMIT 9 OFFSET 27")
+        ).affirm();
+    }
+
+    @Test
+    void keepsOrderedSelectAlreadyLimited() {
+        new Assertion<>(
+            "must not paginate again an ordered select that already has LIMIT",
+            () -> new Paginated(
+                new QueryOf("SELECT name FROM moon ORDER BY name LIMIT 4"),
+                2,
+                17
+            ).sql(),
+            new IsText("SELECT name FROM moon ORDER BY name LIMIT 4")
+        ).affirm();
+    }
+
+    @Test
+    void keepsSelectAlreadyFetched() {
+        new Assertion<>(
+            "must not paginate again a select that already has FETCH",
+            () -> new Paginated(
+                new QueryOf(
+                    "SELECT id FROM star OFFSET 6 ROWS FETCH NEXT 2 ROWS ONLY"
+                ),
+                5,
+                8
+            ).sql(),
+            new IsText(
+                "SELECT id FROM star OFFSET 6 ROWS FETCH NEXT 2 ROWS ONLY"
             )
         ).affirm();
     }
