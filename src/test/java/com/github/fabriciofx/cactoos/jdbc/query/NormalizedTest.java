@@ -581,4 +581,30 @@ final class NormalizedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void normalizesLimitWithoutOrderBy() throws Exception {
+        new Assertion<>(
+            "must not print an empty ORDER BY for a select with only LIMIT",
+            () -> new Normalized(
+                new QueryOf("SELECT y, x FROM glacier LIMIT 4")
+            ).sql(),
+            new IsText("SELECT `X`, `Y` FROM `GLACIER` FETCH NEXT 4 ROWS ONLY")
+        ).affirm();
+    }
+
+    @Test
+    void normalizesOffsetFetchWithoutOrderBy() throws Exception {
+        new Assertion<>(
+            "must not print an empty ORDER BY for a select with only FETCH",
+            () -> new Normalized(
+                new QueryOf(
+                    "SELECT q FROM fjord OFFSET 9 ROWS FETCH NEXT 3 ROWS ONLY"
+                )
+            ).sql(),
+            new IsText(
+                "SELECT `Q` FROM `FJORD` OFFSET 9 ROWS FETCH NEXT 3 ROWS ONLY"
+            )
+        ).affirm();
+    }
 }

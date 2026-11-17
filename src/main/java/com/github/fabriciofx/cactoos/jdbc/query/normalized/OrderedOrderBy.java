@@ -43,15 +43,20 @@ public final class OrderedOrderBy implements Scalar<SqlNode> {
         final SqlNode ordered;
         final SqlNode query = this.order.query.accept(this.shuttle);
         if (new OrderBy(this.order).semantic(query)) {
-            final SqlNodeList sorted = new SqlNodeList(
-                this.order.orderList.getParserPosition()
-            );
-            for (final SqlNode node : this.order.orderList) {
-                sorted.add(
-                    new Unchecked<>(
-                        new SortedExpression(this.shuttle, node)
-                    ).value()
+            final SqlNodeList sorted;
+            if (this.order.orderList.isEmpty()) {
+                sorted = SqlNodeList.EMPTY;
+            } else {
+                sorted = new SqlNodeList(
+                    this.order.orderList.getParserPosition()
                 );
+                for (final SqlNode node : this.order.orderList) {
+                    sorted.add(
+                        new Unchecked<>(
+                            new SortedExpression(this.shuttle, node)
+                        ).value()
+                    );
+                }
             }
             ordered = new SqlOrderBy(
                 this.order.getParserPosition(),
