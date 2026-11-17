@@ -13,11 +13,14 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.cactoos.Scalar;
 
 /**
- * UngroupedSelect.
+ * FlatSelect.
+ *
+ * <p>The page of a select without GROUP BY or DISTINCT. The total is counted
+ * in the select itself, with no subquery.</p>
  *
  * @since 0.9.0
  */
-public final class UngroupedSelect implements Scalar<SqlNode> {
+public final class FlatSelect implements Scalar<SqlNode> {
 
     /**
      * Select.
@@ -41,11 +44,7 @@ public final class UngroupedSelect implements Scalar<SqlNode> {
      * @param page Page number
      * @param size Rows per page
      */
-    public UngroupedSelect(
-        final SqlSelect select,
-        final int page,
-        final int size
-    ) {
+    public FlatSelect(final SqlSelect select, final int page, final int size) {
         this.select = select;
         this.page = page;
         this.size = size;

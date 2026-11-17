@@ -12,18 +12,18 @@ import org.llorllale.cactoos.matchers.Assertion;
 import org.llorllale.cactoos.matchers.IsText;
 
 /**
- * {@link UngroupedOrder} tests.
+ * {@link FlatOrder} tests.
  *
  * @since 0.9.0
  */
-final class UngroupedOrderTest {
+final class FlatOrderTest {
 
     @Test
     void keepsOrderOfPaginatedSelect() throws Exception {
         new Assertion<>(
             "must keep the ORDER BY of the select in its page",
             new Pretty(
-                new UngroupedOrder(
+                new FlatOrder(
                     (SqlOrderBy) SqlParser.create(
                         "SELECT name FROM satellite ORDER BY launch DESC"
                     ).parseQuery(),

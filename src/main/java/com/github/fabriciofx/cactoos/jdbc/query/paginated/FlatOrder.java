@@ -11,14 +11,15 @@ import org.apache.calcite.sql.SqlSelect;
 import org.cactoos.Scalar;
 
 /**
- * UngroupedOrder.
+ * FlatOrder.
  *
- * <p>The page of a select without GROUP BY that keeps its ORDER BY, which
- * Calcite holds in a {@link SqlOrderBy} around the select.</p>
+ * <p>The page of a select without GROUP BY or DISTINCT that keeps its
+ * ORDER BY, which Calcite holds in a {@link SqlOrderBy} around the
+ * select.</p>
  *
  * @since 0.9.0
  */
-public final class UngroupedOrder implements Scalar<SqlNode> {
+public final class FlatOrder implements Scalar<SqlNode> {
 
     /**
      * Ordered select.
@@ -42,11 +43,7 @@ public final class UngroupedOrder implements Scalar<SqlNode> {
      * @param page Page number
      * @param size Rows per page
      */
-    public UngroupedOrder(
-        final SqlOrderBy order,
-        final int page,
-        final int size
-    ) {
+    public FlatOrder(final SqlOrderBy order, final int page, final int size) {
         this.order = order;
         this.page = page;
         this.size = size;
@@ -55,7 +52,7 @@ public final class UngroupedOrder implements Scalar<SqlNode> {
     @Override
     public SqlNode value() throws Exception {
         final SqlSelect select = (SqlSelect) this.order.query;
-        return new UngroupedSelect(
+        return new FlatSelect(
             new SqlSelect(
                 select.getParserPosition(),
                 new SqlNodeList(select.getParserPosition()),
