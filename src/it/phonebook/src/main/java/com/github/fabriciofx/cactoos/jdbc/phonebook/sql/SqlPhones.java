@@ -67,19 +67,19 @@ public final class SqlPhones implements Phones {
     @Override
     public Phone get(final int index) throws Exception {
         try (Session session = this.source.session()) {
-            final Scalar<String> number = new ResultSetAsValue<>(
+            final Scalar<UUID> phone = new ResultSetAsValue<>(
                 new Select(
                     session,
                     new NamedQuery(
                         new FormattedText(
-                            "SELECT number FROM phone WHERE contact_id = :contact_id ORDER BY number OFFSET %d ROWS FETCH FIRST 1 ROWS ONLY",
+                            "SELECT id FROM phone WHERE contact_id = :contact_id ORDER BY number OFFSET %d ROWS FETCH FIRST 1 ROWS ONLY",
                             index
                         ),
                         new UuidParam("contact_id", this.id)
                     )
                 )
             );
-            return new SqlPhone(this.source, this.id, number.value());
+            return new SqlPhone(this.source, phone.value());
         }
     }
 
@@ -89,7 +89,8 @@ public final class SqlPhones implements Phones {
             new Insert(
                 session,
                 new NamedQuery(
-                    "INSERT INTO phone (contact_id, number) VALUES (:contact_id, :number)",
+                    "INSERT INTO phone (id, contact_id, number) VALUES (:id, :contact_id, :number)",
+                    new UuidParam("id", UUID.randomUUID()),
                     new UuidParam("contact_id", this.id),
                     new TextParam("number", number)
                 )

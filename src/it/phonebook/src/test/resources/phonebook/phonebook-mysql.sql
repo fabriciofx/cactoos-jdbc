@@ -7,10 +7,12 @@ CREATE TABLE contact (
 );
 
 CREATE TABLE phone (
+  id BINARY(16) NOT NULL,
   contact_id BINARY(16) NOT NULL,
   number VARCHAR(10) NOT NULL,
   CONSTRAINT fk_phone_contact FOREIGN KEY(contact_id) REFERENCES contact(id),
-  CONSTRAINT pk_phone PRIMARY KEY(contact_id, number)
+  CONSTRAINT pk_phone PRIMARY KEY(id),
+  CONSTRAINT uk_phone_number UNIQUE(contact_id, number)
 );
 
 INSERT INTO contact(id, name)

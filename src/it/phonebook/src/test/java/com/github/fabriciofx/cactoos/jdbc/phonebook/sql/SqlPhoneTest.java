@@ -5,6 +5,7 @@
 package com.github.fabriciofx.cactoos.jdbc.phonebook.sql;
 
 import com.github.fabriciofx.cactoos.jdbc.phonebook.Contact;
+import com.github.fabriciofx.cactoos.jdbc.phonebook.Phone;
 import com.github.fabriciofx.cactoos.jdbc.source.NoAuth;
 import com.github.fabriciofx.fake.server.Server;
 import com.github.fabriciofx.fake.server.db.script.SqlScript;
@@ -66,6 +67,32 @@ final class SqlPhoneTest {
                 XhtmlMatchers.xhtml(contact.phones().get(0).xml()),
                 XhtmlMatchers.hasXPath(
                     "/phones[count(phone)=1]/phone/number[text()='94440001']"
+                )
+            ).affirm();
+        }
+    }
+
+    @Test
+    void keepsRepresentingPhoneAfterUpdate() throws Exception {
+        try (
+            Server<DataSource> server = new H2Server(
+                new SqlScript(
+                    new ResourceOf("phonebook/phonebook-h2.sql")
+                )
+            )
+        ) {
+            server.start();
+            final Contact contact = new SqlPhonebook(
+                new NoAuth(server.resource())
+            ).create("Ken Thompson");
+            contact.phones().add("92220004");
+            final Phone phone = contact.phones().get(0);
+            phone.update("98880007");
+            new Assertion<>(
+                "must not lose track of the phone after updating its number",
+                XhtmlMatchers.xhtml(phone.xml()),
+                XhtmlMatchers.hasXPath(
+                    "/phones/phone/number[text()='98880007']"
                 )
             ).affirm();
         }

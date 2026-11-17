@@ -30,30 +30,19 @@ public final class SqlPhone implements Phone {
     private final Source source;
 
     /**
-     * Contact's ID.
+     * Phone's ID.
      */
     private final UUID id;
-
-    /**
-     * Phone num.
-     */
-    private final String num;
 
     /**
      * Ctor.
      *
      * @param source A Source
-     * @param contact A Contact's ID
-     * @param number Phone number
+     * @param id A Phone's ID
      */
-    public SqlPhone(
-        final Source source,
-        final UUID contact,
-        final String number
-    ) {
+    public SqlPhone(final Source source, final UUID id) {
         this.source = source;
-        this.id = contact;
-        this.num = number;
+        this.id = id;
     }
 
     @Override
@@ -63,9 +52,8 @@ public final class SqlPhone implements Phone {
                 new Select(
                     session,
                     new NamedQuery(
-                        "SELECT number FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
-                        new UuidParam("contact_id", this.id),
-                        new TextParam("number", this.num)
+                        "SELECT number FROM phone WHERE id = :id",
+                        new UuidParam("id", this.id)
                     )
                 ),
                 "phones",
@@ -80,9 +68,8 @@ public final class SqlPhone implements Phone {
             new Update(
                 session,
                 new NamedQuery(
-                    "DELETE FROM phone WHERE (contact_id = :contact_id) AND (number = :number)",
-                    new UuidParam("contact_id", this.id),
-                    new TextParam("number", this.num)
+                    "DELETE FROM phone WHERE id = :id",
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }
@@ -94,10 +81,9 @@ public final class SqlPhone implements Phone {
             new Update(
                 session,
                 new NamedQuery(
-                    "UPDATE phone SET number = :number WHERE (contact_id = :contact_id) AND (number = :current)",
+                    "UPDATE phone SET number = :number WHERE id = :id",
                     new TextParam("number", number),
-                    new UuidParam("contact_id", this.id),
-                    new TextParam("current", this.num)
+                    new UuidParam("id", this.id)
                 )
             ).execute();
         }
