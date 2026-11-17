@@ -12,6 +12,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.paginated.LimitDialect;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedOrder;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedSelect;
 import com.github.fabriciofx.cactoos.jdbc.scalar.HasLimit;
+import com.github.fabriciofx.cactoos.jdbc.scalar.QuotingOf;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
@@ -56,11 +57,12 @@ public final class Paginated implements Query {
         this.origin = query;
         this.code = new Sticky(
             () -> {
+                final Quoting quoting = new QuotingOf(query.sql()).value();
                 final SqlNode stmt = SqlParser.create(
                     query.sql(),
                     SqlParser.config()
                         .withCaseSensitive(false)
-                        .withQuoting(Quoting.BACK_TICK)
+                        .withQuoting(quoting)
                         .withUnquotedCasing(Casing.UNCHANGED)
                         .withQuotedCasing(Casing.UNCHANGED)
                         .withConformance(SqlConformanceEnum.LENIENT)
@@ -84,22 +86,22 @@ public final class Paginated implements Query {
                 } else if (nested && stmt instanceof SqlOrderBy order) {
                     paginated = new Pretty(
                         new NestedOrder(order, page, size),
-                        new LimitDialect()
+                        new LimitDialect(quoting.string)
                     );
                 } else if (nested) {
                     paginated = new Pretty(
                         new NestedSelect(select, page, size),
-                        new LimitDialect()
+                        new LimitDialect(quoting.string)
                     );
                 } else if (stmt instanceof SqlOrderBy order) {
                     paginated = new Pretty(
                         new FlatOrder(order, page, size),
-                        new LimitDialect()
+                        new LimitDialect(quoting.string)
                     );
                 } else {
                     paginated = new Pretty(
                         new FlatSelect(select, page, size),
-                        new LimitDialect()
+                        new LimitDialect(quoting.string)
                     );
                 }
                 return paginated.asString();

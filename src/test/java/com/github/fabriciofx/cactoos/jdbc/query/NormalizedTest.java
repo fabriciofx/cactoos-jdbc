@@ -621,4 +621,15 @@ final class NormalizedTest {
             new IsText("SELECT r FROM rune WHERE k = 4 AND s = ?")
         ).affirm();
     }
+
+    @Test
+    void keepsDoubleQuotedIdentifiers() throws Exception {
+        new Assertion<>(
+            "must keep identifiers quoted with double quotes",
+            () -> new Normalized(
+                new QueryOf("SELECT \"Full Name\" FROM \"Person\" WHERE 3 < age")
+            ).sql(),
+            new IsText("SELECT \"Full Name\" FROM \"Person\" WHERE age > 3")
+        ).affirm();
+    }
 }

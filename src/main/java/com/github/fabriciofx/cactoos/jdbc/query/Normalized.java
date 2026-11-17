@@ -8,9 +8,11 @@ import com.github.fabriciofx.cactoos.jdbc.Params;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 import com.github.fabriciofx.cactoos.jdbc.query.normalized.Shuttle;
+import com.github.fabriciofx.cactoos.jdbc.scalar.QuotingOf;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
+import org.apache.calcite.sql.dialect.AnsiSqlDialect;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
@@ -43,17 +45,24 @@ public final class Normalized implements Query {
     public Normalized(final Query query) {
         this.origin = query;
         this.code = new Sticky(
-            () -> new Pretty(
-                SqlParser.create(
-                    query.sql(),
-                    SqlParser.config()
-                        .withCaseSensitive(false)
-                        .withQuoting(Quoting.BACK_TICK)
-                        .withUnquotedCasing(Casing.UNCHANGED)
-                        .withQuotedCasing(Casing.UNCHANGED)
-                        .withConformance(SqlConformanceEnum.LENIENT)
-                ).parseQuery().accept(new Shuttle())
-            ).asString()
+            () -> {
+                final Quoting quoting = new QuotingOf(query.sql()).value();
+                return new Pretty(
+                    () -> SqlParser.create(
+                        query.sql(),
+                        SqlParser.config()
+                            .withCaseSensitive(false)
+                            .withQuoting(quoting)
+                            .withUnquotedCasing(Casing.UNCHANGED)
+                            .withQuotedCasing(Casing.UNCHANGED)
+                            .withConformance(SqlConformanceEnum.LENIENT)
+                    ).parseQuery().accept(new Shuttle()),
+                    new AnsiSqlDialect(
+                        AnsiSqlDialect.DEFAULT_CONTEXT
+                            .withIdentifierQuoteString(quoting.string)
+                    )
+                ).asString();
+            }
         );
     }
 

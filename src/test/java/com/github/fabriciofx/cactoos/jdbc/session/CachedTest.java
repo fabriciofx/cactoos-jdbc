@@ -365,4 +365,33 @@ final class CachedTest {
             ).affirm();
         }
     }
+
+    @Test
+    void cachesSelectWithDoubleQuotedIdentifiers() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE \"Squad\" (\"Call Sign\" VARCHAR(20))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO \"Squad\" VALUES ('Red Leader')")
+            ).execute();
+            new Assertion<>(
+                "must cache a select with identifiers in double quotes",
+                new ResultSetAsValue<>(
+                    new Select(
+                        session,
+                        new QueryOf("SELECT \"Call Sign\" FROM \"Squad\"")
+                    )
+                ),
+                new HasValue<>("Red Leader")
+            ).affirm();
+        }
+    }
 }

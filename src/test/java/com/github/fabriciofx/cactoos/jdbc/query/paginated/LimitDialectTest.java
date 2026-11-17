@@ -30,4 +30,21 @@ final class LimitDialectTest {
             new IsText("SELECT NAME FROM COMET LIMIT 7 OFFSET 14")
         ).affirm();
     }
+
+    @Test
+    void printsIdentifiersWithGivenQuote() {
+        new Assertion<>(
+            "must quote identifiers with the given quote",
+            new Pretty(
+                () -> SqlParser.create(
+                    """
+                    SELECT "Tail Size" FROM "Comet" OFFSET 2 ROWS \
+                    FETCH NEXT 4 ROWS ONLY\
+                    """
+                ).parseQuery(),
+                new LimitDialect("\"")
+            ),
+            new IsText("SELECT \"Tail Size\" FROM \"Comet\" LIMIT 4 OFFSET 2")
+        ).affirm();
+    }
 }

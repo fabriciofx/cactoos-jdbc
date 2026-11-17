@@ -193,4 +193,17 @@ final class TableNamesTest {
             new Matches<>(new ListOf<>("RECENT_ORDERS", "ORDERS", "USERS"))
         ).affirm();
     }
+
+    @Test
+    void tableNamesWithDoubleQuotes() throws Exception {
+        new Assertion<>(
+            "must get table names quoted with double quotes",
+            new HasValues<>(
+                new TableNames(
+                    new QueryOf("SELECT \"Lens\" FROM \"Telescope\"")
+                ).value()
+            ),
+            new Matches<>(new ListOf<>("Telescope"))
+        ).affirm();
+    }
 }

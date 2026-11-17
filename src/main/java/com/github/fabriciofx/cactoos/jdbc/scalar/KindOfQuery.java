@@ -5,7 +5,6 @@
 package com.github.fabriciofx.cactoos.jdbc.scalar;
 
 import com.github.fabriciofx.cactoos.jdbc.Query;
-import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWith;
@@ -109,7 +108,7 @@ public final class KindOfQuery implements Scalar<SqlKind> {
                 normalized,
                 SqlParser.config()
                     .withConformance(SqlConformanceEnum.LENIENT)
-                    .withQuoting(Quoting.BACK_TICK)
+                    .withQuoting(new QuotingOf(normalized).value())
             );
             final SqlNode stmt = parser.parseStmt();
             kind = stmt.getKind();

@@ -24,7 +24,16 @@ public final class LimitDialect extends AnsiSqlDialect {
      * Ctor.
      */
     public LimitDialect() {
-        super(AnsiSqlDialect.DEFAULT_CONTEXT);
+        this("`");
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param quote The quote of identifiers
+     */
+    public LimitDialect(final String quote) {
+        super(AnsiSqlDialect.DEFAULT_CONTEXT.withIdentifierQuoteString(quote));
     }
 
     @Override

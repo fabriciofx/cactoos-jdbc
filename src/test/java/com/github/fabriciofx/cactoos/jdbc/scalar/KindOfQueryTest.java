@@ -151,4 +151,15 @@ final class KindOfQueryTest {
             new HasValue<>(SqlKind.ORDER_BY)
         ).affirm();
     }
+
+    @Test
+    void checkIfAStatementWithDoubleQuotesIsASelect() {
+        new Assertion<>(
+            "must check if statement with double quotes is a select",
+            () -> new KindOfQuery(
+                new QueryOf("SELECT \"Moon\" FROM \"Orbit\"")
+            ).value(),
+            new HasValue<>(SqlKind.SELECT)
+        ).affirm();
+    }
 }

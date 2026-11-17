@@ -311,4 +311,22 @@ final class PaginatedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void keepsDoubleQuotedIdentifiers() {
+        new Assertion<>(
+            "must keep identifiers quoted with double quotes",
+            () -> new Paginated(
+                new QueryOf("SELECT \"Full Name\", age FROM \"Person\""),
+                3,
+                5
+            ).sql(),
+            new IsText(
+                """
+                SELECT "Full Name", age, COUNT(*) OVER () AS __total_count__ \
+                FROM "Person" LIMIT 5 OFFSET 10\
+                """
+            )
+        ).affirm();
+    }
 }
