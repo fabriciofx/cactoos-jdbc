@@ -10,7 +10,6 @@ import com.github.fabriciofx.cactoos.jdbc.Plan;
 import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Table;
-import com.github.fabriciofx.cactoos.jdbc.plan.Simple;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.scalar.KindOfQuery;
 import com.github.fabriciofx.cactoos.jdbc.scalar.TableNames;
@@ -76,11 +75,9 @@ public final class Cached implements Session {
     public PreparedStatement prepared(final Plan plan) throws Exception {
         return switch (new KindOfQuery(plan.query()).value()) {
             case SELECT, WITH, ORDER_BY -> {
-                final Normalized normalized = new Normalized(plan.query());
                 yield new com.github.fabriciofx.cactoos.jdbc.prepared.Cached(
                     this.origin.prepared(plan),
-                    this.origin.prepared(new Simple(normalized)),
-                    normalized,
+                    new Normalized(plan.query()),
                     this.cache
                 );
             }

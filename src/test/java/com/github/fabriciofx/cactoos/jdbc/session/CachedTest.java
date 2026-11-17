@@ -12,6 +12,9 @@ import com.github.fabriciofx.cactoos.jdbc.Session;
 import com.github.fabriciofx.cactoos.jdbc.Source;
 import com.github.fabriciofx.cactoos.jdbc.Table;
 import com.github.fabriciofx.cactoos.jdbc.cache.TableStore;
+import com.github.fabriciofx.cactoos.jdbc.param.IntParam;
+import com.github.fabriciofx.cactoos.jdbc.param.TextParam;
+import com.github.fabriciofx.cactoos.jdbc.query.NamedQuery;
 import com.github.fabriciofx.cactoos.jdbc.query.Normalized;
 import com.github.fabriciofx.cactoos.jdbc.query.QueryOf;
 import com.github.fabriciofx.cactoos.jdbc.scalar.ResultSetAsValue;
@@ -230,5 +233,64 @@ final class CachedTest {
             ),
             new IsTrue()
         ).affirm();
+    }
+
+    @Test
+    void keepsColumnOrderOfCachedSelect() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (5, 'Biggs')")
+            ).execute();
+            new Assertion<>(
+                "must not reorder the columns of a cached select",
+                new ResultSetAsValue<>(
+                    new Select(session, new QueryOf("SELECT name, id FROM pilot"))
+                ),
+                new HasValue<>("Biggs")
+            ).affirm();
+        }
+    }
+
+    @Test
+    void bindsParamsInOrderOfCachedSelect() throws Exception {
+        try (
+            Session session = new Cached(
+                new NoAuth(new H2Source(new RandomName().asString())).session(),
+                new CacheOf<>(new TableStore())
+            )
+        ) {
+            new Update(
+                session,
+                new QueryOf("CREATE TABLE pilot (id INT, name VARCHAR(30))")
+            ).execute();
+            new Insert(
+                session,
+                new QueryOf("INSERT INTO pilot (id, name) VALUES (4, 'Wedge')")
+            ).execute();
+            new Assertion<>(
+                "must not bind params to reordered conditions of a select",
+                new ResultSetAsValue<>(
+                    new Select(
+                        session,
+                        new NamedQuery(
+                            "SELECT name FROM pilot WHERE name = :name AND id = :id",
+                            new TextParam("name", "Wedge"),
+                            new IntParam("id", 4)
+                        )
+                    )
+                ),
+                new HasValue<>("Wedge")
+            ).affirm();
+        }
     }
 }

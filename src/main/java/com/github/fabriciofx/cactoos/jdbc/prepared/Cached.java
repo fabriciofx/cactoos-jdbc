@@ -26,16 +26,10 @@ import java.sql.SQLException;
  * A {@link java.sql.PreparedStatement} decorator for cache query data.
  *
  * @since 0.9.0
- * @checkstyle ParameterNumberCheck (500 lines)
  * @checkstyle IllegalCatchCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidCatchingGenericException")
 public final class Cached extends PreparedEnvelope {
-
-    /**
-     * A normalized PreparedStatement to be stored into cache.
-     */
-    private final PreparedStatement stored;
 
     /**
      * The normalized SQL select.
@@ -51,18 +45,15 @@ public final class Cached extends PreparedEnvelope {
      * Ctor.
      *
      * @param origin Decorated PreparedStatement
-     * @param stored PreparedStatement to normalized SQL select
-     * @param normalized The normalized select SQL
+     * @param normalized The normalized select SQL, used as the cache key
      * @param cache The cache
      */
     public Cached(
         final PreparedStatement origin,
-        final PreparedStatement stored,
         final Normalized normalized,
         final Cache<Query, Table> cache
     ) {
         super(origin);
-        this.stored = stored;
         this.normalized = normalized;
         this.cache = cache;
     }
@@ -90,7 +81,7 @@ public final class Cached extends PreparedEnvelope {
             ) {
                 result = super.executeQuery();
             } else {
-                try (ResultSet rset = this.stored.executeQuery()) {
+                try (ResultSet rset = super.executeQuery()) {
                     final Table table = new ArrayedTable(rset);
                     result = new CachedResultSet(table.rows(), table.columns());
                     store.save(
