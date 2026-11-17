@@ -41,6 +41,16 @@ public final class Pretty implements Text {
      * @param node A Scalar of {@link SqlNode}
      */
     public Pretty(final Scalar<SqlNode> node) {
+        this(node, SqlDialect.DatabaseProduct.UNKNOWN.getDialect());
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param node A Scalar of {@link SqlNode}
+     * @param dialect The SQL dialect to print in
+     */
+    public Pretty(final Scalar<SqlNode> node, final SqlDialect dialect) {
         this.sql = new Sticky(
             () -> new Trimmed(
                 new Replaced(
@@ -49,10 +59,8 @@ public final class Pretty implements Text {
                             SqlPrettyWriter.config()
                                 .withIndentation(0)
                                 .withSelectListItemsOnSeparateLines(false)
-                                .withClauseStartsLine(false).withDialect(
-                                    SqlDialect.DatabaseProduct.UNKNOWN
-                                        .getDialect()
-                                )
+                                .withClauseStartsLine(false)
+                                .withDialect(dialect)
                         ).format(node.value())
                     ),
                     "\\s+",
