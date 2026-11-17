@@ -18,6 +18,7 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
 import org.cactoos.text.TextOf;
@@ -59,6 +60,7 @@ public final class Paginated implements Query {
                     SqlParser.config()
                         .withCaseSensitive(false)
                         .withQuoting(Quoting.BACK_TICK)
+                        .withConformance(SqlConformanceEnum.LENIENT)
                 ).parseQuery();
                 final SqlSelect select;
                 if (stmt instanceof SqlOrderBy rdr) {

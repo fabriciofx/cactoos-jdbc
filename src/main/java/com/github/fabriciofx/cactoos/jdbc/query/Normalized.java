@@ -11,6 +11,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.normalized.Shuttle;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.cactoos.Text;
 import org.cactoos.text.Sticky;
 
@@ -47,6 +48,7 @@ public final class Normalized implements Query {
                     SqlParser.config()
                         .withCaseSensitive(false)
                         .withQuoting(Quoting.BACK_TICK)
+                        .withConformance(SqlConformanceEnum.LENIENT)
                 ).parseQuery().accept(new Shuttle())
             ).asString()
         );

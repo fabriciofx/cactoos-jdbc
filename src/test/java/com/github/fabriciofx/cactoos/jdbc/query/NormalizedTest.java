@@ -565,4 +565,20 @@ final class NormalizedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void normalizesLimitWithOffsetAndCount() throws Exception {
+        new Assertion<>(
+            "must normalize a select with LIMIT offset, count",
+            () -> new Normalized(
+                new QueryOf("SELECT b, a FROM dune ORDER BY a LIMIT 30, 6")
+            ).sql(),
+            new IsText(
+                """
+                SELECT `A`, `B` FROM `DUNE` ORDER BY `A` OFFSET 30 ROWS FETCH \
+                NEXT 6 ROWS ONLY\
+                """
+            )
+        ).affirm();
+    }
 }

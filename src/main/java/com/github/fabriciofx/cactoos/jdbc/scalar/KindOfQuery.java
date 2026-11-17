@@ -108,7 +108,7 @@ public final class KindOfQuery implements Scalar<SqlKind> {
             final SqlParser parser = SqlParser.create(
                 normalized,
                 SqlParser.config()
-                    .withConformance(SqlConformanceEnum.DEFAULT)
+                    .withConformance(SqlConformanceEnum.LENIENT)
                     .withQuoting(Quoting.BACK_TICK)
             );
             final SqlNode stmt = parser.parseStmt();

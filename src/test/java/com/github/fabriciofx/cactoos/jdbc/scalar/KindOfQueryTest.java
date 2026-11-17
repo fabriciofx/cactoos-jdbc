@@ -140,4 +140,15 @@ final class KindOfQueryTest {
             new HasValue<>(SqlKind.DELETE)
         ).affirm();
     }
+
+    @Test
+    void checkIfAStatementWithLimitOffsetAndCountIsAnOrderBy() {
+        new Assertion<>(
+            "must check if statement with LIMIT offset, count is an order by",
+            () -> new KindOfQuery(
+                new QueryOf("SELECT id FROM canyon LIMIT 8, 4")
+            ).value(),
+            new HasValue<>(SqlKind.ORDER_BY)
+        ).affirm();
+    }
 }

@@ -280,4 +280,17 @@ final class PaginatedTest {
             )
         ).affirm();
     }
+
+    @Test
+    void keepsSelectLimitedWithOffsetAndCount() {
+        new Assertion<>(
+            "must not paginate again a select with LIMIT offset, count",
+            () -> new Paginated(
+                new QueryOf("SELECT name FROM crater LIMIT 15, 5"),
+                6,
+                12
+            ).sql(),
+            new IsText("SELECT name FROM crater LIMIT 15, 5")
+        ).affirm();
+    }
 }
