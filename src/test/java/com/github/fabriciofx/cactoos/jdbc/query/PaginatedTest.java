@@ -69,7 +69,7 @@ final class PaginatedTest {
                 """
                 SELECT `ID`, `NAME`, `EMAIL`, COUNT(*) OVER () AS \
                 `__total_count__` FROM `USERS` WHERE `STATUS` = 'active' \
-                LIMIT 10 OFFSET 0\
+                ORDER BY `NAME` LIMIT 10 OFFSET 0\
                 """
             )
         ).affirm();
@@ -98,7 +98,8 @@ final class PaginatedTest {
                 SELECT `U`.`ID`, `U`.`NAME`, `U`.`EMAIL`, `O`.`ORDER_DATE`, \
                 COUNT(*) OVER () AS `__total_count__` FROM `USERS` AS `U` \
                 LEFT JOIN `ORDERS` AS `O` ON `U`.`ID` = `O`.`USER_ID` WHERE \
-                `U`.`STATUS` = 'active' LIMIT 20 OFFSET 20\
+                `U`.`STATUS` = 'active' ORDER BY `O`.`ORDER_DATE` DESC \
+                LIMIT 20 OFFSET 20\
                 """
             )
         ).affirm();
