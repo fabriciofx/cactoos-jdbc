@@ -9,6 +9,7 @@ import com.github.fabriciofx.cactoos.jdbc.Query;
 import com.github.fabriciofx.cactoos.jdbc.bytes.QueryAsBytes;
 import com.github.fabriciofx.cactoos.jdbc.query.normalized.Shuttle;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
+import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
@@ -48,6 +49,8 @@ public final class Normalized implements Query {
                     SqlParser.config()
                         .withCaseSensitive(false)
                         .withQuoting(Quoting.BACK_TICK)
+                        .withUnquotedCasing(Casing.UNCHANGED)
+                        .withQuotedCasing(Casing.UNCHANGED)
                         .withConformance(SqlConformanceEnum.LENIENT)
                 ).parseQuery().accept(new Shuttle())
             ).asString()

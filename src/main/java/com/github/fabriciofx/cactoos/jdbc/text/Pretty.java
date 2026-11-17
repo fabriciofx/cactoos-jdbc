@@ -60,6 +60,7 @@ public final class Pretty implements Text {
                                 .withIndentation(0)
                                 .withSelectListItemsOnSeparateLines(false)
                                 .withClauseStartsLine(false)
+                                .withQuoteAllIdentifiers(false)
                                 .withDialect(dialect)
                         ).format(node.value())
                     ),

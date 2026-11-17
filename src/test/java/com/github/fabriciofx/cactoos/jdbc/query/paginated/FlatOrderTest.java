@@ -34,8 +34,8 @@ final class FlatOrderTest {
             ),
             new IsText(
                 """
-                SELECT `NAME`, COUNT(*) OVER () AS `__total_count__` \
-                FROM `SATELLITE` ORDER BY `LAUNCH` DESC LIMIT 9 OFFSET 45\
+                SELECT NAME, COUNT(*) OVER () AS __total_count__ \
+                FROM SATELLITE ORDER BY LAUNCH DESC LIMIT 9 OFFSET 45\
                 """
             )
         ).affirm();

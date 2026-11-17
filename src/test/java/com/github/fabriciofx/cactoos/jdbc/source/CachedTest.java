@@ -129,7 +129,7 @@ final class CachedTest {
             new HasString(
                 """
                 Checking if cache has a value for key \
-                '423915ac363acf6f': false\
+                'dabb90a0938011ef': false\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -138,7 +138,7 @@ final class CachedTest {
             "must store a cache value",
             new HasString(
                 """
-                Storing in cache with key '423915ac363acf6f' and value\
+                Storing in cache with key 'dabb90a0938011ef' and value\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -148,7 +148,7 @@ final class CachedTest {
             new HasString(
                 """
                 Checking if cache has a value for key \
-                '423915ac363acf6f': true\
+                'dabb90a0938011ef': true\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -157,7 +157,7 @@ final class CachedTest {
             "must retrieve a cached value",
             new HasString(
                 """
-                Retrieving from cache with key '423915ac363acf6f' and value\
+                Retrieving from cache with key 'dabb90a0938011ef' and value\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -267,7 +267,7 @@ final class CachedTest {
             new HasString(
                 """
                 Checking if cache has a value for key \
-                '4fdf480b89704977': false\
+                '8fb3463209e9df0d': false\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -276,7 +276,7 @@ final class CachedTest {
             "must store a cache value",
             new HasString(
                 """
-                Storing in cache with key '4fdf480b89704977' and value\
+                Storing in cache with key '8fb3463209e9df0d' and value\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -286,7 +286,7 @@ final class CachedTest {
             new HasString(
                 """
                 Checking if cache has a value for key \
-                '4fdf480b89704977': true\
+                '8fb3463209e9df0d': true\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -295,7 +295,7 @@ final class CachedTest {
             "must retrieve a cached value",
             new HasString(
                 """
-                Retrieving from cache with key '4fdf480b89704977' and value\
+                Retrieving from cache with key '8fb3463209e9df0d' and value\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))
@@ -305,7 +305,7 @@ final class CachedTest {
             new HasString(
                 """
                 Invalidating 1 cache entries with keys: \
-                '4fdf480b89704977'\
+                '8fb3463209e9df0d'\
                 """
             ),
             new Matches<>(new TextOf(logger.toString()))

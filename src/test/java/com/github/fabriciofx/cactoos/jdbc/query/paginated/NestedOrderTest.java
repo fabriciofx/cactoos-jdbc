@@ -37,9 +37,9 @@ final class NestedOrderTest {
             ),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT `ORBIT`, COUNT(*) AS `ROCKS` FROM `ASTEROID` GROUP BY \
-                `ORBIT`) AS `__paginated_subquery__` ORDER BY `ROCKS` DESC \
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT ORBIT, COUNT(*) AS ROCKS FROM ASTEROID GROUP BY \
+                ORBIT) AS __paginated_subquery__ ORDER BY ROCKS DESC \
                 LIMIT 9 OFFSET 18\
                 """
             )
@@ -62,9 +62,9 @@ final class NestedOrderTest {
             ),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT DISTINCT `TAIL` FROM `COMET`) AS \
-                `__paginated_subquery__` ORDER BY `TAIL` LIMIT 2 OFFSET 12\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT DISTINCT TAIL FROM COMET) AS \
+                __paginated_subquery__ ORDER BY TAIL LIMIT 2 OFFSET 12\
                 """
             )
         ).affirm();

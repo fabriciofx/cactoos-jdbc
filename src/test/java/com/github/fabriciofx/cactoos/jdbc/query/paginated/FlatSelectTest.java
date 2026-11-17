@@ -34,8 +34,8 @@ final class FlatSelectTest {
             ),
             new IsText(
                 """
-                SELECT `NAME`, `MASS`, COUNT(*) OVER () AS `__total_count__` \
-                FROM `PLANET` WHERE `MASS` > 3 LIMIT 6 OFFSET 18\
+                SELECT NAME, MASS, COUNT(*) OVER () AS __total_count__ \
+                FROM PLANET WHERE MASS > 3 LIMIT 6 OFFSET 18\
                 """
             )
         ).affirm();

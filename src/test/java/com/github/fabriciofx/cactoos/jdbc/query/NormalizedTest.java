@@ -23,7 +23,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT * FROM person WHERE id = 1")
             ).sql(),
-            new IsText("SELECT * FROM `PERSON` WHERE `ID` = 1")
+            new IsText("SELECT * FROM person WHERE id = 1")
         ).affirm();
     }
 
@@ -34,7 +34,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT id, name FROM person WHERE id = 1")
             ).sql(),
-            new IsText("SELECT `ID`, `NAME` FROM `PERSON` WHERE `ID` = 1")
+            new IsText("SELECT id, name FROM person WHERE id = 1")
         ).affirm();
     }
 
@@ -45,7 +45,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT name, id FROM person WHERE 1 = id")
             ).sql(),
-            new IsText("SELECT `ID`, `NAME` FROM `PERSON` WHERE `ID` = 1")
+            new IsText("SELECT id, name FROM person WHERE id = 1")
         ).affirm();
     }
 
@@ -56,7 +56,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT * FROM t WHERE b = a - 1")
             ).sql(),
-            new IsText("SELECT * FROM `T` WHERE `B` = `A` - 1")
+            new IsText("SELECT * FROM t WHERE b = a - 1")
         ).affirm();
     }
 
@@ -70,7 +70,7 @@ final class NormalizedTest {
                     new IntParam("id", 1)
                 )
             ).sql(),
-            new IsText("SELECT `ID`, `NAME` FROM `PERSON` WHERE `ID` = ?")
+            new IsText("SELECT id, name FROM person WHERE id = ?")
         ).affirm();
     }
 
@@ -81,7 +81,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT d, b, c, a FROM person WHERE a = 1")
             ).sql(),
-            new IsText("SELECT `A`, `B`, `C`, `D` FROM `PERSON` WHERE `A` = 1")
+            new IsText("SELECT a, b, c, d FROM person WHERE a = 1")
         ).affirm();
     }
 
@@ -111,9 +111,9 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `CARRIER`, `NAME`, `NUMBER` FROM `CONTACT` INNER \
-                JOIN `PHONE` ON `CONTACT`.`ID` = `PHONE`.`CONTACT_ID` \
-                WHERE `CONTACT`.`ID` = 123\
+                SELECT carrier, name, number FROM contact INNER \
+                JOIN phone ON contact.id = phone.contact_id \
+                WHERE contact.id = 123\
                 """
             )
         ).affirm();
@@ -130,8 +130,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `A`, `B`, `C`, `D` FROM `PERSON` \
-                WHERE `A` = 1 AND `B` = 2\
+                SELECT a, b, c, d FROM `PERSON` \
+                WHERE a = 1 AND b = 2\
                 """
             )
         ).affirm();
@@ -148,8 +148,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `A`, `B`, `C`, `D` FROM `PERSON` \
-                WHERE `A` = 1 OR `B` = 2\
+                SELECT a, b, c, d FROM `PERSON` \
+                WHERE a = 1 OR b = 2\
                 """
             )
         ).affirm();
@@ -169,8 +169,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `AGE`, `NAME` FROM `USERS` WHERE (`AGE` = 30 \
-                OR `CITY` = 'NYC') AND `NAME` = 'John'\
+                SELECT age, name FROM users WHERE (age = 30 \
+                OR city = 'NYC') AND name = 'John'\
                 """
             )
         ).affirm();
@@ -190,8 +190,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `AGE`, `CITY`, `NAME` FROM `USERS` WHERE `AGE` = 30 OR \
-                `CITY` = 'NYC' OR `NAME` = 'John'\
+                SELECT age, city, name FROM users WHERE age = 30 OR \
+                city = 'NYC' OR name = 'John'\
                 """
             )
         ).affirm();
@@ -254,21 +254,21 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                WITH `ACTIVE_CUSTOMERS` AS (SELECT `C`.`COUNTRY`, `C`.`ID`, \
-                `C`.`NAME`, `C`.`SEGMENT` FROM `CUSTOMERS` AS `C` WHERE \
-                `C`.`STATUS` = 'ACTIVE'), `RECENT_ORDERS` AS (SELECT \
-                `O`.`CREATED_AT`, `O`.`CUSTOMER_ID`, `O`.`ID` FROM `ORDERS` \
-                AS `O` WHERE `O`.`CREATED_AT` >= DATE '2024-01-01') SELECT \
-                `AC`.`COUNTRY`, `RO`.`CREATED_AT`, `AC`.`ID` AS `CUSTOMER_ID`, \
-                `AC`.`NAME` AS `CUSTOMER_NAME`, `RO`.`ID` AS `ORDER_ID`, \
-                `OI`.`PRODUCT_ID`, `OI`.`QUANTITY`, `AC`.`SEGMENT`, \
-                `OI`.`UNIT_PRICE` FROM `ACTIVE_CUSTOMERS` AS `AC` INNER JOIN \
-                `RECENT_ORDERS` AS `RO` ON `RO`.`CUSTOMER_ID` = `AC`.`ID` \
-                INNER JOIN `ORDER_ITEMS` AS `OI` ON `OI`.`ORDER_ID` = \
-                `RO`.`ID` WHERE EXISTS (SELECT 1 FROM `PRODUCTS` AS `P` \
-                WHERE `P`.`ACTIVE` = TRUE AND `P`.`ID` = `OI`.`PRODUCT_ID`) \
-                AND `AC`.`COUNTRY` = 'BR' AND `AC`.`SEGMENT` IN ('ENTERPRISE', \
-                'SMB') AND `OI`.`UNIT_PRICE` > 100 ORDER BY `RO`.`CREATED_AT` \
+                WITH active_customers AS (SELECT c.country, c.id, \
+                c.name, c.segment FROM customers AS c WHERE \
+                c.status = 'ACTIVE'), recent_orders AS (SELECT \
+                o.created_at, o.customer_id, o.id FROM orders \
+                AS o WHERE o.created_at >= DATE '2024-01-01') SELECT \
+                ac.country, ro.created_at, ac.id AS customer_id, \
+                ac.name AS customer_name, ro.id AS order_id, \
+                oi.product_id, oi.quantity, ac.segment, \
+                oi.unit_price FROM active_customers AS ac INNER JOIN \
+                recent_orders AS ro ON ro.customer_id = ac.id \
+                INNER JOIN order_items AS oi ON oi.order_id = \
+                ro.id WHERE EXISTS (SELECT 1 FROM products AS p \
+                WHERE p.active = TRUE AND p.id = oi.product_id) \
+                AND ac.country = 'BR' AND ac.segment IN ('ENTERPRISE', \
+                'SMB') AND oi.unit_price > 100 ORDER BY ro.created_at \
                 DESC OFFSET 20 ROWS FETCH NEXT 50 ROWS ONLY\
                 """
             )
@@ -296,9 +296,9 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `DEPARTMENT`, `ID`, ROW_NUMBER() OVER (PARTITION BY \
-                `DEPARTMENT` ORDER BY `SALARY` DESC) AS `RN`, `SALARY` FROM \
-                `EMPLOYEES`\
+                SELECT department, id, ROW_NUMBER() OVER (PARTITION BY \
+                department ORDER BY salary DESC) AS rn, salary FROM \
+                employees\
                 """
             )
         ).affirm();
@@ -326,9 +326,9 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `DEPARTMENT`, `ID`, ROW_NUMBER() OVER (PARTITION BY \
-                `DEPARTMENT` ORDER BY `SALARY` DESC) AS `RN`, `SALARY` \
-                FROM `EMPLOYEES` QUALIFY `RN` = 1\
+                SELECT department, id, ROW_NUMBER() OVER (PARTITION BY \
+                department ORDER BY salary DESC) AS rn, salary \
+                FROM employees QUALIFY rn = 1\
                 """
             )
         ).affirm();
@@ -341,7 +341,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT d, c, b, a FROM t ORDER BY b, a")
             ).sql(),
-            new IsText("SELECT `A`, `B`, `C`, `D` FROM `T`")
+            new IsText("SELECT a, b, c, d FROM t")
         ).affirm();
     }
 
@@ -354,7 +354,7 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `A`, `B`, `C` FROM `P` ORDER BY `X` DESC FETCH NEXT \
+                SELECT a, b, c FROM p ORDER BY x DESC FETCH NEXT \
                 10 ROWS ONLY\
                 """
             )
@@ -372,7 +372,7 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT * FROM `USERS` WHERE `AGE` >= 30 AND `STATUS` = 'ACTIVE'\
+                SELECT * FROM users WHERE age >= 30 AND status = 'ACTIVE'\
                 """
             )
         ).affirm();
@@ -385,7 +385,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT * FROM t ORDER BY a ASC")
             ).sql(),
-            new IsText("SELECT * FROM `T`")
+            new IsText("SELECT * FROM t")
         ).affirm();
     }
 
@@ -400,8 +400,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `P`.`ID` FROM `PERSON` AS `P` INNER JOIN `ADDRESS` AS \
-                `A` ON `A`.`PID` = `P`.`ID`\
+                SELECT p.id FROM person AS p INNER JOIN address AS \
+                a ON a.pid = p.id\
                 """
             )
         ).affirm();
@@ -414,7 +414,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT * FROM a LEFT JOIN b ON a.id = b.id")
             ).sql(),
-            new IsText("SELECT * FROM `A` LEFT JOIN `B` ON `A`.`ID` = `B`.`ID`")
+            new IsText("SELECT * FROM a LEFT JOIN b ON a.id = b.id")
         ).affirm();
     }
 
@@ -425,7 +425,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT DISTINCT country FROM person")
             ).sql(),
-            new IsText("SELECT DISTINCT `COUNTRY` FROM `PERSON`")
+            new IsText("SELECT DISTINCT country FROM person")
         ).affirm();
     }
 
@@ -436,7 +436,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT /* test */ id FROM t -- comment")
             ).sql(),
-            new IsText("SELECT `ID` FROM `T`")
+            new IsText("SELECT id FROM t")
         ).affirm();
     }
 
@@ -447,7 +447,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT * FROM t WHERE id IN (3, 1, 2)")
             ).sql(),
-            new IsText("SELECT * FROM `T` WHERE `ID` IN (3, 1, 2)")
+            new IsText("SELECT * FROM t WHERE id IN (3, 1, 2)")
         ).affirm();
     }
 
@@ -465,8 +465,8 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, ROW_NUMBER() OVER (PARTITION BY `DEPT` ORDER BY \
-                `SALARY` DESC) AS `RN` FROM `EMP`\
+                SELECT *, ROW_NUMBER() OVER (PARTITION BY dept ORDER BY \
+                salary DESC) AS rn FROM emp\
                 """
             )
         ).affirm();
@@ -503,14 +503,14 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `O`.`ID`, `C`.`NAME`, `P`.`NAME` AS `PRODUCT_NAME`, \
-                `R`.`REGION_NAME`, `S`.`NAME` AS `SUPPLIER_NAME` FROM `ORDERS` \
-                AS `O` INNER JOIN `CUSTOMERS` AS `C` ON `C`.`ID` = \
-                `O`.`CUSTOMER_ID` LEFT JOIN `PRODUCTS` AS `P` ON \
-                `P`.`ID` = `O`.`PRODUCT_ID` RIGHT JOIN `SUPPLIERS` AS `S` ON \
-                `S`.`ID` = `P`.`SUPPLIER_ID` FULL JOIN `REGIONS` AS `R` ON \
-                `R`.`ID` = `S`.`REGION_ID` WHERE `C`.`ACTIVE` = TRUE AND \
-                `O`.`CREATED_AT` >= DATE '2024-01-01'\
+                SELECT o.id, c.name, p.name AS product_name, \
+                r.region_name, s.name AS supplier_name FROM orders \
+                AS o INNER JOIN customers AS c ON c.id = \
+                o.customer_id LEFT JOIN products AS p ON \
+                p.id = o.product_id RIGHT JOIN suppliers AS s ON \
+                s.id = p.supplier_id FULL JOIN regions AS r ON \
+                r.id = s.region_id WHERE c.active = TRUE AND \
+                o.created_at >= DATE '2024-01-01'\
                 """
             )
         ).affirm();
@@ -549,18 +549,18 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT DISTINCT AVG(`SALARY`) AS `AVERAGE_SALARY`, \
-                `DEPARTMENT`, COUNT(DISTINCT `ROLE`) AS `DISTINCT_ROLES`, \
-                COUNT(`SALARY`) AS `EMPLOYEES_WITH_SALARY`, MAX(`SALARY`) AS \
-                `HIGHEST_SALARY`, MIN(`SALARY`) AS `LOWEST_SALARY`, \
-                PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY `SALARY`) AS \
-                `MEDIAN_SALARY`, STDDEV_POP(`SALARY`) AS `STDDEV_POPULATION`, \
-                STDDEV_SAMP(`SALARY`) AS `STDDEV_SAMPLE`, COUNT(*) AS \
-                `TOTAL_EMPLOYEES`, SUM(`SALARY`) AS `TOTAL_SALARY`, \
-                VAR_POP(`SALARY`) AS `VARIANCE_POPULATION`, \
-                VAR_SAMP(`SALARY`) AS `VARIANCE_SAMPLE` FROM `EMPLOYEES` \
-                WHERE `ACTIVE` = TRUE GROUP BY `DEPARTMENT` \
-                HAVING AVG(`SALARY`) > 3000\
+                SELECT DISTINCT AVG(salary) AS average_salary, \
+                department, COUNT(DISTINCT role) AS distinct_roles, \
+                COUNT(salary) AS employees_with_salary, MAX(salary) AS \
+                highest_salary, MIN(salary) AS lowest_salary, \
+                PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary) AS \
+                median_salary, STDDEV_POP(salary) AS stddev_population, \
+                STDDEV_SAMP(salary) AS stddev_sample, COUNT(*) AS \
+                total_employees, SUM(salary) AS total_salary, \
+                VAR_POP(salary) AS variance_population, \
+                VAR_SAMP(salary) AS variance_sample FROM employees \
+                WHERE active = TRUE GROUP BY department \
+                HAVING AVG(salary) > 3000\
                 """
             )
         ).affirm();
@@ -575,7 +575,7 @@ final class NormalizedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `A`, `B` FROM `DUNE` ORDER BY `A` OFFSET 30 ROWS FETCH \
+                SELECT a, b FROM dune ORDER BY a OFFSET 30 ROWS FETCH \
                 NEXT 6 ROWS ONLY\
                 """
             )
@@ -589,7 +589,7 @@ final class NormalizedTest {
             () -> new Normalized(
                 new QueryOf("SELECT y, x FROM glacier LIMIT 4")
             ).sql(),
-            new IsText("SELECT `X`, `Y` FROM `GLACIER` FETCH NEXT 4 ROWS ONLY")
+            new IsText("SELECT x, y FROM glacier FETCH NEXT 4 ROWS ONLY")
         ).affirm();
     }
 
@@ -603,8 +603,19 @@ final class NormalizedTest {
                 )
             ).sql(),
             new IsText(
-                "SELECT `Q` FROM `FJORD` OFFSET 9 ROWS FETCH NEXT 3 ROWS ONLY"
+                "SELECT q FROM fjord OFFSET 9 ROWS FETCH NEXT 3 ROWS ONLY"
             )
+        ).affirm();
+    }
+
+    @Test
+    void keepsIdentifiersAsWritten() throws Exception {
+        new Assertion<>(
+            "must keep identifiers in their original case and unquoted",
+            () -> new Normalized(
+                new QueryOf("SELECT vat, Amount FROM Invoice WHERE vat > 7")
+            ).sql(),
+            new IsText("SELECT Amount, vat FROM Invoice WHERE vat > 7")
         ).affirm();
     }
 }

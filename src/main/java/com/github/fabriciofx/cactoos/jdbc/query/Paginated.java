@@ -13,6 +13,7 @@ import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedOrder;
 import com.github.fabriciofx.cactoos.jdbc.query.paginated.NestedSelect;
 import com.github.fabriciofx.cactoos.jdbc.scalar.HasLimit;
 import com.github.fabriciofx.cactoos.jdbc.text.Pretty;
+import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOrderBy;
@@ -60,6 +61,8 @@ public final class Paginated implements Query {
                     SqlParser.config()
                         .withCaseSensitive(false)
                         .withQuoting(Quoting.BACK_TICK)
+                        .withUnquotedCasing(Casing.UNCHANGED)
+                        .withQuotedCasing(Casing.UNCHANGED)
                         .withConformance(SqlConformanceEnum.LENIENT)
                 ).parseQuery();
                 final SqlSelect select;

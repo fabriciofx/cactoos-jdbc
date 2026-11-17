@@ -26,8 +26,8 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` \
-                FROM `EMPLOYEE` LIMIT 40 OFFSET 120\
+                SELECT *, COUNT(*) OVER () AS __total_count__ \
+                FROM employee LIMIT 40 OFFSET 120\
                 """
             )
         ).affirm();
@@ -44,8 +44,8 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `NAME`, `ADDRESS`, COUNT(*) OVER () AS \
-                `__total_count__` FROM `EMPLOYEE` LIMIT 30 OFFSET 120\
+                SELECT name, address, COUNT(*) OVER () AS \
+                __total_count__ FROM employee LIMIT 30 OFFSET 120\
                 """
             )
         ).affirm();
@@ -67,9 +67,9 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `ID`, `NAME`, `EMAIL`, COUNT(*) OVER () AS \
-                `__total_count__` FROM `USERS` WHERE `STATUS` = 'active' \
-                ORDER BY `NAME` LIMIT 10 OFFSET 0\
+                SELECT id, name, email, COUNT(*) OVER () AS \
+                __total_count__ FROM users WHERE status = 'active' \
+                ORDER BY name LIMIT 10 OFFSET 0\
                 """
             )
         ).affirm();
@@ -95,10 +95,10 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT `U`.`ID`, `U`.`NAME`, `U`.`EMAIL`, `O`.`ORDER_DATE`, \
-                COUNT(*) OVER () AS `__total_count__` FROM `USERS` AS `U` \
-                LEFT JOIN `ORDERS` AS `O` ON `U`.`ID` = `O`.`USER_ID` WHERE \
-                `U`.`STATUS` = 'active' ORDER BY `O`.`ORDER_DATE` DESC \
+                SELECT u.id, u.name, u.email, o.order_date, \
+                COUNT(*) OVER () AS __total_count__ FROM users AS u \
+                LEFT JOIN orders AS o ON u.id = o.user_id WHERE \
+                u.status = 'active' ORDER BY o.order_date DESC \
                 LIMIT 20 OFFSET 20\
                 """
             )
@@ -125,11 +125,11 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT `DEPARTMENT`, COUNT(*) AS `EMP_COUNT`, AVG(`SALARY`) \
-                AS `AVG_SALARY` FROM `EMPLOYEES` WHERE \
-                `HIRE_DATE` > '2023-01-01' GROUP BY `DEPARTMENT`) AS \
-                `__paginated_subquery__` ORDER BY `EMP_COUNT` DESC LIMIT 5 \
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT department, COUNT(*) AS emp_count, AVG(salary) \
+                AS avg_salary FROM employees WHERE \
+                hire_date > '2023-01-01' GROUP BY department) AS \
+                __paginated_subquery__ ORDER BY emp_count DESC LIMIT 5 \
                 OFFSET 0\
                 """
             )
@@ -182,19 +182,19 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT `D`.`NAME` AS `DEPARTMENT`, COUNT(`E`.`ID`) AS \
-                `EMPLOYEE_COUNT`, AVG(`E`.`SALARY`) AS `AVG_SALARY`, \
-                COUNT(`E`.`ID`) OVER () AS `TOTAL_EMPLOYEES`, \
-                AVG(`E`.`SALARY`) OVER (PARTITION BY `D`.`ID`) AS \
-                `DEPT_AVG_SALARY`, (SELECT COUNT(*) FROM `EMPLOYEE` AS `E2` \
-                WHERE `E2`.`DEPARTMENT_ID` = `D`.`ID`) AS \
-                `SUBQUERY_EMPLOYEE_COUNT` FROM `DEPARTMENT` AS `D` LEFT JOIN \
-                `EMPLOYEE` AS `E` ON `E`.`DEPARTMENT_ID` = `D`.`ID` RIGHT \
-                JOIN `LOCATION` AS `L` ON `D`.`LOCATION_ID` = `L`.`ID` FULL \
-                JOIN `COMPANY` AS `C` ON `L`.`COMPANY_ID` = `C`.`ID` GROUP \
-                BY `D`.`ID`, `D`.`NAME`) AS `__paginated_subquery__` ORDER \
-                BY `AVG_SALARY` DESC LIMIT 15 OFFSET 30\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT d.name AS department, COUNT(e.id) AS \
+                employee_count, AVG(e.salary) AS avg_salary, \
+                COUNT(e.id) OVER () AS total_employees, \
+                AVG(e.salary) OVER (PARTITION BY d.id) AS \
+                dept_avg_salary, (SELECT COUNT(*) FROM employee AS e2 \
+                WHERE e2.department_id = d.id) AS \
+                subquery_employee_count FROM department AS d LEFT JOIN \
+                employee AS e ON e.department_id = d.id RIGHT \
+                JOIN location AS l ON d.location_id = l.id FULL \
+                JOIN company AS c ON l.company_id = c.id GROUP \
+                BY d.id, d.name) AS __paginated_subquery__ ORDER \
+                BY avg_salary DESC LIMIT 15 OFFSET 30\
                 """
             )
         ).affirm();
@@ -254,9 +254,9 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT DISTINCT `CITY` FROM `CLIENT`) AS \
-                `__paginated_subquery__` LIMIT 7 OFFSET 14\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT DISTINCT city FROM client) AS \
+                __paginated_subquery__ LIMIT 7 OFFSET 14\
                 """
             )
         ).affirm();
@@ -273,9 +273,9 @@ final class PaginatedTest {
             ).sql(),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT DISTINCT `CITY` FROM `CLIENT`) AS \
-                `__paginated_subquery__` ORDER BY `CITY` LIMIT 4 OFFSET 4\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT DISTINCT city FROM client) AS \
+                __paginated_subquery__ ORDER BY city LIMIT 4 OFFSET 4\
                 """
             )
         ).affirm();
@@ -291,6 +291,24 @@ final class PaginatedTest {
                 12
             ).sql(),
             new IsText("SELECT name FROM crater LIMIT 15, 5")
+        ).affirm();
+    }
+
+    @Test
+    void keepsIdentifiersAsWritten() {
+        new Assertion<>(
+            "must keep identifiers in their original case and unquoted",
+            () -> new Paginated(
+                new QueryOf("SELECT Title, isbn FROM Book WHERE pages > 90"),
+                2,
+                25
+            ).sql(),
+            new IsText(
+                """
+                SELECT Title, isbn, COUNT(*) OVER () AS __total_count__ \
+                FROM Book WHERE pages > 90 LIMIT 25 OFFSET 25\
+                """
+            )
         ).affirm();
     }
 }

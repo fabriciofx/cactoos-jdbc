@@ -34,9 +34,9 @@ final class NestedSelectTest {
             ),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT `STAR`, COUNT(*) AS `MOONS` FROM `MOON` GROUP BY \
-                `STAR`) AS `__paginated_subquery__` LIMIT 8 OFFSET 8\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT STAR, COUNT(*) AS MOONS FROM MOON GROUP BY \
+                STAR) AS __paginated_subquery__ LIMIT 8 OFFSET 8\
                 """
             )
         ).affirm();
@@ -58,9 +58,9 @@ final class NestedSelectTest {
             ),
             new IsText(
                 """
-                SELECT *, COUNT(*) OVER () AS `__total_count__` FROM \
-                (SELECT DISTINCT `GALAXY` FROM `NEBULA`) AS \
-                `__paginated_subquery__` LIMIT 3 OFFSET 12\
+                SELECT *, COUNT(*) OVER () AS __total_count__ FROM \
+                (SELECT DISTINCT GALAXY FROM NEBULA) AS \
+                __paginated_subquery__ LIMIT 3 OFFSET 12\
                 """
             )
         ).affirm();

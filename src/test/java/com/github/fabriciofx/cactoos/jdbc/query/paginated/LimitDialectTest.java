@@ -27,7 +27,7 @@ final class LimitDialectTest {
                 ).parseQuery(),
                 new LimitDialect()
             ),
-            new IsText("SELECT `NAME` FROM `COMET` LIMIT 7 OFFSET 14")
+            new IsText("SELECT NAME FROM COMET LIMIT 7 OFFSET 14")
         ).affirm();
     }
 }
