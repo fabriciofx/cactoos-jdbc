@@ -34,15 +34,15 @@ final class SqlPhonesTest {
             final Contact contact = new SqlPhonebook(
                 new NoAuth(server.resource())
             ).create("Edsger Dijkstra");
-            contact.phones().add("95550003");
-            contact.phones().add("91110001");
-            contact.phones().add("93330002");
+            contact.phones().add("(87) 99555-0003");
+            contact.phones().add("(87) 99111-0001");
+            contact.phones().add("(87) 99333-0002");
             contact.phones().get(1).delete();
             new Assertion<>(
                 "must get the phone at the given index in number order",
                 XhtmlMatchers.xhtml(contact.xml()),
                 XhtmlMatchers.hasXPath(
-                    "/contact/phones[count(phone)=2 and not(phone/number='93330002')]"
+                    "/contact/phones[count(phone)=2 and not(phone/number='(87) 99333-0002')]"
                 )
             ).affirm();
         }

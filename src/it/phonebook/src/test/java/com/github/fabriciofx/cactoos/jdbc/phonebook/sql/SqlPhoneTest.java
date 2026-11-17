@@ -35,13 +35,13 @@ final class SqlPhoneTest {
             final Contact contact = new SqlPhonebook(
                 new NoAuth(server.resource())
             ).create("Grace Hopper");
-            contact.phones().add("81236547");
-            contact.phones().get(0).update("97770001");
+            contact.phones().add("(87) 98123-6547");
+            contact.phones().get(0).update("(87) 99777-0001");
             new Assertion<>(
                 "must replace the old phone number with the new one",
                 XhtmlMatchers.xhtml(contact.xml()),
                 XhtmlMatchers.hasXPath(
-                    "/contact/phones[count(phone)=1]/phone/number[text()='97770001']"
+                    "/contact/phones[count(phone)=1]/phone/number[text()='(87) 99777-0001']"
                 )
             ).affirm();
         }
@@ -60,13 +60,13 @@ final class SqlPhoneTest {
             final Contact contact = new SqlPhonebook(
                 new NoAuth(server.resource())
             ).create("Barbara Liskov");
-            contact.phones().add("96660002");
-            contact.phones().add("94440001");
+            contact.phones().add("(87) 99666-0002");
+            contact.phones().add("(87) 99444-0001");
             new Assertion<>(
                 "must not include numbers of other phones of the contact",
                 XhtmlMatchers.xhtml(contact.phones().get(0).xml()),
                 XhtmlMatchers.hasXPath(
-                    "/phones[count(phone)=1]/phone/number[text()='94440001']"
+                    "/phones[count(phone)=1]/phone/number[text()='(87) 99444-0001']"
                 )
             ).affirm();
         }
@@ -85,14 +85,14 @@ final class SqlPhoneTest {
             final Contact contact = new SqlPhonebook(
                 new NoAuth(server.resource())
             ).create("Ken Thompson");
-            contact.phones().add("92220004");
+            contact.phones().add("(87) 99222-0004");
             final Phone phone = contact.phones().get(0);
-            phone.update("98880007");
+            phone.update("(87) 99888-0007");
             new Assertion<>(
                 "must not lose track of the phone after updating its number",
                 XhtmlMatchers.xhtml(phone.xml()),
                 XhtmlMatchers.hasXPath(
-                    "/phones/phone/number[text()='98880007']"
+                    "/phones/phone/number[text()='(87) 99888-0007']"
                 )
             ).affirm();
         }
