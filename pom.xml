@@ -243,6 +243,9 @@
           <pomIncludes>
             <pomInclude>phonebook/pom.xml</pomInclude>
           </pomIncludes>
+          <properties>
+            <aether.remoteRepositoryFilter.prefixes.central.maven.org>false</aether.remoteRepositoryFilter.prefixes.central.maven.org>
+          </properties>
         </configuration>
         <executions>
           <execution>
